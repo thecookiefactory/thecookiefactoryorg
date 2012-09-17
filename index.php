@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "inc/connect.php";
+require "inc/essential.php";
 
 ?>
 
