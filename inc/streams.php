@@ -18,13 +18,19 @@ echo "</a>";
 echo "</ul>";
 
 
-if (isset($_GET["streamid"])) {
+if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
  // DISPLAY A STREAM
  $q = mysql_query("SELECT * FROM streams WHERE id=".$_GET["streamid"]);
+ 
+ if (mysql_num_rows($q) == 1) {
+ 
  $r = mysql_fetch_assoc($q);
  echo "<h1>".$r["author"]."'s stream</h1>";
  streamo($r["twitch"]);
  echo "<p>".nl2br($r["description"])."</p>";
+ } else {
+ echo "<p>Something went wrong.</p>";
+ }
 
 }
 
