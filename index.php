@@ -28,7 +28,7 @@ require "inc/essential.php";
 <?php
 
 if (isset($_SESSION["username"])) {
-echo "logged in as ".$_SESSION["username"];
+echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
 } else {
 echo "<a href='?p=login'>log in</a>";
 }

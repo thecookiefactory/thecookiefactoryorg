@@ -9,13 +9,19 @@ $q = mysql_query("SELECT * FROM users WHERE name='$username'");
 $row = mysql_fetch_assoc($q);
 if ($username == $row["name"] && $password == $row["password"]) {
 $_SESSION["username"] = $username;
+echo "<script type='text/javascript'>
+<!--
+window.location = '?p=news'
+//-->
+</script>";
+echo "<p>Welcome, ".$_SESSION["username"]."</p>";
 } else {
-echo "username or password incorrect";
+echo "<p>Username or password incorrect!</p>";
 }
 }
 
 if (isset($_SESSION["username"])) {
-echo "you are already logged in";
+echo "<p>You are already logged in! Click <a href='?p=logout'>here</a> if you want to log out.</p>";
 } else {
 echo "<form action='?p=login' method='post'>
 <input type='text' name='username' placeholder='username' /><br />
