@@ -24,10 +24,14 @@ if (isset($_GET["id"])) {
 				echo "</div>";
 			}
 			
+			if (checkuser()) {			
 			echo "<form>
 			<textarea></textarea>
 			<input type='submit' />
 			</form>";
+			} else {
+			echo "you have to be logged in to post comments";
+			}
 			
 		} else 
 			echo "commenting disabled";
