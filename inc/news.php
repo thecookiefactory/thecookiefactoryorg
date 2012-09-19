@@ -14,8 +14,21 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			echo "<p>".nl2br($row["text"])."</p>";
 			echo $row["date"]." - ".$row["author"];
 		
-			echo "Comments";
+			echo "<a name='comments'></a>Comments";
 			if ($row["comments"] == 1) {
+			
+			if (isset($_POST["cp"])) {
+				
+				$newsid = $_GET["id"];
+				$author = $_SESSION["username"];
+				$text = mysql_real_escape_string(htmlentities($_POST["text"]));
+				$date = date("Y-m-d");
+				$time = date("H:i", time());
+				
+				$iq = mysql_query("INSERT INTO newscomments VALUES('','$author','$text','$date','$time','$newsid')");
+				
+				}
+			
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
 				echo "<a href='?p=news&id=".$row["id"]."#comments'>".$commnum." comments</a>";
@@ -26,11 +39,10 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 					echo "<p>".nl2br($crow["text"])."</p>";
 					echo "</div>";
 				}
-			
 				if (checkuser()) {			
-					echo "<form>
-					<textarea></textarea>
-					<input type='submit' />
+					echo "<form action='?p=news&id=".$_GET["id"]."' method='post'>
+					<textarea name='text'></textarea>
+					<input type='submit' name='cp' />
 					</form>";
 				} else {
 					echo "you have to be logged in to post comments";
