@@ -9,12 +9,12 @@ $q = mysql_query("SELECT * FROM users WHERE name='$username'");
 $row = mysql_fetch_assoc($q);
 if ($username == $row["name"] && $password == $row["password"]) {
 $_SESSION["username"] = $username;
+echo "<p>Welcome, ".$_SESSION["username"]."</p>";
 echo "<script type='text/javascript'>
 <!--
 window.location = '?p=news'
 //-->
 </script>";
-echo "<p>Welcome, ".$_SESSION["username"]."</p>";
 } else {
 echo "<p>Username or password incorrect!</p>";
 }
