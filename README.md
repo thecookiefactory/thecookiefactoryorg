@@ -1,1 +1,1 @@
-[The Cookie Factory](http://thecookiefactory.org/)
+[thecookiefactory](http://thecookiefactory.org/)
