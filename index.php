@@ -53,7 +53,7 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "") {
 	else
 		echo "404";
 } else {
-echo "default page (news?)";
+require "inc/news.php";
 }
 
 ?>
