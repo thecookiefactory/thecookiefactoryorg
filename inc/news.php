@@ -16,7 +16,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		<span class='article-title'>".$row["title"]."</span><span class='article-metadata'>";
 		
 		echo "by ".$row["author"]." &ndash; on ".$row["date"]."</span>
-		</div><br></span><br>";
+		</div><br></span>";
 		echo "<div class='article-body'>
 		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
 		</div>";
