@@ -12,13 +12,15 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 	
 		$row = mysql_fetch_assoc($query);
 	
-		echo "<h1>".$row["title"]."</h1>";
+		echo "<div class='article-header'>
+		<span class='article-title'>".$row["title"]."</span><span class='article-metadata'>";
 		
-			echo "<p>".nl2br($row["text"])."</p>";
-			echo $row["date"]." - ".$row["author"];
-		
-			echo "<a name='comments'></a>Comments";
-			if ($row["comments"] == 1) {
+		echo "by ".$row["author"]." &ndash; on ".$row["date"]."</span>
+		</div><br>";
+		echo "<p>".nl2br($row["text"])."</p>";
+
+		echo "</span></div><br>";
+		if ($row["comments"] == 1) {
 			
 			if (isset($_POST["cp"])) {
 				
