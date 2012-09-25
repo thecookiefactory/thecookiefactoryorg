@@ -16,10 +16,11 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		<span class='article-title'>".$row["title"]."</span><span class='article-metadata'>";
 		
 		echo "by ".$row["author"]." &ndash; on ".$row["date"]."</span>
-		</div><br>";
-		echo "<p>".nl2br($row["text"])."</p>";
+		</div><br></span><br>";
+		echo "<div class='article-body'>
+		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
+		</div>";
 
-		echo "</span><br>";
 		if ($row["comments"] == 1) {
 			
 			if (isset($_POST["cp"])) {
