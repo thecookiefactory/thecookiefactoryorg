@@ -2,6 +2,9 @@
 
 <?php
 
+if ($r_c != 42)
+die("This site must be embedded to use.");
+
 if (isset($_POST["submit"])) {
 
 $name = mysql_real_escape_string($_POST["username"]);

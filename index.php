@@ -2,6 +2,8 @@
 session_start();
 require "inc/essential.php";
 
+$r_c = 42;
+
 ?>
 
 <!doctype html>

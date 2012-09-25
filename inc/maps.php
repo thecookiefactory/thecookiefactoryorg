@@ -1,5 +1,8 @@
 <?php
 
+if ($r_c != 42)
+die("This site must be embedded to use.");
+
 if (isset($_GET["id"])) {
 echo "display map id: ".$_GET["id"];
 } else {

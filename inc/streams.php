@@ -1,5 +1,8 @@
 <?php
 
+if ($r_c != 42)
+die("This site must be embedded to use.");
+
 $q = mysql_query("SELECT * FROM streams");
 
 echo "<ul id='stream-menu'>";
