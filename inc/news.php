@@ -19,7 +19,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		</div><br>";
 		echo "<p>".nl2br($row["text"])."</p>";
 
-		echo "</span></div><br>";
+		echo "</span><br>";
 		if ($row["comments"] == 1) {
 			
 			if (isset($_POST["cp"])) {
@@ -82,7 +82,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
 		// BODY
 		echo "<div class='article-body'>
-		<span class='article-text'>".nl2br($row["text"])."</span>
+		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
 		</div>
 		<hr class='article-separator' />";
 
