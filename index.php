@@ -1,8 +1,9 @@
 <?php
 session_start();
+$r_c = 42;
 require "inc/essential.php";
 
-$r_c = 42;
+
 
 ?>
 
@@ -48,6 +49,8 @@ echo "<a href='?p=login'>log in</a>";
 
 if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "") {
 require "inc/".$_GET["p"].".php";
+} else {
+echo "No ?p defined";
 }
 
 ?>
