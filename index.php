@@ -48,9 +48,12 @@ echo "<a href='?p=login'>log in</a>";
 <?php
 
 if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "") {
-require "inc/".$_GET["p"].".php";
+	if (file_exists("inc/".$_GET["p"].".php"))
+		require "inc/".$_GET["p"].".php";
+	else
+		echo "404";
 } else {
-echo "No ?p defined";
+echo "default page (news?)";
 }
 
 ?>
