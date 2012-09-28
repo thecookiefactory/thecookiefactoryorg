@@ -14,6 +14,7 @@ echo $r["name"];
 echo $r["author"];
 echo $r["game"];
 echo $r["desc"];
+echo $r["dl"];
 //echo $r["rating"]/$r["ratecount"];
 echo "</div>";
 
