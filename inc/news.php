@@ -37,7 +37,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
-				echo "<a href='?p=news&id=".$row["id"]."#comments'>".$commnum." comments</a>";
+				echo "<a name='comments'></a>Comments<a href='?p=news&id=".$row["id"]."#comments'>".$commnum." comments</a>";
 			
 				while ($crow = mysql_fetch_assoc($cq)) {
 					echo "<div class='comment'>";
