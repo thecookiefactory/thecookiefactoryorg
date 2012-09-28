@@ -6,14 +6,9 @@ include "../inc/essential.php";
 if (!checkadmin())
 die("must be an dmin :(".$_SESSION["username"]);
 ?>
-
+<!doctype html>
 <html>
-<head>
-</head>
 <body>
-<p>
-welcome to the admin panel
-<a href='writenews.php'>write news</a> <a href='postmap.php'>post a map</a>
-</p>
+<h1>post a map</h1>
 </body>
 </html>

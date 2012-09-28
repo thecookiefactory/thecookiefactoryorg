@@ -1,10 +1,14 @@
 <?php
+session_start();
+$r_c = 42;
+include "../inc/essential.php";
 
-include "../inc/connect.php";
+if (!checkadmin())
+die("must be an dmin :(");
 
 if (isset($_POST["submit"])) {
 $title = $_POST["title"];
-$author = "mici"; //$_SESSION["username"];
+$author = $_SESSION["username"];
 $date = date("Y-m-d");
 $time = date("H:i", time());
 $text = $_POST["text"];
@@ -18,7 +22,10 @@ else
 }
 
 ?>
-
+<!doctype html>
+<html>
+<body>
+<h1>post news - by <?php echo $_SESSION["username"] ?></h1>
 <form action='writenews.php' method='post'>
 Title<br /><input type='text' name='title' /><br />
 Text<br /><textarea name='text'>
@@ -28,3 +35,5 @@ Disable comments<input type='checkbox' name='comments' />
 <br />
 <input type='submit'name='submit' />
 </form>
+</body>
+</html>
