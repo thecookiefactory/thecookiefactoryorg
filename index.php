@@ -25,7 +25,7 @@ require "inc/essential.php";
 
 <nav>
 <span id='nav-menubar'>
-<a href='?p=news'>news</a> / <a href='?p=maps'>maps</a> / <a href='?p=streams'>streams</a>
+<a href='?p=news'>news</a> / <a href='?p=maps'>maps</a> / <a href='?p=streams'>streams</a> / <a href='?p=projects'>projects</a>
 </span>
 <span id='nav-actionbar'>
 <?php
