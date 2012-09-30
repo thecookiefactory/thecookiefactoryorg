@@ -36,14 +36,15 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
-				echo "<a name='comments'></a>Comments<a href='?p=news&id=".$row["id"]."#comments'>".$commnum." comments</a>";
+				echo "<hr><a name='comments'></a>Comments<a href='?p=news&id=".$row["id"]."#comments' id='comments-title'><br>".$commnum." comments</a>";
 			
 				while ($crow = mysql_fetch_assoc($cq)) {
-					echo "<div class='comment'>";
-					echo $crow["username"]." - ".$crow["date"];
-					echo "<p>".nl2br($crow["text"])."</p>";
+					echo "<div class='comment'><span class='comment-metadata'>";
+					echo "<span class='comment-author'>"$crow["username"]."</span> - <span class='comment-date'>".$crow["date"]."</span>";
+					echo "</span><br><p><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
 					echo "</div>";
 				}
+
 				if (checkuser()) {			
 					echo "<form action='?p=news&id=".$_GET["id"]."' method='post'>
 					<textarea name='text'></textarea>
