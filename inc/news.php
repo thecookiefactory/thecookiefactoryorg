@@ -40,7 +40,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			
 				while ($crow = mysql_fetch_assoc($cq)) {
 					echo "<div class='comment'><span class='comment-metadata'>";
-					echo "<span class='comment-author'>"$crow["username"]."</span> - <span class='comment-date'>".$crow["date"]."</span>";
+					echo "<span class='comment-author'>".$crow["username"]."</span> - <span class='comment-date'>".$crow["date"]."</span>";
 					echo "</span><br><p><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
 					echo "</div>";
 				}
