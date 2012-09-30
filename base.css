@@ -191,6 +191,7 @@ div.map {
 
 #comments-title {
   float: left;
+  margin-bottom: -6px;
   margin-left: 19px;
   font-weight: 300;
   text-decoration: none;
@@ -198,7 +199,9 @@ div.map {
 }
 
 .comment-metadata {
+  clear: both;
   float: left;
+  margin-top: 10px;
   margin-left: 19px;
   font-style: italic;
 }
@@ -208,9 +211,9 @@ div.map {
   color: #BAD5F1;
 }
 
-.comment-text {
-  margin-left: 19px;
-  margin-right: 17px;
+p.comment-text {
+  margin-left: 8px;
+  margin-right: 25px;
   padding-left: 19px;
   font-size: 14px;
   color: #BAD5F1;
