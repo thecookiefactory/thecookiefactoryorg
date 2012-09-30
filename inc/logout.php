@@ -1,6 +1,5 @@
 <?php
-if ($r_c != 42)
-die("This site must be embedded to use.");
+checkembed();
 
 if (checkuser()) {
 session_destroy();

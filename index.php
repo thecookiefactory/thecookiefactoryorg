@@ -3,8 +3,6 @@ session_start();
 $r_c = 42;
 require "inc/essential.php";
 
-
-
 ?>
 
 <!doctype html>

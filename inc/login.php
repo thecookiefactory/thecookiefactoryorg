@@ -2,8 +2,7 @@
 
 <?php
 
-if ($r_c != 42)
-die("This site must be embedded to use.");
+checkembed();
 
 if (isset($_POST["username"]) && !isset($_SESSION["username"])) {
 $username = mysql_real_escape_string(htmlentities($_POST["username"]));

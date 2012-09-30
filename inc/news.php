@@ -1,7 +1,6 @@
 <?php
 
-if ($r_c != 42)
-die("This site must be embedded to use.");
+checkembed();
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 // DISPLAY ONE PIECE OF NEWS
