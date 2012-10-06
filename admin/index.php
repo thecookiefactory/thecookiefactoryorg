@@ -1,7 +1,7 @@
 <?php
 session_start();
 $r_c = 42;
-include "../inc/essential.php";
+require "../inc/essential.php";
 
 if (!checkadmin())
 die("must be an dmin :(".$_SESSION["username"]);
@@ -11,9 +11,12 @@ die("must be an dmin :(".$_SESSION["username"]);
 <head>
 </head>
 <body>
+<h1>welcome to the admin panel</h1>
 <p>
-welcome to the admin panel
-<a href='writenews.php'>write news</a> <a href='postmap.php'>post a map</a>
+<ul>
+<li><a href='news.php'>manage news</a></li>
+<li><a href='maps.php'>manage maps</a></li>
+</ul>
 </p>
 </body>
 </html>

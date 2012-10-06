@@ -1,7 +1,7 @@
 <?php
 session_start();
 $r_c = 42;
-include "../inc/essential.php";
+require "../inc/essential.php";
 
 if (!checkadmin())
 die("must be an dmin :(".$_SESSION["username"]);
