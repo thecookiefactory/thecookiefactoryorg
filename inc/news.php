@@ -2,6 +2,8 @@
 
 checkembed();
 
+include "analyticstracking.php";
+
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 // DISPLAY ONE PIECE OF NEWS
 
