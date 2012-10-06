@@ -3,6 +3,7 @@
 <?php
 
 checkembed();
+include "analyticstracking.php";
 
 if (isset($_POST["username"]) && !isset($_SESSION["username"])) {
 $username = mysql_real_escape_string(htmlentities($_POST["username"]));

@@ -1,6 +1,7 @@
 <?php
 
 checkembed();
+include "analyticstracking.php";
 
 if (isset($_GET["id"])) {
 echo "display map id: ".$_GET["id"];

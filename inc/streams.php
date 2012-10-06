@@ -1,6 +1,7 @@
 <?php
 
 checkembed();
+include "analyticstracking.php";
 
 $q = mysql_query("SELECT * FROM streams");
 

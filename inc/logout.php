@@ -1,5 +1,6 @@
 <?php
 checkembed();
+include "analyticstracking.php";
 
 if (checkuser()) {
 session_destroy();

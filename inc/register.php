@@ -3,6 +3,7 @@
 <?php
 
 checkembed();
+include "analyticstracking.php";
 
 if (isset($_POST["submit"])) {
 
