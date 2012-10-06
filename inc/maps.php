@@ -14,7 +14,7 @@ echo $r["name"];
 echo $r["author"];
 echo $r["game"];
 echo $r["desc"];
-echo $r["dl"];
+echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>";
 //echo $r["rating"]/$r["ratecount"];
 echo "</div>";
 

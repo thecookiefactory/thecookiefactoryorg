@@ -70,14 +70,14 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 	
 		// TITLE, AUTHOR & DATE
 		echo "<div class='article-header'>
-		<span class='article-title'><a href='?p=news&id=".$row["id"]."'>".$row["title"]."</a></span>
+		<span class='article-title'><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></span>
 		<span class='article-metadata'>";
 		
 		if ($row["comments"] == 1) {
 		
 			$cq = mysql_query("SELECT id FROM newscomments WHERE newsid=".$row["id"]);
 			$commnum = mysql_num_rows($cq);
-			echo "<a href='?p=news&id=".$row["id"]."#comments'>".$commnum." comments </a> &ndash; ";
+			echo "<a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments </a> &ndash; ";
 			}
 
 		echo "by ".$row["author"]." &ndash; on ".$row["date"]."</span>
