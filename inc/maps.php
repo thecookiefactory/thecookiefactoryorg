@@ -21,6 +21,14 @@ echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>";
 //echo $r["rating"]/$r["ratecount"];
 echo "</div>";
 
+// images
+if ($r["gallery"] == 1) {
+$iq = mysql_query("SELECT * FROM ".$r["name"]." ORDER BY id ASC");
+while ($ir = mysql_fetch_assoc($iq)) {
+echo "<img src='img/maps/".$r["name"]."/thumbs/".$ir["id"].".jpg'>";
+}
+}
+
 }
 
 }
