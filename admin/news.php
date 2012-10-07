@@ -17,10 +17,47 @@ die("must be an dmin :(".$_SESSION["username"]);
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
-	
+
 		if (isset($_GET["id"])) {
-			// edit news id
-			echo "edit".$_GET["id"];
+		
+			$id = $_GET["id"];
+			$eq = mysql_query("SELECT * FROM news WHERE id=$id");
+			$er = mysql_fetch_assoc($eq);
+		
+			if (isset($_POST["submit"])) {
+			
+				$title = $_POST["title"];
+				$author = $_SESSION["username"];
+				$date = date("Y-m-d");
+				$time = date("H:i", time());
+				$text = $_POST["text"];
+
+				if (isset($_POST["comments"]) && $_POST["comments"] == "on") 
+					$comments = 0;
+				else
+					$comments = 1;
+
+				mysql_query("UPDATE news SET title='$title', author='$author', text='$text', comments=$comments WHERE id=$id");
+				echo "updated!";
+				
+			} else {
+			
+				echo "<!doctype html>
+				<html>
+				<body>
+				<h1>edit news - by ".$er["author"]."</h1>
+				<form action='?action=edit&id=".$id."' method='post'>
+				Title<br /><input type='text' name='title' value='".$er["title"]."' /><br />
+				Text<br /><textarea name='text'>".nl2br($er["text"])."</textarea>
+				<br />
+				Disable comments<input type='checkbox' name='comments'";
+				if ($er["comments"] == 0) 
+					echo "checked";
+				echo " />
+				<br />
+				<input type='submit'name='submit' />
+				</form>";
+			}
 		} else {
 			echo "no id defined";
 		}
