@@ -36,7 +36,35 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		// write
-		echo "write";
+		if (isset($_POST["submit"])) {
+			$title = $_POST["title"];
+			$author = $_SESSION["username"];
+			$date = date("Y-m-d");
+			$time = date("H:i", time());
+			$text = $_POST["text"];
+
+			if (isset($_POST["comments"]) && $_POST["comments"] == "on") 
+				$comments = 0;
+			else
+				$comments = 1;
+
+			mysql_query("INSERT INTO news VALUES('','$title','$author','$date','$time','$text','$comments')");
+			echo "piece of news successfully submitted";
+		} else {
+			echo "<!doctype html>
+			<html>
+			<body>
+			<h1>post news - by ".$_SESSION["username"]."</h1>
+			<form action='?action=write' method='post'>
+			Title<br /><input type='text' name='title' /><br />
+			Text<br /><textarea name='text'></textarea>
+			<br />
+			Disable comments<input type='checkbox' name='comments' />
+			<br />
+			<input type='submit'name='submit' />
+			</form>";
+		}
+
 	}
 
 } else {
