@@ -28,8 +28,19 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 
 		if (isset($_GET["id"])) {
-			// delete news id
-			echo "delete".$_GET["id"];
+		
+			if (isset($_POST["delete"])) {
+				// delete
+				$id = $_GET["id"];
+				$dq = mysql_query("DELETE FROM news WHERE id=$id");
+				echo "piece of news successfully deleted";
+			} else {
+				echo "delete news id ".$_GET["id"];
+				echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
+				<input type='submit' name='delete' value='Yes, delete' /> or just <a href='news.php'>go back</a>
+				</form>";
+			}
+			
 		} else {
 			echo "no id defined";
 		}
