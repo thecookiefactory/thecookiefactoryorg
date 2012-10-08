@@ -18,10 +18,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 
-		if (isset($_GET["id"])) {
+		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		
 			$id = $_GET["id"];
 			$eq = mysql_query("SELECT * FROM news WHERE id=$id");
+			
+			if (mysql_num_rows($eq) == 1) {
+			
 			$er = mysql_fetch_assoc($eq);
 		
 			if (isset($_POST["submit"])) {
@@ -58,13 +61,22 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				<input type='submit'name='submit' />
 				</form>";
 			}
+			
+			} else {
+			echo "wrong id";
+			}
 		} else {
 			echo "no id defined";
 		}
 
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 
-		if (isset($_GET["id"])) {
+		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+		
+		$id = $_GET["id"];
+		$eq = mysql_query("SELECT * FROM news WHERE id=$id");
+		
+		if (mysql_num_rows($eq) == 1) {
 		
 			if (isset($_POST["delete"])) {
 				// delete
@@ -76,6 +88,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
 				<input type='submit' name='delete' value='Yes, delete' /> or just <a href='news.php'>go back</a>
 				</form>";
+			}
+			
+		} else {
+			echo "wrong id";
 			}
 			
 		} else {
