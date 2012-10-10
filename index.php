@@ -2,26 +2,27 @@
 session_start();
 $r_c = 42;
 require "inc/essential.php";
-
 ?>
 
 <!doctype html>
 <html>
 <head>
-<title>thecookiefactory.org</title>
-<link rel='StyleSheet' type='text/css' href='base.css' />
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' />
-<script src="js/main.js"></script>
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/lightbox.js"></script>
-<link href="lightbox.css" rel="stylesheet" />
+
+	<title>thecookiefactory.org</title>
+	<meta http-equiv='Content-Type' content='text/html; charset=windows-1252' />
+	<link rel='stylesheet' type='text/css' href='base.css' />
+	<link rel='stylesheet' type='text/css' href='lightbox.css' />
+	<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' />
+	<script src='js/main.js'></script>
+	<script src='js/jquery-1.7.2.min.js'></script>
+	<script src='js/lightbox.js'></script>
+	
 </head>
 <body>
-	
-<?php include_once("inc/analyticstracking.php") ?>
+
+<?php include "inc/analyticstracking.php" ?>
 
 <header>
-
 </header>
 
 <div id='wrapper'>
@@ -32,21 +33,20 @@ require "inc/essential.php";
 </span>
 <span id='nav-actionbar'>
 
-<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
- / <?php
+<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form> / 
 
-if (isset($_SESSION["username"])) {
-echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
-} else {
-echo "<a href='?p=login'>log in</a>";
-}
+<?php
 
+if (isset($_SESSION["username"]))
+	echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
+else
+	echo "<a href='?p=login'>log in</a>";
 
 ?>
+
 </span>
 </nav>
 <hr />
-
 <section>
 
 <?php
@@ -56,9 +56,8 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "") {
 		require "inc/".$_GET["p"].".php";
 	else
 		echo "404";
-} else {
-require "inc/news.php";
-}
+} else
+	require "inc/news.php";
 
 ?>
 
