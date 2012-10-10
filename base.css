@@ -33,8 +33,36 @@ nav {
   width: 1000px;
   font-size: 20px;
   font-weight: 300;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+
+#searchbox {
+  font-family: "Open Sans", "Arial", sans-serif;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 300;
+  color: white;
+  border: 0;
+  cursor: pointer;
+  text-align: right
+}
+
+#searchbox::-webkit-input-placeholder {
+  color: white;
+}
+
+#searchbox:hover::-webkit-input-placeholder {
+  color: #4188D2;
+}
+
+#searchbox:focus {
+  cursor: text;
+  outline: none;
+}
+
+#searchbox:focus::-webkit-input-placeholder {
+  color: #4188D2;
 }
 
 section {
@@ -186,7 +214,7 @@ div.map {
 
 #nav-actionbar {
   float: right;
-  margin-right: 17px;
+  margin-right: 18px;
 }
 
 #comments-title {

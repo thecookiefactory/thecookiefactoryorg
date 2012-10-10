@@ -30,7 +30,9 @@ require "inc/essential.php";
 <a href='?p=news'>news</a> / <a href='?p=maps'>maps</a> / <a href='?p=streams'>streams</a> / <a href='?p=projects'>projects</a>
 </span>
 <span id='nav-actionbar'>
-<?php
+
+<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="this.placeholder = ''" onblur="this.placeholder = 'search'"/></form>
+ / <?php
 
 if (isset($_SESSION["username"])) {
 echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
@@ -38,10 +40,9 @@ echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
 echo "<a href='?p=login'>log in</a>";
 }
 
-?>
-&nbsp;<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' /></form>
-</span>
 
+?>
+</span>
 </nav>
 <hr />
 
