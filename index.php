@@ -11,6 +11,7 @@ require "inc/essential.php";
 <title>thecookiefactory.org</title>
 <link rel='StyleSheet' type='text/css' href='base.css' />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' />
+<script src="js/main.js"></script>
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/lightbox.js"></script>
 <link href="lightbox.css" rel="stylesheet" />
@@ -31,7 +32,7 @@ require "inc/essential.php";
 </span>
 <span id='nav-actionbar'>
 
-<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="this.placeholder = ''" onblur="this.placeholder = 'search'"/></form>
+<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
  / <?php
 
 if (isset($_SESSION["username"])) {

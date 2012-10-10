@@ -40,6 +40,7 @@ nav {
 #searchbox {
   font-family: "Open Sans", "Arial", sans-serif;
   background: transparent;
+  width: 62px;
   font-size: 20px;
   font-weight: 300;
   color: white;
