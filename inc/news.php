@@ -38,19 +38,21 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
-				echo "<hr><a name='comments'></a><a href='?p=news&id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
+				if ($commnum > 0) {
+					echo "<hr><a name='comments'></a><a href='?p=news&id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
 			
-				while ($crow = mysql_fetch_assoc($cq)) {
-					echo "<div class='comment'><span class='comment-metadata'>";
-					echo "<span class='comment-author'>".$crow["username"]."</span> &middot; <span class='comment-date'>".$crow["date"]."</span>";
-					echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
-					echo "</div>";
+					while ($crow = mysql_fetch_assoc($cq)) {
+						echo "<div class='comment'><span class='comment-metadata'>";
+						echo "<span class='comment-author'>".$crow["username"]."</span> &middot; <span class='comment-date'>".$crow["date"]."</span>";
+						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
+						echo "</div>";
+					}
 				}
 
 				if (checkuser()) {	
 					echo "<hr><p class='comments-title'>Post a comment</p>";		
 					echo "<div id='comment-form'><form action='?p=news&id=".$_GET["id"]."' method='post'>
-					<textarea name='text' id='comment-textarea'></textarea>
+					<textarea name='text' id='comment-textarea' required></textarea>
 					<input type='submit' name='cp' value='>' id='comment-submitbutton'>
 					</form></div>";
 				} else {
