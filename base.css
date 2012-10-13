@@ -225,13 +225,15 @@ div.map {
   font-weight: 600;
 }
 
-#comments-title {
+.comments-title {
   float: left;
+  margin-top: 0px;
   margin-bottom: -6px;
   margin-left: 19px;
   font-weight: 300;
   text-decoration: none;
   font-size: 20px;
+  color: white;
 }
 
 .comment-metadata {
@@ -249,10 +251,44 @@ div.map {
 }
 
 p.comment-text {
-  margin-left: 8px;
-  margin-right: 25px;
-  padding-left: 19px;
+  margin-left: 19px;
+  margin-right: 20px;
+  padding-left: 8px;
   font-size: 14px;
   color: #BAD5F1;
   text-align: justify;
+}
+
+#comment-form {
+  clear: both;
+}
+
+#comment-textarea {
+  height: 60px;
+  width: 500px;
+  margin-top: 18px;
+  margin-left: 19px;
+  background-color: inherit;
+  border-color: #4188D2;
+  color: white;
+  font: inherit;
+  font-size: 14px;
+  -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+          border-radius: 2px;
+}
+
+#comment-submitbutton {
+  height: 66px;
+  width: 41px;
+  margin-left: -5px;
+  position: relative;
+  left: 4px;
+  top: -24px;
+  color: #BAD5F1;
+  font-size: 28px;
+  border-color: #4188D2;
+  -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+          border-radius: 2px;
 }

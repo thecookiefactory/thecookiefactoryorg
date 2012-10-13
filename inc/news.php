@@ -38,7 +38,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
-				echo "<hr><a name='comments'></a><a href='?p=news&id=".$row["id"]."#comments' id='comments-title'>".$commnum." comments</a><br>";
+				echo "<hr><a name='comments'></a><a href='?p=news&id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
 			
 				while ($crow = mysql_fetch_assoc($cq)) {
 					echo "<div class='comment'><span class='comment-metadata'>";
@@ -47,17 +47,18 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 					echo "</div>";
 				}
 
-				if (checkuser()) {			
-					echo "<hr><form action='?p=news&id=".$_GET["id"]."' method='post'>
-					<textarea name='text'></textarea>
-					<input type='submit' name='cp'>
-					</form>";
+				if (checkuser()) {	
+					echo "<hr><p class='comments-title'>Post a comment</p>";		
+					echo "<div id='comment-form'><form action='?p=news&id=".$_GET["id"]."' method='post'>
+					<textarea name='text' id='comment-textarea'></textarea>
+					<input type='submit' name='cp' value='>' id='comment-submitbutton'>
+					</form></div>";
 				} else {
 					echo "<span id='loginnotice'>you have to be logged in to post comments</span>";
 				}
 			
 			} else 
-				echo "commenting disabled";
+				echo "<p class='comments-title'>Commenting disabled</p>";
 	} else {
 		echo "No.";
 	}
