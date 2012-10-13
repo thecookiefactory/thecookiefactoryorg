@@ -36,7 +36,7 @@ require "inc/essential.php";
  / <?php
 
 if (isset($_SESSION["username"])) {
-echo "logged in as ".$_SESSION["username"]." | <a href='?p=logout'>log out</a>";
+echo "<span id='actionbar-logindata'>logged in as <span id='actionbar-username'>".$_SESSION["username"]."</span></span> / <a href='?p=logout'>log out</a>";
 } else {
 echo "<a href='?p=login'>log in</a>";
 }

@@ -1,10 +1,6 @@
 body, html {
   margin: 0px;
-  padding: 0px;
-  background-color: #151515;
   background-image: url(img/bg2.png);
-  color: #4188d2;
-  text-align: center;
   font-family: "Open Sans", "Arial", sans-serif;
   font-weight: 400;
 }
@@ -35,6 +31,7 @@ nav {
   font-weight: 300;
   padding-top: 10px;
   padding-bottom: 30px;
+  color: #4188D2;
 }
 
 #searchbox {
@@ -81,6 +78,7 @@ footer {
   padding-bottom: 1em;
   font-size: 12px;
   color: white;
+  text-align: center;
 }
 
 a, a:visited {
@@ -215,7 +213,16 @@ div.map {
 
 #nav-actionbar {
   float: right;
-  margin-right: 18px;
+  margin-right: 19px;
+  margin-top: -2px;
+}
+
+#actionbar-logindata {
+  color: white;
+}
+
+#actionbar-username {
+  font-weight: 600;
 }
 
 #comments-title {
@@ -232,7 +239,8 @@ div.map {
   float: left;
   margin-top: 10px;
   margin-left: 19px;
-  font-style: italic;
+  color: white;
+  font-weight: 200;
 }
 
 .comment-author {

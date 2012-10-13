@@ -48,12 +48,12 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 				}
 
 				if (checkuser()) {			
-					echo "<form action='?p=news&id=".$_GET["id"]."' method='post'>
+					echo "<hr><form action='?p=news&id=".$_GET["id"]."' method='post'>
 					<textarea name='text'></textarea>
-					<input type='submit' name='cp' />
+					<input type='submit' name='cp'>
 					</form>";
 				} else {
-					echo "you have to be logged in to post comments";
+					echo "<span id='loginnotice'>you have to be logged in to post comments</span>";
 				}
 			
 			} else 
@@ -81,13 +81,13 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			}
 
 		echo "by ".$row["author"]." &ndash; on ".$row["date"]."</span>
-		</div><br />";		
+		</div><br>";		
 
 		// BODY
 		echo "<div class='article-body'>
 		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
 		</div>
-		<hr class='article-separator' />";
+		<hr class='article-separator'>";
 
 	}
 
