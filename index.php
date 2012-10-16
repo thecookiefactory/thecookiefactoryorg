@@ -67,7 +67,8 @@ require "inc/news.php";
 </div>
 
 <footer>
-2012 thecookiefactory.org
+2012 thecookiefactory.org<br>
+YYYY-MM-DD H:i (CET/CEST)
 </footer>
 
 </body>
