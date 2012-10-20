@@ -10,8 +10,6 @@ if (!checkadmin())
 <!doctype html>
 <html>
 <body>
-<h1>manage maps</h1>
-<p><a href='#'>add new</a></p>
 
 <?php
 
@@ -41,9 +39,40 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "no id defined";
 		}
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
-	
+		if (isset($_POST["submit"])) {
+			$name = $_POST["name"];
+			$author = $_SESSION["username"];
+			$game = $_POST["game"];
+			$desc = $_POST["desc"];
+			$dl = $_POST["dl"];
+			$date = date("Y-m-d");
+
+			if (isset($_POST["gallery"]) && $_POST["gallery"] == "on") 
+				$gallery = 1;
+			else
+				$gallery = 0;
+
+			mysql_query("INSERT INTO maps VALUES('','$name','$author','$game','$desc','$dl','0','0','$date','$gallery')");
+			echo "map successfully submitted";
+		} else {
+			echo "<h1>post a map - by ".$_SESSION["username"]."</h1>
+			<form action='?action=write' method='post'>
+			Name<br /><input type='text' name='name' /><br />
+			<select name='game'>
+				<option value='1'>Team Fortress 2</option>
+				<option value='2'>Portal 2</option>
+			</select>
+			Description<br /><textarea name='desc'></textarea><br />
+			download link<br /><input type='text' name='dl' /><br />
+			Create a gallery<input type='checkbox' name='gallery' />
+			<br />
+			<input type='submit'name='submit' />
+			</form>";
+		}
 	}
 	} else { // display all the maps
+		echo "<h1>manage maps</h1>
+		<p><a href='?action=write'>add new</a></p>";
 		$query = mysql_query("SELECT * FROM maps ORDER BY id DESC");
 		echo "<table style='border-spacing: 5px;'>";
 		echo "<tr><th>maps</th><th>editing tools</th></tr>";
@@ -54,7 +83,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "#".$row["id"]." - ".$row["name"]." - ".$row["author"];
 			echo "</td>";
 			echo "<td>";
-			echo "<a href='#'>edit</a> <a href='#'>delete</a>";
+			echo "<a href='?action=edit&id=".$row["id"]."'>edit</a> <a href='?action=delete&id=".$row["id"]."'>delete</a>";
 			echo "</td>";
 			echo "</tr>";
 }

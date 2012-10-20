@@ -92,10 +92,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			mysql_query("INSERT INTO news VALUES('','$title','$author','$date','$time','$text','$comments')");
 			echo "piece of news successfully submitted";
 		} else {
-			echo "<!doctype html>
-			<html>
-			<body>
-			<h1>post news - by ".$_SESSION["username"]."</h1>
+			echo "<h1>post news - by ".$_SESSION["username"]."</h1>
 			<form action='?action=write' method='post'>
 			Title<br /><input type='text' name='title' /><br />
 			Text<br /><textarea name='text'></textarea>
