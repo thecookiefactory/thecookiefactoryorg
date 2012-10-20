@@ -9,6 +9,7 @@ require "inc/essential.php";
 <html>
 <head>
 <title>thecookiefactory.org</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel='StyleSheet' type='text/css' href='base.css' />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' />
 <script src="js/main.js"></script>
