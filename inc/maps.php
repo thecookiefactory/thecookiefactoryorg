@@ -9,15 +9,15 @@ echo "display map id: ".$_GET["id"];
 $q = mysql_query("SELECT * FROM maps");
 
 while ($r = mysql_fetch_assoc($q)) {
-echo "<div class='map' style='background-image: url(img/maps/".$r["name"].".jpg);'>";
-echo $r["name"];
-echo $r["author"];
+echo "<div class='map-div' style='background-image: url(img/maps/".$r["name"].".jpg);'>";
+echo "<span class='map-name'>".$r["name"]."</span>";
+echo "<span class='map-author'>".$r["author"]."</span>"."<span class='map-game'>";
 switch($r["game"]) {
 case 1: echo "Team Fortress 2"; break;
 case 2: echo "Portal 2"; break;
 }
-echo $r["desc"];
-echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>";
+echo "</span>"."<span class='map-desc'>".$r["desc"]."</span>";
+echo "<span class='map-dl'><a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a></span>";
 //echo $r["rating"]/$r["ratecount"];
 echo "</div>";
 
