@@ -24,21 +24,18 @@ echo "</ul>";
 
 
 if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
- // DISPLAY A STREAM
- $q = mysql_query("SELECT * FROM streams WHERE id=".$_GET["streamid"]);
- 
- if (mysql_num_rows($q) == 1) {
- 
- $r = mysql_fetch_assoc($q);
- echo "<h1>".$r["author"]."'s stream</h1>";
- streamo($r["twitch"]);
- echo "<p>".nl2br($r["description"])."</p>";
- if (islive($r["twitch"]))
-echo "IS LIVE!";
- } else {
- echo "<p>Something went wrong.</p>";
- }
+// DISPLAY A STREAM
+$q = mysql_query("SELECT * FROM streams WHERE id=".$_GET["streamid"]);
 
+if (mysql_num_rows($q) == 1) {
+
+$r = mysql_fetch_assoc($q);
+echo "<h1>".$r["author"]."'s stream</h1>";
+streamo($r["twitch"]);
+echo "<p>".nl2br($r["description"])."</p>";
+} else {
+echo "<p>Something went wrong.</p>";
+}
 }
 
 function streamo($x) {
@@ -54,10 +51,7 @@ echo "<object type='application/x-shockwave-flash' height='378' width='620' id='
 function islive($x) {
 $json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
 $json_array = json_decode($json_file, true);
-//echo $x;
-//print_r($json_array);
-if(empty($json_array)) {
-echo "off";
+if (empty($json_array)) {
 return false;
 }
 
