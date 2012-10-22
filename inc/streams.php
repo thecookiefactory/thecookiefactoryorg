@@ -14,6 +14,8 @@ if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"])
 echo "<li class='stream-button-selected'>".$r["author"]."</li>";
 else
 echo "<li class='stream-button'>".$r["author"]."</li>";
+if (islive($r["twitch"]))
+echo "LIVE";
 echo "</a>";
 
 }
@@ -31,6 +33,8 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
  echo "<h1>".$r["author"]."'s stream</h1>";
  streamo($r["twitch"]);
  echo "<p>".nl2br($r["description"])."</p>";
+ if (islive($r["twitch"]))
+echo "IS LIVE!";
  } else {
  echo "<p>Something went wrong.</p>";
  }
@@ -45,6 +49,23 @@ echo "<object type='application/x-shockwave-flash' height='378' width='620' id='
 <param name='movie' value='http://www.twitch.tv/widgets/live_embed_player.swf' />
 <param name='flashvars' value='hostname=www.twitch.tv&channel=".$x."&auto_play=true&start_volume=25' />
 </object>";
+}
+
+function islive($x) {
+$json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
+$json_array = json_decode($json_file, true);
+//echo $x;
+//print_r($json_array);
+if(empty($json_array)) {
+echo "off";
+return false;
+}
+
+if ($json_array[0]['name'] == "live_user_$x") {
+return true;
+} else {
+return false;
+}
 }
 
 ?>
