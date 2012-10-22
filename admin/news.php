@@ -37,8 +37,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
 					mysql_query("UPDATE news SET title='$title', author='$author', text='$text', comments=$comments WHERE id=$id");
 					echo "updated!";
+					echo "<a href='news.php'>go back</a>";
 				
-				} else {		
+				} else {
 					echo "<h1>edit news - by ".$er["author"]."</h1>
 					<form action='?action=edit&id=".$id."' method='post'>
 					Title<br /><input type='text' name='title' value='".$er["title"]."' /><br />
@@ -54,9 +55,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				}
 			} else {
 				echo "wrong id";
+				echo "<a href='news.php'>go back</a>";
 			}
 		} else {
 			echo "no id defined";
+			echo "<a href='news.php'>go back</a>";
 		}
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
@@ -67,6 +70,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					$id = $_GET["id"];
 					$dq = mysql_query("DELETE FROM news WHERE id=$id");
 					echo "piece of news successfully deleted";
+					echo "<a href='news.php'>go back</a>";
 				} else {
 					echo "delete news id ".$_GET["id"];
 					echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
@@ -75,9 +79,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				}
 			} else {
 				echo "wrong id";
+				echo "<a href='news.php'>go back</a>";
 			}
 		} else {
 			echo "no id defined";
+			echo "<a href='news.php'>go back</a>";
 		}
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		if (isset($_POST["submit"])) {
@@ -94,6 +100,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
 			mysql_query("INSERT INTO news VALUES('','$title','$author','$date','$time','$text','$comments')");
 			echo "piece of news successfully submitted";
+			echo "<a href='news.php'>go back</a>";
 		} else {
 			echo "<h1>post news - by ".$_SESSION["username"]."</h1>
 			<form action='?action=write' method='post'>

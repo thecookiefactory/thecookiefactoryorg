@@ -29,6 +29,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					$id = $_GET["id"];
 					$dq = mysql_query("DELETE FROM maps WHERE id=$id");
 					echo "map successfully deleted";
+					echo "<a href='maps.php'>go back</a>";
 				} else {
 					echo "delete map id ".$_GET["id"];
 					echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
@@ -37,9 +38,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				}
 			} else {
 				echo "wrong id";
+				echo "<a href='maps.php'>go back</a>";
 			}
 		} else {
 			echo "no id defined";
+			echo "<a href='maps.php'>go back</a>";
 		}
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		if (isset($_POST["submit"])) {
@@ -57,6 +60,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
 			mysql_query("INSERT INTO maps VALUES('','$name','$author','$game','$desc','$dl','0','0','$date','$gallery')");
 			echo "map successfully submitted";
+			echo "<a href='maps.php'>go back</a>";
 		} else {
 			echo "<h1>post a map - by ".$_SESSION["username"]."</h1>
 			<form action='?action=write' method='post'>
