@@ -4,32 +4,38 @@ checkembed();
 include "analyticstracking.php";
 
 if (isset($_GET["id"])) {
-echo "display map id: ".$_GET["id"];
+  echo "display map id: ".$_GET["id"];
 } else {
-$q = mysql_query("SELECT * FROM maps");
+  $q = mysql_query("SELECT * FROM maps");
 
-while ($r = mysql_fetch_assoc($q)) {
-echo "<div class='map-div' style='background-image: url(img/maps/".$r["name"].".jpg);'>";
-echo "<span class='map-name'>".$r["name"]."</span>";
-echo "<span class='map-author'>".$r["author"]."</span>"."<span class='map-game'>";
-switch($r["game"]) {
-case 1: echo "Team Fortress 2"; break;
-case 2: echo "Portal 2"; break;
-}
-echo "</span>"."<span class='map-desc'>".$r["desc"]."</span>";
-echo "<span class='map-dl'><a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a></span>";
-//echo $r["rating"]/$r["ratecount"];
-echo "</div>";
+  while ($r = mysql_fetch_assoc($q)) {
+    echo "<div class='map-container'>";
+      echo "<div class='map-imageroll' id='map-1' onclick='mapsAnimation(this.id);'>";
+        echo "<div class='map-image'>";
+          echo "<img class='map-image' src='img/maps/cp_1.jpg'>";
+        echo "</div>";
+        echo "<div class='map-image'>";
+          echo "<img class='map-image' src='img/maps/mp_coop_wat.jpg'>";
+        echo "</div>";
+        echo "<div class='map-image'>";
+          echo "<img class='map-image' src='img/maps/cp_1.jpg'>";
+        echo "</div>";
+      echo "</div>";
+      echo "<div class='map-data'>";
+        echo "<span class='map-name'>".$r["name"]."</span>";
+        echo "<span class='map-author'>".$r["author"]."</span>";
+        echo "<span class='map-game'>";
+                switch($r["game"]) {
+                  case 1: echo "Team Fortress 2"; break;
+                  case 2: echo "Portal 2"; break;
+                }
+        echo "</span>";
+        echo "<span class='map-desc'>".$r["desc"]."</span>";
+        echo "<span class='map-dl'><a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a></span>";
+      echo "</div>";
+    echo "</div>";
 
-// images
-if ($r["gallery"] == 1) {
-$iq = mysql_query("SELECT * FROM ".$r["name"]." ORDER BY id ASC");
-while ($ir = mysql_fetch_assoc($iq)) {
-echo "<a href='img/maps/".$r["name"]."/".$ir["id"].".jpg' title='".$ir["desc"]."' rel='lightbox[".$r["name"]."]'><img src='img/maps/".$r["name"]."/thumbs/".$ir["id"].".jpg' /></a>";
-}
-}
-
-}
+  }
 
 }
 

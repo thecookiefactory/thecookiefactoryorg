@@ -297,8 +297,35 @@ p.comment-text {
           border-radius: 2px;
 }
 
-.map-div {
+@-webkit-keyframes test {
+  from { -webkit-transform: translateX(0px) }
+  to   { -webkit-transform: translateX(-900px) }
+}
 
+.map-container {
+  width: 900px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.map-imageroll {
+  white-space: nowrap;
+  position: relative;
+}
+
+.map-imageroll-animated {
+  -webkit-animation-name: test;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-fill-mode: forwards;
+}
+
+div.map-image {
+  display: inline;
+}
+
+img.map-image {
+  width: 100%;
 }
 
 .map-name {
