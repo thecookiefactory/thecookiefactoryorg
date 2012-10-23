@@ -10,7 +10,7 @@ if (isset($_GET["id"])) {
 
   while ($r = mysql_fetch_assoc($q)) {
     echo "<div class='map-container'>";
-      echo "<div class='map-imageroll' id='map-1' onclick='mapsAnimation(this.id);'>";
+      echo "<div class='map-imageroll' id='map-".$r["id"]."' onclick='mapsAnimation(this.id);'>";
         echo "<div class='map-image'>";
           echo "<img class='map-image' src='img/maps/cp_1.jpg'>";
         echo "</div>";
