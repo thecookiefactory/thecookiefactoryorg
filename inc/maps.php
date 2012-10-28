@@ -7,6 +7,8 @@ include "analyticstracking.php";
 
   while ($r = mysql_fetch_assoc($q)) {
     echo "<div class='map-container'>";
+      echo "<div class='map-leftarrow' id='map-".$r["id"]."' onclick='startAnimation(this.id, -1);'></div>";
+      echo "<div class='map-rightarrow' id='map-".$r["id"]."' onclick='startAnimation(this.id, 1);'></div>";
       echo "<div class='map-imageroll' id='map-".$r["id"]."' onclick='startAnimation(this.id);'>";
       
     //display the main image

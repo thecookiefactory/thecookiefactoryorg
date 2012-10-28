@@ -14,9 +14,6 @@ require "inc/essential.php";
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' />
 <script src="js/main.js"></script>
 <script src="js/maps.js"></script>
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/lightbox.js"></script>
-<link href="lightbox.css" rel="stylesheet" />
 </head>
 <body>
 	

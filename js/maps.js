@@ -13,14 +13,14 @@ function findKeyframesRule(rule)
         return null;
     }
 
-function endAnimation(mapid) {
+function endAnimation(mapid, direction) {
         document.getElementById(mapid).style.webkitAnimationName = "none";
-        position = dict[mapid] + 1;
+        position = dict[mapid] + direction;
         document.getElementById(mapid).style.left = (0 - (position * 900))+"px";
         dict[mapid] = position
     }
 
-function startAnimation(mapid) {
+function startAnimation(mapid, direction) {
         document.getElementById(mapid).style.webkitAnimationName = "none";
         var keyframes = findKeyframesRule("scrolling");
         if (mapid in dict) {
@@ -31,7 +31,7 @@ function startAnimation(mapid) {
         keyframes.deleteRule("from");
         keyframes.deleteRule("to");
         keyframes.insertRule("from { -webkit-transform: translateX(0px); }");
-        keyframes.insertRule("to { -webkit-transform: translateX(-900px); }");
+        keyframes.insertRule("to { -webkit-transform: translateX("+direction*-900+"px); }");
         
         // assign the animation to our element (which will cause the animation to run)
         document.getElementById(mapid).style.webkitAnimationName = "scrolling";
