@@ -3,6 +3,8 @@ body, html {
   background-image: url(img/bg2.png);
   font-family: "Open Sans", "Arial", sans-serif;
   font-weight: 400;
+  color: #BAD5F1;
+  text-align: center;
 }
 
 @font-face {
@@ -295,6 +297,11 @@ p.comment-text {
   -webkit-border-radius: 2px;
      -moz-border-radius: 2px;
           border-radius: 2px;
+}
+
+.clearfix {
+  clear: both;
+  margin-top: 38px;
 }
 
 @-webkit-keyframes scrolling {

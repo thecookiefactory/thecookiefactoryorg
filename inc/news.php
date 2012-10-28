@@ -50,17 +50,17 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 				}
 
 				if (checkuser()) {	
-					echo "<hr><p class='comments-title'>Post a comment</p>";		
+					echo "<hr><h1 class='comments-title'>Post a comment</h1>";		
 					echo "<div id='comment-form'><form action='?p=news&id=".$_GET["id"]."' method='post'>
 					<textarea name='text' id='comment-textarea' required></textarea>
 					<input type='submit' name='cp' value='>' id='comment-submitbutton'>
 					</form></div>";
 				} else {
-					echo "<span id='loginnotice'>you have to be logged in to post comments</span>";
+					echo "<hr><h1 class='comments-title'>Log in to be able to post comments</h1><div class='clearfix'></div>";
 				}
 			
 			} else 
-				echo "<p class='comments-title'>Commenting disabled</p>";
+				echo "<hr><h1 class='comments-title'>Commenting disabled</h1><div class='clearfix'></div>";
 	} else {
 		echo "No.";
 	}
