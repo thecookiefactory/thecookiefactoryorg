@@ -6,10 +6,11 @@ include "analyticstracking.php";
   $q = mysql_query("SELECT * FROM maps");
 
   while ($r = mysql_fetch_assoc($q)) {
+    echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
-      echo "<div class='map-leftarrow' id='map-".$r["id"]."' onclick='startAnimation(this.id, -1);'></div>";
-      echo "<div class='map-rightarrow' id='map-".$r["id"]."' onclick='startAnimation(this.id, 1);'></div>";
-      echo "<div class='map-imageroll' id='map-".$r["id"]."' onclick='startAnimation(this.id);'>";
+      echo "<div class='map-leftarrow' id='map-".$r["id"]."a' onclick='startAnimation(this.id, -1);'></div>";
+      echo "<div class='map-rightarrow' id='map-".$r["id"]."b' onclick='startAnimation(this.id, 1);'></div>";
+      echo "<div class='map-imageroll' id='map-".$r["id"]."'>";
       
     //display the main image
         echo "<div class='map-image'>";
@@ -26,7 +27,6 @@ include "analyticstracking.php";
     
       echo "</div>";
       echo "<div class='map-data'>";
-        echo "<span class='map-name'>".$r["name"]."</span>";
         echo "<span class='map-author'>".$r["author"]."</span>";
         echo "<span class='map-game'>";
                 switch($r["game"]) {

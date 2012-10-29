@@ -8,7 +8,8 @@ body, html {
 }
 
 @font-face {
-  font-family: "TF2 Build"; src: url('res/tf2build.ttf');
+  font-family: "TF2 Build";
+  src: url("res/tf2build.ttf");
 } 
 
 #wrapper {
@@ -304,9 +305,21 @@ p.comment-text {
   margin-top: 38px;
 }
 
-@-webkit-keyframes scrolling {
-  from { -webkit-transform: translateX(0px) }
-  to   { -webkit-transform: translateX(0px) }
+        @keyframes arrowfade { from{background-color: rgba(0, 0, 0, 0.2);} to{background-color: rgba(0, 0, 0, 0.0);} }
+@-webkit-keyframes arrowfade { from{background-color: rgba(0, 0, 0, 0.2);} to{background-color: rgba(0, 0, 0, 0.0);} }
+   @-moz-keyframes arrowfade { from{background-color: rgba(0, 0, 0, 0.2);} to{background-color: rgba(0, 0, 0, 0.0);} }
+     @-o-keyframes arrowfade { from{background-color: rgba(0, 0, 0, 0.2);} to{background-color: rgba(0, 0, 0, 0.0);} }
+
+        @keyframes scrolling { }
+@-webkit-keyframes scrolling { }
+   @-moz-keyframes scrolling { }
+     @-o-keyframes scrolling { }
+
+.map-scrolling {
+          animation-name: scrolling;
+  -webkit-animation-name: scrolling;
+     -moz-animation-name: scrolling;
+       -o-animation-name: scrolling;
 }
 
 .map-container {
@@ -314,8 +327,8 @@ p.comment-text {
   margin: auto;
   overflow: hidden;
   position: relative;
-  border-radius: 15px;
 }
+
 .map-leftarrow {
   height: 510px;
   width: 65px;
@@ -323,9 +336,25 @@ p.comment-text {
   display: block;
   position: absolute;
   z-index: 1;
+  background-image: url(img/prev.png);
+  background-repeat: no-repeat;
+  background-position: -3px 232.5px;
+          animation-duration: 0.2s;
+  -webkit-animation-duration: 0.2s;
+     -moz-animation-duration: 0.2s;
+       -o-animation-duration: 0.2s;
+          animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease-in-out;
+     -moz-animation-timing-function: ease-in-out;
+       -o-animation-timing-function: ease-in-out;
+          animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+     -moz-animation-fill-mode: forwards;
+       -o-animation-fill-mode: forwards;
 }
 
 .map-leftarrow:hover {
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -337,10 +366,25 @@ p.comment-text {
   position: absolute;
   left: 835px;
   z-index: 1;
-
+  background-image: url(img/next.png);
+  background-repeat: no-repeat;
+  background-position: 17px 232.5px;
+          animation-duration: 0.2s;
+  -webkit-animation-duration: 0.2s;
+     -moz-animation-duration: 0.2s;
+       -o-animation-duration: 0.2s;
+          animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease-in-out;
+     -moz-animation-timing-function: ease-in-out;
+       -o-animation-timing-function: ease-in-out;
+          animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+     -moz-animation-fill-mode: forwards;
+       -o-animation-fill-mode: forwards;
 }
 
 .map-rightarrow:hover {
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -348,9 +392,18 @@ p.comment-text {
   white-space: nowrap;
   position: relative;
   border-radius: 15px;
+          animation-duration: 1s;
   -webkit-animation-duration: 1s;
+     -moz-animation-duration: 1s;
+       -o-animation-duration: 1s;
+          animation-timing-function: ease-in-out;
   -webkit-animation-timing-function: ease-in-out;
+     -moz-animation-timing-function: ease-in-out;
+       -o-animation-timing-function: ease-in-out;
+          animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
+     -moz-animation-fill-mode: forwards;
+       -o-animation-fill-mode: forwards;
 }
 
 div.map-image {
@@ -362,7 +415,15 @@ img.map-image {
 }
 
 .map-name {
-  
+  width: 100%;
+  font-family: "TF2 Build";
+  font-size: 56px;
+  -webkit-text-stroke: 2px black;
+  color: white;
+  text-align: center;
+  z-index: 1;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .map-author {

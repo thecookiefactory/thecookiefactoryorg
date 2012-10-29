@@ -3,37 +3,45 @@ var dict = {};
 function findKeyframesRule(rule)
     {
         var ss = document.styleSheets;
-        for (var i = 0; i < ss.length; ++i) {
-            for (var j = 0; j < ss[i].cssRules.length; ++j) {
-                if (ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE && ss[i].cssRules[j].name == rule)
-                    return ss[i].cssRules[j];
-            }
+        var result = new Array();
+        for (var j = 0; j < ss[0].cssRules.length; ++j) {
+            if (ss[0].cssRules[j].name == rule)
+                result.push(ss[0].cssRules[j]);
         }
         
-        return null;
+        return result;
     }
 
 function endAnimation(mapid, direction) {
-        document.getElementById(mapid).style.webkitAnimationName = "none";
+        document.getElementById(mapid).className = "map-imageroll";
         position = dict[mapid] + direction;
         document.getElementById(mapid).style.left = (0 - (position * 900))+"px";
         dict[mapid] = position
     }
 
 function startAnimation(mapid, direction) {
-        document.getElementById(mapid).style.webkitAnimationName = "none";
+        mapid = mapid.slice(0,-1);
+        elem = document.getElementById(mapid)
+        elem.className = "map-imageroll";
         var keyframes = findKeyframesRule("scrolling");
         if (mapid in dict) {
                 position = dict[mapid]
             } else {
                 dict[mapid] = 0
             }
-        keyframes.deleteRule("from");
-        keyframes.deleteRule("to");
-        keyframes.insertRule("from { -webkit-transform: translateX(0px); }");
-        keyframes.insertRule("to { -webkit-transform: translateX("+direction*-900+"px); }");
-        
-        // assign the animation to our element (which will cause the animation to run)
-        document.getElementById(mapid).style.webkitAnimationName = "scrolling";
-        setTimeout(function() {endAnimation(mapid);}, 1200);      
+
+        for (var i = 0; i < keyframes.length; ++i) {
+            if (keyframes[i].deleteRule) {
+                keyframes[i].deleteRule(0);
+                keyframes[i].deleteRule(1);
+            } else {
+                keyframes[i].removeRule("from");
+                keyframes[i].removeRule("to");
+            }
+            keyframes[i].insertRule("from { transform: translateX(0px); -webkit-transform: translateX(0px); -moz-transform: translateX(0px); -o-transform: translateX(0px); }");
+            keyframes[i].insertRule("to { transform: translateX("+direction*-900+"px); -webkit-transform: translateX("+direction*-900+"px); -moz-transform: translateX("+direction*-900+"px); -o-transform: translateX("+direction*-900+"px); }");
+        }
+
+        elem.className = "map-imageroll map-scrolling";
+        setTimeout(function() {endAnimation(mapid, direction);}, 1200);      
     }
