@@ -19,7 +19,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
 	if ($_GET["action"] == "edit" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
 	
-		$query = mysql_query("SELECT * FROM gallery WHERE id=".$_GET["id"]);
+		$query = mysql_query("SELECT * FROM `gallery` WHERE `id`=".$_GET["id"]);
+		if (mysql_num_rows($query) == 0) {
+			die("Not a valid id");
+		}
 		$row = mysql_fetch_assoc($query);
 		if (isset($_POST["submit"])) {
 		
@@ -49,8 +52,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 		}
 	
 	} else if ($_GET["action"] == "add" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
-	
+		
 		$mq = mysql_query("SELECT `name` FROM `maps` WHERE `id`=".$_GET["id"]);
+		if (mysql_num_rows($mq) == 0) {
+			die("Not a valid id");
+		}
 		$mr = mysql_fetch_assoc($mq);
 		echo "<h1>Add an image to ".$mr["name"]."</h1>";
 		
@@ -60,22 +66,32 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 			$mapid = $_GET["id"];
 			
 			//image variables
-			$filename = $_FILES["image"]["name"];
+			$filename = strtolower($_FILES["image"]["name"]);
 			$filetype = $_FILES["image"]["type"];
 			$tmp_name = $_FILES["image"]["tmp_name"];
 			
-			if (!empty($filename)) {
-				
-				$location = "../img/maps/".$_GET["id"]."/";
-				
-				if (move_uploaded_file($tmp_name, $location.$filename)) {
-					
-					mysql_query("INSERT INTO gallery VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
-					echo "iuploaded";
+			$extension = substr($filename, strpos($filename, ".") + 1);
 			
+			if (!empty($filename)) {
+			
+				if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
+				
+					$location = "../img/maps/".$_GET["id"]."/";
+				
+					if (move_uploaded_file($tmp_name, $location.$filename)) {
+					
+						mysql_query("INSERT INTO gallery VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
+						echo "iuploaded";
+			
+					} else {
+				
+						echo "error";
+				
+					}
+				
 				} else {
 				
-					echo "error";
+					echo "jpg or png only";
 				
 				}
 				
@@ -84,7 +100,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 		} else {
 			
 			echo "<form action='?action=add&amp;id=".$_GET["id"]."' method='post' enctype='multipart/form-data'>";
-			echo "<input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique<br>";
+			echo "<input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique. jpg/png only<br>";
 			echo "description: <input type='text' name='desc' required><br>";
 			echo "<input type='submit' name='submit'>";
 			echo "</form>";
