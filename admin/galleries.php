@@ -15,7 +15,7 @@ if (!checkadmin())
 <body>
 
 <?php
-if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "delete")) {
+if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "delete" || $_GET["action"] == "edit")) {
 
 } else {
 	echo "<h1>manage galleries</h1>";
