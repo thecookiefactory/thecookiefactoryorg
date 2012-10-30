@@ -63,20 +63,22 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "<a href='maps.php'>go back</a>";
 		} else {
 			echo "<h1>post a map - by ".$_SESSION["username"]."</h1>
-			<form action='?action=write' method='post'>
+			<form action='?action=write' method='post' enctype='multipart/form-data'>
 			Name<br /><input type='text' name='name' /><br />
 			<select name='game'>
 				<option value='1'>Team Fortress 2</option>
 				<option value='2'>Portal 2</option>
 			</select>
 			Description<br /><textarea name='desc'></textarea><br />
-			download link<br /><input type='text' name='dl' /><br />
+			download link<br /><input type='text' name='dl' />OR
+			bsp file<input type='file' name='bsp' /><br>
+			main image<input type='file' name='image' /><br>
 			Create a gallery<input type='checkbox' name='gallery' />
 			<br />
 			<input type='submit'name='submit' />
 			</form>";
 		}
-	}
+		}
 	} else { // display all the maps
 		echo "<h1>manage maps</h1>
 		<p><a href='?action=write'>add new</a></p>";

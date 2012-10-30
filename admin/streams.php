@@ -38,7 +38,7 @@ description
 Active stream <input type='checkbox' name='active' ";
 if ($sr["active"] == 1)
 echo "checked ";
-echo "/><br />
+echo "/> (there is a chance your stream will be live sometime soon)<br />
 <input type='submit' name='submit' />
 </form>";
 

@@ -22,7 +22,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		if (isset($_POST["delete"])) {
 			$id = $_GET["id"];
 			$dq = mysql_query("DELETE FROM newscomments WHERE id=$id");
-			echo "piece of news successfully deleted";
+			echo "comment successfully deleted";
 			echo "<a href='../index.php?p=news'>go back</a>";
 		} else {
 			echo "delete comment id ".$_GET["id"]."(".$er["text"].")";

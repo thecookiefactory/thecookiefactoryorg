@@ -13,17 +13,15 @@ include "analyticstracking.php";
       
     //display the main image
         echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["name"].".jpg'>";
+          echo "<img class='map-image' src='img/maps/".$r["id"].".jpg'>";
         echo "</div>";
     
     //display additional images
-    if ($r["gallery"] == 1) {
-      $gq = mysql_query("SELECT * FROM ".$r["name"]);
-      while ($gr = mysql_fetch_assoc($gq)) {
-        echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["name"]."/".$gr["id"].".jpg' title='".$gr["desc"]."'>";
+    $gq = mysql_query("SELECT * FROM gallery WHERE mapid=".$r["id"]);
+    while ($gr = mysql_fetch_assoc($gq)) {
+		echo "<div class='map-image'>";
+          echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' title='".$gr["desc"]."'>";
         echo "</div>";
-      }
     }
     
       echo "</div>";

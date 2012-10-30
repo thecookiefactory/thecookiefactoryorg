@@ -3,7 +3,7 @@
 checkembed();
 include "analyticstracking.php";
 
-$q = mysql_query("SELECT * FROM streams");
+$q = mysql_query("SELECT * FROM streams WHERE active=1");
 
 echo "<ul id='stream-menu'>";
 
