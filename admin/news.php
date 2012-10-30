@@ -41,9 +41,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				
 				} else {
 					echo "<h1>edit news - by ".$er["author"]."</h1>
-					<form action='?action=edit&id=".$id."' method='post'>
+					<form action='?action=edit&amp;id=".$id."' method='post'>
 					Title<br /><input type='text' name='title' value='".$er["title"]."' /><br />
-					Text<br /><textarea name='text'>".nl2br($er["text"])."</textarea>
+					Text<br /><textarea name='text'>".$er["text"]."</textarea>
 					<br />
 					Disable comments<input type='checkbox' name='comments'";
 					if ($er["comments"] == 0) 
@@ -73,7 +73,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					echo "<a href='news.php'>go back</a>";
 				} else {
 					echo "delete news id ".$_GET["id"];
-					echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
+					echo "<form action='?action=delete&amp;id=".$_GET["id"]."' method='post'>
 					<input type='submit' name='delete' value='Yes, delete' /> or just <a href='news.php'>go back</a>
 					</form>";
 				}
@@ -87,7 +87,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		}
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		if (isset($_POST["submit"])) {
-			$title = $_POST["title"];
+			$title = mysql_real_escape_string($_POST["title"]);
 			$author = $_SESSION["username"];
 			$date = date("Y-m-d");
 			$time = date("H:i", time());
@@ -131,7 +131,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		echo "#".$row["id"]." - ".$row["title"]." - ".substr($row["text"], 0, 100);
 		echo "</td>";
 		echo "<td>";
-		echo "<a href='?action=edit&id=".$row["id"]."'>edit</a> <a href='?action=delete&id=".$row["id"]."'>delete</a>";
+		echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
 		echo "</td>";
 		echo "</tr>";
 	}

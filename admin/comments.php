@@ -26,7 +26,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			echo "<a href='../index.php?p=news'>go back</a>";
 		} else {
 			echo "delete comment id ".$_GET["id"]."(".$er["text"].")";
-			echo "<form action='?action=delete&id=".$_GET["id"]."' method='post'>
+			echo "<form action='?action=delete&amp;id=".$_GET["id"]."' method='post'>
 			<input type='submit' name='delete' value='Yes, delete' /> or just <a href='news.php'>go back</a>
 			</form>";
 		}

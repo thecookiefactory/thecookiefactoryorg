@@ -9,7 +9,7 @@ echo "<ul id='stream-menu'>";
 
 while ($r = mysql_fetch_assoc($q)) {
 
-echo "<a href='?p=streams&streamid=".$r["id"]."'>";
+echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
 if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"])
 echo "<li class='stream-button-selected'>".$r["author"]."</li>";
 else

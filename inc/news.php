@@ -39,7 +39,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
 				if ($commnum > 0) {
-					echo "<hr><a name='comments'></a><a href='?p=news&id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
+					echo "<hr><a name='comments'></a><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
 			
 					if (checkadmin()) {
 						while ($crow = mysql_fetch_assoc($cq)) {
@@ -61,7 +61,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
 				if (checkuser()) {	
 					echo "<hr><h1 class='comments-title'>Post a comment</h1>";		
-					echo "<div id='comment-form'><form action='?p=news&id=".$_GET["id"]."' method='post'>
+					echo "<div id='comment-form'><form action='?p=news&amp;id=".$_GET["id"]."' method='post'>
 					<textarea name='text' id='comment-textarea' required></textarea>
 					<input type='submit' name='cp' value='>' id='comment-submitbutton'>
 					</form></div>";
