@@ -69,6 +69,10 @@ require "inc/news.php";
 2012 thecookiefactory.org<br>
 YYYY-MM-DD H:i (CET/CEST)
 </footer>
+<!-- ezt persze majd nem ide-->
+<div id='contact-us'>
+<a href='http://steamcommunity.com/groups/thecookiefactory'>Steam</a> <a href='http://facebook.com/thecookiefactoryorg'>Facebook</a> <a href='http://youtube.com/thecookiefactoryorg'>YouTube</a> <a href='http://github.com/thecookiefactory'>GitHub</a>
+</div>
 
 </body>
 </html>
