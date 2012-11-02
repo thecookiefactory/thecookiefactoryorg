@@ -75,7 +75,7 @@ YYYY-MM-DD H:i (CET/CEST)
 </footer>
 <!-- ezt persze majd nem ide-->
 <div id='contact-us'>
-<a href='http://steamcommunity.com/groups/thecookiefactory'>Steam</a> <a href='http://facebook.com/thecookiefactoryorg'>Facebook</a> <a href='http://youtube.com/thecookiefactoryorg'>YouTube</a> <a href='http://github.com/thecookiefactory'>GitHub</a>
+<a href='http://steamcommunity.com/groups/thecookiefactory' target='_blank'>Steam</a> <a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a> <a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a> <a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a>
 </div>
 
 </body>
