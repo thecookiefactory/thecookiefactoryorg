@@ -8,7 +8,7 @@ include "analyticstracking.php";
 if (isset($_POST["username"]) && !isset($_SESSION["username"])) {
 $username = mysql_real_escape_string(htmlentities($_POST["username"]));
 $password = md5($_POST["password"]);
-$q = mysql_query("SELECT * FROM users WHERE name='$username'");
+$q = mysql_query("SELECT * FROM `users` WHERE `name`='$username'");
 $row = mysql_fetch_assoc($q);
 if ($username == $row["name"] && $password == $row["password"]) {
 $_SESSION["username"] = $username;

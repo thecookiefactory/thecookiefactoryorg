@@ -28,7 +28,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 		
 			if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 				if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
-					mysql_query("DELETE FROM gallery WHERE id=".$_GET["id"]);
+					mysql_query("DELETE FROM `gallery` WHERE `id`=".$_GET["id"]);
 					echo "Image deleted successfully.";
 				} else {
 					echo "delete process failed";
@@ -80,7 +80,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 				
 					if (move_uploaded_file($tmp_name, $location.$filename)) {
 					
-						mysql_query("INSERT INTO gallery VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
+						mysql_query("INSERT INTO `gallery` VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
 						echo "iuploaded";
 			
 					} else {
@@ -117,7 +117,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 	while ($row = mysql_fetch_assoc($query)) {
 		echo "<li>";
 		echo "#".$row["id"]." - ".$row["name"]." - ".$row["author"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
-		$gq = mysql_query("SELECT * FROM gallery WHERE mapid=".$row["id"]);
+		$gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$row["id"]);
 		if (mysql_num_rows($gq) > 0) {
 			echo "<ul>";
 			while ($gr = mysql_fetch_assoc($gq)) {

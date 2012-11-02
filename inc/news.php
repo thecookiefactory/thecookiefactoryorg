@@ -7,7 +7,7 @@ include "analyticstracking.php";
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 // DISPLAY ONE PIECE OF NEWS
 
-	$query = mysql_query("SELECT * FROM news WHERE id=".$_GET["id"]);
+	$query = mysql_query("SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
 	
 	if (mysql_num_rows($query) == 1) {
 	
@@ -32,11 +32,11 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 				$date = date("Y-m-d");
 				$time = date("H:i", time());
 				
-				$iq = mysql_query("INSERT INTO newscomments VALUES('','$author','$text','$date','$time','$newsid')");
+				$iq = mysql_query("INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
 				
 				}
 			
-				$cq = mysql_query("SELECT * FROM newscomments WHERE newsid=".$row["id"]." ORDER BY id ASC");
+				$cq = mysql_query("SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
 				if ($commnum > 0) {
 					echo "<hr><a name='comments'></a><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
@@ -77,7 +77,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 } else {
 // DISPLAY ALL THE NEWS
 
-	$query = mysql_query("SELECT * FROM news ORDER BY id DESC");
+	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC");
 
 	while ($row = mysql_fetch_assoc($query)) {
 	
@@ -88,7 +88,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		
 		if ($row["comments"] == 1) {
 		
-			$cq = mysql_query("SELECT id FROM newscomments WHERE newsid=".$row["id"]);
+			$cq = mysql_query("SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
 			$commnum = mysql_num_rows($cq);
 			echo "<a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments </a> &ndash; ";
 			}

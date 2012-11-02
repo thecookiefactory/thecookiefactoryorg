@@ -9,7 +9,7 @@ if (isset($_POST["searchb"])) {
 	
 	if (strlen($term) >= 3) {
 
-	$squery = mysql_query("SELECT * FROM news WHERE text LIKE '%$term%' ORDER BY id DESC");
+	$squery = mysql_query("SELECT * FROM `news` WHERE `text` LIKE '%$term%' ORDER BY `id` DESC");
 	$nr = mysql_num_rows($squery);
 
 	if ($nr == 0) {

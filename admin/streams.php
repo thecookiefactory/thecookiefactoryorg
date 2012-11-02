@@ -24,10 +24,10 @@ if (isset($_POST["submit"])) {
 	$active = 1;
 	else
 	$active = 0;
-	$uq = mysql_query("UPDATE streams SET twitch='".$twitch."', description='".$desc."', active='".$active."' WHERE author='".$_SESSION["username"]."'") or die(mysql_error());
+	$uq = mysql_query("UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `author`='".$_SESSION["username"]."'") or die(mysql_error());
 }
 
-$sq = mysql_query("SELECT * FROM streams WHERE author='".$_SESSION["username"]."'");
+$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["username"]."'");
 $sr = mysql_fetch_assoc($sq);
 
 echo "<form action='streams.php' method='post'>

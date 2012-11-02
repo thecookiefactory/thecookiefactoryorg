@@ -23,11 +23,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			$id = $_GET["id"];
-			$eq = mysql_query("SELECT * FROM maps WHERE id=$id");
+			$eq = mysql_query("SELECT * FROM `maps` WHERE `id`=$id");
 			if (mysql_num_rows($eq) == 1) {
 				if (isset($_POST["delete"])) {
 					$id = $_GET["id"];
-					$dq = mysql_query("DELETE FROM maps WHERE id=$id");
+					$dq = mysql_query("DELETE FROM `maps` WHERE `id`=$id");
 					echo "map successfully deleted";
 					echo "<a href='maps.php'>go back</a>";
 				} else {
@@ -63,7 +63,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			$image_type = $_FILES["image"]["type"];
 			$image_tmp = $_FILES["image"]["tmp_name"];
 			
-			mysql_query("INSERT INTO maps VALUES('','$name','$author','$game','$desc','$dl','0','0','$date')");
+			mysql_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$dl','0','0','$date')");
 			
 			echo "map successfully submitted";
 			echo "<a href='maps.php'>go back</a>";
@@ -89,7 +89,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 } else { // display all the maps
 	echo "<h1>manage maps</h1>
 	<p><a href='?action=write'>add new</a></p>";
-	$query = mysql_query("SELECT * FROM maps ORDER BY id DESC");
+	$query = mysql_query("SELECT * FROM `maps` ORDER BY `id` DESC");
 	echo "<table style='border-spacing: 5px;'>";
 	echo "<tr><th>maps</th><th>editing tools</th></tr>";
 

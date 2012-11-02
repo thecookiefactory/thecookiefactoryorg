@@ -3,7 +3,7 @@
 checkembed();
 include "analyticstracking.php";
 
-$q = mysql_query("SELECT * FROM streams WHERE active=1");
+$q = mysql_query("SELECT * FROM `streams` WHERE `active`=1");
 
 echo "<ul id='stream-menu'>";
 
@@ -25,7 +25,7 @@ echo "</ul>";
 
 if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
 // DISPLAY A STREAM
-$q = mysql_query("SELECT * FROM streams WHERE id=".$_GET["streamid"]);
+$q = mysql_query("SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"]);
 
 if (mysql_num_rows($q) == 1) {
 
