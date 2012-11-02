@@ -122,7 +122,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 			echo "<ul>";
 			while ($gr = mysql_fetch_assoc($gq)) {
 				echo "<li>";
-				echo "<a href='?action=edit&amp;id=".$gr["id"]."'>#".$gr["id"]." - ".$gr["desc"];
+				echo "<a href='?action=edit&amp;id=".$gr["id"]."'>#".$gr["id"]." - ".$gr["desc"]."</a>";
 				echo "</li>";
 			}
 			echo "</ul>";
