@@ -1,0 +1,25 @@
+Note: the following files are not affected by this license in any way
+
+ - The TF2 Build font (res/tf2build.ttf)
+ - All images files not referencing the 'thecookiefactory' trademark (img/*)
+
+Copyright (c) 2012, thecookiefactory (Bognár Márton, Nagy Bence, and all other
+specifically not named members)
+
+Redistribution and use in any form, with or without modification, is
+permitted, provided that the following condition is met:
+
+Redistribution of any code or resource related to this project must retain the
+above copyright notice, this list of conditions and the following disclaimer.
+
+ANY AND ALL CODE AND RESOURCES INCLUDED IN THIS PROJECT ARE PROVIDED BY THE
+COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIALDAMAGES 
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS ORSERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT,
+INCLUDING NEGLIGENCE OR OTHERWISE, ARISING OUT OF THE USE OF CODE OR RESOURCES
+INCLUDED IN THE PROJECT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
