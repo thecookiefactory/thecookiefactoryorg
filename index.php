@@ -19,7 +19,7 @@ require "inc/essential.php";
 <script src="js/main.js"></script>
 <script src="js/maps.js"></script>
 </head>
-<body>
+<body <?php if (isset($_GET["p"]) && $_GET["p"] == "login") echo "onLoad='document.forms.login.username.focus()'"; ?>>
 	
 <?php include_once("inc/analyticstracking.php") ?>
 
