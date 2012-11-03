@@ -78,8 +78,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			Description<br /><textarea name='desc' required></textarea><br />
 			download link<br /><input type='text' name='dl' />OR
 			bsp file<input type='file' name='bsp' /><br>
-			main image<input type='file' name='image' required /><br>
-			Create a gallery<input type='checkbox' name='gallery' />
+			main image<input type='file' name='image' required />
 			<br />
 			<input type='submit'name='submit' />
 			</form>";
