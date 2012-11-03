@@ -54,33 +54,51 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			$desc = mysql_real_escape_string($_POST["desc"]);
 			$date = date("Y-m-d");
 			
-			//bsp
-			$dl = mysql_real_escape_string($_POST["dl"]);
+			//map file
+			switch($_POST["dli"]) {
+				case "link": 
+					//steam community link
+					echo "download link is a steam community url";
+					$dl = mysql_real_escape_string($_POST["dl"]);
+					break;
+				case "file": 
+					//file upload
+					echo "download link is an uploaded bsp file";
+					$dl = $name.".bsp";
+					break;
+			}
 			
-			//image
+			//image file
 			$image_name = $_FILES["image"]["name"];
 			$image_size = $_FILES["image"]["size"];
 			$image_type = $_FILES["image"]["type"];
 			$image_tmp = $_FILES["image"]["tmp_name"];
 			
-			mysql_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$dl','0','0','$date')");
+			//inserting the data
+			//mysql_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$dl','0','0','$date')");
 			
 			echo "map successfully submitted";
 			echo "<a href='maps.php'>go back</a>";
 		} else {
 			echo "<h1>post a map - by ".$_SESSION["username"]."</h1>
 			<form action='?action=write' method='post' enctype='multipart/form-data'>
-			Name<br /><input type='text' name='name' required /><br />
+			Name<br>
+			<input type='text' name='name' required><br>
+			Associated game<br>
 			<select name='game'>
 				<option value='1'>Team Fortress 2</option>
 				<option value='2'>Portal 2</option>
-			</select>
-			Description<br /><textarea name='desc' required></textarea><br />
-			download link<br /><input type='text' name='dl' />OR
-			bsp file<input type='file' name='bsp' /><br>
-			main image<input type='file' name='image' required />
-			<br />
-			<input type='submit'name='submit' />
+			</select><br>
+			Description<br>
+			<textarea name='desc' required></textarea><br>
+			
+			<input type='radio' name='dli' value='link' required>download link <input type='text' name='dl'>
+			<br>
+			<input type='radio' name='dli' value='file'>bsp file <input type='file' name='bsp'>			
+			<br>
+			main image<br>
+			<input type='file' name='image' required><br>
+			<input type='submit' name='submit'>
 			</form>";
 		}
 		
