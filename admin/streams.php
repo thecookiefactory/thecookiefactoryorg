@@ -34,23 +34,23 @@ if (mysql_num_rows($sq) == 0) {
 	echo "Your stream page is being created now...";
 	$cq = mysql_query("INSERT INTO `streams` VALUES('','".$_SESSION["username"]."','','','0')");
 	echo "Done. Please fill out the fields below.";
-} else {
-	$sr = mysql_fetch_assoc($sq);
-
-	echo "<form action='streams.php' method='post'>
-	twitch.tv username:<br>
-	<input type='text' name='twitch' value='".$sr["twitch"]."' required /><br>
-	description:<br>
-	<textarea name='description' rows='7' cols='50' required>".$sr["description"]."</textarea><br>
-	Active stream <input type='checkbox' name='active' ";
-	
-	if ($sr["active"] == 1)
-		echo "checked ";
-		
-	echo "/> (there is a chance your stream will be live sometime soon)<br>
-	<input type='submit' name='submit'>
-	</form>";
 }
+$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["username"]."'");
+$sr = mysql_fetch_assoc($sq);
+
+echo "<form action='streams.php' method='post'>
+twitch.tv username:<br>
+<input type='text' name='twitch' value='".$sr["twitch"]."' required /><br>
+description:<br>
+<textarea name='description' rows='7' cols='50' required>".$sr["description"]."</textarea><br>
+Active stream <input type='checkbox' name='active' ";
+	
+if ($sr["active"] == 1)
+	echo "checked ";
+	
+echo "/> (there is a chance your stream will be live sometime soon)<br>
+<input type='submit' name='submit'>
+</form>";
 
 ?>
 </body>
