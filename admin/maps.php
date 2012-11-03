@@ -28,11 +28,24 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				$er = mysql_fetch_assoc($eq);
 				if (isset($_POST["delete"])) {
 					$id = $_GET["id"];
+					
+					//deleting the bsp if present
 					if ($er["steam"] == 0) {
 						unlink("../".$er["dl"]);
 						echo "bsp deleted";
 					}
+					
+					//deleting the main image
 					unlink("../img/maps/".$er["id"].".".$er["ext"]);
+					
+					//deleting images from the gallery
+					$gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$id);
+					
+					while ($gr = mysql_fetch_assoc($gq)) {
+						unlink("../img/maps/".$er["id"]."/".$gr["filename"]);
+						mysql_query("DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
+					}
+					
 					$dq = mysql_query("DELETE FROM `maps` WHERE `id`=$id");
 					rmdir("../img/maps/".$id);
 					echo "map successfully deleted";
