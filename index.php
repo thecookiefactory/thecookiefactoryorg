@@ -17,7 +17,6 @@ require "inc/essential.php";
 <link rel='StyleSheet' type='text/css' href='base.css' />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' />
 <script src="js/main.js"></script>
-<script src="js/maps.js"></script>
 </head>
 <body <?php if (isset($_GET["p"]) && $_GET["p"] == "login") echo "onLoad='document.forms.login.username.focus()'"; ?>>
 	

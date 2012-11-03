@@ -4,10 +4,11 @@ checkembed();
 include "analyticstracking.php";
   
   $q = mysql_query("SELECT * FROM `maps` ORDER BY `id` DESC");
-  $gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
 
   while ($r = mysql_fetch_assoc($q)) {
-    echo "<script type="text/javascript"> var imgno = <?php mysql_num_rows($gq) ?>; </script>";
+	$gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
+    echo "<script type='text/javascript'> var imgno = <?php mysql_num_rows($gq) ?>; </script>";
+	echo "<script src='js/maps.js'></script>";
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
       echo "<div class='map-leftarrow' id='map-".$r["id"]."a' onclick='startImagerollScrolling(this.id, -1);'></div>";
