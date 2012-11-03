@@ -8,8 +8,8 @@ include "analyticstracking.php";
   while ($r = mysql_fetch_assoc($q)) {
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
-      echo "<div class='map-leftarrow' id='map-".$r["id"]."a' onclick='startAnimation(this.id, -1);'></div>";
-      echo "<div class='map-rightarrow' id='map-".$r["id"]."b' onclick='startAnimation(this.id, 1);'></div>";
+      echo "<div class='map-leftarrow' id='map-".$r["id"]."a' onclick='startImagerollScrolling(this.id, -1);'></div>";
+      echo "<div class='map-rightarrow' id='map-".$r["id"]."b' onclick='startImagerollScrolling(this.id, 1);'></div>";
       echo "<div class='map-imageroll' id='map-".$r["id"]."'>";
       
     //display the main image
@@ -20,7 +20,7 @@ include "analyticstracking.php";
     //display additional images
     $gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     while ($gr = mysql_fetch_assoc($gq)) {
-		echo "<div class='map-image'>";
+    echo "<div class='map-image'>";
           echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' title='".$gr["desc"]."'>";
         echo "</div>";
     }
