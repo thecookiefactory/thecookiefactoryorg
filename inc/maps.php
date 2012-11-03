@@ -17,7 +17,7 @@ include "analyticstracking.php";
       
     //display the main image
         echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["id"].".jpg'>";
+          echo "<img class='map-image' src='img/maps/".$r["id"].".".$r["ext"]."'>";
         echo "</div>";
     
     //display additional images

@@ -20,7 +20,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			$id = $_GET["id"];
-			$eq = mysql_query("SELECT * FROM news WHERE id=$id");
+			$eq = mysql_query("SELECT * FROM `news` WHERE `id`=$id");
 			if (mysql_num_rows($eq) == 1) {
 				$er = mysql_fetch_assoc($eq);
 				if (isset($_POST["submit"])) {

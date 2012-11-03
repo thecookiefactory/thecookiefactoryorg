@@ -25,9 +25,16 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			$id = $_GET["id"];
 			$eq = mysql_query("SELECT * FROM `maps` WHERE `id`=$id");
 			if (mysql_num_rows($eq) == 1) {
+				$er = mysql_fetch_assoc($eq);
 				if (isset($_POST["delete"])) {
 					$id = $_GET["id"];
+					if ($er["steam"] == 0) {
+						unlink("../".$er["dl"]);
+						echo "bsp deleted";
+					}
+					unlink("../img/maps/".$er["id"].".".$er["ext"]);
 					$dq = mysql_query("DELETE FROM `maps` WHERE `id`=$id");
+					rmdir("../img/maps/".$id);
 					echo "map successfully deleted";
 					echo "<a href='maps.php'>go back</a>";
 				} else {
@@ -47,6 +54,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		
 		if (isset($_POST["submit"])) {
+		
+			echo "map creating process begins...<br>";
+			
 			//basic values
 			$name = mysql_real_escape_string($_POST["name"]);
 			$author = $_SESSION["username"];
@@ -54,19 +64,70 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			$desc = mysql_real_escape_string($_POST["desc"]);
 			$date = date("Y-m-d");
 			
+			echo "basic values read...<br>";
+			
+			//inserting the basic data and returning the map id
+			mysql_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$date')");
+			$id = mysql_insert_id();
+			echo "basic values inserted...<br>";
+			echo "the id is ".$id."<br>";
+			
+			//create the directory
+			mkdir("../img/maps/".$id, 0777);
+			echo "directory created...<br>";
+			
 			//map file
 			switch($_POST["dli"]) {
 				case "link": 
 					//steam community link
-					echo "download link is a steam community url";
 					$dl = mysql_real_escape_string($_POST["dl"]);
+					echo "steam community url read...<br>";
+					mysql_query("UPDATE `maps` SET `steam`='1' WHERE `id`=".$id);
 					break;
 				case "file": 
+					print_r($_FILES)."<br>";
 					//file upload
-					echo "download link is an uploaded bsp file";
-					$dl = $name.".bsp";
+					$bsp_name = $_FILES["bsp"]["name"];
+					$bsp_type = $_FILES["bsp"]["type"];
+					$bsp_size = $_FILES["bsp"]["size"];
+					$bsp_tmp = $_FILES["bsp"]["tmp_name"];
+					$bsp_error = $_FILES["bsp"]["error"];
+					
+					$extension = substr($bsp_name, strpos($bsp_name, ".") + 1);
+					
+					if (!empty($bsp_name)) {
+			
+						if ($extension == "bsp" && $bsp_type == "application/octet-stream") {
+				
+							$location = "../img/maps/";
+							$dl = $name.".bsp";
+							
+							echo "bsp_tmp: ".$bsp_tmp;
+							echo "<br>location: ".$location.$dl."<br>";
+				
+							if (move_uploaded_file($bsp_tmp, $location.$dl)) {
+					
+								echo "file uploaded...<br>";
+			
+							} else {
+				
+								echo "error uploading<br>";
+				
+							}
+				
+						} else {
+				
+							echo "not a bsp file";
+				
+						}
+				
+					} else echo "no file defined";
+					
 					break;
 			}
+			
+			mysql_query("UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
+			echo "download url added...<br>";
 			
 			//image file
 			$image_name = $_FILES["image"]["name"];
@@ -74,9 +135,34 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			$image_type = $_FILES["image"]["type"];
 			$image_tmp = $_FILES["image"]["tmp_name"];
 			
-			//inserting the data
-			//mysql_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$dl','0','0','$date')");
+			$extension = substr($image_name, strpos($image_name, ".") + 1);
 			
+			if (!empty($image_name)) {
+			
+				if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
+				
+					$location = "../img/maps/";
+				
+					if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
+					
+						echo "image file uploaded...<br>";
+						mysql_query("UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
+						echo "extension saved...<br>";
+			
+					} else {
+				
+						echo "error";
+				
+					}
+				
+				} else {
+				
+					echo "jpg or png only";
+				
+				}
+				
+			}
+						
 			echo "map successfully submitted";
 			echo "<a href='maps.php'>go back</a>";
 		} else {
