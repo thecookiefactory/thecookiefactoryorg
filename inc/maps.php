@@ -37,9 +37,29 @@ include "analyticstracking.php";
                   case 2: echo "Portal 2"; break;
                 }
         echo "</span>";
-        echo "<span class='map-desc'>".$r["desc"]."</span>";
+        echo "<span class='map-desc'>".nl2br($r["desc"])."</span>";
         echo "<span class='map-dl'><a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a></span>";
       echo "</div>";
+	  
+	  //comments
+	  $cq = mysql_query("SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysql_error());
+	  echo "<div class='comments'>";
+		if (mysql_num_rows($cq) > 0) {
+		  while ($cr = mysql_fetch_assoc($cq)) {
+	  	    echo $cr["author"]." said on ".$cr["date"].": <p>".nl2br($cr["text"])."</p>";
+		  }
+		} else {
+		  echo "no comments yet";
+		}
+	  if (checkuser()) {
+	    echo "<form>";
+	    echo "<textarea></textarea>";
+	    echo "<input type='submit'>";
+	    echo "</form>";
+	  } else {
+	    echo "you have to be logged in to post comments";
+	  }
+	  echo "</div>";
     echo "</div>";
 
   }
