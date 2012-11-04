@@ -448,7 +448,7 @@ img.map-image {
   width: 100%;
   font-family: "TF2 Build";
   font-size: 56px;
-  -webkit-text-stroke: 2px black;
+  -webkit-text-stroke: 2px #141414;
   color: white;
   text-align: center;
   z-index: 1;
