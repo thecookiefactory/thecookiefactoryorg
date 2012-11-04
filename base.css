@@ -310,10 +310,10 @@ p.comment-text {
    @-moz-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
      @-o-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
 
-        @keyframes fadein { from{opacity: 0;} to{opacity: 1;} }
-@-webkit-keyframes fadein { from{opacity: 0;} to{opacity: 1;} }
-   @-moz-keyframes fadein { from{opacity: 0;} to{opacity: 1;} }
-     @-o-keyframes fadein { from{opacity: 0;} to{opacity: 1;} }
+        @keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
+@-webkit-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
+   @-moz-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
+     @-o-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
 
 
         @keyframes scrolling { }
@@ -356,11 +356,12 @@ p.comment-text {
   display: block;
   position: absolute;
   z-index: 1;
+  opacity: 0;
   background-image: url(img/prev.png);
   background-repeat: no-repeat;
   background-position: -3px 232.5px;
           animation-duration: 0.2s;
-  -webkit-animation-duration: 0.2s;
+  -webkit-animation-duration: 0.3s;
      -moz-animation-duration: 0.2s;
        -o-animation-duration: 0.2s;
           animation-timing-function: ease-in-out;
@@ -386,11 +387,12 @@ p.comment-text {
   position: absolute;
   left: 835px;
   z-index: 1;
+  opacity: 0;
   background-image: url(img/next.png);
   background-repeat: no-repeat;
   background-position: 17px 232.5px;
           animation-duration: 0.2s;
-  -webkit-animation-duration: 0.2s;
+  -webkit-animation-duration: 0.3s;
      -moz-animation-duration: 0.2s;
        -o-animation-duration: 0.2s;
           animation-timing-function: ease-in-out;
@@ -406,6 +408,14 @@ p.comment-text {
 .map-rightarrow:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.map-arrow-disabled {
+  opacity: 0;
+}
+
+.map-arrow-disabled:hover {
+  cursor: default !important;
 }
 
 .map-imageroll {

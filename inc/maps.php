@@ -2,18 +2,19 @@
 
 checkembed();
 include "analyticstracking.php";
-  
+
+  echo "<script src='js/maps.js'></script>";
+
   $q = mysql_query("SELECT * FROM `maps` ORDER BY `id` DESC");
 
   while ($r = mysql_fetch_assoc($q)) {
 	$gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
-    echo "<script type='text/javascript'> var imgno = <?php mysql_num_rows($gq) ?>; </script>";
-	echo "<script src='js/maps.js'></script>";
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
-      echo "<div class='map-leftarrow' id='map-".$r["id"]."a' onclick='startImagerollScrolling(this.id, -1);'></div>";
-      echo "<div class='map-rightarrow' id='map-".$r["id"]."b' onclick='startImagerollScrolling(this.id, 1);'></div>";
-      echo "<div class='map-imageroll' id='map-".$r["id"]."'>";
+      echo "<div class='map-leftarrow map-arrow-disabled' id='map-".$r["id"]."-left' onclick='startImagerollScrolling(this.id, -1);'></div>";
+      echo "<div class='map-rightarrow map-arrow-disabled' id='map-".$r["id"]."-right' onclick='startImagerollScrolling(this.id, 1);'></div>";
+      echo "<div class='map-imageroll' id='map-".$r["id"]."' onload='initialize(this.id);'>";
+      echo "<script type='text/javascript'> lendict[\"map-".$r["id"]."\"] = ".(mysql_num_rows($gq)+1)."; initialize(\"map-".$r["id"]."\");</script>";
       
     //display the main image
         echo "<div class='map-image'>";

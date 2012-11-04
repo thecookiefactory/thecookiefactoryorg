@@ -1,5 +1,33 @@
 var posdict = {};
 var lockdict = {};
+var lendict = {};
+
+function initialize(mapid) {
+    posdict[mapid] = 0;
+
+    if (lendict[mapid] > 1) {
+        arrowFade(mapid, "in", "right");
+    }
+
+    setLocks(mapid)
+
+    return;
+}
+
+function setLocks(mapid) {
+    lockdict[mapid+"-left"] = 1
+    lockdict[mapid+"-right"] = 1
+
+    if (posdict[mapid] < lendict[mapid] - 1) {
+        lockdict[mapid+"-right"] = 0
+    }
+
+    if (posdict[mapid] > 0) {
+        lockdict[mapid+"-left"] = 0
+    }
+
+    return;
+}
 
 function findKeyframesRule(rule) {
     var ss = document.styleSheets;
@@ -14,29 +42,32 @@ function findKeyframesRule(rule) {
 
 function endImagerollScrolling(mapid, direction) {
     document.getElementById(mapid).className = "map-imageroll";
-    position = posdict[mapid] + direction;
-    document.getElementById(mapid).style.left = (0 - (position * 900))+"px";
-    posdict[mapid] = position;
-    arrowFade(mapid, "in");
-    lockdict[mapid] = 0;
+    document.getElementById(mapid).style.left = (0 - (posdict[mapid] * 900))+"px";
+    setLocks(mapid);
 }
 
-function startImagerollScrolling(mapid, direction) {
-    mapid = mapid.slice(0,-1);
-    if (lockdict[mapid] == 1) {
+function startImagerollScrolling(arrowid, direction) {
+    if (lockdict[arrowid] == 1) {
         return;
     }
 
-    lockdict[mapid] = 1;
-    arrowFade(mapid, "out");
+    mapid = arrowid.slice(0,arrowid.search("left")+arrowid.search("right"));
+
+    lockdict[mapid+"-left"] = 1
+    lockdict[mapid+"-right"] = 1
+
+    if (posdict[mapid] < lendict[mapid] - 1) {
+        arrowFade(mapid, "out", "right"); 
+    }
+
+    if (posdict[mapid] > 0) {
+        arrowFade(mapid, "out", "left");
+    }
+
     elem = document.getElementById(mapid);
     elem.className = "map-imageroll";
     var keyframes = findKeyframesRule("scrolling");
-    if (mapid in posdict) {
-            position = posdict[mapid];
-        } else {
-            posdict[mapid] = 0;
-        }
+    posdict[mapid] += direction;
 
     for (var i = 0; i < keyframes.length; ++i) {
         if (keyframes[i].deleteRule) {
@@ -51,18 +82,35 @@ function startImagerollScrolling(mapid, direction) {
     }
 
     elem.className = "map-imageroll map-scrolling";
-    setTimeout(function() {endImagerollScrolling(mapid, direction);}, 1200);      
+
+    if (posdict[mapid] < lendict[mapid] - 1) {
+        setTimeout(function() {arrowFade(mapid, "in", "right");}, 900); 
+    }
+
+    if (posdict[mapid] > 0) {
+        setTimeout(function() {arrowFade(mapid, "in", "left");}, 900);  
+    }
+    
+    setTimeout(function() {endImagerollScrolling(mapid, direction);}, 1200);          
 }
 
-function arrowFade(mapid, direction) {
-    leftelem = document.getElementById(mapid+"a");
-    rightelem = document.getElementById(mapid+"b");
+function arrowFade(mapid, direction, arrow) {
+    // mapid: string (ex. "map-1")
+    // direction: string ("in" or "out")
+    // arrow: string ("left" or "right")
+
+    arrowelem = document.getElementById(mapid+"-"+arrow);
+    arrowelem.className = "map-"+arrow+"arrow map-fade"+direction;
 
     if (direction == "out") {
-        leftelem.className = "map-leftarrow map-fadeout";
-        rightelem.className = "map-rightarrow map-fadeout";
-    } else {
-        leftelem.className = "map-leftarrow map-fadein";
-        rightelem.className = "map-rightarrow map-fadein";
+        arrowelem.className = "map-"+arrow+"arrow map-fadeout";
+        setTimeout(function() {arrowelem.className = "map-"+arrow+"arrow map-fadeout map-arrow-disabled";}, 100);
     }
+
+    if (direction == "in") {
+        arrowelem.className = "map-"+arrow+"arrow map-fadein map-arrow-disabled";
+        setTimeout(function() {arrowelem.className = "map-"+arrow+"arrow map-fadein"}, 200);
+    }
+
+    return;
 }
