@@ -31,9 +31,9 @@ echo "this user is already registered";
 } else {
 
 echo "<form action='?p=register' method='post'>
-<input type='text' placeholder='username' name='username' required='required' /><br />
+<input type='text' placeholder='username' name='username' required='required' autofocus /><br />
 <input type='password' placeholder='password' name='password' required='required' /><br />
-<input type='text' placeholder='e-mail' name='email' required='required' /><br />
+<input type='email' placeholder='e-mail' name='email' required='required' /><br />
 <input type='submit' value='Register' name='submit' />
 </form>";
 

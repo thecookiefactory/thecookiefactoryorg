@@ -29,7 +29,7 @@ if (isset($_SESSION["username"])) {
 	echo "<p>You are already logged in! Click <a href='?p=logout'>here</a> if you want to log out.</p>";
 } else {
 	echo "<form action='?p=login' method='post' name='login'>
-	<input type='text' name='username' placeholder='username' required='required' /><br />
+	<input type='text' name='username' placeholder='username' required='required' autofocus /><br />
 	<input type='password' name='password' placeholder='password' required='required' /><br />
 	<input type='checkbox' name='remember'> remember me<br>
 	<input type='submit' name='submit' value='Log in' /> or <a href='?p=register'>register</a>

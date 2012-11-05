@@ -3,6 +3,16 @@
 checkembed();
 include "analyticstracking.php";
 
+  if (isset($_POST["submit"])) {
+    $text = mysql_real_escape_string($_POST["text"]);
+	$m_id = mysql_real_escape_string($_POST["m_id"]);
+	$username = $_SESSION["username"];
+	$date = date("Y-m-d");
+	$time = date("H:i");
+	
+	mysql_query("INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
+  }
+
   echo "<script src='js/maps.js'></script>";
 
   $q = mysql_query("SELECT * FROM `maps` ORDER BY `id` DESC");
@@ -46,15 +56,16 @@ include "analyticstracking.php";
 	  echo "<div class='comments'>";
 		if (mysql_num_rows($cq) > 0) {
 		  while ($cr = mysql_fetch_assoc($cq)) {
-	  	    echo $cr["author"]." said on ".$cr["date"].": <p>".nl2br($cr["text"])."</p>";
+	  	    echo $cr["username"]." said on ".$cr["date"].": <p>".nl2br($cr["text"])."</p>";
 		  }
 		} else {
 		  echo "no comments yet";
 		}
 	  if (checkuser()) {
-	    echo "<form>";
-	    echo "<textarea></textarea>";
-	    echo "<input type='submit'>";
+	    echo "<form action='?p=maps' method='post'>";
+	    echo "<textarea name='text' required></textarea>";
+		echo "<input type='hidden' name='m_id' value='".$r["id"]."'>";
+	    echo "<input type='submit' name='submit'>";
 	    echo "</form>";
 	  } else {
 	    echo "you have to be logged in to post comments";

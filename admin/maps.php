@@ -191,7 +191,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			Description<br>
 			<textarea name='desc' required></textarea><br>
 			
-			<input type='radio' name='dli' value='link' required>download link <input type='text' name='dl'>
+			<input type='radio' name='dli' value='link' required>download link <input type='url' name='dl'>
 			<br>
 			<input type='radio' name='dli' value='file'>bsp file <input type='file' name='bsp'>			
 			<br>
