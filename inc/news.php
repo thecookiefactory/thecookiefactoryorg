@@ -7,7 +7,14 @@ include "analyticstracking.php";
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS
 
-	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC");
+	if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1)
+	$page = 1;
+	else
+	$page = $_GET["page"];
+	
+	$xo = ($page - 1) * 5;
+	$yo = $page * 5;
+	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
 
 	while ($row = mysql_fetch_assoc($query)) {
 	
@@ -32,6 +39,16 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		</div>
 		<hr class='article-separator'>";
 
+	}
+	
+	//page links
+	$nr = mysql_num_rows(mysql_query("SELECT * FROM `news`"));
+	for ($i = 1; $i <= $nr%5; $i++) {
+	if ($page == $i)
+	echo "Page ".$i;
+	else
+	echo "<a href='?p=news&amp;page=".$i."'>Page ".$i."</a>";
+	
 	}
 } else {
 // DISPLAY ONE PIECE OF NEWS
