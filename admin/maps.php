@@ -46,6 +46,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 						mysql_query("DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
 					}
 					
+					//deleting comments related to the map
+					
 					$dq = mysql_query("DELETE FROM `maps` WHERE `id`=$id");
 					rmdir("../img/maps/".$id);
 					echo "map successfully deleted";

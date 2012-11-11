@@ -48,7 +48,13 @@ include "analyticstracking.php";
                 }
         echo "</span>";
         echo "<span class='map-desc'>".nl2br($r["desc"])."</span>";
-        echo "<span class='map-dl'><a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a></span>";
+        echo "<span class='map-dl'>";
+		switch ($r["dltype"]) {
+			case 0: echo "<a href='img/maps/".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
+			case 1: echo "<a href='http://steamcommunity.com/sharedfiles/filedetails/?id=".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
+			case 2: echo "No dowload available yet."; break;
+		}
+		echo "</span>";
       echo "</div>";
 	  
 	  //comments
