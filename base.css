@@ -465,11 +465,12 @@ p.comment-text {
 }
 
 div.map-image {
-  display: inline;
+  display: inline-block;
+  width: 900px;
 }
 
 img.map-image {
-  width: 100%;
+  height: 505px;
 }
 
 .map-name {
