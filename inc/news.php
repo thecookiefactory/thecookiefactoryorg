@@ -15,8 +15,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	$xo = ($page - 1) * 5;
 	$yo = $page * 5;
 	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
-
-	while ($row = mysql_fetch_assoc($query)) {
+	
+	if (mysql_num_rows($query) == 0) {
+		echo "No news posts found.";
+	} else {
+		while ($row = mysql_fetch_assoc($query)) {
 	
 		// TITLE, AUTHOR & DATE
 		echo "<div class='article-header'>
@@ -39,6 +42,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		</div>
 		<hr class='article-separator'>";
 
+	}
 	}
 	
 	//page links

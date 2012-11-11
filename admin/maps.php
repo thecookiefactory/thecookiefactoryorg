@@ -20,11 +20,14 @@ if (!checkadmin())
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 		
-	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
+	} else if ($_GET["action"] == "delete") {	// DELETE DELETE DELETE DELETE DELETE DELETE
+	
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+		
 			$id = $_GET["id"];
 			$eq = mysql_query("SELECT * FROM `maps` WHERE `id`=$id");
 			if (mysql_num_rows($eq) == 1) {
+			
 				$er = mysql_fetch_assoc($eq);
 				if (isset($_POST["delete"])) {
 					$id = $_GET["id"];
@@ -66,6 +69,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "no id defined";
 			echo "<a href='maps.php'>go back</a>";
 		}
+		
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		
 		if (isset($_POST["submit"])) {
