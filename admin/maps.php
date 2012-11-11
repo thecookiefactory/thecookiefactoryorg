@@ -30,7 +30,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					$id = $_GET["id"];
 					
 					//deleting the bsp if present
-					if ($er["steam"] == 0) {
+					if ($er["dltype"] == 0) {
 						unlink("../".$er["dl"]);
 						echo "bsp deleted";
 					}
@@ -91,11 +91,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			
 			//map file
 			switch($_POST["dli"]) {
+				case "none": 
+					echo "no download specified...<br>";
+					mysql_query("UPDATE `maps` SET `dltype`='2' WHERE `id`=".$id);
+					break;
 				case "link": 
 					//steam community link
 					$dl = mysql_real_escape_string($_POST["dl"]);
 					echo "steam community url read...<br>";
-					mysql_query("UPDATE `maps` SET `steam`='1' WHERE `id`=".$id);
+					mysql_query("UPDATE `maps` SET `dltype`='1' WHERE `id`=".$id);
+					mysql_query("UPDATE `maps` SET `dl`='".$dl."' WHERE `id`=".$id);
+					echo "download url added...<br>";
 					break;
 				case "file": 
 					print_r($_FILES)."<br>";
@@ -121,6 +127,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 							if (move_uploaded_file($bsp_tmp, $location.$dl)) {
 					
 								echo "file uploaded...<br>";
+								mysql_query("UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
+								echo "download url added...<br>";
 			
 							} else {
 				
@@ -138,9 +146,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					
 					break;
 			}
-			
-			mysql_query("UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
-			echo "download url added...<br>";
 			
 			//image file
 			$image_name = $_FILES["image"]["name"];
@@ -194,6 +199,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			<input type='radio' name='dli' value='link' required>download link <input type='url' name='dl'>
 			<br>
 			<input type='radio' name='dli' value='file'>bsp file <input type='file' name='bsp'>			
+			<br>
+			<input type='radio' name='dli' value='none'>no dl
 			<br>
 			main image<br>
 			<input type='file' name='image' required><br>
