@@ -2,7 +2,7 @@
 
 <?php
 
-checkembed();
+checkembed($r_c);
 include "analyticstracking.php";
 
 if (isset($_POST["username"]) && !isset($_SESSION["username"])) {

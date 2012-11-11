@@ -1,6 +1,6 @@
 <?php
 
-checkembed();
+checkembed($r_c);
 include "analyticstracking.php";
 
 $q = mysql_query("SELECT * FROM `streams` WHERE `active`=1");

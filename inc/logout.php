@@ -1,5 +1,5 @@
 <?php
-checkembed();
+checkembed($r_c);
 include "analyticstracking.php";
 
 if (checkuser()) {
