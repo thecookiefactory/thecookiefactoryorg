@@ -8,14 +8,19 @@ $q = mysql_query("SELECT * FROM `streams` WHERE `active`=1");
 echo "<ul id='stream-menu'>";
 
 while ($r = mysql_fetch_assoc($q)) {
-
-echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
-if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"])
-echo "<li class='stream-button-selected'>".$r["author"]."</li>";
-else
-echo "<li class='stream-button'>".$r["author"]."</li>";
+    echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
+if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"]) {
+    echo "<li class='stream-button stream-button-selected";
+    if (islive($r["twitch"]))
+    echo " stream-live";
+}
+else {
+echo "<li class='stream-button";
 if (islive($r["twitch"]))
-echo "LIVE";
+echo " stream-live";
+}
+
+echo "'>".$r["author"]."</li>";
 echo "</a>";
 
 }
