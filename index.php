@@ -30,17 +30,17 @@ require "inc/essential.php";
 
 <nav>
 <span id='nav-menubar'>
-<a href='?p=news'>news</a> / <a href='?p=maps'>maps</a> / <a href='?p=streams'>streams</a> / <a href='?p=projects'>projects</a>
+<a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=projects'>projects</a>
 </span>
 <span id='nav-actionbar'>
 
-<form action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
- / <?php
+<form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
+<?php
 
 if (isset($_SESSION["username"])) {
-echo "<span id='actionbar-logindata'>logged in as <span id='actionbar-username'>".$_SESSION["username"]."</span></span> / <a href='?p=logout'>log out</a>";
+echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".$_SESSION["username"]."</span></span> / <a href='?p=logout'>log out</a>";
 } else {
-echo "<a href='?p=login'>log in</a>";
+echo "<a class='menu-item' href='?p=login'>log in</a>";
 }
 
 

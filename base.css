@@ -188,6 +188,18 @@ div.map {
   margin-right: 22px;
 }
 
+.article-author:before {
+  content: "by ";
+}
+
+.article-date:before {
+  content: "on ";
+}
+
+.article-metadata-item+.article-metadata-item:before {
+  content: " – ";
+}
+
 .article-body {
   margin-top: 30px;
   margin-left: 19px;
@@ -224,6 +236,15 @@ div.map {
   margin-top: -2px;
 }
 
+.menu-item+.menu-item:before {
+  content: " / ";
+  color: #4188D2;
+}
+
+.menu-item+.menu-item:before:hover {
+  color: #4188D2;
+}
+
 #actionbar-logindata {
   color: white;
 }
@@ -257,6 +278,13 @@ div.map {
   color: #BAD5F1;
 }
 
+.comment-date:before {
+  content: " · ";
+}
+
+.comment-deletebutton:before {
+  content: " · ";
+}
 p.comment-text {
   margin-left: 19px;
   margin-right: 20px;
