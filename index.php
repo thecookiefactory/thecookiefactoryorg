@@ -32,8 +32,8 @@ require "inc/essential.php";
 <span id='nav-menubar'>
 <a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=projects'>projects</a>
 </span>
-<span id='nav-actionbar'>
 
+<div id='nav-actionbar'>
 <form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
 <?php
 
@@ -45,7 +45,7 @@ echo "<a class='menu-item' href='?p=login'>log in</a>";
 
 
 ?>
-</span>
+</div>
 </nav>
 <hr />
 

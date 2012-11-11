@@ -28,7 +28,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
 		// BODY
 		echo "<div class='article-body'>
-		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
+		<span class='article-text'>".nl2br($row["text"])."</span>
 		</div>
 		<hr class='article-separator'>";
 
@@ -46,9 +46,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		<span class='article-title'>".$row["title"]."</span><span class='article-metadata'>";
 		
 		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></span>
-		</div><br></span>";
+		</div><br>";
 		echo "<div class='article-body'>
-		<span class='article-text'><p>".nl2br($row["text"])."</p></span>
+		<span class='article-text'>".nl2br($row["text"])."</span>
 		</div>";
 
 		if ($row["comments"] == 1) {
@@ -68,7 +68,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 				$cq = mysql_query("SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysql_num_rows($cq);
 				if ($commnum > 0) {
-					echo "<hr><a name='comments'></a><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a><br>";
+					echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";
 			
 					if (checkadmin()) {
 						while ($crow = mysql_fetch_assoc($cq)) {
