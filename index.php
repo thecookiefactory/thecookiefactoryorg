@@ -76,6 +76,13 @@ YYYY-MM-DD H:i (CET/CEST)
 <div id='contact-us'>
 <a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a> <a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a> <a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a> <a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a>
 </div>
-
+<?php
+if (isset($redirect) && $redirect == true)
+	echo "<script type='text/javascript'>
+	<!--
+	window.location = '?p=news'
+	//-->
+	</script>";
+?>
 </body>
 </html>
