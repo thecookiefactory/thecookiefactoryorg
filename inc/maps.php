@@ -28,13 +28,13 @@ include "analyticstracking.php";
       
     //display the main image
         echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["id"].".".$r["ext"]."'>";
+          echo "<img class='map-image' alt='".$r["name"]."' src='img/maps/".$r["id"].".".$r["ext"]."'>";
         echo "</div>";
     
     //display additional images
     while ($gr = mysql_fetch_assoc($gq)) {
     echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' title='".$gr["desc"]."'>";
+          echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' alt='".$gr["desc"]."' title='".$gr["desc"]."'>";
         echo "</div>";
     }
     
