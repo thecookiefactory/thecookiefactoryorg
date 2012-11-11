@@ -19,7 +19,7 @@ if (!checkadmin())
 
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
-	
+		
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			$id = $_GET["id"];

@@ -70,6 +70,11 @@ require "inc/news.php";
 
 <footer>
 2012 thecookiefactory.org<br>
+<?php
+if (checkadmin()) {
+	echo "<a href='admin' target='_blank'>admin</a><br>";
+}
+?>
 YYYY-MM-DD H:i (CET/CEST)
 </footer>
 <!-- ezt persze majd nem ide-->
