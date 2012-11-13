@@ -74,7 +74,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
 		if ($row["comments"] == 1) {
 			
-			if (isset($_POST["cp"])) {
+			if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 				
 				$newsid = $_GET["id"];
 				$author = $_SESSION["username"];
