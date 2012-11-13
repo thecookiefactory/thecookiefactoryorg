@@ -37,7 +37,7 @@ if (mysql_num_rows($q) == 1) {
 $r = mysql_fetch_assoc($q);
 echo "<h1>".$r["author"]."'s stream</h1>";
 streamo($r["twitch"]);
-echo "<p>".nl2br($r["description"])."</p>";
+echo "<p>".nl2br($r["description"], false)."</p>";
 } else {
 echo "<p>Something went wrong.</p>";
 }

@@ -38,7 +38,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
 		// BODY
 		echo "<div class='article-body'>
-		<span class='article-text'>".nl2br($row["text"])."</span>
+		<span class='article-text'>".nl2br($row["text"], false)."</span>
 		</div>
 		<hr class='article-separator'>";
 
@@ -69,7 +69,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></span>
 		</div><br>";
 		echo "<div class='article-body'>
-		<span class='article-text'>".nl2br($row["text"])."</span>
+		<span class='article-text'>".nl2br($row["text"], false)."</span>
 		</div>";
 
 		if ($row["comments"] == 1) {
@@ -95,14 +95,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 						while ($crow = mysql_fetch_assoc($cq)) {
 						echo "<div class='comment'><span class='comment-metadata'>";
 						echo "<span class='comment-author'>".$crow["username"]."</span><span class='comment-date'>".$crow["date"]."</span><span class='comment-deletebutton'><a href='admin/comments.php?id=".$crow["id"]."'>delete this</a></span>";
-						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
+						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";
 						echo "</div>";
 					}
 					} else {
 						while ($crow = mysql_fetch_assoc($cq)) {
 						echo "<div class='comment'><span class='comment-metadata'>";
 						echo "<span class='comment-author'>".$crow["username"]."</span><span class='comment-date'>".$crow["date"]."</span>";
-						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"])."</span></p>";
+						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";
 						echo "</div>";
 					}
 					}

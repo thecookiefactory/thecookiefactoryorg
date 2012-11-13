@@ -47,7 +47,7 @@ include "analyticstracking.php";
                   case 2: echo "Portal 2"; break;
                 }
         echo "</span>";
-        echo "<span class='map-desc'>".nl2br($r["desc"])."</span>";
+        echo "<span class='map-desc'>".nl2br($r["desc"], false)."</span>";
         echo "<span class='map-dl'>";
 		switch ($r["dltype"]) {
 			case 0: echo "<a href='img/maps/".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
@@ -62,7 +62,7 @@ include "analyticstracking.php";
 	  echo "<div class='comments'>";
 		if (mysql_num_rows($cq) > 0) {
 		  while ($cr = mysql_fetch_assoc($cq)) {
-	  	    echo $cr["username"]." said on ".$cr["date"].": <p>".nl2br($cr["text"])."</p>";
+	  	    echo $cr["username"]." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
 		  }
 		} else {
 		  echo "no comments yet";
