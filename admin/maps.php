@@ -20,6 +20,43 @@ if (!checkadmin())
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 		
+		$id = $_GET["id"];
+		
+		$eq = mysql_query("SELECT * FROM `maps` WHERE `id`=$id");
+		if (mysql_num_rows($eq) == 1) {
+			
+			//fetching the current data
+			$mr = mysql_fetch_assoc($eq);
+			
+			if (isset($_POST["submit"])) {
+			
+			}
+			
+			echo "<form action='?action=edit&amp;id=".$id."' method='post' enctype='multipart/form-data'>
+			Name<br>
+			<input type='text' name='name' value='".$mr["name"]."' required><br>
+			Associated game<br>
+			<select name='game'>
+				<option value='1' "; if ($mr["game"] == 1) echo "selected "; echo ">Team Fortress 2</option>
+				<option value='2' "; if ($mr["game"] == 2) echo "selected "; echo ">Portal 2</option>
+			</select><br>
+			Description<br>
+			<textarea name='desc' required>".$mr["desc"]."</textarea><br>
+			
+			<input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='url' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
+			<br>
+			<input type='radio' name='dli' value='file'  "; if ($mr["dltype"] == 0) echo "checked "; echo ">bsp file <input type='file' name='bsp'>			
+			<br>
+			<input type='radio' name='dli' value='none'  "; if ($mr["dltype"] == 2) echo "checked "; echo ">no dl
+			<br>
+			main image<br>
+			<img style='width: 300px;' src='../img/maps/".$mr["id"].".".$mr["ext"]."' alt=''>
+			<br>
+			<input type='file' name='image'><br>
+			<input type='submit' name='submit'>
+			</form>";
+		}
+		
 	} else if ($_GET["action"] == "delete") {	// DELETE DELETE DELETE DELETE DELETE DELETE
 	
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
