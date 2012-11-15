@@ -4,7 +4,7 @@ $r_c = 42;
 require "../inc/essential.php";
 
 if (!checkadmin())
-	die("must be an dmin :(".$_SESSION["username"]);
+	die("must be an dmin :(".$_SESSION["userid"]);
 ?>
 
 <!doctype html>
@@ -25,7 +25,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 				$er = mysql_fetch_assoc($eq);
 				if (isset($_POST["submit"])) {
 					$title = $_POST["title"];
-					$author = $_SESSION["username"];
+					$author = $_SESSION["userid"];
 					$date = date("Y-m-d");
 					$time = date("H:i", time());
 					$text = $_POST["text"];
@@ -88,7 +88,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		if (isset($_POST["submit"])) {
 			$title = mysql_real_escape_string($_POST["title"]);
-			$author = $_SESSION["username"];
+			$author = $_SESSION["userid"];
 			$date = date("Y-m-d");
 			$time = date("H:i", time());
 			$text = $_POST["text"];
@@ -102,7 +102,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "piece of news successfully submitted";
 			echo "<a href='news.php'>go back</a>";
 		} else {
-			echo "<h1>post news - by ".$_SESSION["username"]."</h1>
+			echo "<h1>post news - by ".$_SESSION["userid"]."</h1>
 			<form action='?action=write' method='post'>
 			Title<br /><input type='text' name='title' /><br />
 			Text<br /><textarea name='text'></textarea>

@@ -6,7 +6,7 @@ include "analyticstracking.php";
   if (isset($_POST["submit"]) && trim($_POST["text"]) != "") {
     $text = mysql_real_escape_string($_POST["text"]);
 	$m_id = mysql_real_escape_string($_POST["m_id"]);
-	$username = $_SESSION["username"];
+	$username = $_SESSION["userid"];
 	$date = date("Y-m-d");
 	$time = date("H:i");
 	

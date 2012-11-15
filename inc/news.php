@@ -77,7 +77,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 			if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 				
 				$newsid = $_GET["id"];
-				$author = $_SESSION["username"];
+				$author = $_SESSION["userid"];
 				$text = mysql_real_escape_string(htmlentities($_POST["text"]));
 				$date = date("Y-m-d");
 				$time = date("H:i", time());

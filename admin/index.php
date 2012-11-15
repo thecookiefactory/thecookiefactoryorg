@@ -4,7 +4,7 @@ $r_c = 42;
 require "../inc/essential.php";
 
 if (!checkadmin())
-	die("must be an dmin :(".$_SESSION["username"]);
+	die("must be an dmin :(".$_SESSION["userid"]);
 ?>
 
 <html>
