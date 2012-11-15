@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (isset($_COOKIE["username"]) && !isset($_SESSION["username"]))
-$_SESSION["username"] = $_COOKIE["username"];
+if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))
+$_SESSION["userid"] = $_COOKIE["userid"];
 
 $r_c = 42;
 require "inc/essential.php";
@@ -37,8 +37,8 @@ require "inc/essential.php";
 <form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
 <?php
 
-if (isset($_SESSION["username"])) {
-echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".$_SESSION["username"]."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
+if (isset($_SESSION["userid"])) {
+echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".$_SESSION["userid"]."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
 } else {
 echo "<a class='menu-item' href='?p=login'>log in</a>";
 }

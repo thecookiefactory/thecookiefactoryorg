@@ -4,8 +4,8 @@ include "analyticstracking.php";
 
 if (checkuser()) {
 	session_destroy();
-	if (isset($_COOKIE["username"])) {
-		setcookie("username", "", time()-3600);
+	if (isset($_COOKIE["userid"])) {
+		setcookie("userid", "", time()-3600);
 	}
 	echo "logged out successfully";
 	$redirect = true;
