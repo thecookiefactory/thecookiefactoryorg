@@ -22,15 +22,25 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		
 		$id = $_GET["id"];
 		
+		if (isset($_POST["submit"])) {
+			$name = mysql_real_escape_string($_POST["name"]);
+			$game = $_POST["game"];
+			$desc = mysql_real_escape_string($_POST["desc"]);
+			switch($_POST["dli"]) {
+				case "file": $dli = 0; break;
+				case "link": $dli = 1; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
+					$dl = $_POST["dl"]; $uq = mysql_query("UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id) or die(mysql_error()); break;
+				case "none": $dli = 2; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } break;
+			}
+			
+			$uq = mysql_query("UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id) or die(mysql_error());
+		}
+		
 		$eq = mysql_query("SELECT * FROM `maps` WHERE `id`=$id");
 		if (mysql_num_rows($eq) == 1) {
 			
 			//fetching the current data
 			$mr = mysql_fetch_assoc($eq);
-			
-			if (isset($_POST["submit"])) {
-			
-			}
 			
 			echo "<form action='?action=edit&amp;id=".$id."' method='post' enctype='multipart/form-data'>
 			Name<br>
@@ -43,7 +53,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			Description<br>
 			<textarea name='desc' required>".$mr["desc"]."</textarea><br>
 			
-			<input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='url' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
+			<input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='text' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
 			<br>
 			<input type='radio' name='dli' value='file'  "; if ($mr["dltype"] == 0) echo "checked "; echo ">bsp file <input type='file' name='bsp'>			
 			<br>
