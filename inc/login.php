@@ -11,7 +11,7 @@ if (checkuser()) {
 
 } else {
 
-	if (isset($_POST["username"])) {
+	if (isset($_POST["submit"])) {
 		
 		$username = $_POST["username"];
 		$password = $_POST["password"];
