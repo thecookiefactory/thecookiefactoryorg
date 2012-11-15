@@ -4,7 +4,7 @@ $r_c = 42;
 require "../inc/essential.php";
 
 if (!checkadmin())
-	die("must be an dmin :(".$_SESSION["username"]);
+	die("must be an dmin :(".$_SESSION["userid"]);
 ?>
 
 <!doctype html>
@@ -26,16 +26,16 @@ if (isset($_POST["submit"])) {
 	else
 		$active = 0;
 		
-	$uq = mysql_query("UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `author`='".$_SESSION["username"]."'") or die(mysql_error());
+	$uq = mysql_query("UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `author`='".$_SESSION["userid"]."'") or die(mysql_error());
 }
 
-$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["username"]."'");
+$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
 if (mysql_num_rows($sq) == 0) {
 	echo "Your stream page is being created now...";
-	$cq = mysql_query("INSERT INTO `streams` VALUES('','".$_SESSION["username"]."','','','0')");
+	$cq = mysql_query("INSERT INTO `streams` VALUES('','".$_SESSION["userid"]."','','','0')");
 	echo "Done. Please fill out the fields below.";
 }
-$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["username"]."'");
+$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
 $sr = mysql_fetch_assoc($sq);
 
 echo "<form action='streams.php' method='post'>

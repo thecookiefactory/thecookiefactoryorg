@@ -4,7 +4,7 @@ $r_c = 42;
 require "../inc/essential.php";
 
 if (!checkadmin())
-	die("must be an dmin :(".$_SESSION["username"]);
+	die("must be an dmin :(".$_SESSION["userid"]);
 ?>
 
 <!doctype html>
@@ -125,7 +125,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			
 			//basic values
 			$name = mysql_real_escape_string($_POST["name"]);
-			$author = $_SESSION["username"];
+			$author = $_SESSION["userid"];
 			$game = $_POST["game"];
 			$desc = mysql_real_escape_string($_POST["desc"]);
 			$date = date("Y-m-d");
@@ -237,7 +237,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "map successfully submitted";
 			echo "<a href='maps.php'>go back</a>";
 		} else {
-			echo "<h1>post a map - by ".$_SESSION["username"]."</h1>
+			echo "<h1>post a map - by ".$_SESSION["userid"]."</h1>
 			<form action='?action=write' method='post' enctype='multipart/form-data'>
 			Name<br>
 			<input type='text' name='name' required><br>
