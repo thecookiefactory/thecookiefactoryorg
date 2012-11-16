@@ -159,19 +159,20 @@ div.map {
   background-image: url(img/stream-live-bg.png);
 }
 
-.article-header {
-  margin: 0px;
-  padding: 0px;
-}
-
-.article-title {
+h1 {
   height: 36px;
   font-size: 36px;
   font-weight: 400;
+  font-family: Bitter;
   text-align: left;
   margin-left: 17px;
   float: left;
   color: white;
+}
+
+.article-header {
+  margin: 0px;
+  padding: 0px;
 }
 
 .article-metadata {
@@ -198,10 +199,10 @@ div.map {
 }
 
 .article-body {
-  margin-top: 30px;
   margin-left: 19px;
   color: #BAD5F1;
   text-align: justify;
+  clear: both;
 }
 
 .article-separator {
@@ -509,6 +510,7 @@ img.map-image {
   text-align: justify;
   font-size: 18px;
   font-family: Bitter;
+  line-height: 1.3em;
   color: #DDD;
 }
 
@@ -529,7 +531,7 @@ img.map-image {
 }
 
 .register-email {
-  width: auto;
+  width: 240px;
 }
 
 .register-button {

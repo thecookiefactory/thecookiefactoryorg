@@ -23,7 +23,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	
 		// TITLE, AUTHOR & DATE
 		echo "<div class='article-header'>
-		<span class='article-title'><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></span>
+		<h1><span class='article-title'><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></span></h1>
 		<span class='article-metadata'>";
 		
 		if ($row["comments"] == 1) {
@@ -64,7 +64,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		$row = mysql_fetch_assoc($query);
 	
 		echo "<div class='article-header'>
-		<span class='article-title'>".$row["title"]."</span><span class='article-metadata'>";
+		<h1><span class='article-title'>".$row["title"]."</span></h1><span class='article-metadata'>";
 		
 		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></span>
 		</div><br>";
