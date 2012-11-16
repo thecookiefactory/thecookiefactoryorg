@@ -498,25 +498,49 @@ img.map-image {
 
 }
 
+.register-title {
+  font-size: 32px;
+  line-height: 2em;
+}
+
 .register-form {
   width: 800px;
   margin: auto;
   text-align: justify;
-  font-size: 20px;
+  font-size: 18px;
+  font-family: Bitter;
+  color: #DDD;
 }
 
 .register-input {
   width: 140px;
   border-width: 0px;
   border-bottom-width: 1px;
-  border-bottom-style: dotted;
-  border-bottom-color: #666;
+  border-bottom-style: solid;
+  border-bottom-color: #333;
   outline: 0;
-  font-size: inherit;
+  font: inherit;
+  color: #4188D2;
+}
+
+.register-input::-webkit-input-placeholder {
+  color: #F93;
+  text-align: center;
+}
+
+.register-email {
+  width: auto;
 }
 
 .register-button {
   width: auto;
+  padding: 0;
+  cursor: pointer;
+  color: #F93;
+}
+
+.register-button:hover {
+  color: #4188D2;
 }
 
 .register-text {
