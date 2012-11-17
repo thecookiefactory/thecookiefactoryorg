@@ -517,12 +517,31 @@ img.map-image {
 .register-input {
   width: 140px;
   border-width: 0px;
-  border-bottom-width: 1px;
+  border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: #333;
+  padding: 0;
   outline: 0;
   font: inherit;
+  color: #141414;
+  text-align: left;
+}
+
+        @keyframes blink { from{border-bottom-color: #333;} to{border-bottom-color: #666;} }
+@-webkit-keyframes blink { from{border-bottom-color: #333;} to{border-bottom-color: #666;} }
+   @-moz-keyframes blink { from{border-bottom-color: #333;} to{border-bottom-color: #666;} }
+     @-o-keyframes blink { from{border-bottom-color: #333;} to{border-bottom-color: #666;} }
+
+.register-input:focus {
+          animation: blink 0.8s ease-in-out infinite alternate;
+  -webkit-animation: blink 0.8s ease-in-out infinite alternate;
+     -moz-animation: blink 0.8s ease-in-out infinite alternate;
+       -o-animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+.register-input:valid {
   color: #4188D2;
+  text-align: center;
 }
 
 .register-input::-webkit-input-placeholder {
@@ -530,7 +549,7 @@ img.map-image {
   text-align: center;
 }
 
-.register-email {
+.register-input[name=email] {
   width: 240px;
 }
 
@@ -538,11 +557,13 @@ img.map-image {
   width: auto;
   padding: 0;
   cursor: pointer;
-  color: #F93;
+  color: #F93 !important;
+  font-weight: 700;
+  border: 0;
 }
 
 .register-button:hover {
-  color: #4188D2;
+  color: #4188D2 !important;
 }
 
 .register-text {

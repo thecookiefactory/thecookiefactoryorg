@@ -25,11 +25,9 @@ if (checkuser()) {
 
 echo "<div class='register-form'><form action='?p=register' method='post'>
 <span class='register-text'><span class='register-title'>Hey there!</span><br>My name is </span>
-<input class='register-input register-username' type='text' placeholder='username' name='username' required='required' autocomplete='off' autofocus />
-<span class='register-text'>, and you will know it really is me when I tell my secret password, which is </span>
-<input class='register-input register-password' type='password' placeholder='password' name='password' required='required' autocomplete='off' />
-<span class='register-text'>. If you want to contact me, feel free to do it at my email address, </span>
-<input class='register-input register-email' type='email' placeholder='e-mail' name='email' required='required' autocomplete='off'>
+<input class='register-input' type='text' placeholder='username' name='username' required='required' autocomplete='off' autofocus /><span class='register-text'>, and you will know it really is me when I tell you my secret password, which is </span>
+<input class='register-input' type='password' placeholder='password' name='password' required='required' autocomplete='off' /><span class='register-text'>. If you want to contact me, feel free to do it at my email address, </span>
+<input class='register-input' type='text' placeholder='e-mail' name='email' required='required' autocomplete='off'>
 <span class='register-text'>(I know I won't be getting any spam from you). I guess that's pretty much all I need to say about myself, so </span>
 <input class='register-input register-button' type='submit' value='just get me in already!' name='submit'>
 </form></div>";
