@@ -165,7 +165,9 @@ h1 {
   font-weight: 400;
   font-family: Bitter;
   text-align: left;
-  margin-left: 17px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 19px;
   float: left;
   color: white;
 }
@@ -175,11 +177,13 @@ h1 {
   padding: 0px;
 }
 
+.article-title {
+  width: 730px;
+}
+
 .article-metadata {
-  position: relative;
-  top: 10px;
   font-size: 14px;
-  color: #909090;
+  color: #999;
   font-style: italic;
   float: right;
   text-align: right;
@@ -208,17 +212,16 @@ h1 {
 .article-separator {
   height: 1px;
   margin-top: 20px;
-  margin-bottom: 20px;
   border-width: 0px;
-  background-image:         linear-gradient(left, #141414 0%, #505050 30%, #505050 70%, #141414 100%);
-  background-image:      -o-linear-gradient(left, #141414 0%, #505050 30%, #505050 70%, #141414 100%);
-  background-image:    -moz-linear-gradient(left, #141414 0%, #505050 30%, #505050 70%, #141414 100%);
-  background-image: -webkit-linear-gradient(left, #141414 0%, #505050 30%, #505050 70%, #141414 100%);
-  background-image:     -ms-linear-gradient(left, #141414 0%, #505050 30%, #505050 70%, #141414 100%);
+  background-image:         linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
+  background-image:      -o-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
+  background-image:    -moz-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
+  background-image: -webkit-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
+  background-image:     -ms-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
   background-image: -webkit-gradient (linear, left top, right top,
                                       color-stop(0, #141414),
-                                      color-stop(0.3, #505050),
-                                      color-stop(0.7, #505050),
+                                      color-stop(0.3, #555),
+                                      color-stop(0.7, #555),
                                       color-stop(1, #141414)
                                      );
 }

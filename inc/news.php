@@ -23,8 +23,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	
 		// TITLE, AUTHOR & DATE
 		echo "<div class='article-header'>
-		<h1><span class='article-title'><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></span></h1>
-		<span class='article-metadata'>";
+		<div class='article-title'><h1><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></h1></div>
+		<div class='article-metadata'>";
 		
 		if ($row["comments"] == 1) {
 		
@@ -33,8 +33,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 			echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
 			}
 
-		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></span>
-		</div><br>";		
+		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>
+		</div>";		
 
 		// BODY
 		echo "<div class='article-body'>
@@ -64,10 +64,10 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		$row = mysql_fetch_assoc($query);
 	
 		echo "<div class='article-header'>
-		<h1><span class='article-title'>".$row["title"]."</span></h1><span class='article-metadata'>";
+		<div class='article-title'><h1>".$row["title"]."</h1></div><div class='article-metadata'>";
 		
-		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></span>
-		</div><br>";
+		echo "<span class='article-metadata-item'><span class='article-author'>".$row["author"]."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>
+		</div>";
 		echo "<div class='article-body'>
 		<span class='article-text'>".nl2br($row["text"], false)."</span>
 		</div>";
