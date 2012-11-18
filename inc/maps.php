@@ -4,27 +4,27 @@ checkembed($r_c);
 include "analyticstracking.php";
 
   if (isset($_POST["submit"]) && trim($_POST["text"]) != "") {
-    $text = mysql_real_escape_string($_POST["text"]);
-	$m_id = mysql_real_escape_string($_POST["m_id"]);
+    $text = mysqli_real_escape_string($_POST["text"]);
+	$m_id = mysqli_real_escape_string($_POST["m_id"]);
 	$username = $_SESSION["userid"];
 	$date = date("Y-m-d");
 	$time = date("H:i");
 	
-	mysql_query("INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
+	mysqli_query("INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
   }
 
   echo "<script src='js/maps.js'></script>";
 
-  $q = mysql_query("SELECT * FROM `maps` ORDER BY `id` DESC");
+  $q = mysqli_query("SELECT * FROM `maps` ORDER BY `id` DESC");
 
-  while ($r = mysql_fetch_assoc($q)) {
-	$gq = mysql_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
+  while ($r = mysqli_fetch_assoc($q)) {
+	$gq = mysqli_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
       echo "<div class='map-leftarrow map-arrow-disabled' id='map-".$r["id"]."-left' onclick='startImagerollScrolling(this.id, -1);'></div>";
       echo "<div class='map-rightarrow map-arrow-disabled' id='map-".$r["id"]."-right' onclick='startImagerollScrolling(this.id, 1);'></div>";
       echo "<div class='map-imageroll' id='map-".$r["id"]."' onload='initialize(this.id);'>";
-      echo "<script type='text/javascript'> lendict[\"map-".$r["id"]."\"] = ".(mysql_num_rows($gq)+1)."; initialize(\"map-".$r["id"]."\");</script>";
+      echo "<script type='text/javascript'> lendict[\"map-".$r["id"]."\"] = ".(mysqli_num_rows($gq)+1)."; initialize(\"map-".$r["id"]."\");</script>";
       
     //display the main image
         echo "<div class='map-image'>";
@@ -32,7 +32,7 @@ include "analyticstracking.php";
         echo "</div>";
     
     //display additional images
-    while ($gr = mysql_fetch_assoc($gq)) {
+    while ($gr = mysqli_fetch_assoc($gq)) {
     echo "<div class='map-image'>";
           echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' alt='".$gr["desc"]."' title='".$gr["desc"]."'>";
         echo "</div>";
@@ -58,10 +58,10 @@ include "analyticstracking.php";
       echo "</div>";
 	  
 	  //comments
-	  $cq = mysql_query("SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysql_error());
+	  $cq = mysqli_query("SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
 	  echo "<div class='comments'>";
-		if (mysql_num_rows($cq) > 0) {
-		  while ($cr = mysql_fetch_assoc($cq)) {
+		if (mysqli_num_rows($cq) > 0) {
+		  while ($cr = mysqli_fetch_assoc($cq)) {
 	  	    echo $cr["username"]." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
 		  }
 		} else {

@@ -14,12 +14,12 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	
 	$xo = ($page - 1) * 5;
 	$yo = $page * 5;
-	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
+	$query = mysqli_query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
 	
-	if (mysql_num_rows($query) == 0) {
+	if (mysqli_num_rows($query) == 0) {
 		echo "No news posts found.";
 	} else {
-		while ($row = mysql_fetch_assoc($query)) {
+		while ($row = mysqli_fetch_assoc($query)) {
 	
 		// TITLE, AUTHOR & DATE
 		echo "<div class='article-header'>
@@ -28,8 +28,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		
 		if ($row["comments"] == 1) {
 		
-			$cq = mysql_query("SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
-			$commnum = mysql_num_rows($cq);
+			$cq = mysqli_query("SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
+			$commnum = mysqli_num_rows($cq);
 			echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
 			}
 
@@ -46,7 +46,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	}
 	
 	//page links
-	$nr = mysql_num_rows(mysql_query("SELECT * FROM `news`"));
+	$nr = mysqli_num_rows(mysqli_query("SELECT * FROM `news`"));
 	for ($i = 1; $i <= $nr%5; $i++) {
 	if ($page == $i)
 	echo "Page ".$i;
@@ -57,11 +57,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 } else {
 // DISPLAY ONE PIECE OF NEWS
 
-	$query = mysql_query("SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
+	$query = mysqli_query("SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
 	
-	if (mysql_num_rows($query) == 1) {
+	if (mysqli_num_rows($query) == 1) {
 	
-		$row = mysql_fetch_assoc($query);
+		$row = mysqli_fetch_assoc($query);
 	
 		echo "<div class='article-header'>
 		<div class='article-title'><h1>".$row["title"]."</h1></div><div class='article-metadata'>";
@@ -78,28 +78,28 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 				
 				$newsid = $_GET["id"];
 				$author = $_SESSION["userid"];
-				$text = mysql_real_escape_string(htmlentities($_POST["text"]));
+				$text = mysqli_real_escape_string(htmlentities($_POST["text"]));
 				$date = date("Y-m-d");
 				$time = date("H:i", time());
 				
-				$iq = mysql_query("INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
+				$iq = mysqli_query("INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
 				
 				}
 			
-				$cq = mysql_query("SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
-				$commnum = mysql_num_rows($cq);
+				$cq = mysqli_query("SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
+				$commnum = mysqli_num_rows($cq);
 				if ($commnum > 0) {
 					echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";
 			
 					if (checkadmin()) {
-						while ($crow = mysql_fetch_assoc($cq)) {
+						while ($crow = mysqli_fetch_assoc($cq)) {
 						echo "<div class='comment'><span class='comment-metadata'>";
 						echo "<span class='comment-author'>".$crow["username"]."</span><span class='comment-date'>".$crow["date"]."</span><span class='comment-deletebutton'><a href='admin/comments.php?id=".$crow["id"]."'>delete this</a></span>";
 						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";
 						echo "</div>";
 					}
 					} else {
-						while ($crow = mysql_fetch_assoc($cq)) {
+						while ($crow = mysqli_fetch_assoc($cq)) {
 						echo "<div class='comment'><span class='comment-metadata'>";
 						echo "<span class='comment-author'>".$crow["username"]."</span><span class='comment-date'>".$crow["date"]."</span>";
 						echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";

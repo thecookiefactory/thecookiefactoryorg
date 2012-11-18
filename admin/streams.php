@@ -19,24 +19,24 @@ if (!checkadmin())
 
 if (isset($_POST["submit"])) {
 	$twitch = $_POST["twitch"];
-	$desc = mysql_real_escape_string($_POST["description"]);
+	$desc = mysqli_real_escape_string($_POST["description"]);
 	
 	if (isset($_POST["active"]) && $_POST["active"] == "on")
 		$active = 1;
 	else
 		$active = 0;
 		
-	$uq = mysql_query("UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `author`='".$_SESSION["userid"]."'") or die(mysql_error());
+	$uq = mysqli_query("UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `author`='".$_SESSION["userid"]."'") or die(mysqli_error());
 }
 
-$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
-if (mysql_num_rows($sq) == 0) {
+$sq = mysqli_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
+if (mysqli_num_rows($sq) == 0) {
 	echo "Your stream page is being created now...";
-	$cq = mysql_query("INSERT INTO `streams` VALUES('','".$_SESSION["userid"]."','','','0')");
+	$cq = mysqli_query("INSERT INTO `streams` VALUES('','".$_SESSION["userid"]."','','','0')");
 	echo "Done. Please fill out the fields below.";
 }
-$sq = mysql_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
-$sr = mysql_fetch_assoc($sq);
+$sq = mysqli_query("SELECT * FROM `streams` WHERE `author`='".$_SESSION["userid"]."'");
+$sr = mysqli_fetch_assoc($sq);
 
 echo "<form action='streams.php' method='post'>
 twitch.tv username:<br>

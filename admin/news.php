@@ -20,9 +20,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			$id = $_GET["id"];
-			$eq = mysql_query("SELECT * FROM `news` WHERE `id`=$id");
-			if (mysql_num_rows($eq) == 1) {
-				$er = mysql_fetch_assoc($eq);
+			$eq = mysqli_query("SELECT * FROM `news` WHERE `id`=$id");
+			if (mysqli_num_rows($eq) == 1) {
+				$er = mysqli_fetch_assoc($eq);
 				if (isset($_POST["submit"])) {
 					$title = $_POST["title"];
 					$author = $_SESSION["userid"];
@@ -35,7 +35,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					else
 						$comments = 1;
 
-					mysql_query("UPDATE `news` SET `title`='$title', `author`='$author', `text`='$text', `comments`=$comments WHERE `id`=$id");
+					mysqli_query("UPDATE `news` SET `title`='$title', `author`='$author', `text`='$text', `comments`=$comments WHERE `id`=$id");
 					echo "updated!";
 					echo "<a href='news.php'>go back</a>";
 				
@@ -64,11 +64,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	} else if ($_GET["action"] == "delete") { // DELETE DELETE DELETE DELETE DELETE DELETE
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 			$id = $_GET["id"];
-			$eq = mysql_query("SELECT * FROM `news` WHERE `id`=$id");
-			if (mysql_num_rows($eq) == 1) {
+			$eq = mysqli_query("SELECT * FROM `news` WHERE `id`=$id");
+			if (mysqli_num_rows($eq) == 1) {
 				if (isset($_POST["delete"])) {
 					$id = $_GET["id"];
-					$dq = mysql_query("DELETE FROM `news` WHERE `id`=$id");
+					$dq = mysqli_query("DELETE FROM `news` WHERE `id`=$id");
 					echo "piece of news successfully deleted";
 					echo "<a href='news.php'>go back</a>";
 				} else {
@@ -87,7 +87,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		}
 	} else { // WRITE WRITE WRITE WRITE WRITE WRITE
 		if (isset($_POST["submit"])) {
-			$title = mysql_real_escape_string($_POST["title"]);
+			$title = mysqli_real_escape_string($_POST["title"]);
 			$author = $_SESSION["userid"];
 			$date = date("Y-m-d");
 			$time = date("H:i", time());
@@ -98,7 +98,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			else
 				$comments = 1;
 
-			mysql_query("INSERT INTO `news` VALUES('','$title','$author','$date','$time','$text','$comments')");
+			mysqli_query("INSERT INTO `news` VALUES('','$title','$author','$date','$time','$text','$comments')");
 			echo "piece of news successfully submitted";
 			echo "<a href='news.php'>go back</a>";
 		} else {
@@ -120,12 +120,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	<h1>manage news</h1>
 	<p><a href='?action=write'>write new</a></p>";	
 
-	$query = mysql_query("SELECT * FROM `news` ORDER BY `id` DESC");
+	$query = mysqli_query("SELECT * FROM `news` ORDER BY `id` DESC");
 
 	echo "<table style='border-spacing: 5px;'>";
 	echo "<tr><th>news</th><th>editing tools</th></tr>";
 
-	while ($row = mysql_fetch_assoc($query)) {
+	while ($row = mysqli_fetch_assoc($query)) {
 		echo "<tr>";
 		echo "<td>";
 		echo "#".$row["id"]." - ".$row["title"]." - ".substr($row["text"], 0, 100);

@@ -3,11 +3,11 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
-$q = mysql_query("SELECT * FROM `streams` WHERE `active`=1");
+$q = mysqli_query("SELECT * FROM `streams` WHERE `active`=1");
 
 echo "<ul id='stream-menu'>";
 
-while ($r = mysql_fetch_assoc($q)) {
+while ($r = mysqli_fetch_assoc($q)) {
     echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
 if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"]) {
     echo "<li class='stream-button stream-button-selected";
@@ -30,11 +30,11 @@ echo "</ul>";
 
 if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
 // DISPLAY A STREAM
-$q = mysql_query("SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"]);
+$q = mysqli_query("SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"]);
 
-if (mysql_num_rows($q) == 1) {
+if (mysqli_num_rows($q) == 1) {
 
-$r = mysql_fetch_assoc($q);
+$r = mysqli_fetch_assoc($q);
 echo "<h1>".$r["author"]."'s stream</h1>";
 streamo($r["twitch"]);
 echo "<p>".nl2br($r["description"], false)."</p>";

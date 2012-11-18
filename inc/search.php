@@ -5,12 +5,12 @@ include "analyticstracking.php";
 
 if (isset($_POST["searchb"])) {
 
-	$term = mysql_real_escape_string($_POST["searchb"]);
+	$term = mysqli_real_escape_string($_POST["searchb"]);
 	
 	if (strlen($term) >= 3) {
 
-	$squery = mysql_query("SELECT * FROM `news` WHERE `text` LIKE '%$term%' or `title` LIKE '%$term%' ORDER BY `id` DESC");
-	$nr = mysql_num_rows($squery);
+	$squery = mysqli_query("SELECT * FROM `news` WHERE `text` LIKE '%$term%' or `title` LIKE '%$term%' ORDER BY `id` DESC");
+	$nr = mysqli_num_rows($squery);
 
 	if ($nr == 0) {
 
@@ -19,7 +19,7 @@ if (isset($_POST["searchb"])) {
 	} else {
 
 		echo "<h1>".$nr." results found for: ".$term."</h1>";
-		while ($srow = mysql_fetch_assoc($squery)) {
+		while ($srow = mysqli_fetch_assoc($squery)) {
 			echo "<a href='?p=news&amp;id=".$srow["id"]."'><h1>".$srow["title"]."</h1></a>";
 			echo $srow["date"]." - ".$srow["author"];
 			echo "<p>".substr($srow["text"], 0, 100)."...</p>";
