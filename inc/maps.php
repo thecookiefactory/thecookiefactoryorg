@@ -4,21 +4,21 @@ checkembed($r_c);
 include "analyticstracking.php";
 
   if (isset($_POST["submit"]) && trim($_POST["text"]) != "") {
-    $text = mysqli_real_escape_string($_POST["text"]);
-	$m_id = mysqli_real_escape_string($_POST["m_id"]);
+    $text = mysqli_real_escape_string($con, $_POST["text"]);
+	$m_id = mysqli_real_escape_string($con, $_POST["m_id"]);
 	$username = $_SESSION["userid"];
 	$date = date("Y-m-d");
 	$time = date("H:i");
 	
-	mysqli_query("INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
+	mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
   }
 
   echo "<script src='js/maps.js'></script>";
 
-  $q = mysqli_query("SELECT * FROM `maps` ORDER BY `id` DESC");
+  $q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
 
   while ($r = mysqli_fetch_assoc($q)) {
-	$gq = mysqli_query("SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
+	$gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
       echo "<div class='map-leftarrow map-arrow-disabled' id='map-".$r["id"]."-left' onclick='startImagerollScrolling(this.id, -1);'></div>";
@@ -58,7 +58,7 @@ include "analyticstracking.php";
       echo "</div>";
 	  
 	  //comments
-	  $cq = mysqli_query("SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
+	  $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
 	  echo "<div class='comments'>";
 		if (mysqli_num_rows($cq) > 0) {
 		  while ($cr = mysqli_fetch_assoc($cq)) {

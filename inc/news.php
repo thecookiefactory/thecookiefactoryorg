@@ -14,7 +14,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	
 	$xo = ($page - 1) * 5;
 	$yo = $page * 5;
-	$query = mysqli_query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
+	$query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
 	
 	if (mysqli_num_rows($query) == 0) {
 		echo "No news posts found.";
@@ -28,7 +28,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		
 		if ($row["comments"] == 1) {
 		
-			$cq = mysqli_query("SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
+			$cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
 			$commnum = mysqli_num_rows($cq);
 			echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
 			}
@@ -46,7 +46,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 	}
 	
 	//page links
-	$nr = mysqli_num_rows(mysqli_query("SELECT * FROM `news`"));
+	$nr = mysqli_num_rows(mysqli_query($con, "SELECT * FROM `news`"));
 	for ($i = 1; $i <= $nr%5; $i++) {
 	if ($page == $i)
 	echo "Page ".$i;
@@ -57,7 +57,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 } else {
 // DISPLAY ONE PIECE OF NEWS
 
-	$query = mysqli_query("SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
+	$query = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
 	
 	if (mysqli_num_rows($query) == 1) {
 	
@@ -78,15 +78,15 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 				
 				$newsid = $_GET["id"];
 				$author = $_SESSION["userid"];
-				$text = mysqli_real_escape_string(htmlentities($_POST["text"]));
+				$text = mysqli_real_escape_string($con, htmlentities($_POST["text"]));
 				$date = date("Y-m-d");
 				$time = date("H:i", time());
 				
-				$iq = mysqli_query("INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
+				$iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
 				
 				}
 			
-				$cq = mysqli_query("SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
+				$cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
 				$commnum = mysqli_num_rows($cq);
 				if ($commnum > 0) {
 					echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";

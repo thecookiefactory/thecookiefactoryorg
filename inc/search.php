@@ -5,11 +5,11 @@ include "analyticstracking.php";
 
 if (isset($_POST["searchb"])) {
 
-	$term = mysqli_real_escape_string($_POST["searchb"]);
+	$term = mysqli_real_escape_string($con, $_POST["searchb"]);
 	
 	if (strlen($term) >= 3) {
 
-	$squery = mysqli_query("SELECT * FROM `news` WHERE `text` LIKE '%$term%' or `title` LIKE '%$term%' ORDER BY `id` DESC");
+	$squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%$term%' or `title` LIKE '%$term%' ORDER BY `id` DESC");
 	$nr = mysqli_num_rows($squery);
 
 	if ($nr == 0) {
