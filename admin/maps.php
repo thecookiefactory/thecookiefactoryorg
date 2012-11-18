@@ -186,6 +186,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					}
 					
 					//deleting comments related to the map
+					mysqli_query($con, "DELETE FROM `mapscomments` WHERE `mapid`=".$id);
 					
 					$dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
 					rmdir("../img/maps/".$id);

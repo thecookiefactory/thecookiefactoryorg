@@ -70,6 +70,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					$id = $_GET["id"];
 					$dq = mysqli_query($con, "DELETE FROM `news` WHERE `id`=$id");
 					echo "piece of news successfully deleted";
+					mysqli_query($con, "DELETE FROM `newscomments` WHERE `newsid`=".$id);
+					echo "related comments deleted";
 					echo "<a href='news.php'>go back</a>";
 				} else {
 					echo "delete news id ".$_GET["id"];
