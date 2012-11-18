@@ -21,25 +21,114 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 	if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
 		
 		$id = $_GET["id"];
+		$eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
 		
 		if (isset($_POST["submit"])) {
+		
+			$mr = mysqli_fetch_assoc($eq);
+		
 			$name = mysqli_real_escape_string($con, $_POST["name"]);
 			$game = $_POST["game"];
 			$desc = mysqli_real_escape_string($con, $_POST["desc"]);
+			
 			switch($_POST["dli"]) {
-				case "file": $dli = 0; break;
+				case "file": $dli = 0;
+					//file upload
+					$bsp_name = $_FILES["bsp"]["name"];
+					$bsp_type = $_FILES["bsp"]["type"];
+					$bsp_size = $_FILES["bsp"]["size"];
+					$bsp_tmp = $_FILES["bsp"]["tmp_name"];
+					$bsp_error = $_FILES["bsp"]["error"];
+					
+					$extension = substr($bsp_name, strpos($bsp_name, ".") + 1);
+					
+					if (!empty($bsp_name) && $bsp_size > 0) {
+			
+						if ($extension == "bsp" && $bsp_type == "application/octet-stream") {
+				
+							$location = "../img/maps/";
+							$dl = $name.".bsp";
+							if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
+							echo "bsp_tmp: ".$bsp_tmp;
+							echo "<br>location: ".$location.$dl."<br>";
+				
+							if (move_uploaded_file($bsp_tmp, $location.$dl)) {
+					
+								echo "file uploaded...<br>";
+								mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
+								echo "download url added...<br>";
+			
+							} else {
+				
+								echo "error uploading<br>";
+				
+							}
+				
+						} else {
+				
+							echo "not a bsp file";
+				
+						}
+				
+					} else echo "no file defined this si bad";
+				
+
+
+
+				break;
+			
+
 				case "link": $dli = 1; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
 					$dl = $_POST["dl"]; $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id) or die(mysqli_error()); break;
 				case "none": $dli = 2; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } break;
 			}
+		
+			//image file
+			$image_name = $_FILES["image"]["name"];
+			$image_size = $_FILES["image"]["size"];
+			$image_type = $_FILES["image"]["type"];
+			$image_tmp = $_FILES["image"]["tmp_name"];
 			
+			$extension = substr($image_name, strpos($image_name, ".") + 1);
+			
+			if (!empty($image_name) && $image_size > 0) {
+			
+				if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
+				
+					$location = "../img/maps/";
+					
+					unlink($location.$id.".".$mr["ext"]);
+					echo "old image deleted";
+				
+					if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
+					
+						echo "image file uploaded...<br>";
+						mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
+						echo "extension saved...<br>";
+			
+					} else {
+				
+						echo "error";
+				
+					}
+				
+				} else {
+				
+					echo "jpg or png only";
+				
+				}
+				
+			} else {
+				echo "there is no new image";
+			}
+		
 			$uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id) or die(mysqli_error());
 		}
 		
-		$eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
 		if (mysqli_num_rows($eq) == 1) {
 			
 			//fetching the current data
+			$eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
 			$mr = mysqli_fetch_assoc($eq);
 			
 			echo "<form action='?action=edit&amp;id=".$id."' method='post' enctype='multipart/form-data'>
