@@ -40,7 +40,7 @@ include "analyticstracking.php";
     
       echo "</div>";
       echo "<div class='map-data'>";
-        echo "<span class='map-author'>".$r["author"]."</span>";
+        echo "<span class='map-author'>".getname($r["authorid"])."</span>";
         echo "<span class='map-game'>";
                 switch($r["game"]) {
                   case 1: echo "Team Fortress 2"; break;
@@ -62,7 +62,7 @@ include "analyticstracking.php";
 	  echo "<div class='comments'>";
 		if (mysqli_num_rows($cq) > 0) {
 		  while ($cr = mysqli_fetch_assoc($cq)) {
-	  	    echo $cr["username"]." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
+	  	    echo getname($cr["authorid"])." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
 		  }
 		} else {
 		  echo "no comments yet";
