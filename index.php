@@ -40,12 +40,22 @@ require "inc/essential.php";
 if (isset($_SESSION["userid"])) {
 echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".getname($_SESSION["userid"])."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
 } else {
-echo "<a class='menu-item' href='?p=login'>log in</a>";
+echo "<a class='menu-item' href='?p=login'>log in</a><a class='menu-item' href='?p=register'>register</a>";
 }
 
 
 ?>
 </div>
+
+<div id='nav-loginbar'>
+  <form class='menu-item' action='?p=login' method='post'>
+    I'm
+    <input type='text' name='username' placeholder='username' required='required'>
+    and my password is
+    <input type='text' name='password' placeholder='password' required='required'>
+  </form>
+</div>
+
 </nav>
 <hr />
 
