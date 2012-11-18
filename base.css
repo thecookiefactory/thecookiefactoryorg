@@ -160,15 +160,13 @@ div.map {
 }
 
 h1 {
-  height: 36px;
   font-size: 36px;
   font-weight: 400;
   font-family: Bitter;
   text-align: left;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   margin-left: 19px;
-  float: left;
   color: white;
 }
 
@@ -177,8 +175,18 @@ h1 {
   padding: 0px;
 }
 
+.article-header:before, .article-header:after {
+  content: '';
+  display: table;
+}
+
+.article-header:after {
+  clear: both;
+}
+
 .article-title {
-  width: 730px;
+  width: 700px;
+  float: left;
 }
 
 .article-metadata {
@@ -206,7 +214,6 @@ h1 {
   margin-left: 19px;
   color: #BAD5F1;
   text-align: justify;
-  clear: both;
 }
 
 .article-separator {
