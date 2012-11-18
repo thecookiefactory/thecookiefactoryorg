@@ -116,7 +116,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 	echo "<ul>";
 	while ($row = mysqli_fetch_assoc($query)) {
 		echo "<li>";
-		echo "#".$row["id"]." - ".$row["name"]." - ".$row["author"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
+		echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"])." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
 		$gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$row["id"]);
 		if (mysqli_num_rows($gq) > 0) {
 			echo "<ul>";
