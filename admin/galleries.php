@@ -19,7 +19,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
 	if ($_GET["action"] == "edit" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
 	
-		$query = mysqli_query("SELECT * FROM `gallery` WHERE `id`=".$_GET["id"]);
+		$query = mysqli_query($con, "SELECT * FROM `gallery` WHERE `id`=".$_GET["id"]);
 		if (mysqli_num_rows($query) == 0) {
 			die("Not a valid id");
 		}
@@ -28,15 +28,15 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 		
 			if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 				if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
-					mysqli_query("DELETE FROM `gallery` WHERE `id`=".$_GET["id"]);
+					mysqli_query($con, "DELETE FROM `gallery` WHERE `id`=".$_GET["id"]);
 					echo "Image deleted successfully.";
 				} else {
 					echo "delete process failed";
 				}
 			} else {
-				$desc = htmlentities(mysqli_real_escape_string($_POST["desc"]));
+				$desc = htmlentities(mysqli_real_escape_string($con, $_POST["desc"]));
 				
-				$query = mysqli_query("UPDATE `gallery` SET `desc`='".$desc."' WHERE `id`=".$_GET["id"]) or die(mysqli_error());
+				$query = mysqli_query($con, "UPDATE `gallery` SET `desc`='".$desc."' WHERE `id`=".$_GET["id"]) or die(mysqli_error());
 				echo "image updated";
 			}
 		
@@ -53,7 +53,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 	
 	} else if ($_GET["action"] == "add" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		
-		$mq = mysqli_query("SELECT `name` FROM `maps` WHERE `id`=".$_GET["id"]);
+		$mq = mysqli_query($con, "SELECT `name` FROM `maps` WHERE `id`=".$_GET["id"]);
 		if (mysqli_num_rows($mq) == 0) {
 			die("Not a valid id");
 		}
@@ -62,7 +62,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 		
 		if (isset($_POST["submit"])) {
 		
-			$desc = htmlentities(mysqli_real_escape_string($_POST["desc"]));
+			$desc = htmlentities(mysqli_real_escape_string($con, $_POST["desc"]));
 			$mapid = $_GET["id"];
 			
 			//image variables
@@ -80,7 +80,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 				
 					if (move_uploaded_file($tmp_name, $location.$filename)) {
 					
-						mysqli_query("INSERT INTO `gallery` VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
+						mysqli_query($con, "INSERT INTO `gallery` VALUES('','".$_GET["id"]."','".$desc."','".$filename."')");
 						echo "iuploaded";
 			
 					} else {
@@ -111,13 +111,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
 } else {
 	echo "<h1>manage galleries</h1>";
-	$query = mysqli_query("SELECT * FROM maps ORDER BY id DESC");
+	$query = mysqli_query($con, "SELECT * FROM maps ORDER BY id DESC");
 	
 	echo "<ul>";
 	while ($row = mysqli_fetch_assoc($query)) {
 		echo "<li>";
 		echo "#".$row["id"]." - ".$row["name"]." - ".$row["author"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
-		$gq = mysqli_query("SELECT * FROM `gallery` WHERE `mapid`=".$row["id"]);
+		$gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$row["id"]);
 		if (mysqli_num_rows($gq) > 0) {
 			echo "<ul>";
 			while ($gr = mysqli_fetch_assoc($gq)) {

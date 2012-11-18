@@ -20,7 +20,7 @@ if (islive($r["twitch"]))
 echo " stream-live";
 }
 
-echo "'>".$r["author"]."</li>";
+echo "'>".getname($r["authorid"])."</li>";
 echo "</a>";
 
 }
@@ -35,7 +35,7 @@ $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"])
 if (mysqli_num_rows($q) == 1) {
 
 $r = mysqli_fetch_assoc($q);
-echo "<h1>".$r["author"]."'s stream</h1>";
+echo "<h1>".getname($r["authorid"])."'s stream</h1>";
 streamo($r["twitch"]);
 echo "<p>".nl2br($r["description"], false)."</p>";
 } else {

@@ -23,20 +23,20 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		$id = $_GET["id"];
 		
 		if (isset($_POST["submit"])) {
-			$name = mysqli_real_escape_string($_POST["name"]);
+			$name = mysqli_real_escape_string($con, $_POST["name"]);
 			$game = $_POST["game"];
-			$desc = mysqli_real_escape_string($_POST["desc"]);
+			$desc = mysqli_real_escape_string($con, $_POST["desc"]);
 			switch($_POST["dli"]) {
 				case "file": $dli = 0; break;
 				case "link": $dli = 1; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
-					$dl = $_POST["dl"]; $uq = mysqli_query("UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id) or die(mysqli_error()); break;
+					$dl = $_POST["dl"]; $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id) or die(mysqli_error()); break;
 				case "none": $dli = 2; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } break;
 			}
 			
-			$uq = mysqli_query("UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id) or die(mysqli_error());
+			$uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id) or die(mysqli_error());
 		}
 		
-		$eq = mysqli_query("SELECT * FROM `maps` WHERE `id`=$id");
+		$eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
 		if (mysqli_num_rows($eq) == 1) {
 			
 			//fetching the current data
@@ -72,7 +72,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 		if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 		
 			$id = $_GET["id"];
-			$eq = mysqli_query("SELECT * FROM `maps` WHERE `id`=$id");
+			$eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
 			if (mysqli_num_rows($eq) == 1) {
 			
 				$er = mysqli_fetch_assoc($eq);
@@ -89,16 +89,16 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					unlink("../img/maps/".$er["id"].".".$er["ext"]);
 					
 					//deleting images from the gallery
-					$gq = mysqli_query("SELECT * FROM `gallery` WHERE `mapid`=".$id);
+					$gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$id);
 					
 					while ($gr = mysqli_fetch_assoc($gq)) {
 						unlink("../img/maps/".$er["id"]."/".$gr["filename"]);
-						mysqli_query("DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
+						mysqli_query($con, "DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
 					}
 					
 					//deleting comments related to the map
 					
-					$dq = mysqli_query("DELETE FROM `maps` WHERE `id`=$id");
+					$dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
 					rmdir("../img/maps/".$id);
 					echo "map successfully deleted";
 					echo "<a href='maps.php'>go back</a>";
@@ -124,17 +124,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "map creating process begins...<br>";
 			
 			//basic values
-			$name = mysqli_real_escape_string($_POST["name"]);
+			$name = mysqli_real_escape_string($con, $_POST["name"]);
 			$author = $_SESSION["userid"];
 			$game = $_POST["game"];
-			$desc = mysqli_real_escape_string($_POST["desc"]);
+			$desc = mysqli_real_escape_string($con, $_POST["desc"]);
 			$date = date("Y-m-d");
 			
 			echo "basic values read...<br>";
 			
 			//inserting the basic data and returning the map id
-			mysqli_query("INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$date')");
-			$id = mysqli_insert_id();
+			mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$date')");
+			$id = mysqli_insert_id($con);
 			echo "basic values inserted...<br>";
 			echo "the id is ".$id."<br>";
 			
@@ -146,14 +146,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			switch($_POST["dli"]) {
 				case "none": 
 					echo "no download specified...<br>";
-					mysqli_query("UPDATE `maps` SET `dltype`='2' WHERE `id`=".$id);
+					mysqli_query($con, "UPDATE `maps` SET `dltype`='2' WHERE `id`=".$id);
 					break;
 				case "link": 
 					//steam community link
-					$dl = mysqli_real_escape_string($_POST["dl"]);
+					$dl = mysqli_real_escape_string($con, $_POST["dl"]);
 					echo "steam community url read...<br>";
-					mysqli_query("UPDATE `maps` SET `dltype`='1' WHERE `id`=".$id);
-					mysqli_query("UPDATE `maps` SET `dl`='".$dl."' WHERE `id`=".$id);
+					mysqli_query($con, "UPDATE `maps` SET `dltype`='1' WHERE `id`=".$id);
+					mysqli_query($con, "UPDATE `maps` SET `dl`='".$dl."' WHERE `id`=".$id);
 					echo "download url added...<br>";
 					break;
 				case "file": 
@@ -180,7 +180,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 							if (move_uploaded_file($bsp_tmp, $location.$dl)) {
 					
 								echo "file uploaded...<br>";
-								mysqli_query("UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
+								mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
 								echo "download url added...<br>";
 			
 							} else {
@@ -217,7 +217,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 					if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
 					
 						echo "image file uploaded...<br>";
-						mysqli_query("UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
+						mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
 						echo "extension saved...<br>";
 			
 					} else {
@@ -237,7 +237,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			echo "map successfully submitted";
 			echo "<a href='maps.php'>go back</a>";
 		} else {
-			echo "<h1>post a map - by ".$_SESSION["userid"]."</h1>
+			echo "<h1>post a map - by ".getname($_SESSION["userid"])."</h1>
 			<form action='?action=write' method='post' enctype='multipart/form-data'>
 			Name<br>
 			<input type='text' name='name' required><br>
@@ -265,14 +265,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 } else { // display all the maps
 	echo "<h1>manage maps</h1>
 	<p><a href='?action=write'>add new</a></p>";
-	$query = mysqli_query("SELECT * FROM `maps` ORDER BY `id` DESC");
+	$query = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
 	echo "<table style='border-spacing: 5px;'>";
 	echo "<tr><th>maps</th><th>editing tools</th></tr>";
 
 	while ($row = mysqli_fetch_assoc($query)) {
 		echo "<tr>";
 		echo "<td>";
-		echo "#".$row["id"]." - ".$row["name"]." - ".$row["author"];
+		echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"]);
 		echo "</td>";
 		echo "<td>";
 		echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";

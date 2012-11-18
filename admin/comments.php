@@ -16,12 +16,12 @@ if (!checkadmin())
 <?php
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 	$id = $_GET["id"];
-	$eq = mysqli_query("SELECT * FROM `newscomments` WHERE `id`=$id");
+	$eq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `id`=$id");
 	if (mysqli_num_rows($eq) == 1) {
 		$er = mysqli_fetch_assoc($eq);
 		if (isset($_POST["delete"])) {
 			$id = $_GET["id"];
-			$dq = mysqli_query("DELETE FROM `newscomments` WHERE `id`=$id");
+			$dq = mysqli_query($con, "DELETE FROM `newscomments` WHERE `id`=$id");
 			echo "comment successfully deleted";
 			echo "<a href='../index.php?p=news'>go back</a>";
 		} else {

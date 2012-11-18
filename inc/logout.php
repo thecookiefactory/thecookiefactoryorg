@@ -3,13 +3,12 @@ checkembed($r_c);
 include "analyticstracking.php";
 
 if (checkuser()) {
-	session_destroy();
-	if (isset($_COOKIE["userid"])) {
-		setcookie("userid", "", time()-3600);
-	}
-	echo "logged out successfully";
-	$redirect = true;
+	
+	logout();
+	
 } else {
-	echo "you are not even logged in you baddie";
+
+	echo "You are not even logged in you baddie";
+	
 }
 ?>
