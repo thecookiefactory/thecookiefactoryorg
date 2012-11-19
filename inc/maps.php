@@ -42,10 +42,9 @@ include "analyticstracking.php";
       echo "<div class='map-data'>";
         echo "<span class='map-author'>".getname($r["authorid"])."</span>";
         echo "<span class='map-game'>";
-                switch($r["game"]) {
-                  case 1: echo "Team Fortress 2"; break;
-                  case 2: echo "Portal 2"; break;
-                }
+			$gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
+			$gr = mysqli_fetch_assoc($gq);
+			echo "<a target='_blank' href='http://steamcommunity.com/app/".$gr["steam"]."'>".$gr["name"]."</a>";
         echo "</span>";
         echo "<span class='map-desc'>".nl2br($r["desc"], false)."</span>";
         echo "<span class='map-dl'>";

@@ -333,8 +333,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 			<input type='text' name='name' required><br>
 			Associated game<br>
 			<select name='game'>
-				<option value='1'>Team Fortress 2</option>
-				<option value='2'>Portal 2</option>
+			";
+			$gq = mysqli_query($con, "SELECT * FROM `games` ORDER BY `id` ASC");
+			while ($gr = mysqli_fetch_assoc($gq)) {
+				echo "<option value='".$gr["id"]."'>".$gr["name"]."</option>";
+			}
+			echo "			
 			</select><br>
 			Description<br>
 			<textarea name='desc' required></textarea><br>
