@@ -23,7 +23,7 @@ if (checkuser()) {
 
 	if (!isset($redirect)) {
 
-echo "<div class='account-form'><form action='?p=account' method='post'>
+echo "<div class='account-form'><form action='?p=register' method='post'>
 <span class='account-text'><span class='account-title'>Hey there!</span><br>My name is </span>
 <input class='account-input' pattern='\w{2,10}' type='text' placeholder='username' name='username' required='required' autocomplete='off' autofocus /><span class='account-text'>, and you will know it really is me when I tell you my secret password, which is </span>
 <input class='account-input' pattern='.{6,30}' type='password' placeholder='password' name='password' required='required' autocomplete='off' /><span class='account-text'>. If you want to contact me, feel free to do it at my email address, </span>

@@ -37,9 +37,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		</div>";		
 
 		// BODY
-		echo "<div class='article-body'>
+		echo "<article>
 		<span class='article-text'>".nl2br($row["text"], false)."</span>
-		</div>
+		</article>
 		<hr class='article-separator'>";
 
 	}
@@ -68,9 +68,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		
 		echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>
 		</div>";
-		echo "<div class='article-body'>
+		echo "<article>
 		<span class='article-text'>".nl2br($row["text"], false)."</span>
-		</div>";
+		</article>";
 
 		if ($row["comments"] == 1) {
 			

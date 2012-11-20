@@ -74,10 +74,6 @@ section {
   width: 1000px;
 }
 
-article {
-
-}
-
 footer {
   border: 0px solid #ff9933;
   padding-top: 1em;
@@ -218,7 +214,7 @@ h1 {
   content: " – ";
 }
 
-.article-body {
+article {
   margin-left: 19px;
   color: #BAD5F1;
   text-align: justify;
