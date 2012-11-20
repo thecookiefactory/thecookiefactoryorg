@@ -34,13 +34,13 @@ require "inc/essential.php";
 </span>
 
 <div id='nav-actionbar'>
-<form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur();"/></form>
+<form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur(); autocomplete='off'"></form>
 <?php
 
 if (isset($_SESSION["userid"])) {
 echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".getname($_SESSION["userid"])."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
 } else {
-echo "<a class='menu-item' href='?p=login'>log in</a><a class='menu-item' href='?p=register'>register</a>";
+echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>";
 }
 
 
@@ -49,10 +49,10 @@ echo "<a class='menu-item' href='?p=login'>log in</a><a class='menu-item' href='
 
 <div id='nav-loginbar'>
   <form class='menu-item' action='?p=login' method='post'>
-    I'm
-    <input type='text' name='username' placeholder='username' required='required'>
-    and my password is
-    <input type='text' name='password' placeholder='password' required='required'>
+    <span class='menu-item faux-link' onclick='hideLoginBar();'>&laquo; </span>
+    <span class='input-wrapper'><input class='account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off'></span>
+    <span class='input-wrapper'><input class='account-input' pattern='.{6,30}' type='password' name='password' placeholder='password' required='required' autocomplete='off'></span>
+    <span class='input-wrapper'><input class='account-input account-button' type='submit' value='go!' name='submit'></span>
   </form>
 </div>
 
