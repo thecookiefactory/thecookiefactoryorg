@@ -566,11 +566,6 @@ img.map-image {
        -o-animation: blink 1.4s ease-in-out infinite alternate;
 }
 
-.account-input:valid {
-  color: #4188D2;
-  text-align: center;
-}
-
 .account-input::-webkit-input-placeholder {
   color: #F93;
   text-align: center;

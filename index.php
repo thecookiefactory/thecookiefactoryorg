@@ -50,8 +50,8 @@ echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><
 <div id='nav-loginbar'>
   <form class='menu-item' action='?p=login' method='post'>
     <span class='menu-item faux-link' onclick='hideLoginBar();'>&laquo; </span>
-    <span class='input-wrapper'><input class='account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off'></span>
-    <span class='input-wrapper'><input class='account-input' pattern='.{6,30}' type='password' name='password' placeholder='password' required='required' autocomplete='off'></span>
+    <span class='input-wrapper'><input class='account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off' oninput='checkInputBox(this)'></span>
+    <span class='input-wrapper'><input class='account-input' pattern='.{6,30}' type='password' name='password' placeholder='password' required='required' autocomplete='off' oninput='checkInputBox(this)'></span>
     <span class='input-wrapper'><input class='account-input account-button' type='submit' value='go!' name='submit'></span>
   </form>
 </div>

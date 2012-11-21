@@ -19,6 +19,12 @@ function hideLoginBar() {
     document.getElementById("nav-loginbar").style.display = "none";
 }
 
-function checkInput(elemid) {
-    document.getElementById(elemid)
+function checkInputBox(elem) {
+    if (elem.value) {
+        elem.style.color = "#4188D2";
+        elem.style.textAlign = "center";
+    } else {
+        elem.style.color = "#141414";
+        elem.style.textAlign = "left";
+    }
 }
