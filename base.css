@@ -593,6 +593,7 @@ img.map-image {
   color: #4188D2 !important;
 }
 
-.account-text {
-  
+--webkit-validation-bubble-message {
+  text-align: left !important;
 }
+
