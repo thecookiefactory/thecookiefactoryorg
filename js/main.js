@@ -28,3 +28,7 @@ function checkInputBox(elem) {
         elem.style.textAlign = "left";
     }
 }
+
+function filterInput(event) {
+    if (!String.fromCharCode(event.which).match(/\w/)) return false;
+}

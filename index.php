@@ -50,7 +50,7 @@ echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><
 <div id='nav-loginbar'>
   <form class='menu-item' action='?p=login' method='post'>
     <span class='menu-item faux-link' onclick='hideLoginBar();'>&laquo; </span>
-    <span class='input-wrapper'><input class='account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off' oninput='checkInputBox(this); this.setCustomValidity(&quot;&quot;);' oninvalid='this.setCustomValidity(&quot;This can&#39;t be right, your username had to be 2-10 alphanumeric characters when you registered.&quot;);'></span>
+    <span class='input-wrapper'><input class='account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off' onkeypress='return filterInput(event);' oninput='checkInputBox(this); this.setCustomValidity(&quot;&quot;);' oninvalid='this.setCustomValidity(&quot;This can&#39;t be right, your username had to be 2-10 alphanumeric characters when you registered.&quot;);'></span>
     <span class='input-wrapper'><input class='account-input' pattern='.{6,30}' type='password' name='password' placeholder='password' required='required' autocomplete='off' oninput='checkInputBox(this); this.setCustomValidity(&quot;&quot;);' oninvalid='this.setCustomValidity(&quot;This can&#39;t be right, your password had to be 6-30 characters when you registered.&quot;);'></span>
     <span class='input-wrapper'><input class='account-input account-button' type='submit' value='go!' name='submit'></span>
   </form>
