@@ -1,5 +1,3 @@
-<div style='margin-top: 20px; margin-bottom: 20px;'>
-
 <?php
 
 checkembed($r_c);
@@ -7,7 +5,7 @@ include "analyticstracking.php";
 
 if (checkuser()) {
 	
-	echo "<p>You are already logged in! Click <a href='?p=logout'>here</a> if you want to log out.</p>";
+	echo "<p>You are already logged in! <a href='?p=logout'>Log out</a>?</p>";
 
 } else {
 
@@ -34,4 +32,3 @@ echo "<div class='account-form'><form action='?p=register' method='post'>
 	}
 }
 ?>
-</div>
