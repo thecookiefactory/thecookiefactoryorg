@@ -38,7 +38,7 @@ function filterInput(elem) {
         if (elem.value.match(/\W/)) error += "Your username can contain English letters, numbers, and underscores only. ";
         if (!elem.value.match(/.{2,10}/)) error += "Your username must be 2 to 10 characters long. ";
         var ajax = new XMLHttpRequest();
-        ajax.open("GET", "inc/checkuser.php&name=" + elem.value, true);
+        ajax.open("GET", "inc/checkuser.php?name=" + elem.value, true);
         ajax.send();
     } else if (elem.name == "password") {
         if (!elem.value.match(/.{6,30}/)) error += "Your password must be 6 to 30 characters long. ";
@@ -48,7 +48,7 @@ function filterInput(elem) {
 
     if (ajax) {
         ajax.onreadystatechange = function(){
-            if (ajax.readyState === 4 && ajax.status === 200 && ajax.responsetext != "0") {
+            if (ajax.readyState === 4 && ajax.status === 200 && ajax.responseText != "0") {
                 error += "Sorry, that username is already taken. ";
             }
             elem.setCustomValidity(error);
