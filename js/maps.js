@@ -20,9 +20,7 @@ function initialize(mapid) {
     posdict[mapid] = 0;
 
     // makes the appropriate arrows visible
-    if (lendict[mapid] > 1) {
-        arrowFade(mapid, "in", "right");
-    }
+    if (lendict[mapid] > 1) arrowFade(mapid, "in", "right");
 
     // locks hidden arrows so that clicking on them won't do anything
     setLocks(mapid)
@@ -37,13 +35,8 @@ function setLocks(mapid) {
     lockdict[mapid+"-left"] = 1
     lockdict[mapid+"-right"] = 1
 
-    if (posdict[mapid] < lendict[mapid] - 1) {
-        lockdict[mapid+"-right"] = 0
-    }
-
-    if (posdict[mapid] > 0) {
-        lockdict[mapid+"-left"] = 0
-    }
+    if (posdict[mapid] < lendict[mapid] - 1) lockdict[mapid+"-right"] = 0;
+    if (posdict[mapid] > 0)                  lockdict[mapid+"-left"] = 0;
 
     return;
 }
@@ -73,9 +66,7 @@ function startImagerollScrolling(arrowid, direction) {
     // direction: integer (-1 for moving left; 1 for moving right)
 
     // don't start animating if the clicked arrow is locked
-    if (lockdict[arrowid] == 1) {
-        return;
-    }
+    if (lockdict[arrowid] == 1) return;
 
     // mapid: string (ex. "map-1")
     mapid = arrowid.slice(0,arrowid.search("left")+arrowid.search("right"));
@@ -84,12 +75,8 @@ function startImagerollScrolling(arrowid, direction) {
     lockdict[mapid+"-right"] = 1
 
     // fade out any currently visible arrows
-    if (posdict[mapid] < lendict[mapid] - 1) {
-        arrowFade(mapid, "out", "right"); 
-    }
-    if (posdict[mapid] > 0) {
-        arrowFade(mapid, "out", "left");
-    }
+    if (posdict[mapid] < lendict[mapid] - 1) arrowFade(mapid, "out", "right");
+    if (posdict[mapid] > 0)                  arrowFade(mapid, "out", "left")
 
     // get array of keyframe rules with the name "scrolling"
     var keyframes = findKeyframesRule("scrolling");
@@ -111,13 +98,8 @@ function startImagerollScrolling(arrowid, direction) {
     posdict[mapid] += direction;
 
     // fade in the appropriate arrows
-    if (posdict[mapid] < lendict[mapid] - 1) {
-        setTimeout(function() {arrowFade(mapid, "in", "right");}, scrolltime+100-fadetime); 
-    }
-
-    if (posdict[mapid] > 0) {
-        setTimeout(function() {arrowFade(mapid, "in", "left");}, scrolltime+100-fadetime);  
-    }
+    if (posdict[mapid] < lendict[mapid] - 1) setTimeout(function() {arrowFade(mapid, "in", "right");}, scrolltime+100-fadetime);
+    if (posdict[mapid] > 0)                  setTimeout(function() {arrowFade(mapid, "in", "left");},  scrolltime+100-fadetime);
     
     // reposition the imageroll after it has been animated
     setTimeout(function() {endImagerollScrolling(mapid, direction);}, scrolltime+100);     
@@ -146,8 +128,7 @@ function findKeyframesRule(rule) {
     var result = new Array();
 
     for (var j = 0; j < ss[0].cssRules.length; ++j) {
-        if (ss[0].cssRules[j].name == rule)
-            result.push(ss[0].cssRules[j]);
+        if (ss[0].cssRules[j].name == rule) result.push(ss[0].cssRules[j]);
     }
     
     return result;
