@@ -1,39 +1,45 @@
 <?php
+
 session_start();
 $r_c = 42;
 require "../inc/essential.php";
 
-if (!checkadmin())
-    die("must be an dmin :(".$_SESSION["userid"]);
+if (!checkadmin()) die("403");
+
 ?>
 
 <!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
 
 <?php
 
-
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
-    if ($_GET["action"] == "edit") { // EDIT EDIT EDIT EDIT EDIT EDIT
+    
+    if ($_GET["action"] == "edit") {
+        // EDIT
         
-        $id = $_GET["id"];
-        $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
+        $id = strip($_GET["id"]);
+        $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=".$id);
         
         if (isset($_POST["submit"])) {
         
             $mr = mysqli_fetch_assoc($eq);
         
-            $name = mysqli_real_escape_string($con, $_POST["name"]);
+            $name = strip($_POST["name"]);
             $game = $_POST["game"];
-            $desc = mysqli_real_escape_string($con, $_POST["desc"]);
+            $desc = strip($_POST["desc"]);
             
             switch($_POST["dli"]) {
-                case "file": $dli = 0;
+            
+                case "file":
                     //file upload
+                    
+                    $dli = 0;
+                    
                     $bsp_name = $_FILES["bsp"]["name"];
                     $bsp_type = $_FILES["bsp"]["type"];
                     $bsp_size = $_FILES["bsp"]["size"];
@@ -48,39 +54,77 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 
                             $location = "../img/maps/";
                             $dl = $name.".bsp";
-                            if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
-                            echo "bsp_tmp: ".$bsp_tmp;
-                            echo "<br>location: ".$location.$dl."<br>";
+                            
+                            if (file_exists("../img/maps/".$name.".bsp")) {
+                                
+                                echo "Deleting the old bsp file...<br>";
+                                unlink("../img/maps/".$name.".bsp");
+                            
+                            } else { 
+                                echo "No old .bsp file found, continuing...<br>";
+                            }
                 
                             if (move_uploaded_file($bsp_tmp, $location.$dl)) {
                     
-                                echo "file uploaded...<br>";
+                                echo ".bsp file successfully uploaded...<br>";
+                                
                                 mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
-                                echo "download url added...<br>";
             
                             } else {
                 
-                                echo "error uploading<br>";
+                                echo "There was an error while uploading the file. It is highly recommended to try again or change the download to not available.<br>";
                 
                             }
                 
                         } else {
                 
-                            echo "not a bsp file";
+                            echo "The specified file does not appear to be a .bsp. It is highly recommended to try again or change the download to not available.<br>";
                 
                         }
                 
-                    } else echo "no file defined this si bad";
-                
-
-
-
-                break;
+                    } else {
+                    
+                        echo "There was no file defined. It is highly recommended to change the download to not available.";
+                        
+                    }
+                    
+                    break;
             
+                case "link":
+                    //steamcommunity id
+                
+                    $dli = 1;
 
-                case "link": $dli = 1; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } 
-                    $dl = $_POST["dl"]; $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id) or die(mysqli_error()); break;
-                case "none": $dli = 2; if (file_exists("../img/maps/".$name.".bsp")) { echo "deleting bsp"; unlink("../img/maps/".$name.".bsp"); } else { echo "no old bsp found"; } break;
+                    if (file_exists("../img/maps/".$name.".bsp")) {
+                        
+                        echo "Deleting the old bsp file...<br>";
+                        unlink("../img/maps/".$name.".bsp");
+
+                    } else { 
+                        echo "No old .bsp file found, continuing...<br>";
+                    } 
+                    
+                    $dl = $_POST["dl"];
+                    $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id);
+                    
+                    break;
+                
+                case "none":
+                    //no download specified
+                    
+                    $dli = 2;
+
+                    if (file_exists("../img/maps/".$name.".bsp")) {
+                        
+                        echo "Deleting the old bsp file...<br>";
+                        unlink("../img/maps/".$name.".bsp");
+
+                    } else { 
+                        echo "No old .bsp file found, continuing...<br>";
+                    }
+                    
+                    break;
+            
             }
         
             //image file
@@ -98,31 +142,34 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     $location = "../img/maps/";
                     
                     unlink($location.$id.".".$mr["ext"]);
-                    echo "old image deleted";
+                    echo "Old image file deleted.<br>";
                 
                     if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
                     
-                        echo "image file uploaded...<br>";
+                        echo "New image file uploaded...<br>";
                         mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
-                        echo "extension saved...<br>";
+                        echo "File extension saved...<br>";
             
                     } else {
                 
-                        echo "error";
+                        echo "There was an error uploading your image.<br>";
                 
                     }
                 
                 } else {
                 
-                    echo "jpg or png only";
+                    echo "File must be jpeg/png.<br>";
                 
                 }
                 
             } else {
-                echo "there is no new image";
+            
+                echo "There was no new image, continuing.<br>";
+            
             }
         
-            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id) or die(mysqli_error());
+            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id);
+        
         }
         
         if (mysqli_num_rows($eq) == 1) {
@@ -142,9 +189,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             Description<br>
             <textarea name='desc' required>".$mr["desc"]."</textarea><br>
             
-            <input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='text' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
-            <br>
             <input type='radio' name='dli' value='file'  "; if ($mr["dltype"] == 0) echo "checked "; echo ">bsp file <input type='file' name='bsp'>         
+            <br>
+            <input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='text' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
             <br>
             <input type='radio' name='dli' value='none'  "; if ($mr["dltype"] == 2) echo "checked "; echo ">no dl
             <br>
@@ -154,24 +201,31 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             <input type='file' name='image'><br>
             <input type='submit' name='submit'>
             </form>";
+        } else {
+        
+            echo "The specified id returned no maps.<br>";
+            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+        
         }
         
-    } else if ($_GET["action"] == "delete") {   // DELETE DELETE DELETE DELETE DELETE DELETE
+    } else if ($_GET["action"] == "delete") {
+        // DELETE
     
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         
-            $id = $_GET["id"];
-            $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
+            $id = strip($_GET["id"]);
+            $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=".$id);
+            
             if (mysqli_num_rows($eq) == 1) {
             
                 $er = mysqli_fetch_assoc($eq);
+                
                 if (isset($_POST["delete"])) {
-                    $id = $_GET["id"];
                     
                     //deleting the bsp if present
                     if ($er["dltype"] == 0) {
                         unlink("../".$er["dl"]);
-                        echo "bsp deleted";
+                        echo ".bsp file deleted.<br>";
                     }
                     
                     //deleting the main image
@@ -189,66 +243,84 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     mysqli_query($con, "DELETE FROM `mapscomments` WHERE `mapid`=".$id);
                     
                     $dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
+                    
                     rmdir("../img/maps/".$id);
-                    echo "map successfully deleted";
-                    echo "<a href='maps.php'>go back</a>";
-                } else {
-                    echo "delete map id ".$_GET["id"];
+                    
+                    echo "Map successfully deleted.<br>";
+                    echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+               
+               } else {
+                    
+                    echo "Delete map id ".$id."?";
                     echo "<form action='?action=delete&amp;id=".$_GET["id"]."' method='post'>
-                    <input type='submit' name='delete' value='Yes, delete' /> or just <a href='maps.php'>go back</a>
+                    <input type='submit' name='delete' value='Yes, delete'> or <a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>
                     </form>";
+                
                 }
+            
             } else {
-                echo "wrong id";
-                echo "<a href='maps.php'>go back</a>";
+                
+                echo "The specified id returned no map.<br>";
+                echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+            
             }
+        
         } else {
-            echo "no id defined";
-            echo "<a href='maps.php'>go back</a>";
+            
+            echo "There was no id defined.<br>";
+            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
         }
         
-    } else { // WRITE WRITE WRITE WRITE WRITE WRITE
+    } else {
+        // WRITE
         
         if (isset($_POST["submit"])) {
         
-            echo "map creating process begins...<br>";
+            echo "Map creating process initiating...<br>";
             
             //basic values
-            $name = mysqli_real_escape_string($con, $_POST["name"]);
+            $name = strip($_POST["name"]);
             $author = $_SESSION["userid"];
             $game = $_POST["game"];
-            $desc = mysqli_real_escape_string($con, $_POST["desc"]);
+            $desc = strip($_POST["desc"]);
             $date = date("Y-m-d");
-            
-            echo "basic values read...<br>";
             
             //inserting the basic data and returning the map id
             mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$date')");
             $id = mysqli_insert_id($con);
-            echo "basic values inserted...<br>";
-            echo "the id is ".$id."<br>";
+            echo "Basic values inserted...<br>";
+            echo "The map id is ".$id."<br>";
             
             //create the directory
             mkdir("../img/maps/".$id, 0777);
-            echo "directory created...<br>";
+            echo "Directory created...<br>";
             
             //map file
             switch($_POST["dli"]) {
-                case "none": 
-                    echo "no download specified...<br>";
+            
+                case "none":
+                
+                    echo "No download link specified...<br>";
                     mysqli_query($con, "UPDATE `maps` SET `dltype`='2' WHERE `id`=".$id);
+                    
                     break;
+                
                 case "link": 
                     //steam community link
-                    $dl = mysqli_real_escape_string($con, $_POST["dl"]);
-                    echo "steam community url read...<br>";
+                    
+                    $dl = strip($_POST["dl"]);
+                    echo "Steam community id read...<br>";
                     mysqli_query($con, "UPDATE `maps` SET `dltype`='1' WHERE `id`=".$id);
                     mysqli_query($con, "UPDATE `maps` SET `dl`='".$dl."' WHERE `id`=".$id);
-                    echo "download url added...<br>";
+                    echo "Download url added...<br>";
+                    
                     break;
+                
                 case "file": 
-                    print_r($_FILES)."<br>";
                     //file upload
+                    
+                    print_r($_FILES)."<br>";
+                    
                     $bsp_name = $_FILES["bsp"]["name"];
                     $bsp_type = $_FILES["bsp"]["type"];
                     $bsp_size = $_FILES["bsp"]["size"];
@@ -263,31 +335,32 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 
                             $location = "../img/maps/";
                             $dl = $name.".bsp";
-                            
-                            echo "bsp_tmp: ".$bsp_tmp;
-                            echo "<br>location: ".$location.$dl."<br>";
                 
                             if (move_uploaded_file($bsp_tmp, $location.$dl)) {
                     
-                                echo "file uploaded...<br>";
                                 mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
-                                echo "download url added...<br>";
+                                echo "File successfully uploaded...<br>";
             
                             } else {
                 
-                                echo "error uploading<br>";
+                                echo "There was an error while uploading the file. It is highly recommended to try again or change the download to not available.<br>";
                 
                             }
                 
                         } else {
                 
-                            echo "not a bsp file";
+                            echo "The specified file does not appear to be a .bsp. It is highly recommended to try again or change the download to not available.<br>";
                 
                         }
                 
-                    } else echo "no file defined";
+                    } else {
+
+                        echo "There was no file defined. It is highly recommended to change the download to not available.";
+                    
+                    }
                     
                     break;
+            
             }
             
             //image file
@@ -306,64 +379,75 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 
                     if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
                     
-                        echo "image file uploaded...<br>";
+                        echo "Image file successfully uploaded...<br>";
                         mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
-                        echo "extension saved...<br>";
+                        echo "File extension saved...<br>";
             
                     } else {
                 
-                        echo "error";
+                        echo "There was an error uploading your image.<br>";
                 
                     }
                 
                 } else {
                 
-                    echo "jpg or png only";
+                    echo "File must be jpeg/png.<br>";
                 
                 }
                 
             }
-                        
-            echo "map successfully submitted";
-            echo "<a href='maps.php'>go back</a>";
+            
+            echo "Map successfully submitted.<br>";
+            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+        
         } else {
+            
             echo "<h1>post a map - by ".getname($_SESSION["userid"])."</h1>
             <form action='?action=write' method='post' enctype='multipart/form-data'>
             Name<br>
             <input type='text' name='name' required><br>
             Associated game<br>
-            <select name='game'>
-            ";
+            <select name='game'>";
+            
             $gq = mysqli_query($con, "SELECT * FROM `games` ORDER BY `id` ASC");
+            
             while ($gr = mysqli_fetch_assoc($gq)) {
                 echo "<option value='".$gr["id"]."'>".$gr["name"]."</option>";
             }
+            
             echo "          
             </select><br>
             Description<br>
             <textarea name='desc' required></textarea><br>
             
-            <input type='radio' name='dli' value='link' required>download link <input type='url' name='dl'>
-            <br>
             <input type='radio' name='dli' value='file'>bsp file <input type='file' name='bsp'>         
             <br>
-            <input type='radio' name='dli' value='none'>no dl
+            <input type='radio' name='dli' value='link' required>steamcommunity id <input type='text' name='dl'>
             <br>
-            main image<br>
+            <input type='radio' name='dli' value='none'>No download available
+            <br>
+            Main image<br>
             <input type='file' name='image' required><br>
             <input type='submit' name='submit'>
             </form>";
+        
         }
         
     }
-} else { // display all the maps
+
+} else {
+    // ALL
+    
     echo "<h1>manage maps</h1>
     <p><a href='?action=write'>add new</a></p>";
+    
     $query = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
+    
     echo "<table style='border-spacing: 5px;'>";
     echo "<tr><th>maps</th><th>editing tools</th></tr>";
 
     while ($row = mysqli_fetch_assoc($query)) {
+        
         echo "<tr>";
         echo "<td>";
         echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"]);
@@ -372,9 +456,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
         echo "</td>";
         echo "</tr>";
+    
     }
 
     echo "</table>";
+
 }
 
 ?>

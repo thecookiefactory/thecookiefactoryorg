@@ -1,15 +1,16 @@
 <?php
+
 session_start();
 $r_c = 42;
 require "../inc/essential.php";
 
-if (!checkadmin())
-    die("must be an dmin :(".$_SESSION["userid"]);
+if (!checkadmin()) die("403");
+
 ?>
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
 <h1>welcome to the admin panel</h1>
