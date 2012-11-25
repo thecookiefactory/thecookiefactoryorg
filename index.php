@@ -19,7 +19,7 @@ require "inc/essential.php";
 <script src="js/main.js"></script>
 </head>
 <body>
-	
+    
 <?php include_once("inc/analyticstracking.php") ?>
 
 <header>
@@ -64,10 +64,10 @@ echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><
 <?php
 
 if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] != "essential") {
-	if (file_exists("inc/".$_GET["p"].".php"))
-		require "inc/".$_GET["p"].".php";
-	else
-		echo "404";
+    if (file_exists("inc/".$_GET["p"].".php"))
+        require "inc/".$_GET["p"].".php";
+    else
+        echo "404";
 } else {
 require "inc/news.php";
 }
@@ -82,7 +82,7 @@ require "inc/news.php";
 2012 thecookiefactory.org<br>
 <?php
 if (checkadmin()) {
-	echo "<a href='admin' target='_blank'>admin</a><br>";
+    echo "<a href='admin' target='_blank'>admin</a><br>";
 }
 ?>
 YYYY-MM-DD H:i (CET/CEST)
@@ -93,11 +93,11 @@ YYYY-MM-DD H:i (CET/CEST)
 </div>
 <?php
 if (isset($redirect))
-	echo "<script type='text/javascript'>
-	<!--
-	setTimeout('window.location = \"?p=".$redirect."\"', 5000)
-	//-->
-	</script>";
+    echo "<script type='text/javascript'>
+    <!--
+    setTimeout('window.location = \"?p=".$redirect."\"', 5000)
+    //-->
+    </script>";
 ?>
 </body>
 </html>

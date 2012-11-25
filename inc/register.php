@@ -4,22 +4,22 @@ checkembed($r_c);
 include "analyticstracking.php";
 
 if (checkuser()) {
-	
-	echo "<p>You are already logged in! <a href='?p=logout'>Log out</a>?</p>";
+    
+    echo "<p>You are already logged in! <a href='?p=logout'>Log out</a>?</p>";
 
 } else {
 
-	if (isset($_POST["submit"])) {
+    if (isset($_POST["submit"])) {
 
-		$username = $_POST["username"];
-		$password = $_POST["password"];
-		$email = $_POST["email"];
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $email = $_POST["email"];
 
-		register($username, $password, $email);
+        register($username, $password, $email);
 
-	}
+    }
 
-	if (!isset($redirect)) {
+    if (!isset($redirect)) {
 
 echo "<div class='account-form'><form action='?p=register' method='post'>
 <span class='account-text'><span class='account-title'>Hey there!</span><br>My name is </span>
@@ -29,6 +29,6 @@ echo "<div class='account-form'><form action='?p=register' method='post'>
 <span class='account-text'>(I know I won't be getting any spam from you). I guess that's pretty much all I need to say about myself, so </span>
 <input class='account-input account-button' type='submit' value='just get me in already!' name='submit'>
 </form></div>";
-	}
+    }
 }
 ?>

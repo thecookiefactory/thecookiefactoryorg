@@ -5,12 +5,12 @@ include "analyticstracking.php";
 
   if (isset($_POST["submit"]) && trim($_POST["text"]) != "") {
     $text = mysqli_real_escape_string($con, $_POST["text"]);
-	$m_id = mysqli_real_escape_string($con, $_POST["m_id"]);
-	$username = $_SESSION["userid"];
-	$date = date("Y-m-d");
-	$time = date("H:i");
-	
-	mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
+    $m_id = mysqli_real_escape_string($con, $_POST["m_id"]);
+    $username = $_SESSION["userid"];
+    $date = date("Y-m-d");
+    $time = date("H:i");
+    
+    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
   }
 
   echo "<script src='js/maps.js'></script>";
@@ -18,7 +18,7 @@ include "analyticstracking.php";
   $q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
 
   while ($r = mysqli_fetch_assoc($q)) {
-	$gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
+    $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
       echo "<div class='map-leftarrow map-arrow-disabled' id='map-".$r["id"]."-left' onclick='startImagerollScrolling(this.id, -1);'></div>";
@@ -42,40 +42,40 @@ include "analyticstracking.php";
       echo "<div class='map-data'>";
         echo "<span class='map-author'>".getname($r["authorid"])."</span>";
         echo "<span class='map-game'>";
-			$gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
-			$gr = mysqli_fetch_assoc($gq);
-			echo "<a target='_blank' href='http://steamcommunity.com/app/".$gr["steam"]."'>".$gr["name"]."</a>";
+            $gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
+            $gr = mysqli_fetch_assoc($gq);
+            echo "<a target='_blank' href='http://steamcommunity.com/app/".$gr["steam"]."'>".$gr["name"]."</a>";
         echo "</span>";
         echo "<span class='map-desc'>".nl2br($r["desc"], false)."</span>";
         echo "<span class='map-dl'>";
-		switch ($r["dltype"]) {
-			case 0: echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
-			case 1: echo "<a href='http://steamcommunity.com/sharedfiles/filedetails/?id=".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
-			case 2: echo "No dowload available yet."; break;
-		}
-		echo "</span>";
+        switch ($r["dltype"]) {
+            case 0: echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
+            case 1: echo "<a href='http://steamcommunity.com/sharedfiles/filedetails/?id=".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
+            case 2: echo "No dowload available yet."; break;
+        }
+        echo "</span>";
       echo "</div>";
-	  
-	  //comments
-	  $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
-	  echo "<div class='comments'>";
-		if (mysqli_num_rows($cq) > 0) {
-		  while ($cr = mysqli_fetch_assoc($cq)) {
-	  	    echo getname($cr["authorid"])." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
-		  }
-		} else {
-		  echo "no comments yet";
-		}
-	  if (checkuser()) {
-	    echo "<form action='?p=maps' method='post'>";
-	    echo "<textarea name='text' required></textarea>";
-		echo "<input type='hidden' name='m_id' value='".$r["id"]."'>";
-	    echo "<input type='submit' name='submit'>";
-	    echo "</form>";
-	  } else {
-	    echo "you have to be logged in to post comments";
-	  }
-	  echo "</div>";
+      
+      //comments
+      $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
+      echo "<div class='comments'>";
+        if (mysqli_num_rows($cq) > 0) {
+          while ($cr = mysqli_fetch_assoc($cq)) {
+            echo getname($cr["authorid"])." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
+          }
+        } else {
+          echo "no comments yet";
+        }
+      if (checkuser()) {
+        echo "<form action='?p=maps' method='post'>";
+        echo "<textarea name='text' required></textarea>";
+        echo "<input type='hidden' name='m_id' value='".$r["id"]."'>";
+        echo "<input type='submit' name='submit'>";
+        echo "</form>";
+      } else {
+        echo "you have to be logged in to post comments";
+      }
+      echo "</div>";
     echo "</div>";
 
   }
