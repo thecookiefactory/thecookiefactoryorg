@@ -18,11 +18,34 @@ if (isset($_POST["searchb"])) {
 
     } else {
 
-        echo "<h1>".$nr." results found for: ".$term."</h1>";
-        while ($srow = mysqli_fetch_assoc($squery)) {
-            echo "<a href='?p=news&amp;id=".$srow["id"]."'><h1>".$srow["title"]."</h1></a>";
-            echo $srow["date"]." - ".getname($srow["authorid"]);
-            echo "<p>".substr($srow["text"], 0, 100)."...</p>";
+            echo "<h1>".$nr." results found for: ".$term."</h1>";
+            while ($srow = mysqli_fetch_assoc($squery)) {
+            // TITLE, AUTHOR & DATE
+            echo "<div class='article-header'>
+            <div class='article-title'><h1><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></h1></div>
+            <div class='article-metadata'>";
+            
+            if ($row["comments"] == 1) {
+            
+                $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
+                $commnum = mysqli_num_rows($cq);
+                echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
+                }
+
+            echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+            
+            //if edited
+            if ($row["edit"] == 1) {
+                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
+            }
+            
+            echo "</div>";        
+
+            // BODY
+            echo "<article>
+            <span class='article-text'>".substr($row["text"], 0, 100)."</span>
+            </article>
+            <hr class='article-separator'>";
         }
     
     }
