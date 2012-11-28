@@ -202,6 +202,22 @@ h1 {
   margin-right: 22px;
 }
 
+.article-edit-metadata {
+  font-size: 14px;
+  color: #555;
+  font-style: italic;
+  float: right;
+  clear: both;
+  text-align: right;
+  margin-right: 22px;
+  position: relative;
+  top: -46px;
+}
+
+.article-edit-metadata:before {
+  content: "last edited ";
+}
+
 .article-author:before {
   content: "by ";
 }
