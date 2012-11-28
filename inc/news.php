@@ -37,7 +37,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 		
 		//if edited
 		if ($row["edit"] == 1) {
-		    echo "last edited by ".getname($row["editorid"])." on ".$row["editdate"];
+		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
 		}
 		
 		echo "</div>";        
