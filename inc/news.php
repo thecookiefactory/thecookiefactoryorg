@@ -33,8 +33,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
             }
 
-        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>
-        </div>";        
+        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+		
+		//if edited
+		if ($row["edit"] == 1) {
+		    echo "last edited by ".getname($row["editorid"])." on ".$row["editdate"];
+		}
+		
+		echo "</div>";        
 
         // BODY
         echo "<article>

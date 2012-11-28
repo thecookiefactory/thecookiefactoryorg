@@ -34,9 +34,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 if (isset($_POST["submit"])) {
                     
                     $title = strip($_POST["title"]);
-                    $author = $_SESSION["userid"];
-                    $date = date("Y-m-d");
-                    $time = date("H:i", time());
+                    $editorid = $_SESSION["userid"];
+                    $editdate = date("Y-m-d");
+                    $edittime = date("H:i", time());
                     $text = strip($_POST["text"]);
 
                     if (isset($_POST["comments"]) && $_POST["comments"] == "on") 
@@ -44,7 +44,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     else
                         $comments = 1;
 
-                    mysqli_query($con, "UPDATE `news` SET `title`='".$title."', `authorid`='".$author."', `text`='".$text."', `comments`=".$comments." WHERE `id`=".$id);
+                    mysqli_query($con, "UPDATE `news` SET `title`='".$title."', `edit`=1, `editorid`='".$editorid."', `text`='".$text."', `comments`=".$comments.", `editdate`='".$editdate."', `edittime`='".$edittime."' WHERE `id`=".$id);
                     echo "Piece of news successfully updated.<br>";
                     echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
                 

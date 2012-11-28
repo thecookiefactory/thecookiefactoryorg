@@ -21,7 +21,7 @@ if (isset($_POST["searchb"])) {
         echo "<h1>".$nr." results found for: ".$term."</h1>";
         while ($srow = mysqli_fetch_assoc($squery)) {
             echo "<a href='?p=news&amp;id=".$srow["id"]."'><h1>".$srow["title"]."</h1></a>";
-            echo $srow["date"]." - ".$srow["author"];
+            echo $srow["date"]." - ".getname($srow["authorid"]);
             echo "<p>".substr($srow["text"], 0, 100)."...</p>";
         }
     
