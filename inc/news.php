@@ -72,9 +72,12 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         echo "<div class='article-header'>
         <div class='article-title'><h1>".$row["title"]."</h1></div><div class='article-metadata'>";
         
-        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>
-        </div>";
-        echo "<article>
+        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+		//if edited
+		if ($row["edit"] == 1) {
+		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
+		}
+        echo "</div><article>
         <span class='article-text'>".nl2br($row["text"], false)."</span>
         </article>";
 

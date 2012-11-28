@@ -177,6 +177,7 @@ h1 {
 .article-header {
   margin: 0px;
   padding: 0px;
+  position: relative;
 }
 
 .article-header:before, .article-header:after {
@@ -198,7 +199,6 @@ h1 {
   color: #999;
   font-style: italic;
   float: right;
-  text-align: right;
   margin-right: 22px;
 }
 
@@ -206,12 +206,10 @@ h1 {
   font-size: 14px;
   color: #555;
   font-style: italic;
-  float: right;
-  clear: both;
-  text-align: right;
-  margin-right: 22px;
-  position: relative;
-  top: -46px;
+  top: 18px;
+  right: 0px;
+  padding-right: 22px;
+  position: absolute;
 }
 
 .article-edit-metadata:before {
