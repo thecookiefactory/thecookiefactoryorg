@@ -10,7 +10,7 @@ if (!checkadmin()) die("403");
 
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
 </head>
 <body>
 <h1>welcome to the admin panel</h1>
@@ -20,6 +20,8 @@ if (!checkadmin()) die("403");
     <li><a href='maps.php'>manage maps</a></li>
     <li><a href='streams.php'>manage your stream</a></li>
     <li><a href='galleries.php'>manage galleries</a></li>
+    <li><a href='games.php'>manage games table</a></li>
+    <li><a href='projects.php'>manage projects</a></li>
 </ul>
 </p>
 </body>

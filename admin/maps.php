@@ -11,7 +11,7 @@ if (!checkadmin()) die("403");
 <!doctype html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
 </head>
 <body>
 
@@ -168,7 +168,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             
             }
         
-            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `game`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id);
+            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id);
         
         }
         
@@ -182,10 +182,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             Name<br>
             <input type='text' name='name' value='".$mr["name"]."' required><br>
             Associated game<br>
-            <select name='game'>
-                <option value='1' "; if ($mr["game"] == 1) echo "selected "; echo ">Team Fortress 2</option>
-                <option value='2' "; if ($mr["game"] == 2) echo "selected "; echo ">Portal 2</option>
-            </select><br>
+            <select name='game'>";
+            
+            $gq = mysqli_query($con, "SELECT * FROM `games` ORDER BY `id` ASC");
+            
+            while ($gr = mysqli_fetch_assoc($gq)) {
+                echo "<option value='".$gr["id"]."'";
+				if ($mr["gameid"] == $gr["id"]) echo " selected";
+				echo ">".$gr["name"]."</option>";
+            }
+            
+            echo "</select><br>
             Description<br>
             <textarea name='desc' required>".$mr["desc"]."</textarea><br>
             
@@ -415,7 +422,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 echo "<option value='".$gr["id"]."'>".$gr["name"]."</option>";
             }
             
-            echo "          
+            echo "
             </select><br>
             Description<br>
             <textarea name='desc' required></textarea><br>

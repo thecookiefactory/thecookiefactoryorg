@@ -1,8 +1,9 @@
 <?php
+
 session_start();
 
 if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))
-$_SESSION["userid"] = $_COOKIE["userid"];
+    $_SESSION["userid"] = $_COOKIE["userid"];
 
 $r_c = 42;
 require "inc/essential.php";
@@ -12,11 +13,11 @@ require "inc/essential.php";
 <!doctype html>
 <html>
 <head>
-<title>thecookiefactory.org</title>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel='StyleSheet' type='text/css' href='base.css' />
-<link href='http://fonts.googleapis.com/css?family=Enriqueta:400,700|Open+Sans:400,300,600' rel='stylesheet' type='text/css' />
-<script src="js/main.js"></script>
+    <title>thecookiefactory.org</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+    <link rel='stylesheet' type='text/css' href='base.css'>
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Enriqueta:400,700|Open+Sans:400,300,600'>
+    <script src='js/main.js'></script>
 </head>
 <body>
     
@@ -34,13 +35,15 @@ require "inc/essential.php";
 </span>
 
 <div id='nav-actionbar'>
-<form class='menu-item' action='?p=search' method='post'><input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus="searchboxFocus();" onblur="searchboxBlur(); autocomplete='off'"></form>
+<form class='menu-item' action='?p=search' method='post'>
+<input type='text' name='searchb' style='display: inline;' id='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off'>
+</form>
 <?php
 
 if (isset($_SESSION["userid"])) {
-echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".getname($_SESSION["userid"])."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
+    echo "<span class='menu-item' id='actionbar-logindata'>logged in as <span id='actionbar-username'>".getname($_SESSION["userid"])."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
 } else {
-echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>";
+    echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>";
 }
 
 
@@ -57,7 +60,7 @@ echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><
 </div>
 
 </nav>
-<hr />
+<hr>
 
 <section>
 
@@ -69,7 +72,7 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] !=
     else
         echo "404";
 } else {
-require "inc/news.php";
+    require "inc/news.php";
 }
 
 ?>
@@ -89,7 +92,10 @@ YYYY-MM-DD H:i (CET/CEST)
 </footer>
 <!-- ezt persze majd nem ide-->
 <div id='contact-us'>
-<a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a> <a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a> <a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a> <a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a>
+<a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a>&nbsp;
+<a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a>&nbsp;
+<a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a>&nbsp;
+<a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a>
 </div>
 <?php
 if (isset($redirect))
