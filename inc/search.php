@@ -22,28 +22,28 @@ if (isset($_POST["searchb"])) {
             while ($srow = mysqli_fetch_assoc($squery)) {
             // TITLE, AUTHOR & DATE
             echo "<div class='article-header'>
-            <div class='article-title'><h1><a href='?p=news&amp;id=".$row["id"]."'>".$row["title"]."</a></h1></div>
+            <div class='article-title'><h1><a href='?p=news&amp;id=".$srow["id"]."'>".$srow["title"]."</a></h1></div>
             <div class='article-metadata'>";
             
-            if ($row["comments"] == 1) {
+            if ($srow["comments"] == 1) {
             
-                $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
+                $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$srow["id"]);
                 $commnum = mysqli_num_rows($cq);
-                echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
+                echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$srow["id"]."#comments'>".$commnum." comments</a></span>";
                 }
 
-            echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+            echo "<span class='article-metadata-item'><span class='article-author'>".getname($srow["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$srow["date"]."</span></span></div>";
             
             //if edited
-            if ($row["edit"] == 1) {
-                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
+            if ($srow["edit"] == 1) {
+                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($srow["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$srow["editdate"]."</span></span></div>";
             }
             
             echo "</div>";        
 
             // BODY
             echo "<article>
-            <span class='article-text'>".substr($row["text"], 0, 100)."</span>
+            <span class='article-text'>".substr($srow["text"], 0, 100)."</span>
             </article>
             <hr class='article-separator'>";
         }
