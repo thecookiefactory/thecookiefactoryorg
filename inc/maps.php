@@ -3,21 +3,24 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
-  if (isset($_POST["submit"]) && trim($_POST["text"]) != "") {
-    $text = mysqli_real_escape_string($con, $_POST["text"]);
-    $m_id = mysqli_real_escape_string($con, $_POST["m_id"]);
-    $username = $_SESSION["userid"];
+if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
+    
+	$text = strip($_POST["text"]);
+    $m_id = strip($_POST["m_id"]);
+    $userid = $_SESSION["userid"];
     $date = date("Y-m-d");
     $time = date("H:i");
     
-    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$username."','".$text."','".$date."','".$time."','".$m_id."')");
-  }
+    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$userid."','".$text."','".$date."','".$time."','".$m_id."')");
+    
+}
 
-  echo "<script src='js/maps.js'></script>";
+echo "<script src='js/maps.js'></script>";
 
-  $q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
+$q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
 
-  while ($r = mysqli_fetch_assoc($q)) {
+while ($r = mysqli_fetch_assoc($q)) {
+
     $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     echo "<div class='map-name'>".$r["name"]."</div>";
     echo "<div class='map-container'>";
@@ -78,6 +81,6 @@ include "analyticstracking.php";
       echo "</div>";
     echo "</div>";
 
-  }
+}
 
 ?>

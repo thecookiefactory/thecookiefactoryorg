@@ -8,9 +8,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1)
-    $page = 1;
+        $page = 1;
     else
-    $page = $_GET["page"];
+        $page = $_GET["page"];
     
     $xo = ($page - 1) * 5;
     $yo = $page * 5;
@@ -85,19 +85,20 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             
             if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
                 
-                $newsid = $_GET["id"];
-                $author = $_SESSION["userid"];
-                $text = mysqli_real_escape_string($con, htmlentities($_POST["text"]));
-                $date = date("Y-m-d");
-                $time = date("H:i", time());
+                    $newsid = strip($_GET["id"]);
+                    $author = $_SESSION["userid"];
+                    $text = strip($_POST["text"]);
+                    $date = date("Y-m-d");
+                    $time = date("H:i", time());
                 
-                $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
+                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
                 
                 }
             
                 $cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
                 $commnum = mysqli_num_rows($cq);
-                if ($commnum > 0) {
+               
+			   if ($commnum > 0) {
                     echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";
             
                     if (checkadmin()) {
