@@ -69,13 +69,33 @@ nav {
   color: #4188D2;
 }
 
+.search-separator {
+  border-color: #f93;
+  width: 30%;
+  margin-bottom: 40px;
+}
+
+.search-title {
+  font-size: 18px;
+  text-align: left;
+  margin-top: 40px;
+  color: #F93;
+  width: 300px;
+}
+
+.search-term {
+  font-size: 18px;
+  font-weight: 700;
+  color: #DDD;
+}
+
 section {
-  border: 0px solid #ff9933;
+  border: 0px solid #f93;
   width: 1000px;
 }
 
 footer {
-  border: 0px solid #ff9933;
+  border: 0px solid #f93;
   padding-top: 1em;
   padding-bottom: 1em;
   font-size: 12px;
@@ -84,7 +104,7 @@ footer {
 }
 
 a, a:visited {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -94,7 +114,7 @@ a:hover, a:active {
 }
 
 .faux-link {
-  color: #ffffff;
+  color: #fff;
 }
 
 .faux-link:hover {
@@ -238,15 +258,16 @@ article {
   height: 1px;
   margin-top: 20px;
   border-width: 0px;
-  background-image:         linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
-  background-image:      -o-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
-  background-image:    -moz-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
-  background-image: -webkit-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
-  background-image:     -ms-linear-gradient(left, #141414 0%, #555 30%, #555 70%, #141414 100%);
+  width: 800px;
+  background-image:         linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image:      -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image:    -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image:     -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -webkit-gradient (linear, left top, right top,
                                       color-stop(0, #141414),
-                                      color-stop(0.3, #555),
-                                      color-stop(0.7, #555),
+                                      color-stop(0.5, #333),
+                                      color-stop(0.5, #333),
                                       color-stop(1, #141414)
                                      );
 }
@@ -338,10 +359,9 @@ p.comment-text {
 }
 
 #comment-textarea {
-  height: 60px;
+  height: 65px;
   width: 500px;
   margin-top: 18px;
-  margin-left: 19px;
   background-color: inherit;
   border-color: #4188D2;
   color: white;

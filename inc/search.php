@@ -14,12 +14,15 @@ if (isset($_POST["searchb"])) {
 
     if ($nr == 0) {
 
-        echo "<h1>No results found for ".$term.".</h1>";
+        echo "<div class='search-title'>No results found for '<span class='search-term'>".$term."</span>'</div>";
 
     } else {
+            if ($nr == 1) {
+                echo "<div class='search-title'>".$nr." result found for '<span class='search-term'>".$term."</span>'</div>";
+            } else {
+                echo "<div class='search-title'>".$nr." results found for '<span class='search-term'>".$term."</span>'</div>";
+            }
 
-            echo "<h1>".$nr." results found for: ".$term."</h1>";
-            
 			while ($srow = mysqli_fetch_assoc($squery)) {
             // TITLE, AUTHOR & DATE
             echo "<div class='article-header'>
@@ -51,12 +54,12 @@ if (isset($_POST["searchb"])) {
     
     }
     } else {
-    echo "<h1>Please enter a keyword longer than 2 characters.</h1>";
+    echo "<div class='search-title'>Please enter a keyword longer than 2 characters.</div>";
     }
 
 } else {
     
-    echo "<h1>No keyword defined.</h1>";
+    echo "<div class='search-title'>No keyword defined.</div>";
 
 } 
 
