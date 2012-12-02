@@ -137,7 +137,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             else
                 $comments = 1;
 
-            mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$date."','".$time."','".$text."','".$comments."')");
+            mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$date."','".$time."','".$text."','".$comments."','','','','')");
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
         
