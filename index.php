@@ -23,7 +23,7 @@ require "inc/essential.php";
     <title>thecookiefactory.org</title>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
     <link rel='stylesheet' type='text/css' href='base.css'>
-    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Enriqueta:400,700|Open+Sans:400,300,600'>
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:400,700|Open+Sans:400,300,600'>
     <script src='js/main.js'></script>
 </head>
 <body>

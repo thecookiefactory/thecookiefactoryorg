@@ -75,23 +75,61 @@ nav {
   margin-bottom: 40px;
 }
 
-.search-title {
-  font-size: 18px;
-  text-align: left;
-  margin-top: 40px;
-  color: #F93;
-  width: 300px;
+.search-border-upper {
+  position: absolute;
+  height: 30px;
+  top: -12px;
+  left: 7px;
+  width: 10px;
+  border: 2px solid #4188D2;
+  border-right: 0;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
+.search-border-lower {
+  position: absolute;
+  height: 2px;
+  width: 12px;
+  top: 77px;
+  left: 8px;
+  background-color: #4188D2;
+}
+
+.search-title {
+  display: inline-block;
+  margin-left: 19px;
+  margin-top: 20px;
+  border: 2px solid #4188D2;
+  border-left: 0;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  padding-right: 11px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  font-family: Bitter;
+  font-size: 28px;
+  color: #F93;
+}
+
+
 .search-term {
-  font-size: 18px;
-  font-weight: 700;
   color: #DDD;
+}
+
+.search-results {
+  width: 984px;
+  margin: auto;
+  position: relative;
+  top: -2px;
+  border-left: 2px solid #4188D2;
 }
 
 section {
   border: 0px solid #f93;
   width: 1000px;
+  position: relative;
+  text-align: left;
 }
 
 footer {
@@ -128,6 +166,7 @@ hr {
   margin-top: 5px;
   margin-bottom: 10px;
   background-color: #4188d2;
+  border-style: solid;
   border-color: #4188d2;
   clear: both;
 }
@@ -186,7 +225,7 @@ div.map {
 h1 {
   font-size: 36px;
   font-weight: 400;
-  font-family: Enriqueta;
+  font-family: Bitter;
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -266,7 +305,6 @@ article {
   background-image:     -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -webkit-gradient (linear, left top, right top,
                                       color-stop(0, #141414),
-                                      color-stop(0.5, #333),
                                       color-stop(0.5, #333),
                                       color-stop(1, #141414)
                                      );
@@ -362,6 +400,7 @@ p.comment-text {
   height: 65px;
   width: 500px;
   margin-top: 18px;
+  margin-left: 19px;
   background-color: inherit;
   border-color: #4188D2;
   color: white;
@@ -570,7 +609,7 @@ img.map-image {
   margin: auto;
   text-align: justify;
   font-size: 18px;
-  font-family: Enriqueta;
+  font-family: Bitter;
   line-height: 1.3em;
   color: #DDD;
 }

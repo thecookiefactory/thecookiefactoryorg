@@ -2,7 +2,8 @@
 
 checkembed($r_c);
 include "analyticstracking.php";
-
+echo "<div class='search-border-upper'></div>";
+echo "<div class='search-border-lower'></div>";
 if (isset($_POST["searchb"])) {
 
     $term = strip($_POST["searchb"]);
@@ -12,18 +13,35 @@ if (isset($_POST["searchb"])) {
     $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
     $nr = mysqli_num_rows($squery);
 
-    if ($nr == 0) {
+    
 
-        echo "<div class='search-title'>No results found for '<span class='search-term'>".$term."</span>'</div>";
+    if ($nr == 0) {
+        if (strlen($term) > 23) {
+            echo "<div class='search-title'>No results found for your search term</div>";
+        } else {
+            echo "<div class='search-title'>No results found for <span class='search-term'>".$term."</span></div>";
+        }
+        
 
     } else {
+            
+        if (strlen($term) > 23) {
             if ($nr == 1) {
-                echo "<div class='search-title'>".$nr." result found for '<span class='search-term'>".$term."</span>'</div>";
+                echo "<div class='search-title'>".$nr." result found for your search term</div>";
             } else {
-                echo "<div class='search-title'>".$nr." results found for '<span class='search-term'>".$term."</span>'</div>";
+                echo "<div class='search-title'>".$nr." results found for your search term</div>";
             }
+        } else {
+            if ($nr == 1) {
+                echo "<div class='search-title'>".$nr." result found for <span class='search-term'>".$term."</span></div>";
+            } else {
+                echo "<div class='search-title'>".$nr." results found for <span class='search-term'>".$term."</span></div>";
+            }
+        }
 
-			while ($srow = mysqli_fetch_assoc($squery)) {
+        echo "<div class='search-results'>";
+
+        while ($srow = mysqli_fetch_assoc($squery)) {
             // TITLE, AUTHOR & DATE
             echo "<div class='article-header'>
             <div class='article-title'><h1><a href='?p=news&amp;id=".$srow["id"]."'>".$srow["title"]."</a></h1></div>
@@ -51,8 +69,11 @@ if (isset($_POST["searchb"])) {
             </article>
             <hr class='article-separator'>";
         }
-    
-    }
+
+        echo "</div>";
+
+        }
+
     } else {
     echo "<div class='search-title'>Please enter a keyword longer than 2 characters.</div>";
     }
