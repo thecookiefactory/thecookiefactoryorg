@@ -290,10 +290,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $author = $_SESSION["userid"];
             $game = $_POST["game"];
             $desc = strip($_POST["desc"]);
-            $date = date("Y-m-d");
+            $dt = time();
             
             //inserting the basic data and returning the map id
-            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$date')");
+            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$dt')");
             $id = mysqli_insert_id($con);
             echo "Basic values inserted...<br>";
             echo "The map id is ".$id."<br>";

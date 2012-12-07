@@ -8,10 +8,9 @@ if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
 	$text = strip($_POST["text"]);
     $m_id = strip($_POST["m_id"]);
     $userid = $_SESSION["userid"];
-    $date = date("Y-m-d");
-    $time = date("H:i");
+    $dt = time();
     
-    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$userid."','".$text."','".$date."','".$time."','".$m_id."')");
+    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$userid."','".$text."','".$dt."','".$m_id."')");
     
 }
 
@@ -64,7 +63,7 @@ while ($r = mysqli_fetch_assoc($q)) {
       echo "<div class='comments'>";
         if (mysqli_num_rows($cq) > 0) {
           while ($cr = mysqli_fetch_assoc($cq)) {
-            echo getname($cr["authorid"])." said on ".$cr["date"].": <p>".nl2br($cr["text"], false)."</p>";
+            echo getname($cr["authorid"])." said on ".displaydate($cr["dt"]).": <p>".nl2br($cr["text"], false)."</p>";
           }
         } else {
           echo "no comments yet";

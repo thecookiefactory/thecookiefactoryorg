@@ -54,11 +54,11 @@ if (isset($_POST["searchb"])) {
                 echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$srow["id"]."#comments'>".$commnum." comments</a></span>";
                 }
 
-            echo "<span class='article-metadata-item'><span class='article-author'>".getname($srow["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$srow["date"]."</span></span></div>";
+            echo "<span class='article-metadata-item'><span class='article-author'>".getname($srow["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["dt"])."</span></span></div>";
             
             //if edited
-            if ($srow["edit"] == 1) {
-                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($srow["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$srow["editdate"]."</span></span></div>";
+            if ($srow["editorid"] > 0) {
+                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($srow["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["editdt"])."</span></span></div>";
             }
             
             echo "</div>";        

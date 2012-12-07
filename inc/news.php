@@ -33,11 +33,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></span>";
             }
 
-        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["dt"])."</span></span></div>";
 		
 		//if edited
-		if ($row["edit"] == 1) {
-		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
+		if ($row["editorid"] > 0) {
+		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
 		}
 		
 		echo "</div>";        
@@ -72,10 +72,10 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         echo "<div class='article-header'>
         <div class='article-title'><h1>".$row["title"]."</h1></div><div class='article-metadata'>";
         
-        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["date"]."</span></span></div>";
+        echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["dt"])."</span></span></div>";
 		//if edited
-		if ($row["edit"] == 1) {
-		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".$row["editdate"]."</span></span></div>";
+		if ($row["editorid"] > 0) {
+		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
 		}
         echo "</div><article>
         <span class='article-text'>".nl2br($row["text"], false)."</span>
@@ -88,10 +88,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                     $newsid = strip($_GET["id"]);
                     $author = $_SESSION["userid"];
                     $text = strip($_POST["text"]);
-                    $date = date("Y-m-d");
-                    $time = date("H:i", time());
+                    $dt = time();
                 
-                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$date','$time','$newsid')");
+                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$dt','$newsid')");
                 
                 }
             
@@ -104,14 +103,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                     if (checkadmin()) {
                         while ($crow = mysqli_fetch_assoc($cq)) {
                         echo "<div class='comment'><span class='comment-metadata'>";
-                        echo "<span class='comment-author'>".getname($crow["authorid"])."</span><span class='comment-date'>".$crow["date"]."</span><span class='comment-deletebutton'><a href='admin/comments.php?id=".$crow["id"]."'>delete this</a></span>";
+                        echo "<span class='comment-author'>".getname($crow["authorid"])."</span><span class='comment-date'>".displaydate($crow["dt"])."</span><span class='comment-deletebutton'><a href='admin/comments.php?id=".$crow["id"]."'>delete this</a></span>";
                         echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";
                         echo "</div>";
                     }
                     } else {
                         while ($crow = mysqli_fetch_assoc($cq)) {
                         echo "<div class='comment'><span class='comment-metadata'>";
-                        echo "<span class='comment-author'>".getname($crow["authorid"])."</span><span class='comment-date'>".$crow["date"]."</span>";
+                        echo "<span class='comment-author'>".getname($crow["authorid"])."</span><span class='comment-date'>".displaydate($crow["dt"])."</span>";
                         echo "</span><br><p class='comment-text'><span class='comment-text'>".nl2br($crow["text"], false)."</span></p>";
                         echo "</div>";
                     }
