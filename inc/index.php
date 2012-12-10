@@ -1,0 +1,3 @@
+<?php
+require "../notfound.php";
+?>
