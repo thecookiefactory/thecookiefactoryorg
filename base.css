@@ -156,7 +156,7 @@ input {
 }
 
 h1 {
-  margin-top: 10px 19px;
+  margin: 10px 19px;
   font-size: 36px;
   font-weight: 400;
   font-family: Bitter;
@@ -185,6 +185,7 @@ h1 {
 }
 
 .article-metadata {
+  margin-right: 22px;
   font-size: 14px;
   font-style: italic;
   color: #999;
