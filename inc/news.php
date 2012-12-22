@@ -33,13 +33,13 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             }
 
         echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["dt"])."</span></span></div>";
-		
-		//if edited
-		if ($row["editorid"] > 0) {
-		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
-		}
-		
-		echo "</div>";        
+        
+        //if edited
+        if ($row["editorid"] > 0) {
+            echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
+        }
+        
+        echo "</div>";        
 
         // BODY
         echo "<article>
@@ -72,10 +72,10 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <div class='article-title'><h1>".$row["title"]."</h1></div><div class='article-metadata'>";
         
         echo "<span class='article-metadata-item'><span class='article-author'>".getname($row["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["dt"])."</span></span></div>";
-		//if edited
-		if ($row["editorid"] > 0) {
-		    echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
-		}
+        //if edited
+        if ($row["editorid"] > 0) {
+            echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($row["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($row["editdt"])."</span></span></div>";
+        }
         echo "</div><article>
         <span class='article-text'>".nl2br($row["text"], false)."</span>
         </article>";
@@ -96,7 +96,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
                 $commnum = mysqli_num_rows($cq);
                
-			   if ($commnum > 0) {
+               if ($commnum > 0) {
                     echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";
             
                     if (checkadmin()) {

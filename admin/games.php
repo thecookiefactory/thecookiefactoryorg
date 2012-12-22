@@ -23,12 +23,12 @@ $nr = mysqli_num_rows($query);
 if (isset($_POST["update"])) {
 
     while ($r = mysqli_fetch_assoc($query)) {
-	$id = $r["id"];
-	$name = strip($_POST[$id."name"]);
-	$steam = strip($_POST[$id."steam"]);
-	
-	mysqli_query($con, "UPDATE `games` SET `name`='".$name."', `steam`='".$steam."' WHERE `id`=".$id);
-	}
+    $id = $r["id"];
+    $name = strip($_POST[$id."name"]);
+    $steam = strip($_POST[$id."steam"]);
+    
+    mysqli_query($con, "UPDATE `games` SET `name`='".$name."', `steam`='".$steam."' WHERE `id`=".$id);
+    }
 
 }
 
@@ -36,7 +36,7 @@ if (isset($_POST["addnew"])) {
 
     $name = strip($_POST["name"]);
     $steam = strip($_POST["steam"]);
-	mysqli_query($con, "INSERT INTO `games` VALUES('','".$name."','".$steam."')");
+    mysqli_query($con, "INSERT INTO `games` VALUES('','".$name."','".$steam."')");
 
 }
 
@@ -49,7 +49,7 @@ echo "<table border>";
 echo "<tr><th>id</th><th>name</th><th>steam store id</th></tr>";
 while ($row = mysqli_fetch_assoc($query)) {
 
-	echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["steam"]."' name='".$row["id"]."steam'></td></tr>";
+    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["steam"]."' name='".$row["id"]."steam'></td></tr>";
 
 }
 echo "</table>";

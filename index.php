@@ -38,7 +38,7 @@ require "inc/essential.php";
 
 <nav>
 <span id='nav-menubar'>
-<a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=projects'>projects</a>
+<a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
 </span>
 
 <div id='nav-actionbar'>
@@ -95,7 +95,6 @@ if (checkadmin()) {
     echo "<a href='admin' target='_blank'>admin</a><br>";
 }
 ?>
-YYYY-MM-DD H:i (CET/CEST)
 </footer>
 <!-- ezt persze majd nem ide-->
 <div id='contact-us'>

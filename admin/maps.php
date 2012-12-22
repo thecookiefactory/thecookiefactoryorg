@@ -188,8 +188,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             
             while ($gr = mysqli_fetch_assoc($gq)) {
                 echo "<option value='".$gr["id"]."'";
-				if ($mr["gameid"] == $gr["id"]) echo " selected";
-				echo ">".$gr["name"]."</option>";
+                if ($mr["gameid"] == $gr["id"]) echo " selected";
+                echo ">".$gr["name"]."</option>";
             }
             
             echo "</select><br>

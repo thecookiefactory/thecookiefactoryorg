@@ -5,7 +5,7 @@ include "analyticstracking.php";
 
 if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
     
-	$text = strip($_POST["text"]);
+    $text = strip($_POST["text"]);
     $m_id = strip($_POST["m_id"]);
     $userid = $_SESSION["userid"];
     $dt = time();
