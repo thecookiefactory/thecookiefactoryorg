@@ -13,8 +13,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         $page = $_GET["page"];
     
     $xo = ($page - 1) * 5;
-    $yo = $page * 5;
-    $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", ".$yo);
+    $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", 5");
     
     if (mysqli_num_rows($query) == 0) {
         echo "No news posts found.";
@@ -53,7 +52,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     
     //page links
     $nr = mysqli_num_rows(mysqli_query($con, "SELECT * FROM `news`"));
-    for ($i = 1; $i <= $nr%5; $i++) {
+    for ($i = 1; $i <= ceil($nr / 5); $i++) {
     if ($page == $i)
     echo "Page ".$i;
     else

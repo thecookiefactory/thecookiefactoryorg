@@ -56,7 +56,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
         } else {
             
             echo "<img style='width: 300px;' src='../img/maps/".$row["mapid"]."/".$row["filename"]."' alt=''>";
-            echo "<form action='?action=edit&amp;id=".$_GET["id"]."' method='post'>";
+            echo "<form action='?action=edit&amp;id=".$id."' method='post'>";
             echo "<input type='text' name='desc' maxlength='100' value='".$row["desc"]."' required><br>";
             echo "<input type='checkbox' name='delete'> Delete permanently<br>";
             echo "<input type='submit' name='submit'>";
@@ -68,7 +68,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
         
         $id = strip($_GET["id"]);
         
-        $mq = mysqli_query($con, "SELECT `name` FROM `maps` WHERE `id`=".$_GET["id"]);
+        $mq = mysqli_query($con, "SELECT `name` FROM `maps` WHERE `id`=".$id);
         
         if (mysqli_num_rows($mq) == 0) {
             die("Not a valid id.");
@@ -116,7 +116,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
         
         } else {
             
-            echo "<form action='?action=add&amp;id=".$_GET["id"]."' method='post' enctype='multipart/form-data'>";
+            echo "<form action='?action=add&amp;id=".$id."' method='post' enctype='multipart/form-data'>";
             echo "<input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique. jpg/png only<br>";
             echo "description: <input type='text' name='desc' required><br>";
             echo "<input type='submit' name='submit'>";

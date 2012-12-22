@@ -21,7 +21,7 @@ while($row = mysqli_fetch_assoc($query)) {
     $rssfeed .= "<title>" . $row["title"] . "</title>";
     $rssfeed .= "<description>" . $row["text"] . "</description>";
     $rssfeed .= "<link>http://thecookiefactory.org/p=news&id=" . $row["id"] . "</link>";
-    $rssfeed .= "<pubDate>" . $row["date"] . "</pubDate>";
+    $rssfeed .= "<pubDate>" . displaydate($row["dt"]) . "</pubDate>";
     $rssfeed .= "</item>";
 }
 

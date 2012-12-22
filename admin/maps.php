@@ -30,7 +30,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $mr = mysqli_fetch_assoc($eq);
         
             $name = strip($_POST["name"]);
-            $game = $_POST["game"];
+            $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
             
             switch($_POST["dli"]) {
@@ -104,7 +104,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                         echo "No old .bsp file found, continuing...<br>";
                     } 
                     
-                    $dl = $_POST["dl"];
+                    $dl = strip($_POST["dl"]);
                     $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id);
                     
                     break;
@@ -256,10 +256,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     echo "Map successfully deleted.<br>";
                     echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
                
-               } else {
+                } else {
                     
                     echo "Delete map id ".$id."?";
-                    echo "<form action='?action=delete&amp;id=".$_GET["id"]."' method='post'>
+                    echo "<form action='?action=delete&amp;id=".$id."' method='post'>
                     <input type='submit' name='delete' value='Yes, delete'> or <a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>
                     </form>";
                 
@@ -288,7 +288,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             //basic values
             $name = strip($_POST["name"]);
             $author = $_SESSION["userid"];
-            $game = $_POST["game"];
+            $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
             $dt = time();
             
