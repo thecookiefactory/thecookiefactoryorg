@@ -24,7 +24,7 @@ if ($action == "add" && checkuser()) {
         echo "<form action='?p=forums&amp;action=add' method='post'>";
         echo "<input type='text' name='title' required>";
         echo "<textarea name='text' required></textarea>";
-        echo "selcet cateryogy";
+        echo "select cateryogy";
         echo "<select name='cat'>";
         $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
         while ($cr = mysqli_fetch_assoc($cq)) {
