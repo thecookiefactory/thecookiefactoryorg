@@ -42,6 +42,7 @@ if ($action == "add" && checkuser()) {
     
     if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
+        // SHOW ONE THREAD
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$_GET["id"]);
         $row = mysqli_fetch_assoc($query);
         echo "<br>".getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".displaydate($row["dt"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
@@ -87,16 +88,20 @@ if ($action == "add" && checkuser()) {
 
     } else {
 
+        // SHOW ALL THREADS
         if (checkuser()) echo "<a href='?p=forums&amp;action=add'>Create a new thread</a>";
         
         $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `ldt` DESC");
         
         while ($row = mysqli_fetch_assoc($query)) {
-            echo "<br>".getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".displaydate($row["dt"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
+
+            echo "<div>";
+            echo getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
             echo "created ".longago($row["dt"])." ";
-            echo "last post at ".longago($row["ldt"]);
-            
+            echo "last post at ".longago($row["ldt"])." ";
             echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"]))." replies";
+            echo "</div>";
+
         }
 
     }
