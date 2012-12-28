@@ -1,8 +1,9 @@
 <?php
 
 checkembed($r_c);
-
 include "analyticstracking.php";
+
+$_SESSION["lp"] = "news";
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS

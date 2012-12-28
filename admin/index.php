@@ -21,7 +21,7 @@ if (!checkadmin()) die("403");
     <li><a href='streams.php'>manage your stream</a></li>
     <li><a href='galleries.php'>manage galleries</a></li>
     <li><a href='games.php'>manage games table</a></li>
-    <li><a href='projects.php'>manage projects</a></li>
+    <li><a href='forums.php'>manage forum topics</a></li>
 </ul>
 </p>
 </body>

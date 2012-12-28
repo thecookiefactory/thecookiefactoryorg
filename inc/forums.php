@@ -1,7 +1,9 @@
 <?php
-checkembed($r_c);
 
+checkembed($r_c);
 include "analyticstracking.php";
+
+$_SESSION["lp"] = "forums";
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 if ($action == "add" && checkuser()) {

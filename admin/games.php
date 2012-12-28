@@ -18,7 +18,6 @@ if (!checkadmin()) die("403");
 <?php
 
 $query = mysqli_query($con, "SELECT * FROM `games`");
-$nr = mysqli_num_rows($query);
 
 if (isset($_POST["update"])) {
 
