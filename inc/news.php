@@ -122,7 +122,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                     echo "<hr><h1 class='comments-title'>Post a comment</h1>";      
                     echo "<div id='comment-form'><form action='?p=news&amp;id=".$_GET["id"]."' method='post'>
                     <textarea name='text' id='comment-textarea' required></textarea>
-                    <input type='submit' name='cp' value='>' id='comment-submitbutton'>
+                    <input type='submit' name='cp' value='&gt;' id='comment-submitbutton'>
                     </form></div>";
                 } else {
                     echo "<hr><h1 class='comments-title'>Log in to be able to post comments</h1><div class='clearfix'></div>";
