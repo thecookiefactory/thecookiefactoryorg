@@ -1,5 +1,3 @@
-<div style='margin-top: 20px; margin-bottom: 20px;'>
-
 <?php
 
 checkembed($r_c);
@@ -36,4 +34,3 @@ if (checkuser()) {
 
 
 ?>
-</div>

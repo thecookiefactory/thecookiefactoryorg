@@ -595,6 +595,10 @@ img.map-image {
   text-align: center;
 }
 
+.login-input::-webkit-input-placeholder {
+  color: white;
+}
+
 .account-input[name=email] {
   width: 240px;
 }
@@ -608,13 +612,22 @@ img.map-image {
   width: auto;
   padding: 0;
   cursor: pointer;
-  color: #F93 !important;
+  color: #F93;
   font-weight: 700;
   border: 0;
 }
 
 .account-button:hover {
   color: #4188D2 !important;
+}
+
+.login-input {
+  border-bottom-width: 1px;
+  color: inherit;
+}
+
+.login-button {
+  color: white;
 }
 
 ::-webkit-validation-bubble-message {
