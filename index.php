@@ -24,6 +24,7 @@ require "inc/essential.php";
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
     <link rel='stylesheet' type='text/css' href='base.css'>
     <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:400,700|Open+Sans:400,300,600'>
+    <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
     <script src='js/main.js'></script>
 </head>
 <body>
