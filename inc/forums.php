@@ -68,7 +68,7 @@ if ($action == "add" && checkuser()) {
             //fetching comments
             $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
             while ($cr = mysqli_fetch_assoc($cq)) {
-                echo "<br>".getname($row["authorid"])." ".longago($cr["dt"]).nl2br($cr["text"]);
+                echo "<br>".getname($cr["authorid"])." ".longago($cr["dt"]).nl2br($cr["text"]);
             }
         
             if (checkuser()) {  
