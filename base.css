@@ -1,4 +1,4 @@
-@font-face {
+font-face {
   font-family: "TF2 Build";
   src: url("res/tf2build.ttf");
 } 
@@ -129,9 +129,10 @@ input {
   color: #BAD5F1;
 }
 
-#stream-menu {
+.stream-menu {
   list-style: none;
   padding: 0;
+  text-align: center;
 }
 
 .stream-button {
@@ -153,6 +154,24 @@ input {
 
 .stream-live {
   background-image: url(img/stream-live-bg.png);
+}
+
+.stream-player {
+  display: inline-block;
+  float: left;
+  height: 378px;
+  width: 620px;
+  margin-left: 19px;
+}
+
+.stream-description {
+  float: right;
+  height: 378px;
+  width: 321px;
+  overflow-y: auto;
+  margin: 0 20px;
+  color: #DDD;
+  text-align: justify;
 }
 
 h1 {
@@ -220,7 +239,7 @@ h1 {
 
 article {
   margin-left: 19px;
-  color: #BAD5F1;
+  color: #DDD;
   text-align: justify;
 }
 
@@ -398,7 +417,7 @@ p.comment-text {
 .map-leftarrow, .map-rightarrow {
   position: absolute;
   width: 65px;
-  height: 510px;
+  height: 504px;
   display: block;
   z-index: 1;
   opacity: 0;
@@ -424,7 +443,7 @@ p.comment-text {
 }
 
 .map-rightarrow {
-  left: 835px;
+  left: 833px;
   background-position: 17px 232.5px;
   background-image: url(img/next.png);
 }

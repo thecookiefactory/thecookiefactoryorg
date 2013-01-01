@@ -7,7 +7,7 @@ $_SESSION["lp"] = "streams";
 
 $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `active`=1");
 
-echo "<ul id='stream-menu'>";
+echo "<ul class='stream-menu'>";
 
 while ($r = mysqli_fetch_assoc($q)) {
     echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
@@ -37,9 +37,9 @@ $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"])
 if (mysqli_num_rows($q) == 1) {
 
 $r = mysqli_fetch_assoc($q);
-echo "<h1>".getname($r["authorid"])."'s stream</h1>";
+echo "<h1>".getname($r["authorid"])."'s stream</h1><div class='stream-player'>";
 streamo($r["twitch"]);
-echo "<p>".nl2br($r["description"], false)."</p>";
+echo "</div><div class='stream-description'>".nl2br($r["description"], false)."</div><div class='clearfix'></div>";
 } else {
 echo "<p>Something went wrong.</p>";
 }
