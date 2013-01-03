@@ -40,7 +40,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     
                     $dli = 0;
                     
-                    $bsp_name = $_FILES["bsp"]["name"];
+                    $bsp_name = strtolower($_FILES["bsp"]["name"]);
                     $bsp_type = $_FILES["bsp"]["type"];
                     $bsp_size = $_FILES["bsp"]["size"];
                     $bsp_tmp = $_FILES["bsp"]["tmp_name"];
@@ -328,7 +328,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     
                     print_r($_FILES)."<br>";
                     
-                    $bsp_name = $_FILES["bsp"]["name"];
+                    $bsp_name = strtolower($_FILES["bsp"]["name"]);
                     $bsp_type = $_FILES["bsp"]["type"];
                     $bsp_size = $_FILES["bsp"]["size"];
                     $bsp_tmp = $_FILES["bsp"]["tmp_name"];
@@ -371,7 +371,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             }
             
             //image file
-            $image_name = $_FILES["image"]["name"];
+            $image_name = strtolower($_FILES["image"]["name"]);
             $image_size = $_FILES["image"]["size"];
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
