@@ -3,6 +3,8 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
+include "markdown.php";
+
 $_SESSION["lp"] = "streams";
 
 $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `active`=1");
@@ -40,7 +42,7 @@ $r = mysqli_fetch_assoc($q);
 # echo "<h1>".getname($r["authorid"])."'s stream</h1>";
 echo "<div class='stream-player'>";
 streamo($r["twitch"]);
-echo "</div><div class='stream-description'>".nl2br($r["description"], false)."</div><div class='clearfix'></div>";
+echo "</div><div class='stream-description'>".Markdown($r["description"])."</div><div class='clearfix'></div>";
 } else {
 echo "<p>Something went wrong.</p>";
 }

@@ -3,6 +3,8 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
+include "markdown.php";
+
 $_SESSION["lp"] = "forums";
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
@@ -62,7 +64,7 @@ if ($action == "add" && checkuser()) {
         echo "<br>".getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".displaydate($row["dt"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
         echo "created ".longago($row["dt"])." ";
         echo "last post at ".longago($row["ldt"]);
-        echo "<br>".nl2br($row["text"]);
+        echo "<br>".Markdown($row["text"]);
         
         //comment processing
         if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
@@ -83,7 +85,7 @@ if ($action == "add" && checkuser()) {
             //fetching comments
             $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
             while ($cr = mysqli_fetch_assoc($cq)) {
-                echo "<br>".getname($cr["authorid"])." ".longago($cr["dt"]).nl2br($cr["text"]);
+                echo "<br>".getname($cr["authorid"])." ".longago($cr["dt"]).Markdown($cr["text"]);
             }
         
             if (checkuser()) {  

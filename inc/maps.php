@@ -3,6 +3,8 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
+include "markdown.php";
+
 $_SESSION["lp"] = "maps";
 
 if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
