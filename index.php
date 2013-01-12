@@ -6,7 +6,7 @@ session_start();
 if (!isset($_SESSION["beta"])) {
     header("Location: betalogin.php");
     die();
-} else echo "beta";
+}
 // /
 
 if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))

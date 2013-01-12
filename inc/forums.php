@@ -6,9 +6,8 @@ include "analyticstracking.php";
 $_SESSION["lp"] = "forums";
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
-if ($action == "add" && checkuser()) {
 
-    echo "add a new thread";
+if ($action == "add" && checkuser()) {
     
     if (isset($_POST["addnew"])) {
         
@@ -18,7 +17,7 @@ if ($action == "add" && checkuser()) {
         $text = strip($_POST["text"]);
         $dt = time();
         
-        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."')");
+        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0')");
         echo "added.";
         
     } else {
@@ -39,17 +38,33 @@ if ($action == "add" && checkuser()) {
     }
 
 } else {
-    
+
     if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
         // SHOW ONE THREAD
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$_GET["id"]);
         $row = mysqli_fetch_assoc($query);
+        
+        //topic creator tools
+        if (checkuser() && ($_SESSION["userid"] == $row["authorid"])) {
+        
+            echo "you are the creator";
+        
+        }
+        
+        //admin tools
+        if (checkadmin()) {
+        
+            echo "you are an admin";
+        
+        }
+        
         echo "<br>".getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".displaydate($row["dt"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
         echo "created ".longago($row["dt"])." ";
         echo "last post at ".longago($row["ldt"]);
         echo "<br>".nl2br($row["text"]);
         
+        //comment processing
         if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
                 
             $tid = strip($_GET["id"]);
@@ -91,12 +106,22 @@ if ($action == "add" && checkuser()) {
         // SHOW ALL THREADS
         if (checkuser()) echo "<a href='?p=forums&amp;action=add'>Create a new thread</a>";
         
-        $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `ldt` DESC");
+        if (isset($_GET["cat"])) {
         
+            $cat = strip($_GET["cat"]);
+            $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
+            echo "<a href='?p=forums'>clear category filter</a>";
+        
+        } else {
+        
+            $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `ldt` DESC");
+            
+        }
+    
         while ($row = mysqli_fetch_assoc($query)) {
 
             echo "<div>";
-            echo getcatname($row["cat"])." <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
+            echo "<a href='?p=forums&cat=".$row["cat"]."'>".getcatname($row["cat"])."</a> <a href='?p=forums&id=".$row["id"]."'>".$row["title"]."</a> ".getname($row["authorid"])." ".(($row["closed"] == 1) ? "closed" : "")." ";
             echo "created ".longago($row["dt"])." ";
             echo "last post at ".longago($row["ldt"])." ";
             echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"]))." replies";
@@ -105,6 +130,7 @@ if ($action == "add" && checkuser()) {
         }
 
     }
+
 }
 
 function getcatname($x) {
