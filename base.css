@@ -3,12 +3,12 @@ font-face {
   src: url("res/tf2build.ttf");
 } 
 
-body, html {
+body {
   margin: 0;
   background-image: url(img/bg2.png);
   font-family: "Open Sans", "Arial", sans-serif;
   font-weight: 400;
-  color: #BAD5F1;
+  color: #DDD;
   text-align: center;
 }
 

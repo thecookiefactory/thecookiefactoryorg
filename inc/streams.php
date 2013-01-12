@@ -37,7 +37,8 @@ $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"])
 if (mysqli_num_rows($q) == 1) {
 
 $r = mysqli_fetch_assoc($q);
-echo "<h1>".getname($r["authorid"])."'s stream</h1><div class='stream-player'>";
+# echo "<h1>".getname($r["authorid"])."'s stream</h1>";
+echo "<div class='stream-player'>";
 streamo($r["twitch"]);
 echo "</div><div class='stream-description'>".nl2br($r["description"], false)."</div><div class='clearfix'></div>";
 } else {
