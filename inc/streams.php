@@ -3,7 +3,7 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
-include "markdown.php";
+include "markdown/markdown.php";
 
 $_SESSION["lp"] = "streams";
 

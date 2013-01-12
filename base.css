@@ -32,7 +32,7 @@ header {
 
 nav {
   width: 1000px;
-  border: 0 solid #ff9933;
+  border: 0 solid #F93;
   padding-top: 10px;
   padding-bottom: 30px;
   font-size: 20px;
@@ -111,10 +111,10 @@ a:hover, a:active {
 hr {
   clear: both;
   width: 96%;
-  background-color: #4188d2;
+  background-color: #4188D2;
   margin: 5px auto 10px;
   border-style: solid;
-  border-color: #4188d2;
+  border-color: #4188D2;
 }
 
 form {
@@ -126,7 +126,7 @@ form {
 input {
   background-color: #141414;
   border: 1px solid #4188D2;
-  color: #BAD5F1;
+  color: #DDD;
 }
 
 .stream-menu {
@@ -149,7 +149,7 @@ input {
 }
 
 .stream-button-selected {
-  color: #FF9933 !important;
+  color: #F93 !important;
 }
 
 .stream-live {
@@ -317,7 +317,7 @@ article {
 
 .comment-author {
   font-weight: 600;
-  color: #BAD5F1;
+  color: #DDD;
 }
 
 .comment-date:before {
@@ -333,7 +333,7 @@ p.comment-text {
   padding-left: 8px;
   text-align: justify;
   font-size: 14px;
-  color: #BAD5F1;
+  color: #DDD;
 }
 
 #comment-form {
@@ -367,7 +367,19 @@ p.comment-text {
   -moz-border-radius: 2px;
   border-radius: 2px;
   font-size: 28px;
-  color: #BAD5F1;
+  color: #DDD;
+}
+
+        @keyframes submitbuttonHover { from{border-color: #4188D2;} to{border-color: #F93;} }
+@-webkit-keyframes submitbuttonHover { from{border-color: #4188D2;} to{border-color: #F93;} }
+   @-moz-keyframes submitbuttonHover { from{border-color: #4188D2;} to{border-color: #F93;} }
+     @-o-keyframes submitbuttonHover { from{border-color: #4188D2;} to{border-color: #F93;} }
+
+#comment-submitbutton:hover {
+          animation-name: submitbuttonHover;
+  -webkit-animation-name: submitbuttonHover;
+     -moz-animation-name: submitbuttonHover;
+       -o-animation-name: submitbuttonHover;
 }
 
         @keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
@@ -379,7 +391,6 @@ p.comment-text {
 @-webkit-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
    @-moz-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
      @-o-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
-
 
         @keyframes scrolling { }
 @-webkit-keyframes scrolling { }
@@ -642,7 +653,7 @@ img.map-image {
 
 .login-input {
   border-bottom-width: 1px;
-  color: inherit;
+  color: #141414;
 }
 
 .login-button {
