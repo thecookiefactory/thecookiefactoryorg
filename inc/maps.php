@@ -3,17 +3,19 @@
 checkembed($r_c);
 include "analyticstracking.php";
 
+include "markdown/markdown.php";
+
 $_SESSION["lp"] = "maps";
 
 if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
-    
+
     $text = strip($_POST["text"]);
     $m_id = strip($_POST["m_id"]);
     $userid = $_SESSION["userid"];
     $dt = time();
-    
+
     mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$userid."','".$text."','".$dt."','".$m_id."')");
-    
+
 }
 
 echo "<script src='js/maps.js'></script>";
@@ -29,19 +31,19 @@ while ($r = mysqli_fetch_assoc($q)) {
       echo "<div class='map-rightarrow map-arrow-disabled' id='map-".$r["id"]."-right' onclick='startImagerollScrolling(this.id, 1);'></div>";
       echo "<div class='map-imageroll' id='map-".$r["id"]."' onload='initialize(this.id);'>";
       echo "<script type='text/javascript'> lendict[\"map-".$r["id"]."\"] = ".(mysqli_num_rows($gq)+1)."; initialize(\"map-".$r["id"]."\");</script>";
-      
+
     //display the main image
         echo "<div class='map-image'>";
           echo "<img class='map-image' alt='".$r["name"]."' src='img/maps/".$r["id"].".".$r["ext"]."'>";
         echo "</div>";
-    
+
     //display additional images
     while ($gr = mysqli_fetch_assoc($gq)) {
     echo "<div class='map-image'>";
           echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' alt='".$gr["desc"]."' title='".$gr["desc"]."'>";
         echo "</div>";
     }
-    
+
       echo "</div>";
       echo "<div class='map-data'>";
         echo "<span class='map-author'>".getname($r["authorid"])."</span>";
@@ -59,7 +61,7 @@ while ($r = mysqli_fetch_assoc($q)) {
         }
         echo "</span>";
       echo "</div>";
-      
+
       //comments
       $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
       echo "<div class='comments'>";
