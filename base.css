@@ -341,7 +341,7 @@ p.comment-text {
 }
 
 #comment-textarea {
-  height: 65px;
+  height: 60px;
   width: 500px;
   margin-top: 18px;
   margin-left: 19px;
@@ -353,6 +353,15 @@ p.comment-text {
   font: inherit;
   font-size: 14px;
   color: white;
+          transition: border-color 0.3s ease-in-out;
+  -webkit-transition: border-color 0.3s ease-in-out;
+     -moz-transition: border-color 0.3s ease-in-out;
+       -o-transition: border-color 0.3s ease-in-out;
+}
+
+#comment-textarea:focus {
+   outline: none;
+   border-color: #F93;
 }
 
 #comment-submitbutton {
