@@ -100,13 +100,13 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $commnum = mysqli_num_rows($cq);
 
                if ($commnum > 0) {
-                    echo "<hr><div id='comments'><a href='?p=news&amp;id=".$row["id"]."#comments' class='comments-title'>".$commnum." comments</a></div><br>";
+                    echo "<hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=".$row["id"]."#comments'>".$commnum." comments</a></div>";
 
                         while ($crow = mysqli_fetch_assoc($cq)) {
                             echo "<div class='comment'><span class='comment-metadata'>";
                             echo "<span class='comment-author'>".getname($crow["authorid"])."</span><span class='comment-date'>".displaydate($crow["dt"])."</span>";
                             if (checkadmin()) echo "<span class='comment-deletebutton'><a href='admin/comments.php?id=".$crow["id"]."'>delete this</a></span>";
-                            echo "</span><br><p class='comment-text'><span class='comment-text'>".Markdown($crow["text"])."</span></p>";
+                            echo "</span><div class='comment-text'>".Markdown($crow["text"])."</div>";
                             echo "</div>";
                         }
 
@@ -114,16 +114,16 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
                 if (checkuser()) {
                     echo "<hr><h1 class='comments-title'>Post a comment</h1>";
-                    echo "<div id='comment-form'><form action='?p=news&amp;id=".$_GET["id"]."' method='post'>
-                    <textarea name='text' id='comment-textarea' required></textarea>
-                    <input type='submit' name='cp' value='&gt;' id='comment-submitbutton'>
-                    </form></div>";
+                    echo "<div class='comment-form'><form action='?p=news&amp;id=".$_GET["id"]."' method='post'>
+                    <textarea name='text' class='comment-textarea' required></textarea>
+                    <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
+                    </form></div></div>";
                 } else {
-                    echo "<hr><h1 class='comments-title'>Log in to be able to post comments</h1><div class='clearfix'></div>";
+                    echo "<hr><h1 class='comments-title'>Log in to be able to post comments</h1><div class='clearfix'></div></div>";
                 }
 
             } else
-                echo "<hr><h1 class='comments-title'>Commenting disabled</h1><div class='clearfix'></div>";
+                echo "<hr><h1 class='comments-title'>Commenting disabled</h1><div class='clearfix'></div></div>";
     } else {
         echo "No.";
     }

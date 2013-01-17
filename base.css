@@ -12,13 +12,15 @@ body {
   text-align: center;
 }
 
-#wrapper {
+.wrapper {
   width: 1000px;
   margin: 10px auto;
   -webkit-box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
-          box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
+  -moz-box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
+  box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
   -webkit-border-radius: 4px;
-          border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   padding-bottom: 10px;
   background-color: #141414;
 }
@@ -32,14 +34,13 @@ header {
 
 nav {
   width: 1000px;
-  border: 0 solid #F93;
   padding-top: 10px;
   padding-bottom: 30px;
   font-size: 20px;
   font-weight: 300;
 }
 
-#searchbox {
+.searchbox {
   width: 62px;
   border: 0;
   font-family: "Open Sans", "Arial", sans-serif;
@@ -51,20 +52,20 @@ nav {
   cursor: pointer;
 }
 
-#searchbox::-webkit-input-placeholder {
+.searchbox::-webkit-input-placeholder {
   color: white;
 }
 
-#searchbox:hover::-webkit-input-placeholder {
+.searchbox:hover::-webkit-input-placeholder {
   color: #4188D2;
 }
 
-#searchbox:focus {
+.searchbox:focus {
   cursor: text;
   outline: none;
 }
 
-#searchbox:focus::-webkit-input-placeholder {
+.searchbox:focus::-webkit-input-placeholder {
   color: #4188D2;
 }
 
@@ -119,8 +120,6 @@ hr {
 
 form {
   display: inline;
-  margin: 0;
-  padding: 0;
 }
 
 input {
@@ -149,7 +148,11 @@ input {
 }
 
 .stream-button-selected {
-  color: #F93 !important;
+  color: #F93;
+}
+
+.stream-button-selected:hover {
+  color: #F93;
 }
 
 .stream-live {
@@ -157,7 +160,6 @@ input {
 }
 
 .stream-player {
-  display: inline-block;
   float: left;
   height: 378px;
   width: 620px;
@@ -248,27 +250,27 @@ article {
   height: 1px;
   margin-top: 20px;
   border-width: 0;
-  background-image:         linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image:      -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image:    -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image:     -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -webkit-gradient (linear, left top, right top, color-stop(0, #141414), color-stop(0.5, #333), color-stop(1, #141414));
+  background-image: -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #141414), color-stop(0.5, #333), color-stop(1, #141414));
 }
 
-#nav-menubar {
+.nav-menubar {
   float: left;
   margin-left: 19px;
   z-index: 1;
 }
 
-#nav-actionbar {
+.nav-actionbar {
   float: right;
   margin-right: 19px;
   margin-top: -2px;
 }
 
-#nav-loginbar {
+.nav-loginbar {
   display: none;
   margin-top: -2px;
   margin-right: 23px;
@@ -289,27 +291,21 @@ article {
   color: #4188D2;
 }
 
-#actionbar-logindata {
+.actionbar-logindata {
   color: white;
 }
 
-#actionbar-username {
+.actionbar-username {
   font-weight: 600;
 }
 
 .comments-title {
-  float: left;
-  margin: 0 0 -6px 10px;
-  font-size: 20px;
-  font-weight: 300;
-  text-decoration: none;
-  color: white;
+  margin: 16px 0 4px 19px;
+  font-size: 22px;
 }
 
 .comment-metadata {
   clear: both;
-  float: left;
-  margin-top: 10px;
   margin-left: 19px;
   font-weight: 200;
   color: white;
@@ -327,23 +323,23 @@ article {
 .comment-deletebutton:before {
   content: " · ";
 }
-p.comment-text {
+
+.comment-text {
   margin-left: 19px;
-  margin-right: 20px;
-  padding-left: 8px;
+  margin-right: 19px;
   text-align: justify;
   font-size: 14px;
   color: #DDD;
 }
 
-#comment-form {
+.comment-form {
   clear: both;
 }
 
-#comment-textarea {
+.comment-textarea {
   height: 60px;
   width: 500px;
-  margin-top: 18px;
+  margin-top: 4px;
   margin-left: 19px;
   border-color: #4188D2;
   -webkit-border-radius: 2px;
@@ -353,18 +349,19 @@ p.comment-text {
   font: inherit;
   font-size: 14px;
   color: white;
-          transition: border-color 0.3s ease-in-out;
   -webkit-transition: border-color 0.3s ease-in-out;
-     -moz-transition: border-color 0.3s ease-in-out;
-       -o-transition: border-color 0.3s ease-in-out;
+  -moz-transition: border-color 0.3s ease-in-out;
+  -o-transition: border-color 0.3s ease-in-out;
+  -ms-transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
 }
 
-#comment-textarea:focus {
-   outline: none;
-   border-color: #F93;
+.comment-textarea:focus {
+  outline: none;
+  border-color: #F93;
 }
 
-#comment-submitbutton {
+.comment-submitbutton {
   position: relative;
   top: -24px;
   left: 4px;
@@ -377,50 +374,48 @@ p.comment-text {
   border-radius: 2px;
   font-size: 28px;
   color: #DDD;
-          transition: border-color 0.3s ease-in-out;
   -webkit-transition: border-color 0.3s ease-in-out;
-     -moz-transition: border-color 0.3s ease-in-out;
-       -o-transition: border-color 0.3s ease-in-out;
+  -moz-transition: border-color 0.3s ease-in-out;
+  -o-transition: border-color 0.3s ease-in-out;
+  -ms-transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
 }
 
-#comment-submitbutton:hover {
+.comment-submitbutton:hover {
    border-color: #F93;
 }
 
-        @keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
 @-webkit-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
-   @-moz-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
-     @-o-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
+@-moz-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
+@keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
 
-        @keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
 @-webkit-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
-   @-moz-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
-     @-o-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
+@-moz-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
+@keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
 
-        @keyframes scrolling { }
 @-webkit-keyframes scrolling { }
-   @-moz-keyframes scrolling { }
-     @-o-keyframes scrolling { }
+@-moz-keyframes scrolling { }
+@keyframes scrolling { }
 
 .map-scrolling {
-          animation-name: scrolling;
   -webkit-animation-name: scrolling;
-     -moz-animation-name: scrolling;
-       -o-animation-name: scrolling;
+  -moz-animation-name: scrolling;
+  -ms-animation-name: scrolling;
+  animation-name: scrolling;
 }
 
 .map-fadeout {
-          animation-name: fadeout;
   -webkit-animation-name: fadeout;
-     -moz-animation-name: fadeout;
-       -o-animation-name: fadeout;
+  -moz-animation-name: fadeout;
+  -ms-animation-name: fadeout;
+  animation-name: fadeout;
 }
 
 .map-fadein {
-          animation-name: fadein;
   -webkit-animation-name: fadein;
-     -moz-animation-name: fadein;
-       -o-animation-name: fadein;
+  -moz-animation-name: fadein;
+  -ms-animation-name: fadein;
+  animation-name: fadein;
 }
 
 .map-container {
@@ -437,20 +432,27 @@ p.comment-text {
   display: block;
   z-index: 1;
   opacity: 0;
+  background-color: #CCC;
   background-color: rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
-          animation-duration: 0.2s;
-  -webkit-animation-duration: 0.3s;
-     -moz-animation-duration: 0.2s;
-       -o-animation-duration: 0.2s;
-          animation-timing-function: ease-in-out;
+
+  -webkit-animation-duration: 0.2s;
+  -moz-animation-duration: 0.2s;
+  -ms-animation-duration: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+
   -webkit-animation-timing-function: ease-in-out;
-     -moz-animation-timing-function: ease-in-out;
-       -o-animation-timing-function: ease-in-out;
-          animation-fill-mode: forwards;
+  -moz-animation-timing-function: ease-in-out;
+  -ms-animation-timing-function: ease-in-out;
+  -o-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+
   -webkit-animation-fill-mode: forwards;
-     -moz-animation-fill-mode: forwards;
-       -o-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
 
 .map-leftarrow {
@@ -466,6 +468,7 @@ p.comment-text {
 
 .map-leftarrow:hover, .map-rightarrow:hover {
   cursor: pointer;
+  background-color: #999;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -481,18 +484,23 @@ p.comment-text {
   position: relative;
   border-radius: 15px;
   white-space: nowrap;
-          animation-duration: 1s;
   -webkit-animation-duration: 1s;
-     -moz-animation-duration: 1s;
-       -o-animation-duration: 1s;
-          animation-timing-function: ease-in-out;
+  -moz-animation-duration: 1s;
+  -ms-animation-duration: 1s;
+  -o-animation-duration: 1s;
+  animation-duration: 1s;
+
   -webkit-animation-timing-function: ease-in-out;
-     -moz-animation-timing-function: ease-in-out;
-       -o-animation-timing-function: ease-in-out;
-          animation-fill-mode: forwards;
+  -moz-animation-timing-function: ease-in-out;
+  -ms-animation-timing-function: ease-in-out;
+  -o-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+
   -webkit-animation-fill-mode: forwards;
-     -moz-animation-fill-mode: forwards;
-       -o-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+  -ms-animation-fill-mode: forwards;
+  -o-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
 
 div.map-image {
@@ -612,17 +620,16 @@ img.map-image {
   text-align: left;
 }
 
-        @keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
 @-webkit-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
-   @-moz-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
-     @-o-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
+@-moz-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
+@keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
 
 .account-input:focus {
-            outline: 0;
-          animation: blink 1.4s ease-in-out infinite alternate;
+  outline: 0;
   -webkit-animation: blink 1.4s ease-in-out infinite alternate;
-     -moz-animation: blink 1.4s ease-in-out infinite alternate;
-       -o-animation: blink 1.4s ease-in-out infinite alternate;
+  -moz-animation: blink 1.4s ease-in-out infinite alternate;
+  -ms-animation: blink 1.4s ease-in-out infinite alternate;
+  animation: blink 1.4s ease-in-out infinite alternate;
 }
 
 .account-input::-webkit-input-placeholder {
