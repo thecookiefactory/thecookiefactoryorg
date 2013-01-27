@@ -41,7 +41,7 @@ if (mysqli_num_rows($q) == 1) {
 $r = mysqli_fetch_assoc($q);
 
 if (islive($r["twitch"])) {
-    echo gettitle($r["twitch"]);
+    echo "<h1>".gettitle($r["twitch"])."</h1>";
 }
 
 echo "<div class='stream-player'>";
