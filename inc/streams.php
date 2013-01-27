@@ -39,7 +39,11 @@ $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"])
 if (mysqli_num_rows($q) == 1) {
 
 $r = mysqli_fetch_assoc($q);
-# echo "<h1>".getname($r["authorid"])."'s stream</h1>";
+
+if (islive($r["twitch"])) {
+    echo gettitle($r["twitch"]);
+}
+
 echo "<div class='stream-player'>";
 streamo($r["twitch"]);
 echo "</div><div class='stream-description'>".Markdown($r["description"])."</div><div class='clearfix'></div>";
@@ -56,6 +60,15 @@ echo "<object type='application/x-shockwave-flash' height='378' width='620' id='
 <param name='movie' value='http://www.twitch.tv/widgets/live_embed_player.swf' />
 <param name='flashvars' value='hostname=www.twitch.tv&channel=".$x."&auto_play=true&start_volume=25' />
 </object>";
+}
+
+function gettitle($x) {
+$json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
+$json_array = json_decode($json_file, true);
+if (empty($json_array)) {
+return "";
+}
+return $json_array[0]['channel']['status'];
 }
 
 function islive($x) {
