@@ -1,22 +1,22 @@
 function searchboxFocus() {
-    document.getElementById("searchbox").placeholder = "";
-    document.getElementById("searchbox").style.width = "200px";
+    document.getElementsByClassName("searchbox")[0].placeholder = "";
+    document.getElementsByClassName("searchbox")[0].style.width = "200px";
 }
 
 function searchboxBlur() {
-    document.getElementById("searchbox").placeholder = "search";
-    document.getElementById("searchbox").style.width = "62px";
-    document.getElementById("searchbox").value = "";
+    document.getElementsByClassName("searchbox")[0].placeholder = "search";
+    document.getElementsByClassName("searchbox")[0].style.width = "62px";
+    document.getElementsByClassName("searchbox")[0].value = "";
 }
 
 function showLoginBar() {
-    document.getElementById("nav-actionbar").style.display = "none";
-    document.getElementById("nav-loginbar").style.display = "block";
+    document.getElementsByClassName("nav-actionbar")[0].style.display = "none";
+    document.getElementsByClassName("nav-loginbar")[0].style.display = "block";
 }
 
 function hideLoginBar() {
-    document.getElementById("nav-actionbar").style.display = "block";
-    document.getElementById("nav-loginbar").style.display = "none";
+    document.getElementsByClassName("nav-actionbar")[0].style.display = "block";
+    document.getElementsByClassName("nav-loginbar")[0].style.display = "none";
 }
 
 function jumpToWrapper() {
@@ -31,7 +31,7 @@ function checkInputBox(elem) {
         elem.style.color = "#141414";
         elem.style.textAlign = "left";
     }
-    
+
     filterInput(elem);
 }
 
