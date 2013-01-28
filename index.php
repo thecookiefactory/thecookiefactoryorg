@@ -47,11 +47,15 @@ require "inc/essential.php";
 <input type='text' name='searchb' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off'>
 </form>
 <?php
-
 if (isset($_SESSION["userid"])) {
-    echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'>".getname($_SESSION["userid"])."</span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>";
+?>
+    <span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> <?php echo getname($_SESSION["userid"]); ?></span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>
+
+<?php
 } else {
-    echo "<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>";
+?>
+<span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>
+<?php
 }
 
 

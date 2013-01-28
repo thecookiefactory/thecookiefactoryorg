@@ -9,29 +9,47 @@ $_SESSION["lp"] = "streams";
 
 $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `active`=1");
 
-echo "<ul class='stream-menu'>";
+?>
+
+<ul class='stream-menu'>
+
+<?php
 
 while ($r = mysqli_fetch_assoc($q)) {
-    echo "<a href='?p=streams&amp;streamid=".$r["id"]."'>";
+?>
+    <a href='?p=streams&amp;streamid=<?php echo $r["id"]; ?>'>
+
+<?php
 if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"]) {
-    echo "<li class='stream-button stream-button-selected";
-    if (islive($r["twitch"]))
-    echo " stream-live";
+?>
+    <li class='stream-button stream-button-selected
+    <?php
+    if (islive($r["twitch"])) {
+    ?> stream-live
+<?php
+}
 }
 else {
-echo "<li class='stream-button";
-if (islive($r["twitch"]))
-echo " stream-live";
+?>
+<li class='stream-button
+<?php
+if (islive($r["twitch"])) {
+?>
+ stream-live
+
+<?php
 }
-
-echo "'>".getname($r["authorid"])."</li>";
-echo "</a>";
-
 }
+?>
 
-echo "</ul>";
+'><?php echo getname($r["authorid"]); ?></li>
+</a>
+<?php
+}
+?>
+</ul>
 
-
+<?php
 if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
 // DISPLAY A STREAM
 $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"]);
@@ -41,14 +59,19 @@ if (mysqli_num_rows($q) == 1) {
 $r = mysqli_fetch_assoc($q);
 
 if (islive($r["twitch"])) {
-    echo "<h1>".gettitle($r["twitch"])."</h1>";
+?>
+    <h1><?php echo gettitle($r["twitch"]); ?></h1>
+<?php
 }
-
-echo "<div class='stream-player'>";
-streamo($r["twitch"]);
-echo "</div><div class='stream-description'>".Markdown($r["description"])."</div><div class='clearfix'></div>";
+?>
+<div class='stream-player'>
+<?php streamo($r["twitch"]); ?>
+</div><div class='stream-description'><?php echo Markdown($r["description"]); ?></div><div class='clearfix'></div>
+<?php
 } else {
-echo "<p>Something went wrong.</p>";
+?>
+<p>Something went wrong.</p>
+<?php
 }
 }
 
