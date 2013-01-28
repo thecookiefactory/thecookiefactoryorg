@@ -22,8 +22,10 @@ if ($action == "add" && checkuser()) {
         mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0')");
         ?>
         added.
-<?php
+        <?php
+    
     } else {
+        
         ?>
         <form action='?p=forums&amp;action=add' method='post'>
         <input type='text' name='title' required>
@@ -32,16 +34,20 @@ if ($action == "add" && checkuser()) {
         <select name='cat'>
         <?php
         $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+        
         while ($cr = mysqli_fetch_assoc($cq)) {
-        ?>
-        <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["name"]; ?></option>
-        <?php
+            
+            ?>
+            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["name"]; ?></option>
+            <?php
+        
         }
         ?>
         </select>
         <input type='submit' name='addnew'>
         </form>
-<?php
+        <?php
+        
     }
 
 } else {
@@ -77,28 +83,34 @@ if ($action == "add" && checkuser()) {
 
         //admin tools
         if (checkadmin()) {
+        
             ?>
             you are an admin
             <?php
+        
         }
-?>
+        ?>
         <br><?php echo getcatname($row["cat"]); ?> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo displaydate($row["dt"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
         created <?php echo longago($row["dt"]); ?>
         last post at <?php echo longago($row["ldt"]); ?>
         <br><?php echo Markdown($row["text"]); ?>
-<?php
+        <?php
         if ($row["closed"] == 0) {
 
             //fetching comments
             $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
+            
             while ($cr = mysqli_fetch_assoc($cq)) {
-            ?>
+                
+                ?>
                 <br><?php echo getname($cr["authorid"]); ?> <?php echo longago($cr["dt"]); ?> <?php echo Markdown($cr["text"]); ?>
-            <?php
+                <?php
+            
             }
 
             if (checkuser()) {
-            ?>
+                
+                ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
                 [md buttons]
                 <div id='comment-form'><form action='?p=forums&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
@@ -106,25 +118,33 @@ if ($action == "add" && checkuser()) {
                 <input type='submit' name='cp' value='&gt;' id='comment-submitbutton'>
                 </form></div>
                 <?php
+            
             } else {
-            ?>
+                
+                ?>
                 <hr><h1 class='comments-title'>Log in to be able to post replies</h1><div class='clearfix'></div>
-            <?php
+                <?php
+            
             }
 
         } else {
-        ?>
+            
+            ?>
             closed thread
-        <?php
+            <?php
+        
         }
 
     } else {
 
         // SHOW ALL THREADS
         if (checkuser()) {
-            ?><a href='?p=forums&amp;action=add'>Create a new thread</a>
+            
+            ?>
+            <a href='?p=forums&amp;action=add'>Create a new thread</a>
             <?php
-            }
+        
+        }
 
         if (isset($_GET["cat"])) {
 
