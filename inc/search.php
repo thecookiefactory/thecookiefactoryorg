@@ -7,35 +7,35 @@ echo "<div class='search-border-lower'></div>";
 if (isset($_POST["searchb"])) {
 
     $term = strip($_POST["searchb"]);
-    
+
     if (strlen($term) >= 3) {
 
     $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
     $nr = mysqli_num_rows($squery);
 
-    
+
 
     if ($nr == 0) {
         if (strlen($term) > 23) {
-            echo "<div class='search-title'>No results found for your search term</div>";
+            echo "<div class='search-title'>No results found for your search term</div><div class='clearfix'></div>";
         } else {
-            echo "<div class='search-title'>No results found for <span class='search-term'>".$term."</span></div>";
+            echo "<div class='search-title'>No results found for <span class='search-term'>".$term."</span></div><div class='clearfix'></div>";
         }
-        
+
 
     } else {
-            
+
         if (strlen($term) > 23) {
             if ($nr == 1) {
-                echo "<div class='search-title'>".$nr." result found for your search term</div>";
+                echo "<div class='search-title'>".$nr." result found for your search term</div><div class='clearfix'></div>";
             } else {
-                echo "<div class='search-title'>".$nr." results found for your search term</div>";
+                echo "<div class='search-title'>".$nr." results found for your search term</div><div class='clearfix'></div>";
             }
         } else {
             if ($nr == 1) {
-                echo "<div class='search-title'>".$nr." result found for <span class='search-term'>".$term."</span></div>";
+                echo "<div class='search-title'>".$nr." result found for <span class='search-term'>".$term."</span></div><div class='clearfix'></div>";
             } else {
-                echo "<div class='search-title'>".$nr." results found for <span class='search-term'>".$term."</span></div>";
+                echo "<div class='search-title'>".$nr." results found for <span class='search-term'>".$term."</span></div><div class='clearfix'></div>";
             }
         }
 
@@ -46,22 +46,22 @@ if (isset($_POST["searchb"])) {
             echo "<div class='article-header'>
             <div class='article-title'><h1><a href='?p=news&amp;id=".$srow["id"]."'>".$srow["title"]."</a></h1></div>
             <div class='article-metadata'>";
-            
+
             if ($srow["comments"] == 1) {
-            
+
                 $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$srow["id"]);
                 $commnum = mysqli_num_rows($cq);
                 echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$srow["id"]."#comments'>".$commnum." comments</a></span>";
                 }
 
             echo "<span class='article-metadata-item'><span class='article-author'>".getname($srow["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["dt"])."</span></span></div>";
-            
+
             //if edited
             if ($srow["editorid"] > 0) {
                 echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($srow["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["editdt"])."</span></span></div>";
             }
-            
-            echo "</div>";        
+
+            echo "</div>";
 
             // BODY
             echo "<article>
@@ -79,10 +79,10 @@ if (isset($_POST["searchb"])) {
     }
 
 } else {
-    
+
     echo "<div class='search-title'>No keyword defined.</div>";
 
-} 
+}
 
 ?>
 

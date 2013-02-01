@@ -74,7 +74,7 @@ if (isset($_SESSION["userid"])) {
 </nav>
 <hr>
 
-<section>
+<section class='include-section'>
 
 <?php
 

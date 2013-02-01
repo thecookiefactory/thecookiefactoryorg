@@ -1,4 +1,4 @@
-font-face {
+@font-face {
   font-family: "TF2 Build";
   src: url("res/tf2build.ttf");
 }
@@ -33,7 +33,8 @@ header {
 }
 
 nav {
-  width: 1000px;
+  width: 962px;
+  margin: auto;
   padding-top: 10px;
   padding-bottom: 30px;
   font-size: 20px;
@@ -69,11 +70,10 @@ nav {
   color: #4188D2;
 }
 
-section {
-  width: 1000px;
+.include-section {
+  width: 962px;
+  margin: 10px auto;
   position: relative;
-  border: 0 solid #F93;
-  text-align: left;
 }
 
 footer {
@@ -111,7 +111,7 @@ a:hover, a:active {
 
 hr {
   clear: both;
-  width: 96%;
+  width: 960px;
   background-color: #4188D2;
   margin: 5px auto 10px;
   border-style: solid;
@@ -163,7 +163,6 @@ input {
   float: left;
   height: 378px;
   width: 620px;
-  margin-left: 19px;
 }
 
 .stream-description {
@@ -171,17 +170,15 @@ input {
   height: 378px;
   width: 321px;
   overflow-y: auto;
-  margin: 0 20px;
   color: #DDD;
   text-align: justify;
 }
 
 h1 {
-  margin: 10px 19px;
+  margin: 0;
   font-size: 36px;
   font-weight: 400;
   font-family: Bitter;
-  color: white;
   text-align: left;
 }
 
@@ -206,7 +203,7 @@ h1 {
 }
 
 .article-metadata {
-  margin-right: 22px;
+  margin-top: 4px;
   font-size: 14px;
   font-style: italic;
   color: #999;
@@ -215,9 +212,8 @@ h1 {
 
 .article-edit-metadata {
   position: absolute;
-  top: 18px;
+  top: 20px;
   right: 0;
-  padding-right: 22px;
   font-size: 14px;
   font-style: italic;
   color: #555;
@@ -240,7 +236,6 @@ h1 {
 }
 
 article {
-  margin-left: 19px;
   color: #DDD;
   text-align: justify;
 }
@@ -260,20 +255,17 @@ article {
 
 .nav-menubar {
   float: left;
-  margin-left: 19px;
   z-index: 1;
 }
 
 .nav-actionbar {
   float: right;
-  margin-right: 19px;
   margin-top: -2px;
 }
 
 .nav-loginbar {
   display: none;
   margin-top: -2px;
-  margin-right: 23px;
   color: #DDD;
   float: right;
 }
@@ -300,13 +292,17 @@ article {
 }
 
 .comments-title {
-  margin: 16px 0 4px 19px;
+  margin-top: 16px;
+  margin-bottom: 4px;
   font-size: 22px;
+}
+
+.comment {
+  text-align: left;
 }
 
 .comment-metadata {
   clear: both;
-  margin-left: 19px;
   font-weight: 200;
   color: white;
 }
@@ -325,8 +321,6 @@ article {
 }
 
 .comment-text {
-  margin-left: 19px;
-  margin-right: 19px;
   text-align: justify;
   font-size: 14px;
   color: #DDD;
@@ -334,13 +328,13 @@ article {
 
 .comment-form {
   clear: both;
+  text-align: left;
 }
 
 .comment-textarea {
   height: 60px;
   width: 500px;
   margin-top: 4px;
-  margin-left: 19px;
   border-color: #4188D2;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -550,7 +544,7 @@ img.map-image {
   position: absolute;
   height: 30px;
   top: -12px;
-  left: 7px;
+  left: -12px;
   width: 10px;
   border: 2px solid #4188D2;
   border-right: 0;
@@ -563,13 +557,13 @@ img.map-image {
   height: 2px;
   width: 12px;
   top: 77px;
-  left: 8px;
+  left: -12px;
   background-color: #4188D2;
 }
 
 .search-title {
   display: inline-block;
-  margin-left: 19px;
+  float: left;
   margin-top: 20px;
   border: 2px solid #4188D2;
   border-left: 0;
@@ -586,10 +580,11 @@ img.map-image {
 }
 
 .search-results {
-  width: 984px;
   position: relative;
   top: -2px;
-  margin: auto;
+  margin-left: -12px;
+  padding-top: 12px;
+  padding-left: 18px;
   border-left: 2px solid #4188D2;
 }
 

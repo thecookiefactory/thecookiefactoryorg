@@ -2,7 +2,6 @@
 
 checkembed($r_c);
 include "analyticstracking.php";
-
 include "markdown/markdown.php";
 
 $_SESSION["lp"] = "forums";
@@ -23,9 +22,9 @@ if ($action == "add" && checkuser()) {
         ?>
         added.
         <?php
-    
+
     } else {
-        
+
         ?>
         <form action='?p=forums&amp;action=add' method='post'>
         <input type='text' name='title' required>
@@ -34,20 +33,20 @@ if ($action == "add" && checkuser()) {
         <select name='cat'>
         <?php
         $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
-        
+
         while ($cr = mysqli_fetch_assoc($cq)) {
-            
+
             ?>
             <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["name"]; ?></option>
             <?php
-        
+
         }
         ?>
         </select>
         <input type='submit' name='addnew'>
         </form>
         <?php
-        
+
     }
 
 } else {
@@ -57,7 +56,7 @@ if ($action == "add" && checkuser()) {
         // SHOW ONE THREAD
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$_GET["id"]);
         $row = mysqli_fetch_assoc($query);
-        
+
         //comment processing
         if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 
@@ -83,11 +82,11 @@ if ($action == "add" && checkuser()) {
 
         //admin tools
         if (checkadmin()) {
-        
+
             ?>
             you are an admin
             <?php
-        
+
         }
         ?>
         <br><?php echo getcatname($row["cat"]); ?> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo displaydate($row["dt"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
@@ -99,17 +98,17 @@ if ($action == "add" && checkuser()) {
 
             //fetching comments
             $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
-            
+
             while ($cr = mysqli_fetch_assoc($cq)) {
-                
+
                 ?>
                 <br><?php echo getname($cr["authorid"]); ?> <?php echo longago($cr["dt"]); ?> <?php echo Markdown($cr["text"]); ?>
                 <?php
-            
+
             }
 
             if (checkuser()) {
-                
+
                 ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
                 [md buttons]
@@ -118,32 +117,33 @@ if ($action == "add" && checkuser()) {
                 <input type='submit' name='cp' value='&gt;' id='comment-submitbutton'>
                 </form></div>
                 <?php
-            
+
             } else {
-                
+
                 ?>
                 <hr><h1 class='comments-title'>Log in to be able to post replies</h1><div class='clearfix'></div>
                 <?php
-            
+
             }
 
         } else {
-            
+
             ?>
             closed thread
             <?php
-        
+
         }
 
     } else {
 
         // SHOW ALL THREADS
+
         if (checkuser()) {
-            
+
             ?>
-            <a href='?p=forums&amp;action=add'>Create a new thread</a>
+            <a class='forums-createthread' href='?p=forums&amp;action=add'>Create a new thread</a>
             <?php
-        
+
         }
 
         if (isset($_GET["cat"])) {
@@ -151,7 +151,7 @@ if ($action == "add" && checkuser()) {
             $cat = strip($_GET["cat"]);
             $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
             ?>
-            <a href='?p=forums'>clear category filter</a>
+            <a class='forums-clearfilter' href='?p=forums'>clear category filter</a>
             <?php
 
         } else {
@@ -163,12 +163,29 @@ if ($action == "add" && checkuser()) {
         while ($row = mysqli_fetch_assoc($query)) {
 
             ?>
-            <div>
-            <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'><?php echo getcatname($row["cat"]); ?></a> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?> 
-            created <?php echo longago($row["dt"]); ?>
-            last post at <?php echo longago($row["ldt"]); ?>
-            <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?> replies
-            </div>
+            <div class='forums-listentry'>
+                <a class='forums-list-category' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                    <?php echo getcatname($row["cat"]); ?>
+                </a>
+                <a class='forums-list-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                    <?php echo $row["title"]; ?>
+                </a>
+                <span class='forums-list-author'>
+                    <?php echo getname($row["authorid"]); ?>
+                </span>
+                <span class='forums-list-status'>
+                    <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
+                </span>
+                <span class='forums-list-createdate'>
+                    created <?php echo longago($row["dt"]); ?>
+                </span>
+                <span class='forums-list-modifydate'>
+                    last post at <?php echo longago($row["ldt"]); ?>
+                </span>
+                <span class='forums-list-postcount'>
+                <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?> replies
+                </span>
+            </section>
             <?php
 
         }
