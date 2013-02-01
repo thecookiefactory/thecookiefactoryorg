@@ -18,72 +18,115 @@ if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
 
 }
 
-echo "<script src='js/maps.js'></script>";
+?>
+
+<script src='js/maps.js'></script>
+
+<?php
 
 $q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
 
 while ($r = mysqli_fetch_assoc($q)) {
 
     $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
-    echo "<div class='map-name'>".$r["name"]."</div>";
-    echo "<div class='map-container'>";
-      echo "<div class='map-leftarrow map-arrow-disabled' id='map-".$r["id"]."-left' onclick='startImagerollScrolling(this.id, -1);'></div>";
-      echo "<div class='map-rightarrow map-arrow-disabled' id='map-".$r["id"]."-right' onclick='startImagerollScrolling(this.id, 1);'></div>";
-      echo "<div class='map-imageroll' id='map-".$r["id"]."' onload='initialize(this.id);'>";
-      echo "<script type='text/javascript'> lendict[\"map-".$r["id"]."\"] = ".(mysqli_num_rows($gq)+1)."; initialize(\"map-".$r["id"]."\");</script>";
+    ?>
+	
+	<div class='map-name'><?php echo $r["name"]; ?></div>
+    <div class='map-container'>
+      <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
+      <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
+      <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
+      <script type='text/javascript'> lendict[\"map-<?php echo $r["id"]; ?>\"] = <?php echo (mysqli_num_rows($gq)+1); ?>; initialize(\"map-<?php echo $r["id"]; ?>\");</script>
+	
+	<?php
 
     //display the main image
-        echo "<div class='map-image'>";
-          echo "<img class='map-image' alt='".$r["name"]."' src='img/maps/".$r["id"].".".$r["ext"]."'>";
-        echo "</div>";
+	
+		?>
+        <div class='map-image'>
+          <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["ext"]; ?>'>
+        </div>
 
-    //display additional images
+    <?php
+	//display additional images
     while ($gr = mysqli_fetch_assoc($gq)) {
-    echo "<div class='map-image'>";
-          echo "<img class='map-image' src='img/maps/".$r["id"]."/".$gr["filename"]."' alt='".$gr["desc"]."' title='".$gr["desc"]."'>";
-        echo "</div>";
+		?>
+		
+		<div class='map-image'>
+          <img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["desc"]; ?>' title='<?php echo $gr["desc"]; ?>'>
+        </div>
+		
+		<?php
     }
 
-      echo "</div>";
-      echo "<div class='map-data'>";
-        echo "<span class='map-author'>".getname($r["authorid"])."</span>";
-        echo "<span class='map-game'>";
-            $gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
+      ?>
+	  
+	  </div>
+      <div class='map-data'>
+        <span class='map-author'><?php echo getname($r["authorid"]); ?></span>
+        <span class='map-game'>
+            
+			<?php
+			$gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
             $gr = mysqli_fetch_assoc($gq);
-            echo "<a target='_blank' href='http://steamcommunity.com/app/".$gr["steam"]."'>".$gr["name"]."</a>";
-        echo "</span>";
-        echo "<span class='map-desc'>".nl2br($r["desc"], false)."</span>";
-        echo "<span class='map-dl'>";
+            ?>
+			
+			<a target='_blank' href='http://steamcommunity.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
+        </span>
+        <span class='map-desc'><?php echo nl2br($r["desc"], false); ?></span>
+        <span class='map-dl'>
+		
+		<?php
         switch ($r["dltype"]) {
-            case 0: echo "<a href='".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
-            case 1: echo "<a href='http://steamcommunity.com/sharedfiles/filedetails/?id=".$r["dl"]."' target='_blank'>DOWNLOAD</a>"; break;
-            case 2: echo "No dowload available yet."; break;
+            case 0: ?><a href='<?php echo $r["dl"]; ?>' target='_blank'>DOWNLOAD</a><?php break;
+            case 1: ?><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'>DOWNLOAD</a><?php break;
+            case 2: ?>No dowload available yet.<?php break;
         }
-        echo "</span>";
-      echo "</div>";
+        ?>
+		
+		</span>
+      </div>
 
-      //comments
+      <?php
+	  //comments
       $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
-      echo "<div class='comments'>";
+      ?>
+	  
+	  <div class='comments'>
+	  
+	  <?php
         if (mysqli_num_rows($cq) > 0) {
           while ($cr = mysqli_fetch_assoc($cq)) {
-            echo getname($cr["authorid"])." said on ".displaydate($cr["dt"]).": <p>".nl2br($cr["text"], false)."</p>";
+            ?>
+			
+			<?php echo getname($cr["authorid"]); ?> said on <?php echo displaydate($cr["dt"]); ?>: <p><?php echo nl2br($cr["text"], false); ?></p>
+			
+			<?php
           }
         } else {
-          echo "no comments yet";
+		  ?>
+          no comments yet
+		  <?php
         }
       if (checkuser()) {
-        echo "<form action='?p=maps' method='post'>";
-        echo "<textarea name='text' required></textarea>";
-        echo "<input type='hidden' name='m_id' value='".$r["id"]."'>";
-        echo "<input type='submit' name='submit'>";
-        echo "</form>";
-      } else {
-        echo "you have to be logged in to post comments";
+	    ?>
+		
+        <form action='?p=maps' method='post'>
+        <textarea name='text' required></textarea>
+        <input type='hidden' name='m_id' value='<?php echo $r["id"]; ?>'>
+        <input type='submit' name='submit'>
+        </form>
+      
+	    <?php
+	  } else {
+        ?>
+		you have to be logged in to post comments
+		<?php
       }
-      echo "</div>";
-    echo "</div>";
-
+	  ?>
+      </div>
+    </div>
+<?php
 }
 
 ?>
