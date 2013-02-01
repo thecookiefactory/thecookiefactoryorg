@@ -2,8 +2,16 @@
 
 checkembed($r_c);
 include "analyticstracking.php";
-echo "<div class='search-border-upper'></div>";
-echo "<div class='search-border-lower'></div>";
+
+include "markdown/markdown.php";
+
+?>
+
+<div class='search-border-upper'></div>
+<div class='search-border-lower'></div>
+
+<?php
+
 if (isset($_POST["searchb"])) {
 
     $term = strip($_POST["searchb"]);
@@ -13,13 +21,21 @@ if (isset($_POST["searchb"])) {
     $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
     $nr = mysqli_num_rows($squery);
 
-    
+
 
     if ($nr == 0) {
         if (strlen($term) > 23) {
-            echo "<div class='search-title'>No results found for your search term</div>";
+            ?>
+            
+            <div class='search-title'>No results found for your search term</div>
+            
+            <?php
         } else {
-            echo "<div class='search-title'>No results found for <span class='search-term'>".$term."</span></div>";
+            ?>
+            
+            <div class='search-title'>No results found for <span class='search-term'><?php echo $term; ?></span></div>
+            
+            <?php
         }
         
 
@@ -27,62 +43,115 @@ if (isset($_POST["searchb"])) {
             
         if (strlen($term) > 23) {
             if ($nr == 1) {
-                echo "<div class='search-title'>".$nr." result found for your search term</div>";
+                ?>
+                
+                <div class='search-title'><?php echo $nr; ?> result found for your search term</div>
+                
+                <?php
             } else {
-                echo "<div class='search-title'>".$nr." results found for your search term</div>";
+                ?>
+                
+                <div class='search-title'><?php echo $nr; ?> results found for your search term</div>
+                
+                <?php
             }
         } else {
             if ($nr == 1) {
-                echo "<div class='search-title'>".$nr." result found for <span class='search-term'>".$term."</span></div>";
+                ?>
+                
+                <div class='search-title'><?php echo $nr; ?> result found for <span class='search-term'><?php echo $term; ?></span></div>
+            
+                <?php
             } else {
-                echo "<div class='search-title'>".$nr." results found for <span class='search-term'>".$term."</span></div>";
+                ?>
+                
+                <div class='search-title'><?php echo $nr; ?> results found for <span class='search-term'><?php echo $term; ?></span></div>
+                
+                <?php
             }
         }
 
-        echo "<div class='search-results'>";
-
+        ?>
+        
+        <div class='search-results'>
+        
+        <?php
+        
         while ($srow = mysqli_fetch_assoc($squery)) {
             // TITLE, AUTHOR & DATE
-            echo "<div class='article-header'>
-            <div class='article-title'><h1><a href='?p=news&amp;id=".$srow["id"]."'>".$srow["title"]."</a></h1></div>
-            <div class='article-metadata'>";
+            ?>
+            
+            <div class='article-header'>
+            <div class='article-title'><h1><a href='?p=news&amp;id=<?php echo $srow["id"]; ?>'><?php echo $srow["title"]; ?></a></h1></div>
+            <div class='article-metadata'>
+            
+            <?php
             
             if ($srow["comments"] == 1) {
             
                 $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$srow["id"]);
                 $commnum = mysqli_num_rows($cq);
-                echo "<span class='article-metadata-item'><a href='?p=news&amp;id=".$srow["id"]."#comments'>".$commnum." comments</a></span>";
-                }
+                ?>
 
-            echo "<span class='article-metadata-item'><span class='article-author'>".getname($srow["authorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["dt"])."</span></span></div>";
+                <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $srow["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+            
+                <?php
+            
+            }
+
+            ?>
+            
+            <span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["dt"]);</span></span></div>
+            
+            <?php
             
             //if edited
             if ($srow["editorid"] > 0) {
-                echo "<div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'>".getname($srow["editorid"])."</span></span><span class='article-metadata-item'><span class='article-date'>".displaydate($srow["editdt"])."</span></span></div>";
+                ?>
+                
+                <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["editdt"]); ?></span></span></div>
+                
+                <?php
             }
             
-            echo "</div>";        
+            ?>
+            </div>
 
+            <?php
+            
             // BODY
-            echo "<article>
-            <span class='article-text'>".substr($srow["text"], 0, 100)."</span>
+            ?>
+            
+            <article>
+            <span class='article-text'><?php echo Markdown(substr($srow["text"], 0, 100)); ?></span>
             </article>
-            <hr class='article-separator'>";
+            <hr class='article-separator'>
+            
+            <?php
         }
 
-        echo "</div>";
+        ?>
+        
+        </div>
 
+        <?php
+        
         }
 
     } else {
-    echo "<div class='search-title'>Please enter a keyword longer than 2 characters.</div>";
+        ?>
+        
+        <div class='search-title'>Please enter a keyword longer than 2 characters.</div>
+        
+        <?php
     }
 
 } else {
+    ?>
     
-    echo "<div class='search-title'>No keyword defined.</div>";
+    <div class='search-title'>No keyword defined.</div>
 
+    <?php
 } 
 
 ?>
-

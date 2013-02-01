@@ -97,7 +97,11 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] !=
 2012 thecookiefactory.org<br>
 <?php
 if (checkadmin()) {
-    echo "<a href='admin' target='_blank'>admin</a><br>";
+    ?>
+    
+    <a href='admin' target='_blank'>admin</a><br>
+    
+    <?php
 }
 ?>
 </footer>
