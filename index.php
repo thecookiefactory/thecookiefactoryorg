@@ -94,7 +94,7 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] !=
 </div>
 
 <footer>
-2012 thecookiefactory.org<br>
+2013 thecookiefactory.org<br>
 <?php
 if (checkadmin()) {
     ?>
@@ -105,7 +105,6 @@ if (checkadmin()) {
 }
 ?>
 </footer>
-<!-- ezt persze majd nem ide-->
 <div class='contact-us'>
 <a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a>&nbsp;
 <a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a>&nbsp;
@@ -116,7 +115,7 @@ if (checkadmin()) {
 if (isset($redirect))
     echo "<script type='text/javascript'>
     <!--
-    setTimeout('window.location = \"?p=".$redirect."\"', 5000)
+    setTimeout('window.location = \"?p=".$redirect."\"')
     //-->
     </script>";
 ?>

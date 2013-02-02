@@ -71,28 +71,21 @@ if ($action == "add" && checkuser()) {
 
         }
 
-        //topic creator tools
-        if (checkuser() && ($_SESSION["userid"] == $row["authorid"])) {
-
-            ?>
-            you are the creator
-            <?php
-
-        }
-
-        //admin tools
-        if (checkadmin()) {
-
-            ?>
-            you are an admin
-            <?php
-
-        }
         ?>
-        <br><?php echo getcatname($row["cat"]); ?> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo displaydate($row["dt"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
-        created <?php echo longago($row["dt"]); ?>
-        last post at <?php echo longago($row["ldt"]); ?>
+        <br><a href='?p=forums'>forums</a> -> <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'><?php echo getcatname($row["cat"]); ?></a> -> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo displaydate($row["dt"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
+        created <?php echo displaydate($row["dt"]); ?>
+        last post at <?php echo displaydate($row["ldt"]); ?>
         <br><?php echo Markdown($row["text"]); ?>
+        <?php
+                //editing tools
+                if (checkadmin() || (isset($_SESSION["userid"]) && ($_SESSION["userid"]) == $cr["authorid"])) {
+                    ?>
+                    
+                    <a href=''>edit</a>
+                    
+                    <?php
+                }
+                ?>
         <?php
         if ($row["closed"] == 0) {
 
@@ -102,7 +95,20 @@ if ($action == "add" && checkuser()) {
             while ($cr = mysqli_fetch_assoc($cq)) {
 
                 ?>
-                <br><?php echo getname($cr["authorid"]); ?> <?php echo longago($cr["dt"]); ?> <?php echo Markdown($cr["text"]); ?>
+                <br><div style='border: 2px solid black;'><?php echo getname($cr["authorid"]); ?> <?php echo displaydate($cr["dt"]); ?> <?php echo Markdown($cr["text"]); ?>
+                
+                <?php
+                //editing tools
+                if (checkadmin() || (isset($_SESSION["userid"]) && ($_SESSION["userid"]) == $cr["authorid"])) {
+                    ?>
+                    
+                    <a href=''>edit</a>
+                    
+                    <?php
+                }
+                ?>
+                
+                </div>
                 <?php
 
             }
