@@ -192,10 +192,10 @@ if ($action == "add" && checkuser()) {
                     <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
                 </span></td>
                 <td class='forums-entry-createdate'><span>
-                    <?php echo longago($row["dt"]); ?>
+                    <?php echo displaydate($row["dt"]); ?>
                 </span></td>
                 <td class='forums-entry-modifydate'><span>
-                    <?php echo longago($row["ldt"]); ?>
+                    <?php echo displaydate($row["ldt"]); ?>
                 </span></td>
                 <td class='forums-entry-postcount'><span>
                     <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?>
