@@ -151,44 +151,64 @@ if ($action == "add" && checkuser()) {
             $cat = strip($_GET["cat"]);
             $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
             ?>
-            <a class='forums-clearfilter' href='?p=forums'>clear category filter</a>
+            <a class='forums-clearfilter' href='?p=forums'>clear category filter</a><table>
             <?php
 
         } else {
 
             $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `ldt` DESC");
+            ?>
+            <table class='forums-table'>
+                <thead>
+                    <tr>
+                        <th class='forums-header-category'></th>
+                        <th class='forums-header-title'>Title</th>
+                        <th class='forums-header-author'>Author</th>
+                        <th class='forums-header-status'></th>
+                        <th class='forums-header-createdate'>Created</th>
+                        <th class='forums-header-modifydate'>Last Post</th>
+                        <th class='forums-header-postcount'>Total Posts</th>
+                    </tr>
+                </thead>
+                <tbody>
+            <?php
 
         }
 
         while ($row = mysqli_fetch_assoc($query)) {
 
             ?>
-            <div class='forums-listentry'>
-                <a class='forums-list-category' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+            <tr class='forums-entry'>
+                <td class='forums-entry-category'><a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
                     <?php echo getcatname($row["cat"]); ?>
-                </a>
-                <a class='forums-list-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                </a></td>
+                <td class='forums-entry-title'><a href='?p=forums&id=<?php echo $row["id"]; ?>'>
                     <?php echo $row["title"]; ?>
-                </a>
-                <span class='forums-list-author'>
+                </a></td>
+                <td class='forums-entry-author'><span>
                     <?php echo getname($row["authorid"]); ?>
-                </span>
-                <span class='forums-list-status'>
+                </span></td>
+                <td class='forums-entry-status'><span>
                     <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
-                </span>
-                <span class='forums-list-createdate'>
-                    created <?php echo longago($row["dt"]); ?>
-                </span>
-                <span class='forums-list-modifydate'>
-                    last post at <?php echo longago($row["ldt"]); ?>
-                </span>
-                <span class='forums-list-postcount'>
-                <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?> replies
-                </span>
-            </section>
+                </span></td>
+                <td class='forums-entry-createdate'><span>
+                    <?php echo longago($row["dt"]); ?>
+                </span></td>
+                <td class='forums-entry-modifydate'><span>
+                    <?php echo longago($row["ldt"]); ?>
+                </span></td>
+                <td class='forums-entry-postcount'><span>
+                    <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?>
+                </span></td>
+            </tr>
             <?php
 
         }
+
+        ?>
+            </tbody>
+        </table>
+        <?php
 
     }
 
