@@ -72,50 +72,67 @@ if ($action == "add" && checkuser()) {
         }
 
         ?>
-        <br><a href='?p=forums'>forums</a> -> <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'><?php echo getcatname($row["cat"]); ?></a> -> <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a> <?php echo getname($row["authorid"]); ?> <?php echo displaydate($row["dt"]); ?> <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
-        created <?php echo displaydate($row["dt"]); ?>
-        last post at <?php echo displaydate($row["ldt"]); ?>
-        <br><?php echo Markdown($row["text"]); ?>
-        <?php
-                //editing tools
-                if (checkadmin() || (isset($_SESSION["userid"]) && ($_SESSION["userid"]) == $cr["authorid"])) {
-                    ?>
-                    
-                    <a href=''>edit</a>
-                    
-                    <?php
-                }
-                ?>
-        <?php
-        if ($row["closed"] == 0) {
 
-            //fetching comments
-            $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
-
-            while ($cr = mysqli_fetch_assoc($cq)) {
-
-                ?>
-                <br><div style='border: 2px solid black;'><?php echo getname($cr["authorid"]); ?> <?php echo displaydate($cr["dt"]); ?> <?php echo Markdown($cr["text"]); ?>
-                
-                <?php
-                //editing tools
-                if (checkadmin() || (isset($_SESSION["userid"]) && ($_SESSION["userid"]) == $cr["authorid"])) {
-                    ?>
-                    
-                    <a href=''>edit</a>
-                    
-                    <?php
-                }
-                ?>
-                
+        <h1>
+            <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
+        </h1>
+        <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
+        <div class='forums-posts'>
+            <div class='forums-post'>
+                <div class='forums-post-metadata'>
+                    <span class='forums-post-metadata-item'>
+                        <span class='forums-post-author'>
+                            <?php echo getname($row["authorid"]); ?>
+                        </span>
+                    </span>
+                    <span class='forums-post-metadata-item'>
+                        <span class='forums-post-date'>
+                            <?php echo displaydate($row["dt"]); ?>
+                        </span>
+                    </span>
                 </div>
+                <div class='forums-post-text'>
+                    <?php echo Markdown($row["text"]); ?>
+                </div>
+            </div>
+
+            <?php
+            if ($row["closed"] == 0) {
+
+                //fetching comments
+                $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
+
+                while ($cr = mysqli_fetch_assoc($cq)) {
+
+                    ?>
+
+                    <div class='forums-post'>
+                        <div class='forums-post-metadata'>
+                            <span class='forums-post-metadata-item'>
+                                <span class='forums-post-author'>
+                                    <?php echo getname($cr["authorid"]); ?>
+                                </span>
+                            </span>
+                            <span class='forums-post-metadata-item'>
+                                <span class='forums-post-date'>
+                                    <?php echo displaydate($cr["dt"]); ?>
+                                </span>
+                            </span>
+                        </div>
+                        <div class='forums-post-text'>
+                            <?php echo Markdown($cr["text"]); ?>
+                        </div>
+                    </div>
+
                 <?php
 
-            }
+            } ?>
 
-            if (checkuser()) {
+        </div>
 
-                ?>
+            <?php if (checkuser()) {
+
+                 ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
                 [md buttons]
                 <div id='comment-form'><form action='?p=forums&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
@@ -127,7 +144,7 @@ if ($action == "add" && checkuser()) {
             } else {
 
                 ?>
-                <hr><h1 class='comments-title'>Log in to be able to post replies</h1><div class='clearfix'></div>
+                <hr><h1 class='comments-title'>Log in to be able to post replies</h1>
                 <?php
 
             }
