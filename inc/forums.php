@@ -134,11 +134,12 @@ if ($action == "add" && checkuser()) {
 
                  ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
-                [md buttons]
-                <div id='comment-form'><form action='?p=forums&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
-                <textarea name='text' id='comment-textarea' required></textarea>
-                <input type='submit' name='cp' value='&gt;' id='comment-submitbutton'>
-                </form></div>
+                <div class='comment-form'>
+                    <form action='?p=forums&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
+                        <textarea name='text' class='comment-textarea' required></textarea>
+                        <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
+                    </form>
+                </div>
                 <?php
 
             } else {

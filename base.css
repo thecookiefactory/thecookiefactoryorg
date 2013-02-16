@@ -51,6 +51,8 @@ nav {
 
 .searchbox::-webkit-input-placeholder {
   color: white;
+  transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .searchbox:hover::-webkit-input-placeholder {
@@ -84,6 +86,8 @@ footer {
 a, a:visited {
   color: #FFF;
   text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
 }
 
 a:hover, a:active {
@@ -155,6 +159,10 @@ input {
   background-image: url(img/stream-live-bg.png);
 }
 
+.stream-title {
+  margin-bottom: 6px;
+}
+
 .stream-player {
   float: left;
   height: 378px;
@@ -168,6 +176,10 @@ input {
   overflow-y: auto;
   color: #DDD;
   text-align: justify;
+}
+
+.stream-description p {
+  margin: 0;
 }
 
 h1 {
@@ -348,7 +360,7 @@ article {
 
 .comment-submitbutton {
   position: relative;
-  top: -24px;
+  top: -25px;
   left: 4px;
   height: 66px;
   width: 41px;
@@ -357,12 +369,16 @@ article {
   border-radius: 2px;
   font-size: 28px;
   color: #DDD;
-  -webkit-transition: border-color 0.3s ease-in-out;
-  transition: border-color 0.3s ease-in-out;
+  -webkit-transition: border-color 0.3s ease-in-out, color 0.1s;
+  transition: border-color 0.3s, color 0.1s;
 }
 
 .comment-submitbutton:hover {
    border-color: #F93;
+}
+
+.comment-submitbutton:active {
+   color: #F93;
 }
 
 @-webkit-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
@@ -644,6 +660,8 @@ img.map-image {
   color: #F93;
   font-weight: 700;
   border: 0;
+  transition: color 0.3s ease-in-out;
+  -webkit-transition: color 0.3s ease-in-out;
 }
 
 .account-button:hover {
@@ -653,6 +671,21 @@ img.map-image {
 .login-input {
   border-bottom-width: 1px;
   color: #141414;
+}
+
+.login-remember-switch {
+  display: none;
+}
+
+.login-remember-switch + label {
+  color: #444;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  -webkit-transition: color 0.3s ease-in-out;
+}
+
+.login-remember-switch:checked + label {
+  color: white;
 }
 
 .login-button {

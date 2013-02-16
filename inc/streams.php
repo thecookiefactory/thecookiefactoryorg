@@ -26,15 +26,15 @@ while ($r = mysqli_fetch_assoc($q)) {
 
     ?>
         <li class='stream-button stream-button-selected
-        
+
         <?php
-        
+
         if (islive($r["twitch"])) {
-        
+
             ?>
 
             stream-live
-        
+
             <?php
 
         }
@@ -52,7 +52,7 @@ while ($r = mysqli_fetch_assoc($q)) {
         if (islive($r["twitch"])) {
 
             ?>
-        
+
             stream-live
 
             <?php
@@ -86,7 +86,7 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
         if (islive($r["twitch"])) {
 
             ?>
-            <h1><?php echo gettitle($r["twitch"]); ?></h1>
+            <div class='stream-title'><h1><?php echo gettitle($r["twitch"]); ?></h1></div>
 
             <?php
 
@@ -103,7 +103,7 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
     } else {
 
         ?>
-        
+
         <p>Something went wrong.</p>
 
         <?php
