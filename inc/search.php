@@ -7,8 +7,6 @@ include "markdown/markdown.php";
 
 ?>
 
-<div class='search-border-upper'></div>
-<div class='search-border-lower'></div>
 
 <?php
 
@@ -22,7 +20,7 @@ if (isset($_POST["searchb"])) {
         $nr = mysqli_num_rows($squery);
 
         if ($nr == 0) {
-        
+
             if (strlen($term) > 23) {
                 ?>
 

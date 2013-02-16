@@ -526,7 +526,8 @@ img.map-image {
   border-color: #F93;
 }
 
-.search-border-upper {
+.search-title:before {
+  content: "";
   position: absolute;
   height: 30px;
   top: -12px;
@@ -538,7 +539,8 @@ img.map-image {
   border-bottom-left-radius: 10px;
 }
 
-.search-border-lower {
+.search-title:after {
+  content: "";
   position: absolute;
   height: 2px;
   width: 12px;
