@@ -97,6 +97,8 @@ a:hover, a:active {
 
 .faux-link {
   color: #FFF;
+  transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .faux-link:hover {
@@ -660,8 +662,8 @@ img.map-image {
   color: #F93;
   font-weight: 700;
   border: 0;
-  transition: color 0.3s ease-in-out;
-  -webkit-transition: color 0.3s ease-in-out;
+  transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .account-button:hover {
@@ -680,8 +682,8 @@ img.map-image {
 .login-remember-switch + label {
   color: #333;
   cursor: pointer;
-  transition: color 0.3s ease-in-out;
-  -webkit-transition: color 0.3s ease-in-out;
+  transition: color 0.2s ease-in-out;
+  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .login-remember-switch + label:hover {
