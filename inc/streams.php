@@ -93,10 +93,14 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
         }
 
         ?>
-
-        <div class='stream-player'>
-        <?php streamo($r["twitch"]); ?>
-        </div><div class='stream-description'><?php echo Markdown($r["description"]); ?></div><div class='clearfix'></div>
+        <div class='stream-content'>
+            <div class='stream-player'>
+                <?php streamo($r["twitch"]); ?>
+            </div>
+            <div class='stream-description'>
+                <?php echo Markdown($r["description"]); ?>
+            </div>
+        </div>
 
         <?php
 

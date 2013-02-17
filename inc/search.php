@@ -24,13 +24,13 @@ if (isset($_POST["searchb"])) {
             if (strlen($term) > 23) {
                 ?>
 
-                <div class='search-title'>No results found for your search term</div><div class='clearfix'></div>
+                <div class='search-title'>No results found for your search term</div>
 
                 <?php
             } else {
                 ?>
 
-                <div class='search-title'>No results found for <span class='search-term'><?php echo $term; ?></span></div><div class='clearfix'></div>
+                <div class='search-title'>No results found for <span class='search-term'><?php echo $term; ?></span></div>
 
                 <?php
             }
@@ -41,13 +41,13 @@ if (isset($_POST["searchb"])) {
                 if ($nr == 1) {
                     ?>
 
-                    <div class='search-title'><?php echo $nr; ?> result found for your search term</div><div class='clearfix'></div>
+                    <div class='search-title'><?php echo $nr; ?> result found for your search term</div>
 
                     <?php
                 } else {
                     ?>
 
-                    <div class='search-title'><?php echo $nr; ?> results found for your search term</div><div class='clearfix'></div>
+                    <div class='search-title'><?php echo $nr; ?> results found for your search term</div>
 
                     <?php
                 }
@@ -55,13 +55,13 @@ if (isset($_POST["searchb"])) {
                 if ($nr == 1) {
                     ?>
 
-                    <div class='search-title'><?php echo $nr; ?> result found for <span class='search-term'><?php echo $term; ?></span></div><div class='clearfix'></div>
+                    <div class='search-title'><?php echo $nr; ?> result found for <span class='search-term'><?php echo $term; ?></span></div>
 
                     <?php
                 } else {
                     ?>
 
-                    <div class='search-title'><?php echo $nr; ?> results found for <span class='search-term'><?php echo $term; ?></span></div><div class='clearfix'></div>
+                    <div class='search-title'><?php echo $nr; ?> results found for <span class='search-term'><?php echo $term; ?></span></div>
 
                     <?php
                 }
@@ -130,7 +130,7 @@ if (isset($_POST["searchb"])) {
     } else {
         ?>
 
-        <div class='search-title'>Please enter a keyword longer than 2 characters.</div><div class='clearfix'></div>
+        <div class='search-title'>Please enter a keyword longer than 2 characters.</div>
 
         <?php
     }
@@ -138,7 +138,7 @@ if (isset($_POST["searchb"])) {
 } else {
     ?>
 
-    <div class='search-title'>No keyword defined.</div><div class='clearfix'></div>
+    <div class='search-title'>No keyword defined.</div>
 
     <?php
 }
