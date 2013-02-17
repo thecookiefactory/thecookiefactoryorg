@@ -723,10 +723,12 @@ img.map-image {
 }
 
 .forums-table {
-  width: 962px
+  table-layout: fixed;
+  width: 100%;
 }
 
 .forums-entry {
+  height: 50px;
   background-color: #181818;
 }
 
@@ -734,14 +736,43 @@ img.map-image {
   background-color: #1C1C1C;
 }
 
+.forums-header-category {
+  width: 12px;
+}
+
 .forums-entry-category {
+  cursor: pointer;
+  transition: background-color 0.5s ease-in-out;
+  -webkit-transition: background-color 0.5s ease-in-out;
+}
+
+.forums-entry-category-text {
+  margin: 0 -10px;
+  color: white;
   text-align: center;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 300;
   text-transform: uppercase;
+  transform-origin: center;
+  -webkit-transform-origin: center;
   transform: rotate(-90deg);
   -webkit-transform: rotate(-90deg);
 }
+
+.forums-entry-category-text:hover {
+  color: white;
+}
+
+/* Category-specific colors */
+
+.forums-category-tf2         {background-color: #3D1C00; }
+.forums-category-tf2:hover   {background-color: #4D2C10; }
+
+.forums-category-dota2       {background-color: #EA2A00; }
+.forums-category-dota2:hover {background-color: #FA3A10; }
+
+.forums-category-other       {background-color: #0B474B; }
+.forums-category-other:hover {background-color: #1B575B; }
 
 .forums-post-header {
   height: 28px;

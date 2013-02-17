@@ -215,9 +215,9 @@ if ($action == "add" && checkuser()) {
 
             ?>
             <tr class='forums-entry'>
-                <td class='forums-entry-category'><a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'><a href='?p=forums&cat=<?php echo $row["cat"]; ?>'><div class='forums-entry-category-text'>
                     <?php echo getcatname($row["cat"]); ?>
-                </a></td>
+                </div></a></td>
                 <td class='forums-entry-title'><a href='?p=forums&id=<?php echo $row["id"]; ?>'>
                     <?php echo $row["title"]; ?>
                 </a></td>
