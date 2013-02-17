@@ -79,18 +79,22 @@ if ($action == "add" && checkuser()) {
         <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
         <div class='forums-posts'>
             <div class='forums-post'>
-                <div class='forums-post-metadata'>
-                    <?php echo "#0"; ?>
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-author'>
-                            <?php echo getname($row["authorid"]); ?>
+                <div class='forums-post-header'>
+                    <div class='forums-post-number'>
+                        <?php echo "#1"; ?>
+                    </div>
+                    <div class='forums-post-metadata'>
+                        <span class='forums-post-metadata-item'>
+                            <span class='forums-post-author'>
+                                <?php echo getname($row["authorid"]); ?>
+                            </span>
                         </span>
-                    </span>
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-date'>
-                            <?php echo displaydate($row["dt"]); ?>
+                        <span class='forums-post-metadata-item'>
+                            <span class='forums-post-date'>
+                                <?php echo displaydate($row["dt"]); ?>
+                            </span>
                         </span>
-                    </span>
+                    </div>
                 </div>
                 <div class='forums-post-text'>
                     <?php echo Markdown($row["text"]); ?>
@@ -103,25 +107,29 @@ if ($action == "add" && checkuser()) {
                 //fetching comments
                 $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
 
-                $cn = 1;
-                
+                $cn = 2;
+
                 while ($cr = mysqli_fetch_assoc($cq)) {
 
                     ?>
 
                     <div class='forums-post'>
-                        <div class='forums-post-metadata'>
-                            <?php echo "#".$cn; ?>
-                            <span class='forums-post-metadata-item'>
-                                <span class='forums-post-author'>
-                                    <?php echo getname($cr["authorid"]); ?>
+                        <div class='forums-post-header'>
+                            <div class='forums-post-number'>
+                                <?php echo "#".$cn; ?>
+                            </div>
+                            <div class='forums-post-metadata'>
+                                <span class='forums-post-metadata-item'>
+                                    <span class='forums-post-author'>
+                                        <?php echo getname($cr["authorid"]); ?>
+                                    </span>
                                 </span>
-                            </span>
-                            <span class='forums-post-metadata-item'>
-                                <span class='forums-post-date'>
-                                    <?php echo displaydate($cr["dt"]); ?>
+                                <span class='forums-post-metadata-item'>
+                                    <span class='forums-post-date'>
+                                        <?php echo displaydate($cr["dt"]); ?>
+                                    </span>
                                 </span>
-                            </span>
+                            </div>
                         </div>
                         <div class='forums-post-text'>
                             <?php echo Markdown($cr["text"]); ?>
