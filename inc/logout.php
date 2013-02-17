@@ -11,4 +11,3 @@ if (checkuser()) {
     echo "You are not even logged in you baddie";
     
 }
-?>

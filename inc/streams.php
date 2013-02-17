@@ -147,5 +147,3 @@ function islive($x) {
         return false;
     }
 }
-
-?>

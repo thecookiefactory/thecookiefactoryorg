@@ -128,5 +128,3 @@ while ($r = mysqli_fetch_assoc($q)) {
     </div>
 <?php
 }
-
-?>

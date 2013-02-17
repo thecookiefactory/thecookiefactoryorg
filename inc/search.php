@@ -125,6 +125,11 @@ if (isset($_POST["searchb"])) {
 
                 <?php
             }
+            ?>
+            
+            </div>
+            
+            <?php
         }
 
     } else {
@@ -143,5 +148,3 @@ if (isset($_POST["searchb"])) {
     <?php
 }
 
-?>
-</div>

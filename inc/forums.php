@@ -252,5 +252,3 @@ function getcatname($x) {
     return $fr["name"];
 
 }
-
-?>
