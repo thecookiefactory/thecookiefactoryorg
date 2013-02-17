@@ -106,10 +106,10 @@ if (checkadmin()) {
 }
 ?>
 <div class='contact-us'>
-    <a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a>&nbsp;
-    <a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a>&nbsp;
-    <a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a>&nbsp;
-    <a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a>
+    <span class='contact-us-link'><a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a></span>
+    <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
+    <span class='contact-us-link'><a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a></span>
+    <span class='contact-us-link'><a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a></span>
 </div>
 </footer>
 
