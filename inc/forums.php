@@ -81,7 +81,7 @@ if ($action == "add" && checkuser()) {
             <div class='forums-post'>
                 <div class='forums-post-metadata'>
                     <?php echo "#0"; ?>
-					<span class='forums-post-metadata-item'>
+                    <span class='forums-post-metadata-item'>
                         <span class='forums-post-author'>
                             <?php echo getname($row["authorid"]); ?>
                         </span>
@@ -104,14 +104,14 @@ if ($action == "add" && checkuser()) {
                 $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
 
                 $cn = 1;
-				
-				while ($cr = mysqli_fetch_assoc($cq)) {
+                
+                while ($cr = mysqli_fetch_assoc($cq)) {
 
                     ?>
 
                     <div class='forums-post'>
                         <div class='forums-post-metadata'>
-							<?php echo "#".$cn; ?>
+                            <?php echo "#".$cn; ?>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
                                     <?php echo getname($cr["authorid"]); ?>
@@ -129,7 +129,7 @@ if ($action == "add" && checkuser()) {
                     </div>
 
                 <?php
-				$cn++;
+                $cn++;
             } ?>
 
         </div>
