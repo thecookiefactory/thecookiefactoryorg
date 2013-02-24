@@ -43,9 +43,17 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $commnum = mysqli_num_rows($cq);
                 ?>
 
-                <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
-
                 <?php
+                if ($commnum != 1) {
+                    ?>
+                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+                    <?php
+                } else {
+                    ?>
+                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comment'><?php echo $commnum; ?> comment</a></span>
+                    <?php
+                }
+
             }
 
             ?>
@@ -141,11 +149,16 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $commnum = mysqli_num_rows($cq);
 
                if ($commnum > 0) {
-                    ?>
 
-                    <hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></div>
-
-                    <?php
+                    if ($commnum != 1) {
+                        ?>
+                        <hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></div>
+                        <?php
+                    } else {
+                        ?>
+                        <hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comment</a></div>
+                        <?php
+                    }
 
                         while ($crow = mysqli_fetch_assoc($cq)) {
                             ?>

@@ -10,12 +10,20 @@ include "markdown/markdown.php";
 
 <?php
 
-if (isset($_POST["searchb"])) {
+if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
     $term = strip($_POST["searchb"]);
 
     if (strlen($term) >= 3) {
 
+        if (isset($_POST["inn"]) && $_POST["inn"] == "on") {
+    
+        }
+    
+        if (isset($_POST["inf"]) && $_POST["inf"] == "on") {
+    
+        }
+        
         $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
         $nr = mysqli_num_rows($squery);
 

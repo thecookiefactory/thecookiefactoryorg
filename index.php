@@ -40,6 +40,16 @@ require "inc/essential.php";
 <nav>
 <span class='nav-menubar'>
 <a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
+
+<?php
+//echo mysqli_num_rows(mysqli_query($con, "SELECT * FROM `cpages`"));
+$q = mysqli_query($con, "SELECT * FROM `cpages`");
+while ($row = mysqli_fetch_assoc($q)) {
+?>
+<a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
+<?php
+}
+?>
 </span>
 
 <div class='nav-actionbar'>
@@ -51,7 +61,15 @@ require "inc/essential.php";
 if (isset($_SESSION["userid"])) {
 
     ?>
-    <span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> <?php echo getname($_SESSION["userid"]); ?></span></span><span class='menu-item'><a href='?p=logout'>log out</a></span>
+    <span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> <?php echo getname($_SESSION["userid"]); ?></span></span>
+    <?php
+    if (checkadmin()) {
+        ?>
+        <span class='menu-item'><a href='admin' target='_blank'>admin menu</a></span>
+        <?php
+    }
+    ?>
+    <span class='menu-item'><a href='?p=logout'>log out</a></span>
     <?php
 } else {
     ?>
@@ -96,15 +114,6 @@ if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] !=
 
 <footer>
 2013 thecookiefactory.org<br>
-<?php
-if (checkadmin()) {
-    ?>
-
-    <a href='admin' target='_blank'>admin</a><br>
-
-    <?php
-}
-?>
 <div class='contact-us'>
     <span class='contact-us-link'><a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a></span>
     <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
