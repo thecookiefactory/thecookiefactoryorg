@@ -22,6 +22,7 @@ if (!checkadmin()) die("403");
     <li><a href='galleries.php'>manage galleries</a></li>
     <li><a href='games.php'>manage games table</a></li>
     <li><a href='forums.php'>manage forum topics</a></li>
+    <li><a href='cpages.php'>manage custom pages</a></li>
 </ul>
 </p>
 </body>

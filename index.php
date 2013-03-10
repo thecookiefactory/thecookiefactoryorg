@@ -42,9 +42,10 @@ require "inc/essential.php";
 <a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
 
 <?php
-//echo mysqli_num_rows(mysqli_query($con, "SELECT * FROM `cpages`"));
 $q = mysqli_query($con, "SELECT * FROM `cpages`");
+$cpages = Array();
 while ($row = mysqli_fetch_assoc($q)) {
+$cpages[] = $row["name"];
 ?>
 <a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
 <?php
@@ -100,7 +101,9 @@ if (isset($_SESSION["userid"])) {
 if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] != "essential") {
     if (file_exists("inc/".$_GET["p"].".php"))
         require "inc/".$_GET["p"].".php";
-    else
+    elseif (in_array($_GET["p"], $cpages))
+		require "inc/custom.php";
+	else
         echo "404";
 } else {
     require "inc/news.php";
