@@ -2,13 +2,6 @@
 
 session_start();
 
-// BETATEST CHECK
-if (!isset($_SESSION["beta"])) {
-    header("Location: betalogin.php");
-    die();
-}
-// /
-
 if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))
     $_SESSION["userid"] = $_COOKIE["userid"];
 
@@ -42,12 +35,18 @@ require "inc/essential.php";
 <a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
 
 <?php
-$q = mysqli_query($con, "SELECT * FROM `cpages`");
+$q = mysqli_query($con, "SELECT `name` FROM `cpages`");
 $cpages = Array();
 while ($row = mysqli_fetch_assoc($q)) {
 $cpages[] = $row["name"];
 ?>
 <a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
+<?php
+}
+
+if (IsAnyoneLive()) {
+?>
+Someone is streaming!!
 <?php
 }
 ?>
@@ -98,15 +97,21 @@ if (isset($_SESSION["userid"])) {
 
 <?php
 
-if (isset($_GET["p"]) && $_GET["p"] != null && $_GET["p"] != "" && $_GET["p"] != "essential") {
-    if (file_exists("inc/".$_GET["p"].".php"))
-        require "inc/".$_GET["p"].".php";
-    elseif (in_array($_GET["p"], $cpages))
-		require "inc/custom.php";
-	else
+if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "" && strip($_GET["p"] != "essential")) {
+    
+    $p = strip($_GET["p"]);
+    
+    if (file_exists("inc/".$p.".php"))
+        require "inc/".$p.".php";
+    elseif (in_array($p, $cpages))
+        require "inc/custom.php";
+    else
         echo "404";
+        
 } else {
+
     require "inc/news.php";
+
 }
 
 ?>
@@ -136,3 +141,19 @@ if (isset($redirect))
 ?>
 </body>
 </html>
+<?php 
+function IsAnyoneLive() {
+
+    global $con;
+    
+    $fquery = mysqli_query($con, "SELECT `twitch` FROM `streams`");
+    
+    while ($frow = mysqli_fetch_assoc($fquery)) {
+        if (islive($frow["twitch"])) {
+            return true;
+        }
+    }
+    
+    return false;
+
+}

@@ -25,7 +25,13 @@ if (isset($_POST["update"])) {
     $id = $r["id"];
     $name = strip($_POST[$id."name"]);
     
-    mysqli_query($con, "UPDATE `forumcat` SET `name`='".$name."' WHERE `id`=".$id);
+    if ($name == "") {
+        mysqli_query($con, "DELETE FROM `forumcat` WHERE `id`=".$id);
+    } else {
+        mysqli_query($con, "UPDATE `forumcat` SET `name`='".$name."' WHERE `id`=".$id);
+    }
+    
+    
     }
 
 }

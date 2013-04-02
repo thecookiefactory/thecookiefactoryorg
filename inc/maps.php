@@ -5,7 +5,7 @@ include "analyticstracking.php";
 
 include "markdown/markdown.php";
 
-$_SESSION["lp"] = "maps";
+$_SESSION["lp"] = $p;
 
 if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
 

@@ -22,11 +22,15 @@ $query = mysqli_query($con, "SELECT * FROM `games`");
 if (isset($_POST["update"])) {
 
     while ($r = mysqli_fetch_assoc($query)) {
-    $id = $r["id"];
-    $name = strip($_POST[$id."name"]);
-    $steam = strip($_POST[$id."steam"]);
+        $id = $r["id"];
+        $name = strip($_POST[$id."name"]);
+        $steam = strip($_POST[$id."steam"]);
     
-    mysqli_query($con, "UPDATE `games` SET `name`='".$name."', `steam`='".$steam."' WHERE `id`=".$id);
+        if ($name == "" && $steam == "") {
+            mysqli_query($con, "DELETE FROM `games` WHERE `id`=".$id);
+        } else {
+            mysqli_query($con, "UPDATE `games` SET `name`='".$name."', `steam`='".$steam."' WHERE `id`=".$id);
+        }
     }
 
 }

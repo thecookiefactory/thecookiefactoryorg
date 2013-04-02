@@ -5,7 +5,7 @@ include "analyticstracking.php";
 
 include "markdown/markdown.php";
 
-$_SESSION["lp"] = "news";
+$_SESSION["lp"] = $p;
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS
@@ -13,7 +13,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1)
         $page = 1;
     else
-        $page = $_GET["page"];
+        $page = strip($_GET["page"]);
 
     $xo = ($page - 1) * 5;
     $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", 5");
@@ -91,18 +91,19 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     //page links
-    $nr = mysqli_num_rows(mysqli_query($con, "SELECT * FROM `news`"));
+    $nr = mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `news`"));
     for ($i = 1; $i <= ceil($nr / 5); $i++) {
-    if ($page == $i)
-        echo "Page ".$i;
-    else
-        echo "<a href='?p=news&amp;page=".$i."'>Page ".$i."</a>";
-
+        if ($page == $i)
+            echo "Page ".$i;
+        else
+            echo "<a href='?p=news&amp;page=".$i."'>Page ".$i."</a>";
     }
 } else {
     // DISPLAY ONE PIECE OF NEWS
 
-    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$_GET["id"]);
+    $id = strip($_GET["id"]);
+
+    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$id);
 
     if (mysqli_num_rows($query) == 1) {
 
@@ -136,27 +137,26 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 
-                    $newsid = strip($_GET["id"]);
                     $author = $_SESSION["userid"];
                     $text = strip($_POST["text"]);
                     $dt = time();
 
-                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$dt','$newsid')");
+                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$dt','$id')");
 
                 }
 
-                $cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY id ASC");
+                $cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY `id` ASC");
                 $commnum = mysqli_num_rows($cq);
 
                if ($commnum > 0) {
 
                     if ($commnum != 1) {
                         ?>
-                        <hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></div>
+                        <hr><div class='comments'><h1 class='comments-title'><a href='#comments'><?php echo $commnum; ?> comments</a></div>
                         <?php
                     } else {
                         ?>
-                        <hr><div class='comments'><h1 class='comments-title'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comment</a></div>
+                        <hr><div class='comments'><h1 class='comments-title'><a href='#comments'><?php echo $commnum; ?> comment</a></div>
                         <?php
                     }
 
@@ -166,11 +166,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                             <div class='comment'><span class='comment-metadata'>
                             <span class='comment-author'><?php echo getname($crow["authorid"]); ?></span><span class='comment-date'><?php echo displaydate($crow["dt"]); ?></span>
                             <?php
-                            if (checkadmin()) {
-                                ?>
-                                <span class='comment-deletebutton'><a href='admin/comments.php?id=<?php echo $crow["id"]; ?>'>delete this</a></span>
-                                <?php
-                            }
+                            
                             ?>
                             </span><div class='comment-text'><?php echo Markdown($crow["text"]); ?></div>
                             </div>
@@ -184,7 +180,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                     ?>
 
                     <hr><h1 class='comments-title'>Post a comment</h1>
-                    <div class='comment-form'><form action='?p=news&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
+                    <div class='comment-form'><form action='?p=news&amp;id=<?php echo $id; ?>' method='post'>
                     <textarea name='text' class='comment-textarea' required></textarea>
                     <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
                     </form></div></div>

@@ -5,9 +5,9 @@ include "analyticstracking.php";
 
 include "markdown/markdown.php";
 
-$_SESSION["lp"] = "streams";
+$_SESSION["lp"] = $p;
 
-$q = mysqli_query($con, "SELECT * FROM `streams` WHERE `active`=1");
+$q = mysqli_query($con, "SELECT `id`,`authorid`,`twitch`,`active` FROM `streams` WHERE `active`=1");
 
 ?>
 
@@ -77,7 +77,8 @@ while ($r = mysqli_fetch_assoc($q)) {
 
 if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
     // DISPLAY A STREAM
-    $q = mysqli_query($con, "SELECT * FROM `streams` WHERE `id`=".$_GET["streamid"]);
+    $streamid = strip($_GET["streamid"]);
+    $q = mysqli_query($con, "SELECT `twitch`,`description` FROM `streams` WHERE `id`=".$streamid);
 
     if (mysqli_num_rows($q) == 1) {
 
@@ -132,18 +133,4 @@ function gettitle($x) {
         return "";
     }
     return $json_array[0]['channel']['status'];
-}
-
-function islive($x) {
-    $json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
-    $json_array = json_decode($json_file, true);
-    if (empty($json_array)) {
-        return false;
-    }
-
-    if ($json_array[0]['name'] == "live_user_$x") {
-        return true;
-    } else {
-        return false;
-    }
 }

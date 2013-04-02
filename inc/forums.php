@@ -4,7 +4,7 @@ checkembed($r_c);
 include "analyticstracking.php";
 include "markdown/markdown.php";
 
-$_SESSION["lp"] = "forums";
+$_SESSION["lp"] = $p;
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 
@@ -18,7 +18,7 @@ if ($action == "add" && checkuser()) {
         $text = strip($_POST["text"]);
         $dt = time();
 
-        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0')");
+        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."')");
         ?>
         added.
         <?php
@@ -54,18 +54,18 @@ if ($action == "add" && checkuser()) {
     if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
         // SHOW ONE THREAD
-        $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$_GET["id"]);
+        $id = strip($_GET["id"]);
+        $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
         $row = mysqli_fetch_assoc($query);
 
         //comment processing
         if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 
-            $tid = strip($_GET["id"]);
             $author = $_SESSION["userid"];
             $text = strip($_POST["text"]);
             $dt = time();
 
-            $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$tid')");
+            $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
 
             $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
 
@@ -104,7 +104,7 @@ if ($action == "add" && checkuser()) {
             <?php
 
             //fetching comments
-            $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$_GET["id"]);
+            $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
 
             $cn = 2;
 
@@ -156,7 +156,7 @@ if ($action == "add" && checkuser()) {
                                 }
                             } else {
                                 ?>
-                                <form action='?p=forums&id=<?php echo $_GET["id"]; ?>&action=edit&pid=<?php echo $cr["id"]; ?>' method='post'>
+                                <form action='?p=forums&id=<?php echo $id; ?>&action=edit&pid=<?php echo $cr["id"]; ?>' method='post'>
                                 <textarea name='text'><?php echo $cr["text"]; ?></textarea>
                                 <?php
                                 if (checkadmin()) {
@@ -190,7 +190,7 @@ if ($action == "add" && checkuser()) {
                  ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
                 <div class='comment-form'>
-                    <form action='?p=forums&amp;id=<?php echo $_GET["id"]; ?>' method='post'>
+                    <form action='?p=forums&amp;id=<?php echo $id; ?>' method='post'>
                         <textarea name='text' class='comment-textarea' required></textarea>
                         <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
                     </form>
@@ -228,14 +228,14 @@ if ($action == "add" && checkuser()) {
         if (isset($_GET["cat"])) {
 
             $cat = strip($_GET["cat"]);
-            $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
+            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
             ?>
             <a class='forums-clearfilter' href='?p=forums'>clear category filter</a><table>
             <?php
 
         } else {
 
-            $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `ldt` DESC");
+            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` ORDER BY `ldt` DESC");
             ?>
             <table class='forums-table'>
                 <thead>
@@ -306,9 +306,11 @@ function getcatname($x) {
 
 function editlinks($cn) {
 
+    global $id;
+
     if (checkadmin() || (isset($_SESSION["userid"]) && $_SESSION["userid"] == author($cn))) {
         
-        return("<a href='?p=forums&id=".$_GET["id"]."&action=edit&pid=".$cn."'>edit/delete</a>");
+        return("<a href='?p=forums&id=".$id."&action=edit&pid=".$cn."'>edit/delete</a>");
         
     }
 }
