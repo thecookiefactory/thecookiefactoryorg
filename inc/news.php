@@ -5,7 +5,7 @@ include "analyticstracking.php";
 
 include "markdown/markdown.php";
 
-$_SESSION["lp"] = $p;
+$_SESSION["lp"] = "news";
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS
@@ -16,7 +16,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         $page = strip($_GET["page"]);
 
     $xo = ($page - 1) * 5;
-    $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC LIMIT ".$xo.", 5");
+    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 1 ORDER BY `id` DESC LIMIT ".$xo.", 5");
 
     if (mysqli_num_rows($query) == 0) {
         ?>

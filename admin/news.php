@@ -42,8 +42,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                         $comments = 0;
                     else
                         $comments = 1;
+                        
+                    if (isset($_POST["live"]) && $_POST["live"] == "on") 
+                        $live = 1;
+                    else
+                        $live = 0;
 
-                    mysqli_query($con, "UPDATE `news` SET `title`='".$title."', `editorid`='".$editorid."', `text`='".$text."', `comments`=".$comments.", `editdt`='".$editdt."' WHERE `id`=".$id);
+                    mysqli_query($con, "UPDATE `news` SET `title`='".$title."', `editorid`='".$editorid."', `text`='".$text."', `comments`=".$comments.", `live`=".$live.", `editdt`='".$editdt."' WHERE `id`=".$id);
                     echo "Piece of news successfully updated.<br>";
                     echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
                 
@@ -54,9 +59,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     Title<br>
                     <input type='text' name='title' value='".$er["title"]."' required><br>
                     Text<br>
-                    <textarea name='text' required>".$er["text"]."</textarea><br>
+                    <textarea name='text' rows='10' cols='90' required>".$er["text"]."</textarea><br>
                     Disable comments <input type='checkbox' name='comments'";
                     if ($er["comments"] == 0) 
+                        echo "checked";
+                    echo "><br>
+                    Publish? <input type='checkbox' name='live'";
+                    if ($er["live"] == 1) 
                         echo "checked";
                     echo "><br>
                     <input type='submit' name='submit'>
@@ -135,7 +144,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             else
                 $comments = 1;
 
-            mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$dt."','".$text."','".$comments."','','')");
+            if (isset($_POST["live"]) && $_POST["live"] == "on") 
+                $live = 1;
+            else
+                $live = 0;
+
+            mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$dt."','".$text."','".$comments."','','','".$live."')");
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
         
@@ -146,8 +160,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             Title<br>
             <input type='text' name='title' required><br>
             Text<br>
-            <textarea name='text' required></textarea><br>
+            <textarea name='text' rows='10' cols='90' required></textarea><br>
             Disable comments <input type='checkbox' name='comments'><br>
+            Publish? <input type='checkbox' name='live'><br>
             <input type='submit' name='submit'>
             </form>";
         
@@ -159,9 +174,33 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     // ALL
     
     echo "<h1>manage news</h1>
-    <p><a href='?action=write'>write new</a></p>";  
+    <p><a href='?action=write'>write new</a></p>";
+    
+    echo "<h2>unpublished newz</h2>";
+    
+    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 0 ORDER BY `id` DESC");
 
-    $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC");
+    echo "<table style='border-spacing: 5px;'>";
+    echo "<tr><th>news</th><th>editing tools</th></tr>";
+
+    while ($row = mysqli_fetch_assoc($query)) {
+    
+        echo "<tr>";
+        echo "<td>";
+        echo "#".$row["id"]." - ".$row["title"]." - ".substr($row["text"], 0, 100);
+        echo "</td>";
+        echo "<td>";
+        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
+        echo "</td>";
+        echo "</tr>";
+    
+    }
+    
+    echo "</table>";
+    
+    echo "<h2>published newz</h2>";
+
+    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 1 ORDER BY `id` DESC");
 
     echo "<table style='border-spacing: 5px;'>";
     echo "<tr><th>news</th><th>editing tools</th></tr>";
