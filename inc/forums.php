@@ -230,25 +230,24 @@ if ($action == "add" && checkuser()) {
             $cat = strip($_GET["cat"]);
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
             ?>
-            <a class='forums-clearfilter' href='?p=forums'>clear category filter</a><table>
+            <a class='forums-clearfilter' href='?p=forums'>↩ clear category filter</a>
             <?php
 
         } else {
-
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` ORDER BY `ldt` DESC");
-            ?>
-            <table class='forums-table'>
+        }
+        ?>
+
+        <table class='forums-table'>
                 <colgroup>
                     <col class='forums-column-category'>
                     <col class='forums-column-title'>
                     <col class='forums-column-modifydate'>
                     <col class='forums-column-postcount'>
                 </colgroup>
-                <tbody>
-            <?php
+            <tbody>
 
-        }
-
+        <?php
         while ($row = mysqli_fetch_assoc($query)) {
 
             ?>
