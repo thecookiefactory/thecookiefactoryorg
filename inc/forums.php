@@ -132,8 +132,8 @@ if ($action == "add" && checkuser()) {
                         </div>
                     </div>
                     <div class='forums-post-text'>
-                        <?php 
-                        
+                        <?php
+
                         if (!isset($_GET["action"]) || $_GET["action"] != "edit" || !isset($_GET["pid"]) || $_GET["pid"] != $cr["id"] || !isset($_SESSION["userid"]) || (!checkadmin() && $_SESSION["userid"] != author($cr["id"]))) {
                             ?>
                             <?php echo Markdown($cr["text"]); ?>
@@ -170,7 +170,7 @@ if ($action == "add" && checkuser()) {
                                 <?php
                             }
                         }
-                        
+
                         ?>
                     </div>
                 </div>
@@ -181,7 +181,7 @@ if ($action == "add" && checkuser()) {
 
         </div>
 
-        <?php 
+        <?php
 
         if ($row["closed"] == 0) {
             //writing a comment
@@ -238,17 +238,12 @@ if ($action == "add" && checkuser()) {
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` ORDER BY `ldt` DESC");
             ?>
             <table class='forums-table'>
-                <thead>
-                    <tr>
-                        <th class='forums-header-category'></th>
-                        <th class='forums-header-title'>Title</th>
-                        <th class='forums-header-author'>Author</th>
-                        <th class='forums-header-status'></th>
-                        <th class='forums-header-createdate'>Created</th>
-                        <th class='forums-header-modifydate'>Last Reply</th>
-                        <th class='forums-header-postcount'>Total Replies</th>
-                    </tr>
-                </thead>
+                <colgroup>
+                    <col class='forums-column-category'>
+                    <col class='forums-column-title'>
+                    <col class='forums-column-modifydate'>
+                    <col class='forums-column-postcount'>
+                </colgroup>
                 <tbody>
             <?php
 
@@ -258,27 +253,38 @@ if ($action == "add" && checkuser()) {
 
             ?>
             <tr class='forums-entry'>
-                <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'><a href='?p=forums&cat=<?php echo $row["cat"]; ?>'><div class='forums-entry-category-text'>
-                    <?php echo getcatname($row["cat"]); ?>
-                </div></a></td>
-                <td class='forums-entry-title'><a href='?p=forums&id=<?php echo $row["id"]; ?>'>
-                    <?php echo $row["title"]; ?>
-                </a></td>
-                <td class='forums-entry-author'><span>
-                    <?php echo getname($row["authorid"]); ?>
-                </span></td>
-                <td class='forums-entry-status'><span>
-                    <?php echo (($row["closed"] == 1) ? "closed" : ""); ?>
-                </span></td>
-                <td class='forums-entry-createdate'><span>
-                    <?php echo displaydate($row["dt"]); ?>
-                </span></td>
-                <td class='forums-entry-modifydate'><span>
+                <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
+                    <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                        <div class='forums-entry-category-text'>
+                            <?php echo getcatname($row["cat"]); ?>
+                        </div>
+                    </a>
+                </td>
+                <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
+                    <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                        <?php echo $row["title"]; ?>
+                    </a>
+                    <br>
+                    <span class='forums-entry-metadata'>
+                        created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
+                    </span>
+                </td>
+                <td class='forums-entry-modifydate'>
+                    <span class='forums-entry-miniheader'>
+                        <?php echo "Last reply posted"?>
+                    </span>
+                    <br>
                     <?php echo displaydate($row["ldt"]); ?>
-                </span></td>
-                <td class='forums-entry-postcount'><span>
-                    <?php echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])); ?>
-                </span></td>
+                </td>
+                <td class='forums-entry-postcount'>
+                    <span class='forums-entry-miniheader'>
+                        Thread has
+                    </span>
+                    <br>
+                    <?php
+                        echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
+                    ?>
+                </td>
             </tr>
             <?php
 
@@ -309,15 +315,15 @@ function editlinks($cn) {
     global $id;
 
     if (checkadmin() || (isset($_SESSION["userid"]) && $_SESSION["userid"] == author($cn))) {
-        
+
         return("<a href='?p=forums&id=".$id."&action=edit&pid=".$cn."'>edit/delete</a>");
-        
+
     }
 }
 
 function author($cn) {
     global $con;
-    
+
     $x = mysqli_fetch_assoc(mysqli_query($con, "SELECT authorid FROM `forumposts` WHERE `id`=".$cn));
     return $x["authorid"];
 }
