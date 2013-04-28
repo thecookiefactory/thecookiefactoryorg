@@ -662,6 +662,11 @@ img.map-image {
   width: 240px;
 }
 
+.account-input:-webkit-autofill {
+    -webkit-text-fill-color: #4188D2;
+    -webkit-box-shadow: 0 0 0px 1000px #141414 inset;
+  }
+
 .input-wrapper+.input-wrapper:before {
   content: " / ";
   color: #4188D2;
