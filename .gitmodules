@@ -1,3 +1,6 @@
 [submodule "inc/markdown"]
 	path = inc/markdown
 	url = https://github.com/thecookiefactory/php-markdown.git
+[submodule "inc/lightopenid"]
+	path = inc/lightopenid
+	url = git://gitorious.org/lightopenid/lightopenid.git
