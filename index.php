@@ -7,6 +7,7 @@ if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))
 
 $r_c = 42;
 require "inc/essential.php";
+include "inc/lightopenid/openid.php";
 
 ?>
 
@@ -73,8 +74,10 @@ if (isset($_SESSION["userid"])) {
     <?php
 } else {
     ?>
-    <span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a>
+    <!-- <span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a> -->
+    <!-- <a href='?p=login' class='menu-item'><img src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login through steam'></a> -->
     <?php
+    login();
 }
 
 ?>
