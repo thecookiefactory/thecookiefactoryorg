@@ -59,30 +59,12 @@ Someone is streaming!!
 </form>
 <?php
 
-if (isset($_SESSION["userid"])) {
-
-    ?>
-    <span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> <?php echo getname($_SESSION["userid"]); ?></span></span>
-    <?php
-    if (checkadmin()) {
-        ?>
-        <span class='menu-item'><a href='admin' target='_blank'>admin menu</a></span>
-        <?php
-    }
-    ?>
-    <span class='menu-item'><a href='?p=logout'>log out</a></span>
-    <?php
-} else {
-    ?>
-    <!-- <span class='menu-item faux-link' onclick='showLoginBar();'>log in</span><a class='menu-item' href='?p=register'>register</a> -->
-    <!-- <a href='?p=login' class='menu-item'><img src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login through steam'></a> -->
-    <?php
-    login();
-}
+login();
 
 ?>
 </div>
 
+<!--
 <div class='nav-loginbar'>
   <form class='menu-item' action='?p=login' method='post'>
     <span class='menu-item faux-link' onclick='hideLoginBar();'>&laquo; </span>
@@ -92,6 +74,7 @@ if (isset($_SESSION["userid"])) {
     <span class='input-wrapper'><input class='login-input account-input login-button account-button' type='submit' value='go!' name='submit'></span>
   </form>
 </div>
+-->
 
 </nav>
 <hr>
