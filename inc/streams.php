@@ -99,7 +99,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                 <?php streamo($r["twitch"]); ?>
             </div>
             <div class='stream-description'>
-                <?php echo Markdown(str_replace("&gt;", ">", $r["description"])); ?>
+                <?php echo Markdown($r["description"]); ?>
             </div>
         </div>
 

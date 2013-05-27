@@ -123,7 +123,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     ?>
 
                     <article>
-                    <span class='article-text'><?php echo Markdown(substr(str_replace("&gt;", ">", $srow["text"]), 0, 100)); ?></span>
+                    <span class='article-text'><?php echo Markdown(substr($srow["text"], 0, 100)); ?></span>
                     </article>
                     <hr class='article-separator'>
 

@@ -101,7 +101,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                     </div>
                     <div class='forums-post-text'>
-                        <?php echo Markdown(str_replace("&gt;", ">", $row["text"])); ?>
+                        <?php echo Markdown($row["text"]); ?>
                     </div>
                 </div>
 
@@ -140,7 +140,7 @@ if ($action == "add" && checkuser()) {
 
                             if (!isset($_GET["action"]) || $_GET["action"] != "edit" || !isset($_GET["pid"]) || $_GET["pid"] != $cr["id"] || !isset($_SESSION["userid"]) || (!checkadmin() && $_SESSION["userid"] != author($cr["id"]))) {
                                 ?>
-                                <?php echo Markdown(str_replace("&gt;", ">", $cr["text"])); ?>
+                                <?php echo Markdown($cr["text"]); ?>
                                 <?php
                             } else {
                                 if (isset($_POST["editsubmit"])) {
@@ -155,7 +155,7 @@ if ($action == "add" && checkuser()) {
                                         //edit
                                         $eq = mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."' WHERE `id`=".$cr["id"]);
                                         ?>
-                                        <?php echo Markdown(str_replace("&gt;", ">", $text)); ?>
+                                        <?php echo Markdown($text); ?>
                                         <?php
                                     }
                                 } else {
