@@ -18,7 +18,7 @@ if ($action == "add" && checkuser()) {
         $text = strip($_POST["text"]);
         $dt = time();
 
-        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."')");
+        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0')");
         ?>
         added.
         <?php
@@ -56,161 +56,171 @@ if ($action == "add" && checkuser()) {
         // SHOW ONE THREAD
         $id = strip($_GET["id"]);
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
-        $row = mysqli_fetch_assoc($query);
+        
+        if (mysqli_num_rows($query) == 1) {
 
-        //comment processing
-        if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
+            $row = mysqli_fetch_assoc($query);
+            
+            //comment processing
+            if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
 
-            $author = $_SESSION["userid"];
-            $text = strip($_POST["text"]);
-            $dt = time();
+                $author = $_SESSION["userid"];
+                $text = strip($_POST["text"]);
+                $dt = time();
 
-            $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
+                $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
 
-            $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
+                $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
 
-        }
+            }
 
-        ?>
+            ?>
 
-        <h1>
-            <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
-        </h1>
-        <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
-        <div class='forums-posts'>
-            <div class='forums-post'>
-                <div class='forums-post-header'>
-                    <div class='forums-post-number'>
-                        <?php echo "#1"; ?>
-                    </div>
-                    <div class='forums-post-metadata'>
-                        <span class='forums-post-metadata-item'>
-                            <span class='forums-post-author'>
-                                <?php echo getname($row["authorid"]); ?>
-                            </span>
-                        </span>
-                        <span class='forums-post-metadata-item'>
-                            <span class='forums-post-date'>
-                                <?php echo displaydate($row["dt"]); ?>
-                            </span>
-                        </span>
-                    </div>
-                </div>
-                <div class='forums-post-text'>
-                    <?php echo Markdown($row["text"]); ?>
-                </div>
-            </div>
-
-            <?php
-
-            //fetching comments
-            $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
-
-            $cn = 2;
-
-            while ($cr = mysqli_fetch_assoc($cq)) {
-
-                ?>
-
+            <h1>
+                <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
+            </h1>
+            <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
+            <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>related map</a>" : ""); ?>
+            <div class='forums-posts'>
                 <div class='forums-post'>
                     <div class='forums-post-header'>
                         <div class='forums-post-number'>
-                            <?php echo "#".$cn; ?>
+                            <?php echo "#1"; ?>
                         </div>
                         <div class='forums-post-metadata'>
-                            <?php echo(editlinks($cr["id"])) ?>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
-                                    <?php echo getname($cr["authorid"]); ?>
+                                    <?php echo getname($row["authorid"]); ?>
                                 </span>
                             </span>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-date'>
-                                    <?php echo displaydate($cr["dt"]); ?>
+                                    <?php echo displaydate($row["dt"]); ?>
                                 </span>
                             </span>
                         </div>
                     </div>
                     <div class='forums-post-text'>
-                        <?php
-
-                        if (!isset($_GET["action"]) || $_GET["action"] != "edit" || !isset($_GET["pid"]) || $_GET["pid"] != $cr["id"] || !isset($_SESSION["userid"]) || (!checkadmin() && $_SESSION["userid"] != author($cr["id"]))) {
-                            ?>
-                            <?php echo Markdown($cr["text"]); ?>
-                            <?php
-                        } else {
-                            if (isset($_POST["editsubmit"])) {
-                                $text = strip($_POST["text"]);
-                                if (isset($_POST["pdelete"]) && $_POST["pdelete"] == "on" && checkadmin()) {
-                                    //delete
-                                    $eq = mysqli_query($con, "DELETE FROM `forumposts` WHERE `id`=".$cr["id"]);
-                                    ?>
-                                    This post has been deleted.
-                                    <?php
-                                } else {
-                                    //edit
-                                    $eq = mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."' WHERE `id`=".$cr["id"]);
-                                    ?>
-                                    <?php echo Markdown($text); ?>
-                                    <?php
-                                }
-                            } else {
-                                ?>
-                                <form action='?p=forums&id=<?php echo $id; ?>&action=edit&pid=<?php echo $cr["id"]; ?>' method='post'>
-                                <textarea name='text'><?php echo $cr["text"]; ?></textarea>
-                                <?php
-                                if (checkadmin()) {
-                                    ?>
-                                    <br><input type='checkbox' name='pdelete' /> Delete
-                                    <?php
-                                }
-                                ?>
-                                <br><input type='submit' name='editsubmit' />
-                                </form>
-                                <?php
-                            }
-                        }
-
-                        ?>
+                        <?php echo Markdown(str_replace("&gt;", ">", $row["text"])); ?>
                     </div>
                 </div>
 
                 <?php
-                $cn++;
-            } ?>
 
-        </div>
+                //fetching comments
+                $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
 
-        <?php
+                $cn = 2;
 
-        if ($row["closed"] == 0) {
-            //writing a comment
-            if (checkuser()) {
+                while ($cr = mysqli_fetch_assoc($cq)) {
 
-                 ?>
-                <hr><h1 class='comments-title'>Reply to this thread</h1>
-                <div class='comment-form'>
-                    <form action='?p=forums&amp;id=<?php echo $id; ?>' method='post'>
-                        <textarea name='text' class='comment-textarea' required></textarea>
-                        <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
-                    </form>
-                </div>
-                <?php
+                    ?>
+
+                    <div class='forums-post'>
+                        <div class='forums-post-header'>
+                            <div class='forums-post-number'>
+                                <?php echo "#".$cn; ?>
+                            </div>
+                            <div class='forums-post-metadata'>
+                                <?php echo(editlinks($cr["id"])) ?>
+                                <span class='forums-post-metadata-item'>
+                                    <span class='forums-post-author'>
+                                        <?php echo getname($cr["authorid"]); ?>
+                                    </span>
+                                </span>
+                                <span class='forums-post-metadata-item'>
+                                    <span class='forums-post-date'>
+                                        <?php echo displaydate($cr["dt"]); ?>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class='forums-post-text'>
+                            <?php
+
+                            if (!isset($_GET["action"]) || $_GET["action"] != "edit" || !isset($_GET["pid"]) || $_GET["pid"] != $cr["id"] || !isset($_SESSION["userid"]) || (!checkadmin() && $_SESSION["userid"] != author($cr["id"]))) {
+                                ?>
+                                <?php echo Markdown(str_replace("&gt;", ">", $cr["text"])); ?>
+                                <?php
+                            } else {
+                                if (isset($_POST["editsubmit"])) {
+                                    $text = strip($_POST["text"]);
+                                    if (isset($_POST["pdelete"]) && $_POST["pdelete"] == "on" && checkadmin()) {
+                                        //delete
+                                        $eq = mysqli_query($con, "DELETE FROM `forumposts` WHERE `id`=".$cr["id"]);
+                                        ?>
+                                        This post has been deleted.
+                                        <?php
+                                    } else {
+                                        //edit
+                                        $eq = mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."' WHERE `id`=".$cr["id"]);
+                                        ?>
+                                        <?php echo Markdown(str_replace("&gt;", ">", $text)); ?>
+                                        <?php
+                                    }
+                                } else {
+                                    ?>
+                                    <form action='?p=forums&id=<?php echo $id; ?>&action=edit&pid=<?php echo $cr["id"]; ?>' method='post'>
+                                    <textarea name='text'><?php echo $cr["text"]; ?></textarea>
+                                    <?php
+                                    if (checkadmin()) {
+                                        ?>
+                                        <br><input type='checkbox' name='pdelete' /> Delete
+                                        <?php
+                                    }
+                                    ?>
+                                    <br><input type='submit' name='editsubmit' />
+                                    </form>
+                                    <?php
+                                }
+                            }
+
+                            ?>
+                        </div>
+                    </div>
+
+                    <?php
+                    $cn++;
+                } ?>
+
+            </div>
+
+            <?php
+
+            if ($row["closed"] == 0) {
+                //writing a comment
+                if (checkuser()) {
+
+                     ?>
+                    <hr><h1 class='comments-title'>Reply to this thread</h1>
+                    <div class='comment-form'>
+                        <form action='?p=forums&amp;id=<?php echo $id; ?>' method='post'>
+                            <textarea name='text' class='comment-textarea' required></textarea>
+                            <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
+                        </form>
+                    </div>
+                    <?php
+
+                } else {
+
+                    ?>
+                    <hr><h1 class='comments-title'>Log in to be able to post replies</h1>
+                    <?php
+
+                }
 
             } else {
 
                 ?>
-                <hr><h1 class='comments-title'>Log in to be able to post replies</h1>
+                closed thread
                 <?php
 
             }
-
         } else {
-
-            ?>
-            closed thread
-            <?php
-
+        
+            // redirecting to the main page instead of giving an error message
+            header("Location: ?p=forums");
+        
         }
 
     } else {

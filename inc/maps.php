@@ -31,7 +31,8 @@ while ($r = mysqli_fetch_assoc($q)) {
     $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
     ?>
     
-    <div class='map-name'><?php echo $r["name"]; ?></div>
+    <div class='map-name'>
+    <a name='<?php echo $r["id"]; ?>'></a><!-- #hashtag --><?php echo $r["name"]; ?></div>
     <div class='map-container'>
       <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
       <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
@@ -71,7 +72,7 @@ while ($r = mysqli_fetch_assoc($q)) {
             $gr = mysqli_fetch_assoc($gq);
             ?>
             
-            <a target='_blank' href='http://steamcommunity.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
+            <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
         </span>
         <span class='map-desc'><?php echo nl2br($r["desc"], false); ?></span>
         <span class='map-dl'>
@@ -87,44 +88,22 @@ while ($r = mysqli_fetch_assoc($q)) {
         </span>
       </div>
 
+
       <?php
-      //comments
-      $cq = mysqli_query($con, "SELECT * FROM `mapscomments` WHERE `mapid`=".$r["id"]) or die(mysqli_error());
+      if ($r["comments"] == 1) {
       ?>
-      
       <div class='comments'>
       
       <?php
-        if (mysqli_num_rows($cq) > 0) {
-          while ($cr = mysqli_fetch_assoc($cq)) {
-            ?>
-            
-            <?php echo getname($cr["authorid"]); ?> said on <?php echo displaydate($cr["dt"]); ?>: <p><?php echo nl2br($cr["text"], false); ?></p>
-            
-            <?php
-          }
-        } else {
-          ?>
-          no comments yet
-          <?php
-        }
-      if (checkuser()) {
-        ?>
-        
-        <form action='?p=maps' method='post'>
-        <textarea name='text' required></textarea>
-        <input type='hidden' name='m_id' value='<?php echo $r["id"]; ?>'>
-        <input type='submit' name='submit'>
-        </form>
-      
-        <?php
-      } else {
-        ?>
-        you have to be logged in to post comments
-        <?php
-      }
+        $cq = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `mapid`=".$r["id"]);
+        $ca = mysqli_fetch_assoc($cq);
+        echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Link to the related forum topic if</a>";
       ?>
       </div>
+      
+      <?php
+      }
+      ?>
     </div>
 <?php
 }

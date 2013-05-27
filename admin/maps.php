@@ -290,10 +290,15 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $author = $_SESSION["userid"];
             $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
+            if (isset($_POST["topicname"]) && strip($_POST["topicname"]) != "") {
+                $comments = 1;
+            } else {
+                $comments = 0;
+            }
             $dt = time();
             
             //inserting the basic data and returning the map id
-            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$dt')");
+            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$comments','$dt')");
             $id = mysqli_insert_id($con);
             echo "Basic values inserted...<br>";
             echo "The map id is ".$id."<br>";
@@ -404,6 +409,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 
             }
             
+            if (isset($_POST["topicname"]) && strip($_POST["topicname"]) != "") {
+                // creating forum entry for comments
+                
+                $authorid = $_SESSION["userid"];
+                $dt = time();
+                $title = strip($_POST["topicname"]);
+                $text = strip($_POST["topictext"]);
+                $cat = strip($_POST["topiccat"]);
+                
+                mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','".$id."')");
+            }
+            
             echo "Map successfully submitted.<br>";
             echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
         
@@ -435,6 +452,19 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             <br>
             Main image<br>
             <input type='file' name='image' required><br>
+            map topic name (leave empty if no topic)<br>
+            <input type='text' name='topicname'>
+            select cateryogy
+            <select name='topiccat'>";
+            $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+
+            while ($cr = mysqli_fetch_assoc($cq)) {
+
+                echo "<option value='".$cr["id"]."'>".$cr["name"]."</option>";
+
+            }
+            echo "</select>
+            <textarea name='topictext'></textarea>
             <input type='submit' name='submit'>
             </form>";
         

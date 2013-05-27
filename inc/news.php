@@ -81,7 +81,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             ?>
 
             <article>
-            <span class='article-text'><?php echo Markdown($row["text"]); ?></span>
+            <span class='article-text'><?php echo Markdown(str_replace("&gt;", ">", $row["text"])); ?></span>
             </article>
             <hr class='article-separator'>
 
@@ -128,7 +128,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         ?>
 
         </div><article>
-        <span class='article-text'><?php echo Markdown($row["text"]); ?></span>
+        <span class='article-text'><?php echo Markdown(str_replace("&gt;", ">", $row["text"])); ?></span>
         </article>
 
         <?php
@@ -168,7 +168,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                             <?php
                             
                             ?>
-                            </span><div class='comment-text'><?php echo Markdown($crow["text"]); ?></div>
+                            </span><div class='comment-text'><?php echo Markdown(str_replace("&gt;", ">", $crow["text"])); ?></div>
                             </div>
 
                             <?php
@@ -201,11 +201,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
                 <?php
             }
+    
     } else {
-        ?>
-
-        No.
-
-        <?php
+        
+        // redirecting to the main page instead of giving an error message
+        header("Location: ?p=news");
+        
     }
 }

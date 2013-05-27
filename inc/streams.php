@@ -18,11 +18,11 @@ $q = mysqli_query($con, "SELECT `id`,`authorid`,`twitch`,`active` FROM `streams`
 while ($r = mysqli_fetch_assoc($q)) {
 
     ?>
-    <a href='?p=streams&amp;streamid=<?php echo $r["id"]; ?>'>
+    <a href='?p=streams&amp;id=<?php echo $r["id"]; ?>'>
 
     <?php
 
-    if (isset($_GET["streamid"]) && $r["id"] == $_GET["streamid"]) {
+    if (isset($_GET["id"]) && $r["id"] == $_GET["id"]) {
 
     ?>
         <li class='stream-button stream-button-selected
@@ -75,10 +75,10 @@ while ($r = mysqli_fetch_assoc($q)) {
 
 <?php
 
-if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     // DISPLAY A STREAM
-    $streamid = strip($_GET["streamid"]);
-    $q = mysqli_query($con, "SELECT `twitch`,`description` FROM `streams` WHERE `id`=".$streamid);
+    $id = strip($_GET["id"]);
+    $q = mysqli_query($con, "SELECT `twitch`,`description` FROM `streams` WHERE `id`=".$id);
 
     if (mysqli_num_rows($q) == 1) {
 
@@ -99,7 +99,7 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
                 <?php streamo($r["twitch"]); ?>
             </div>
             <div class='stream-description'>
-                <?php echo Markdown($r["description"]); ?>
+                <?php echo Markdown(str_replace("&gt;", ">", $r["description"])); ?>
             </div>
         </div>
 
@@ -107,11 +107,8 @@ if (isset($_GET["streamid"]) && is_numeric($_GET["streamid"])) {
 
     } else {
 
-        ?>
-
-        <p>Something went wrong.</p>
-
-        <?php
+        //header("Location: ?p=streams");
+        // simply not echoing out anything should be fine
 
     }
 }
