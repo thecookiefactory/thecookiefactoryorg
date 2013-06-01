@@ -246,8 +246,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                         mysqli_query($con, "DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
                     }
                     
-                    //deleting comments related to the map
-                    mysqli_query($con, "DELETE FROM `mapscomments` WHERE `mapid`=".$id);
+                    //deleting the forum thread
+                    mysqli_query($con, "DELETE FROM `forums` WHERE `mapid`=".$id);
                     
                     $dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
                     

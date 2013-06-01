@@ -122,7 +122,6 @@ if ($action == "add" && checkuser()) {
                                 <?php echo "#".$cn; ?>
                             </div>
                             <div class='forums-post-metadata'>
-                                <?php echo(editlinks($cr["id"])) ?>
                                 <span class='forums-post-metadata-item'>
                                     <span class='forums-post-author'>
                                         <?php echo getname($cr["authorid"]); ?>
@@ -136,46 +135,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                         </div>
                         <div class='forums-post-text'>
-                            <?php
-
-                            if (!isset($_GET["action"]) || $_GET["action"] != "edit" || !isset($_GET["pid"]) || $_GET["pid"] != $cr["id"] || !isset($_SESSION["userid"]) || (!checkadmin() && $_SESSION["userid"] != author($cr["id"]))) {
-                                ?>
                                 <?php echo Markdown($cr["text"]); ?>
-                                <?php
-                            } else {
-                                if (isset($_POST["editsubmit"])) {
-                                    $text = strip($_POST["text"]);
-                                    if (isset($_POST["pdelete"]) && $_POST["pdelete"] == "on" && checkadmin()) {
-                                        //delete
-                                        $eq = mysqli_query($con, "DELETE FROM `forumposts` WHERE `id`=".$cr["id"]);
-                                        ?>
-                                        This post has been deleted.
-                                        <?php
-                                    } else {
-                                        //edit
-                                        $eq = mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."' WHERE `id`=".$cr["id"]);
-                                        ?>
-                                        <?php echo Markdown($text); ?>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <form action='?p=forums&id=<?php echo $id; ?>&action=edit&pid=<?php echo $cr["id"]; ?>' method='post'>
-                                    <textarea name='text'><?php echo $cr["text"]; ?></textarea>
-                                    <?php
-                                    if (checkadmin()) {
-                                        ?>
-                                        <br><input type='checkbox' name='pdelete' /> Delete
-                                        <?php
-                                    }
-                                    ?>
-                                    <br><input type='submit' name='editsubmit' />
-                                    </form>
-                                    <?php
-                                }
-                            }
-
-                            ?>
                         </div>
                     </div>
 
@@ -317,22 +277,4 @@ function getcatname($x) {
 
     return $fr["name"];
 
-}
-
-function editlinks($cn) {
-
-    global $id;
-
-    if (checkadmin() || (isset($_SESSION["userid"]) && $_SESSION["userid"] == author($cn))) {
-
-        return("<a href='?p=forums&id=".$id."&action=edit&pid=".$cn."'>edit/delete</a>");
-
-    }
-}
-
-function author($cn) {
-    global $con;
-
-    $x = mysqli_fetch_assoc(mysqli_query($con, "SELECT authorid FROM `forumposts` WHERE `id`=".$cn));
-    return $x["authorid"];
 }

@@ -17,53 +17,61 @@ if (!checkadmin()) die("403");
 
 <?php
 
-$query = mysqli_query($con, "SELECT * FROM `forumcat`");
+echo "<h1>manage forums</h1>";
 
-if (isset($_POST["update"])) {
+if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write") && (isset($_GET["id"]) && is_numeric($_GET["id"]))) {
 
-    while ($r = mysqli_fetch_assoc($query)) {
-    $id = $r["id"];
-    $name = strip($_POST[$id."name"]);
+    $id = strip($_GET["id"]);
+
+    if ($_GET["action"] == "edit") {
     
-    if ($name == "") {
-        mysqli_query($con, "DELETE FROM `forumcat` WHERE `id`=".$id);
-    } else {
-        mysqli_query($con, "UPDATE `forumcat` SET `name`='".$name."' WHERE `id`=".$id);
+        echo "edit".$_GET["id"];
+        
+        
+    
+    } else if ($_GET["action"] == "delete") {
+    
+        if (isset($_POST["delete"])) {
+            
+            mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$id);
+            mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$id);
+            
+            echo "DELETED!!";
+            
+        } else {
+            
+            echo "Delete thread id ".$id."?";
+            echo "<form action='?action=delete&amp;id=".$id."' method='post'>
+            <input type='submit' name='delete' value='Yes, delete'> or <a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>
+            </form>";
+            
+            }
+    
     }
-    
-    
+
+} else {
+
+    $query = mysqli_query($con, "SELECT * FROM `forums` ORDER BY `id` DESC") or die(mysqli_error($con));
+
+    echo "<table style='border-spacing: 5px;'>";
+    echo "<tr><th>maps</th><th>editing tools</th></tr>";
+
+    while ($row = mysqli_fetch_assoc($query)) {
+        
+        echo "<tr>";
+        echo "<td>";
+        echo "#".$row["id"]." - ".$row["title"]." - ".getname($row["authorid"]);
+        echo "</td>";
+        echo "<td>";
+        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
+        echo "</td>";
+        echo "</tr>";
+
     }
 
-}
-
-if (isset($_POST["addnew"])) {
-
-    $name = strip($_POST["name"]);
-    mysqli_query($con, "INSERT INTO `forumcat` VALUES('','".$name."')");
+    echo "</table>";
 
 }
-
-$query = mysqli_query($con, "SELECT * FROM `forumcat`");
-echo "<h1>manage forum categories</h1>";
-
-echo "<form action='forums.php' method='post'>";
-
-echo "<table border>";
-echo "<tr><th>id</th><th>name</th></tr>";
-while ($row = mysqli_fetch_assoc($query)) {
-
-    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td></tr>";
-
-}
-echo "</table>";
-
-echo "<input type='submit' value='update' name='update'>";
-echo "</form>";
-echo "<hr>";
-echo "<form action='forums.php' method='post'>
-<input type='text' name='name'><input type='submit' name='addnew' value='add new'>
-</form>";
-
 ?>
 
 </body>
