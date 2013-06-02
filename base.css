@@ -768,17 +768,6 @@ img.map-image {
   color: white;
 }
 
-/* Category-specific colors */
-
-.forums-category-tf2         {background-color: #3D1C00; }
-.forums-category-tf2:hover   {background-color: #4D2C10; }
-
-.forums-category-dota2       {background-color: #EA2A00; }
-.forums-category-dota2:hover {background-color: #FA3A10; }
-
-.forums-category-other       {background-color: #0B474B; }
-.forums-category-other:hover {background-color: #1B575B; }
-
 .forums-entry-main {
   padding-left: 4px;
 }

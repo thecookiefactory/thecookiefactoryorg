@@ -208,6 +208,16 @@ if ($action == "add" && checkuser()) {
         }
         ?>
 
+        <style type='text/css' scoped>
+
+            <?php
+            $cq = mysqli_query($con, "SELECT * FROM `forumcat`");
+            while ($cr = mysqli_fetch_assoc($cq)) {
+                echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hex"]."; }\n";
+                echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hexh"]."; }\n";
+            }
+            ?>
+        </style>
         <table class='forums-table'>
                 <colgroup>
                     <col class='forums-column-category'>
