@@ -2,7 +2,6 @@
 
 checkembed($r_c);
 include "analyticstracking.php";
-include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
@@ -18,7 +17,7 @@ if ($action == "add" && checkuser()) {
         $text = strip($_POST["text"]);
         $dt = time();
 
-        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0')");
+        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
         ?>
         added.
         <?php
@@ -81,6 +80,7 @@ if ($action == "add" && checkuser()) {
             </h1>
             <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
             <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>related map</a>" : ""); ?>
+            <?php echo (($row["newsid"] != 0) ? "<a href='?p=news&amp;id=".$row["mapid"]."'>related newspost</a>" : ""); ?>
             <div class='forums-posts'>
                 <div class='forums-post'>
                     <div class='forums-post-header'>
@@ -101,7 +101,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                     </div>
                     <div class='forums-post-text'>
-                        <?php echo Markdown($row["text"]); ?>
+                        <p><?php echo nl2br($row["text"], false); ?></p>
                     </div>
                 </div>
 
@@ -135,7 +135,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                         </div>
                         <div class='forums-post-text'>
-                                <?php echo Markdown($cr["text"]); ?>
+                                <p><?php echo nl2br($cr["text"], false); ?></p>
                         </div>
                     </div>
 

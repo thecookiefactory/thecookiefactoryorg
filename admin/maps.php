@@ -418,7 +418,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 $text = strip($_POST["topictext"]);
                 $cat = strip($_POST["topiccat"]);
                 
-                mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','".$id."')");
+                mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','".$id."','0')");
             }
             
             echo "Map successfully submitted.<br>";

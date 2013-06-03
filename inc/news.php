@@ -168,7 +168,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                             <?php
                             
                             ?>
-                            </span><div class='comment-text'><?php echo Markdown($crow["text"]); ?></div>
+                            </span><div class='comment-text'><p><?php echo nl2br($crow["text"], false); ?></p></div>
                             </div>
 
                             <?php
