@@ -171,15 +171,3 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 }
 
 ?>
-
-<form method='post' action='?p=search'>
-search in
-<input type='checkbox' name='inn'
-<?php if (isset($_POST["inn"]) && $_POST["inn"] == "on") echo "checked" ?>
-> news
-<input type='checkbox' name='inf'
-<?php if (isset($_POST["inf"]) && $_POST["inf"] == "on") echo "checked" ?>
-> forums
-<input type='hidden' name='searchb' value='<?php echo $term; ?>'>
-<input type='submit' value='go'>
-</form>
