@@ -14,7 +14,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
     $term = strip($_POST["searchb"]);
 
     if (strlen($term) >= 3) {
-    
+
         if (!isset($_POST["inn"]) && !isset($_POST["inf"])) {
             $_POST["inn"] = "on";
         }
@@ -89,7 +89,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
                     if ($srow["comments"] == 1) {
 
-                        $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$srow["id"]);
+                        $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$srow["id"]);
                         $commnum = mysqli_num_rows($cq);
                         ?>
 
@@ -130,28 +130,28 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     <?php
                 }
                 ?>
-                
+
                 </div>
-                
+
                 <?php
         }
         }
-    
+
         if (isset($_POST["inf"]) && $_POST["inf"] == "on") {
-            
+
             $squery1 = mysqli_query($con, "SELECT * FROM `forums` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
             $squery2 = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `text` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
             ?>
             <?php echo mysqli_num_rows($squery1) + mysqli_num_rows($squery2); ?> results found in the forums
             <?php
-            
+
             while ($srow = mysqli_fetch_assoc($squery1)) {
                 echo "<a href='?p=forums&amp;id=".$srow["id"]."'>".$srow["title"]."</a>";
             }
             while ($srow = mysqli_fetch_assoc($squery2)) {
                 echo "<a href='?p=forums&amp;id=".$srow["tid"]."'>".$srow["text"]."</a>";
             }
-            
+
         }
 
     } else {
@@ -174,10 +174,10 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
 <form method='post' action='?p=search'>
 search in
-<input type='checkbox' name='inn' 
+<input type='checkbox' name='inn'
 <?php if (isset($_POST["inn"]) && $_POST["inn"] == "on") echo "checked" ?>
 > news
-<input type='checkbox' name='inf' 
+<input type='checkbox' name='inf'
 <?php if (isset($_POST["inf"]) && $_POST["inf"] == "on") echo "checked" ?>
 > forums
 <input type='hidden' name='searchb' value='<?php echo $term; ?>'>
