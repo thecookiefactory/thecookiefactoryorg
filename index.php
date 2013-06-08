@@ -45,11 +45,11 @@ $cpages[] = $row["name"];
 <?php
 }
 
-if (IsAnyoneLive()) {
+/*if (IsAnyoneLive()) {
 ?>
 Someone is streaming!!
 <?php
-}
+}*/
 ?>
 </span>
 
@@ -84,16 +84,16 @@ login();
 <?php
 
 if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "" && strip($_GET["p"] != "essential")) {
-    
+
     $p = strip($_GET["p"]);
-    
+
     if (file_exists("inc/".$p.".php"))
         require "inc/".$p.".php";
     elseif (in_array($p, $cpages))
         require "inc/custom.php";
     else
         echo "404";
-        
+
 } else {
 
     require "inc/news.php";
@@ -127,19 +127,19 @@ if (isset($redirect))
 ?>
 </body>
 </html>
-<?php 
+<?php
 function IsAnyoneLive() {
 
     global $con;
-    
+
     $fquery = mysqli_query($con, "SELECT `twitch` FROM `streams` WHERE `active`=1");
-    
+
     while ($frow = mysqli_fetch_assoc($fquery)) {
         if (islive($frow["twitch"])) {
             return true;
         }
     }
-    
+
     return false;
 
 }

@@ -42,7 +42,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
                 $tid = mysqli_fetch_assoc($ct);
                 $tid = $tid["id"];
-                
+
                 $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$tid);
                 $commnum = mysqli_num_rows($cq);
                 ?>
@@ -140,8 +140,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         if ($row["comments"] == 1) {
 
             $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
-            $tid = mysqli_fetch_assoc($ct)["id"];
-            
+            $tid = mysqli_fetch_assoc($ct);
+            $tid = $tid["id"];
             require_once "forums.php";
 
             } else {
@@ -151,11 +151,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
                 <?php
             }
-    
+
     } else {
-        
+
         // redirecting to the main page instead of giving an error message
         header("Location: ?p=news");
-        
+
     }
 }
