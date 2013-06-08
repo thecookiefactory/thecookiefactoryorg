@@ -165,7 +165,13 @@ if ($action == "add" && checkuser()) {
                      ?>
                     <hr><h1 class='comments-title'>Reply to this thread</h1>
                     <div class='comment-form'>
-                        <?php if (isset($tid)) { echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>"; } else { echo "<form action='?p=forums&amp;id=".$id."' method='post'>"; } ?>
+                        <?php 
+                        if (isset($tid)) { 
+                            echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>"; 
+                        } else { 
+                            echo "<form action='?p=forums&amp;id=".$id."' method='post'>"; 
+                        }
+                        ?>
                             <textarea name='text' class='comment-textarea' required></textarea>
                             <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
                         </form>
