@@ -64,18 +64,6 @@ login();
 ?>
 </div>
 
-<!--
-<div class='nav-loginbar'>
-  <form class='menu-item' action='?p=login' method='post'>
-    <span class='menu-item faux-link' onclick='hideLoginBar();'>&laquo; </span>
-    <span class='input-wrapper'><input class='login-input account-input' pattern='\w{2,10}' type='text' name='username' placeholder='username' required='required' autocomplete='off' oninput='checkInputBox(this);'></span>
-    <span class='input-wrapper'><input class='login-input account-input' pattern='.{6,30}' type='password' name='password' placeholder='password' required='required' autocomplete='off' oninput='checkInputBox(this);'></span>
-    <span class='input-wrapper'><input class='login-remember-switch' type='checkbox' name='remember' id='remember'><label for='remember'>remember me</label></span>
-    <span class='input-wrapper'><input class='login-input account-input login-button account-button' type='submit' value='go!' name='submit'></span>
-  </form>
-</div>
--->
-
 </nav>
 <hr>
 
