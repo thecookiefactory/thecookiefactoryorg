@@ -593,6 +593,24 @@ img.map-image {
   color: #F93;
 }
 
+.search-type {
+  line-height: 25px;
+  background-color: inherit;
+  border: 0;
+  border-bottom: 2px dotted #DDD;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: #DDD;
+  transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.search-type:hover {
+  cursor: pointer;
+  border-bottom-color: #A0C4E8;
+  color: #4188D2;
+}
+
 .search-term {
   color: #DDD;
 }

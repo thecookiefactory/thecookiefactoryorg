@@ -28,13 +28,13 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                 if (strlen($term) > 23) {
                     ?>
 
-                    <div class='search-title'>No results found for your search term</div>
+                    <div class='search-title'>No <button class="search-type" type="button">result</button>s found for your search term</div>
 
                     <?php
                 } else {
                     ?>
 
-                    <div class='search-title'>No results found for <span class='search-term'><?php echo $term; ?></span></div>
+                    <div class='search-title'>No <button class="search-type" type="button">result</button>s found for <span class='search-term'><?php echo $term; ?></span></div>
 
                     <?php
                 }
@@ -45,13 +45,13 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     if ($nr == 1) {
                         ?>
 
-                        <div class='search-title'><?php echo $nr; ?> result found for your search term</div>
+                        <div class='search-title'><?php echo $nr; ?> <button class="search-type" type="button">result</button> found for your search term</div>
 
                         <?php
                     } else {
                         ?>
 
-                        <div class='search-title'><?php echo $nr; ?> results found for your search term</div>
+                        <div class='search-title'><?php echo $nr; ?> <button class="search-type" type="button">result</button>s found for your search term</div>
 
                         <?php
                     }
@@ -59,13 +59,13 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     if ($nr == 1) {
                         ?>
 
-                        <div class='search-title'><?php echo $nr; ?> result found for <span class='search-term'><?php echo $term; ?></span></div>
+                        <div class='search-title'><?php echo $nr; ?> <button class="search-type" type="button">result</button> found for <span class='search-term'><?php echo $term; ?></span></div>
 
                         <?php
                     } else {
                         ?>
 
-                        <div class='search-title'><?php echo $nr; ?> results found for <span class='search-term'><?php echo $term; ?></span></div>
+                        <div class='search-title'><?php echo $nr; ?> <button class="search-type" type="button">result</button>s found for <span class='search-term'><?php echo $term; ?></span></div>
 
                         <?php
                     }
