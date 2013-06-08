@@ -16,7 +16,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
     if (strlen($term) >= 3) {
 
         if (isset($_POST["inn"]) || !isset($_POST["inf"])) {
-            
+
             $nsearch = true;
             $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
             $nr = mysqli_num_rows($squery);
@@ -122,7 +122,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
                 <?php
             }
-        
+
         } else {
 
             $squery1 = mysqli_query($con, "SELECT * FROM `forums` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
@@ -162,5 +162,6 @@ function resultbutton() {
     global $term;
     global $nsearch;
     $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
-    return "<form method='post' action='?p=search'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='result' type='submit' name='".$name."'></form>";
+    $prettyname = ($name == "inf") ? "article" : "forum post";
+    return "<form method='post' action='?p=search'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
 }
