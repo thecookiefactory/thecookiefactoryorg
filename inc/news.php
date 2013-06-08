@@ -39,7 +39,10 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             if ($row["comments"] == 1) {
 
-                $cq = mysqli_query($con, "SELECT `id` FROM `newscomments` WHERE `newsid`=".$row["id"]);
+                $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
+                $tid = mysqli_fetch_assoc($ct)["id"];
+                
+                $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$tid);
                 $commnum = mysqli_num_rows($cq);
                 ?>
 
@@ -135,64 +138,10 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         if ($row["comments"] == 1) {
 
-            if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
-
-                    $author = $_SESSION["userid"];
-                    $text = strip($_POST["text"]);
-                    $dt = time();
-
-                    $iq = mysqli_query($con, "INSERT INTO `newscomments` VALUES('','$author','$text','$dt','$id')");
-
-                }
-
-                $cq = mysqli_query($con, "SELECT * FROM `newscomments` WHERE `newsid`=".$row["id"]." ORDER BY `id` ASC");
-                $commnum = mysqli_num_rows($cq);
-
-               if ($commnum > 0) {
-
-                    if ($commnum != 1) {
-                        ?>
-                        <hr><div class='comments'><h1 class='comments-title'><a href='#comments'><?php echo $commnum; ?> comments</a></div>
-                        <?php
-                    } else {
-                        ?>
-                        <hr><div class='comments'><h1 class='comments-title'><a href='#comments'><?php echo $commnum; ?> comment</a></div>
-                        <?php
-                    }
-
-                        while ($crow = mysqli_fetch_assoc($cq)) {
-                            ?>
-
-                            <div class='comment'><span class='comment-metadata'>
-                            <span class='comment-author'><?php echo getname($crow["authorid"]); ?></span><span class='comment-date'><?php echo displaydate($crow["dt"]); ?></span>
-                            <?php
-                            
-                            ?>
-                            </span><div class='comment-text'><p><?php echo nl2br($crow["text"], false); ?></p></div>
-                            </div>
-
-                            <?php
-                        }
-
-                }
-
-                if (checkuser()) {
-                    ?>
-
-                    <hr><h1 class='comments-title'>Post a comment</h1>
-                    <div class='comment-form'><form action='?p=news&amp;id=<?php echo $id; ?>' method='post'>
-                    <textarea name='text' class='comment-textarea' required></textarea>
-                    <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
-                    </form></div></div>
-
-                    <?php
-                } else {
-                    ?>
-
-                    <hr><h1 class='comments-title'>Log in to be able to post comments</h1></div>
-
-                    <?php
-                }
+            $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
+            $tid = mysqli_fetch_assoc($ct)["id"];
+            
+            require_once "forums.php";
 
             } else {
                 ?>

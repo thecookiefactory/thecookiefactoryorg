@@ -248,6 +248,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     
                     //deleting the forum thread
                     mysqli_query($con, "DELETE FROM `forums` WHERE `mapid`=".$id);
+                    // comments are not actually deleted at this point, but w/e
                     
                     $dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
                     

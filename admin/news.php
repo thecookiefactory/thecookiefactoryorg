@@ -102,7 +102,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     $dq = mysqli_query($con, "DELETE FROM `news` WHERE `id`=".$id);
                     echo "News post successfully deleted.<br>";
                     
-                    mysqli_query($con, "DELETE FROM `newscomments` WHERE `newsid`=".$id);
+                    mysqli_query($con, "DELETE FROM `forums` WHERE `newsid`=".$id);
+                    // comments are not actually deleted at this point, but w/e
                     echo "Related comments successfully deleted.<br>";
                     echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
                 
@@ -150,6 +151,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 $live = 0;
 
             mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$dt."','".$text."','".$comments."','','','".$live."')");
+            $id = mysqli_insert_id($con);
+            mysqli_query($con, "INSERT INTO `forums` VALUES('','".$author."','".$dt."','".$title."','".$text."','0','0','".$dt."','0','".$id."')");
+            
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
         

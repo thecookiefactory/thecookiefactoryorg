@@ -50,10 +50,10 @@ if ($action == "add" && checkuser()) {
 
 } else {
 
-    if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+    if ((isset($_GET["id"]) && is_numeric($_GET["id"])) || (isset($tid) && is_numeric($tid))) {
 
         // SHOW ONE THREAD
-        $id = strip($_GET["id"]);
+        $id = isset($tid) ? strip($tid) : strip($_GET["id"]);
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
         
         if (mysqli_num_rows($query) == 1) {
@@ -75,13 +75,21 @@ if ($action == "add" && checkuser()) {
 
             ?>
 
+            <?php
+            if (!isset($tid)) {
+            ?>
             <h1>
                 <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
             </h1>
             <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
             <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>related map</a>" : ""); ?>
-            <?php echo (($row["newsid"] != 0) ? "<a href='?p=news&amp;id=".$row["mapid"]."'>related newspost</a>" : ""); ?>
+            <?php
+            }
+            ?>
             <div class='forums-posts'>
+                <?php
+                if (!isset($tid)) {
+                ?>
                 <div class='forums-post'>
                     <div class='forums-post-header'>
                         <div class='forums-post-number'>
@@ -106,11 +114,14 @@ if ($action == "add" && checkuser()) {
                 </div>
 
                 <?php
+                }
+                ?>
+                <?php
 
                 //fetching comments
                 $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
 
-                $cn = 2;
+                $cn = isset($tid) ? 1 : 2;
 
                 while ($cr = mysqli_fetch_assoc($cq)) {
 
@@ -154,7 +165,7 @@ if ($action == "add" && checkuser()) {
                      ?>
                     <hr><h1 class='comments-title'>Reply to this thread</h1>
                     <div class='comment-form'>
-                        <form action='?p=forums&amp;id=<?php echo $id; ?>' method='post'>
+                        <?php if (isset($tid)) { echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>"; } else { echo "<form action='?p=forums&amp;id=".$id."' method='post'>"; } ?>
                             <textarea name='text' class='comment-textarea' required></textarea>
                             <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
                         </form>
@@ -198,13 +209,13 @@ if ($action == "add" && checkuser()) {
         if (isset($_GET["cat"])) {
 
             $cat = strip($_GET["cat"]);
-            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." ORDER BY `ldt` DESC");
+            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." AND `cat`<>0 ORDER BY `ldt` DESC");
             ?>
             <a class='forums-clearfilter' href='?p=forums'>↩ clear category filter</a>
             <?php
 
         } else {
-            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` ORDER BY `ldt` DESC");
+            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`<>0 ORDER BY `ldt` DESC");
         }
         ?>
 
