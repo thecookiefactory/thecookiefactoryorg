@@ -40,7 +40,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             if ($row["comments"] == 1) {
 
                 $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
-                $tid = mysqli_fetch_assoc($ct)["id"];
+                $tid = mysqli_fetch_assoc($ct);
+                $tid = $tid["id"];
                 
                 $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$tid);
                 $commnum = mysqli_num_rows($cq);
