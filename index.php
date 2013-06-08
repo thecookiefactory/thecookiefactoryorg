@@ -132,7 +132,7 @@ function IsAnyoneLive() {
 
     global $con;
     
-    $fquery = mysqli_query($con, "SELECT `twitch` FROM `streams`");
+    $fquery = mysqli_query($con, "SELECT `twitch` FROM `streams` WHERE `active`=1");
     
     while ($frow = mysqli_fetch_assoc($fquery)) {
         if (islive($frow["twitch"])) {
