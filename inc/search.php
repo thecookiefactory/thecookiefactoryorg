@@ -129,17 +129,111 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
             $squery2 = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `text` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
             $nr = mysqli_num_rows($squery1) + mysqli_num_rows($squery2);
             $sss = ($nr == 1) ? "" : "s";
+            if ($nr == 0) {
+
+                if (strlen($term) > 23) {
+                    ?>
+
+                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for your search term</div>
+
+                    <?php
+                } else {
+                    ?>
+
+                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for <span class='search-term'><?php echo $term; ?></span></div>
+
+                    <?php
+                }
+
+            } else {
+
+                if (strlen($term) > 23) {
+                    ?>
+
+                    <div class='search-title'><?php echo $nr." ".resultbutton().$sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
+
+                    <?php
+                } else {
+                    ?>
+
+                    <div class='search-title'><?php echo $nr." ".resultbutton().$sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
+
+                    <?php
+                }
             ?>
-            <?php echo $nr." ".resultbutton().$sss; ?> found in the forums
-            <?php
 
-            while ($srow = mysqli_fetch_assoc($squery1)) {
-                echo "<a href='?p=forums&amp;id=".$srow["id"]."'>".$srow["title"]."</a>";
-            }
-            while ($srow = mysqli_fetch_assoc($squery2)) {
-                echo "<a href='?p=forums&amp;id=".$srow["tid"]."'>".$srow["text"]."</a>";
-            }
+            <div class='search-results'>
 
+                <style type='text/css' scoped>
+
+                    <?php
+                    $cq = mysqli_query($con, "SELECT * FROM `forumcat`");
+                    while ($cr = mysqli_fetch_assoc($cq)) {
+                        echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hex"]."; }\n";
+                        echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hexh"]."; }\n";
+                    }
+                    ?>
+                </style>
+                <table class='forums-table'>
+                        <colgroup>
+                            <col class='forums-column-category'>
+                            <col class='forums-column-title'>
+                            <col class='forums-column-modifydate'>
+                            <col class='forums-column-postcount'>
+                        </colgroup>
+                    <tbody>
+
+                <?php
+                while ($row = mysqli_fetch_assoc($squery1)) {
+
+                    ?>
+                    <tr class='forums-entry'>
+                        <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
+                            <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                                <div class='forums-entry-category-text'>
+                                    <?php echo getcatname($row["cat"]); ?>
+                                </div>
+                            </a>
+                        </td>
+                        <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
+                            <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                                <?php echo $row["title"]; ?>
+                            </a>
+                            <br>
+                            <span class='forums-entry-metadata'>
+                                created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
+                            </span>
+                        </td>
+                        <td class='forums-entry-modifydate'>
+                            <span class='forums-entry-miniheader'>
+                                <?php echo "Last reply posted"?>
+                            </span>
+                            <br>
+                            <?php echo displaydate($row["ldt"]); ?>
+                        </td>
+                        <td class='forums-entry-postcount'>
+                            <span class='forums-entry-miniheader'>
+                                Thread has
+                            </span>
+                            <br>
+                            <?php
+                                echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
+                            ?>
+                        </td>
+                    </tr>
+                    <?php
+
+                }
+
+                ?>
+                    </tbody>
+                </table>
+
+            </div>
+
+             <?php
+
+            }
         }
 
     } else {
@@ -164,4 +258,15 @@ function resultbutton() {
     $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
     $prettyname = ($name == "inf") ? "article" : "forum post";
     return "<form method='post' action='?p=search'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
+}
+
+function getcatname($x) {
+
+    global $con;
+
+    $fq = mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$x);
+    $fr = mysqli_fetch_assoc($fq);
+
+    return $fr["name"];
+
 }

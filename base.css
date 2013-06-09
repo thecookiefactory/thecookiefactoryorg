@@ -764,7 +764,7 @@ img.map-image {
 .forums-column-postcount  {width: 120px; }
 
 .forums-entry-category {
-
+  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   -webkit-transition: background-color 0.2s ease-in-out;
 }
