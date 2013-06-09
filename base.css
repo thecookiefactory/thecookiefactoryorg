@@ -54,13 +54,13 @@ nav {
   transition: color 0.2s ease-in-out;
 }
 
-.searchbox:hover::-webkit-input-placeholder {
-  color: #4188D2;
-}
-
 .searchbox::-moz-placeholder {
   color: white;
   transition: color 0.2s ease-in-out;
+}
+
+.searchbox:hover::-webkit-input-placeholder {
+  color: #4188D2;
 }
 
 .searchbox:hover::-moz-placeholder {
@@ -559,22 +559,6 @@ img.map-image {
   -webkit-text-stroke: 2px #141414;
   color: white;
   text-align: center;
-}
-
-.map-author {
-
-}
-
-.map-game {
-
-}
-
-.map-desc {
-
-}
-
-.map-dl {
-
 }
 
 .search-separator {
