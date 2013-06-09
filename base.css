@@ -277,10 +277,6 @@ article {
   height: 1px;
   margin-top: 20px;
   border-width: 0;
-  background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #141414), color-stop(0.5, #333), color-stop(1, #141414));
 }
@@ -423,35 +419,26 @@ article {
 }
 
 @-webkit-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
-@-moz-keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
 @keyframes fadeout { from{opacity: 1;} to{opacity: 0;} }
 
 @-webkit-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
-@-moz-keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
 @keyframes fadein  { from{opacity: 0;} to{opacity: 1;} }
 
 @-webkit-keyframes scrolling { }
-@-moz-keyframes scrolling { }
 @keyframes scrolling { }
 
 .map-scrolling {
   -webkit-animation-name: scrolling;
-  -moz-animation-name: scrolling;
-  -ms-animation-name: scrolling;
   animation-name: scrolling;
 }
 
 .map-fadeout {
   -webkit-animation-name: fadeout;
-  -moz-animation-name: fadeout;
-  -ms-animation-name: fadeout;
   animation-name: fadeout;
 }
 
 .map-fadein {
   -webkit-animation-name: fadein;
-  -moz-animation-name: fadein;
-  -ms-animation-name: fadein;
   animation-name: fadein;
 }
 
@@ -474,21 +461,12 @@ article {
   background-repeat: no-repeat;
 
   -webkit-animation-duration: 0.2s;
-  -moz-animation-duration: 0.2s;
-  -ms-animation-duration: 0.2s;
-  -o-animation-duration: 0.2s;
   animation-duration: 0.2s;
 
   -webkit-animation-timing-function: ease-in-out;
-  -moz-animation-timing-function: ease-in-out;
-  -ms-animation-timing-function: ease-in-out;
-  -o-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
 
   -webkit-animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  -ms-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -522,21 +500,12 @@ article {
   border-radius: 15px;
   white-space: nowrap;
   -webkit-animation-duration: 1s;
-  -moz-animation-duration: 1s;
-  -ms-animation-duration: 1s;
-  -o-animation-duration: 1s;
   animation-duration: 1s;
 
   -webkit-animation-timing-function: ease-in-out;
-  -moz-animation-timing-function: ease-in-out;
-  -ms-animation-timing-function: ease-in-out;
-  -o-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
 
   -webkit-animation-fill-mode: forwards;
-  -moz-animation-fill-mode: forwards;
-  -ms-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -673,14 +642,11 @@ img.map-image {
 }
 
 @-webkit-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
-@-moz-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
 @keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
 
 .account-input:focus {
   outline: 0;
   -webkit-animation: blink 1.4s ease-in-out infinite alternate;
-  -moz-animation: blink 1.4s ease-in-out infinite alternate;
-  -ms-animation: blink 1.4s ease-in-out infinite alternate;
   animation: blink 1.4s ease-in-out infinite alternate;
 }
 
