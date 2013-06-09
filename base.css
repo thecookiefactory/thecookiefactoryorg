@@ -731,19 +731,22 @@ img.map-image {
   top: 7px;
   right: 0;
   opacity: 0;
-  -webkit-transform: translateY(-23px);
+  -webkit-filter: blur(3px);
+  -webkit-transform: translateY(-50px);
   transform: translateY(-23px);
-  transition: all 0.5s ease-in-out;
+  transition: -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease-out, opacity 0.4s ease-in-out;
 }
 
 .login-text:hover ~ .login-button {
   opacity: 1;
+  -webkit-filter: blur(0);
   -webkit-transform: translateY(0);
   transform: translateY(0);
 }
 
 .login-button:hover {
   opacity: 1;
+  -webkit-filter: blur(0);
   -webkit-transform: translateY(0);
   transform: translateY(0);
 }
@@ -751,6 +754,7 @@ img.map-image {
 .login-button-image {
   width: 149px;
 }
+
 
 ::-webkit-validation-bubble-message {
   text-align: left;
