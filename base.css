@@ -612,6 +612,7 @@ img.map-image {
   border: 0;
   border-bottom: 2px dotted #DDD;
   padding: 0;
+  margin-right: 1px;
   font-family: inherit;
   font-size: inherit;
   color: #DDD;
