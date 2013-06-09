@@ -272,6 +272,24 @@ article {
   background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #141414), color-stop(0.5, #333), color-stop(1, #141414));
 }
 
+.news-pages {
+  text-align: center;
+}
+
+.news-page-number {
+  display: inline-block;
+  font-family: "Open Sans";
+  font-weight: 300;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+}
+
+.news-page-number + .news-page-number:before {
+  content: " \B7  ";
+  color: white;
+}
+
 .nav-menubar {
   float: left;
   z-index: 1;

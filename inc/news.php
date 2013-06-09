@@ -96,12 +96,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     //page links
     $nr = mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `news`"));
+    echo "<div class='news-pages'>";
     for ($i = 1; $i <= ceil($nr / 5); $i++) {
         if ($page == $i)
-            echo "Page ".$i;
+            echo "<div class='news-page-number'>".$i."&nbsp;</div>";
         else
-            echo "<a href='?p=news&amp;page=".$i."'>Page ".$i."</a>";
+            echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."&nbsp;</a>";
     }
+    echo "</div>";
 } else {
     // DISPLAY ONE PIECE OF NEWS
 
@@ -133,7 +135,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         </div><article>
         <span class='article-text'><?php echo Markdown($row["text"]); ?></span>
-        </article>
+        </article><hr>
 
         <?php
 
@@ -147,7 +149,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             } else {
                 ?>
 
-                <hr><h1 class='comments-title'>Commenting disabled</h1></div>
+                <h1 class='comments-title'>Commenting disabled</h1></div>
 
                 <?php
             }
