@@ -731,22 +731,22 @@ img.map-image {
   top: 7px;
   right: 0;
   opacity: 0;
-  -webkit-filter: blur(3px);
+  -webkit-filter: blur(2px) saturate(2) hue-rotate(-90deg);
   -webkit-transform: translateY(-50px);
   transform: translateY(-23px);
-  transition: -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease-out, opacity 0.4s ease-in-out;
+  transition: -webkit-transform 0.6s ease-out, -webkit-filter 0.4s ease-out, opacity 0.6s ease-in-out;
 }
 
 .login-text:hover ~ .login-button {
   opacity: 1;
-  -webkit-filter: blur(0);
+  -webkit-filter: blur(0) saturate(1) hue-rotate(0deg);
   -webkit-transform: translateY(0);
   transform: translateY(0);
 }
 
 .login-button:hover {
   opacity: 1;
-  -webkit-filter: blur(0);
+  -webkit-filter: blur(0) saturate(1) hue-rotate(0deg);
   -webkit-transform: translateY(0);
   transform: translateY(0);
 }
