@@ -282,6 +282,7 @@ article {
 }
 
 .nav-actionbar {
+  position: relative;
   float: right;
   margin-top: -2px;
 }
@@ -733,8 +734,38 @@ img.map-image {
   color: #DDD;
 }
 
+.login-text {
+  display: inline-block;
+  opacity: 1;
+  -webkit-transform: translateY(0);
+  transition: all 0.6s ease-in-out;
+}
+
+.login-text:hover {
+  opacity: 0;
+}
+
 .login-button {
-  color: white;
+  position: absolute;
+  top: 7px;
+  right: 0;
+  opacity: 0;
+  -webkit-transform: translateY(-23px);
+  transition: all 0.5s ease-in-out;
+}
+
+.login-text:hover ~ .login-button {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+}
+
+.login-button:hover {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+}
+
+.login-button-image {
+  width: 149px;
 }
 
 ::-webkit-validation-bubble-message {
