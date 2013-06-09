@@ -58,12 +58,25 @@ nav {
   color: #4188D2;
 }
 
+.searchbox::-moz-placeholder {
+  color: white;
+  transition: color 0.2s ease-in-out;
+}
+
+.searchbox:hover::-moz-placeholder {
+  color: #4188D2;
+}
+
 .searchbox:focus {
   cursor: text;
   outline: none;
 }
 
 .searchbox:focus::-webkit-input-placeholder {
+  color: #4188D2;
+}
+
+.searchbox:focus::-moz-placeholder {
   color: #4188D2;
 }
 
@@ -576,7 +589,7 @@ img.map-image {
   height: 30px;
   top: -12px;
   left: -12px;
-  width: 10px;
+  width: 11px;
   border: 2px solid #4188D2;
   border-right: 0;
   border-top-left-radius: 10px;
@@ -604,6 +617,12 @@ img.map-image {
   font-family: Bitter;
   font-size: 28px;
   color: #F93;
+}
+
+@-moz-document url-prefix() {
+    .search-title {
+        padding: 8px 11px 8px 0;
+    }
 }
 
 .search-type {
