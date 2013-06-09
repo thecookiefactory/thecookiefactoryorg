@@ -52,7 +52,6 @@ nav {
 .searchbox::-webkit-input-placeholder {
   color: white;
   transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .searchbox:hover::-webkit-input-placeholder {
@@ -90,14 +89,13 @@ footer {
 }
 
 .contact-us-link+.contact-us-link:before {
-  content: " · ";
+  content: " \B7  ";
 }
 
 a, a:visited {
   color: #FFF;
   text-decoration: none;
   transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
 }
 
 a:hover, a:active {
@@ -108,7 +106,6 @@ a:hover, a:active {
 .faux-link {
   color: #FFF;
   transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .faux-link:hover {
@@ -149,7 +146,6 @@ input {
   padding: 5px 0;
   color: white;
   transition: border-color 0.3s ease-in-out;
-  -webkit-transition: border-color 0.3s ease-in-out;
 }
 
 .stream-button:hover {
@@ -255,7 +251,7 @@ h1 {
 }
 
 .article-metadata-item+.article-metadata-item:before {
-  content: " – ";
+  content: " \2013  ";
 }
 
 article {
@@ -337,11 +333,11 @@ article {
 }
 
 .comment-date:before {
-  content: " · ";
+  content: " \B7  ";
 }
 
 .comment-deletebutton:before {
-  content: " · ";
+  content: " \B7  ";
 }
 
 .comment-text {
@@ -365,7 +361,6 @@ article {
   font: inherit;
   font-size: 14px;
   color: white;
-  -webkit-transition: border-color 0.3s ease-in-out;
   transition: border-color 0.3s ease-in-out;
 }
 
@@ -385,7 +380,6 @@ article {
   border-radius: 2px;
   font-size: 28px;
   color: #DDD;
-  -webkit-transition: border-color 0.3s ease-in-out, color 0.1s;
   transition: border-color 0.3s, color 0.1s;
 }
 
@@ -699,7 +693,6 @@ img.map-image {
   font-weight: 700;
   border: 0;
   transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .account-button:hover {
@@ -719,7 +712,6 @@ img.map-image {
   color: #333;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
 }
 
 .login-remember-switch + label:hover {
@@ -736,13 +728,10 @@ img.map-image {
 
 .login-text {
   display: inline-block;
-  opacity: 1;
-  -webkit-transform: translateY(0);
-  transition: all 0.6s ease-in-out;
 }
 
 .login-text:hover {
-  opacity: 0;
+  color: white;
 }
 
 .login-button {
@@ -751,17 +740,20 @@ img.map-image {
   right: 0;
   opacity: 0;
   -webkit-transform: translateY(-23px);
+  transform: translateY(-23px);
   transition: all 0.5s ease-in-out;
 }
 
 .login-text:hover ~ .login-button {
   opacity: 1;
   -webkit-transform: translateY(0);
+  transform: translateY(0);
 }
 
 .login-button:hover {
   opacity: 1;
   -webkit-transform: translateY(0);
+  transform: translateY(0);
 }
 
 .login-button-image {
@@ -797,7 +789,6 @@ img.map-image {
 .forums-entry-category {
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  -webkit-transition: background-color 0.2s ease-in-out;
 }
 
 .forums-entry-category-text {
@@ -886,7 +877,7 @@ img.map-image {
 }
 
 .forums-post-metadata-item+.forums-post-metadata-item:before {
-  content: " – ";
+  content: " \2013  ";
 }
 
 .forums-post {
