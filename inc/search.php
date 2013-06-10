@@ -125,9 +125,29 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
         } else {
 
-            $squery1 = mysqli_query($con, "SELECT * FROM `forums` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
-            $squery2 = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `text` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
-            $nr = mysqli_num_rows($squery1) + mysqli_num_rows($squery2);
+            $squery1 = mysqli_query($con, "SELECT * FROM `forums` WHERE (`text` LIKE '%".$term."%' or `title` LIKE '%".$term."%') and `cat`<>0 ORDER BY `id` DESC") or die(mysqli_error($con));
+            $squery2 = mysqli_query($con, "SELECT `tid` FROM `forumposts` WHERE `text` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
+            $ra = array();
+            while ($row = mysqli_fetch_assoc($squery1)) {
+                if (!in_array($row["id"], $ra)) {
+                    array_push($ra, $row["id"]);
+                }
+            }
+            
+            while ($row = mysqli_fetch_assoc($squery2)) {
+                if (!in_array($row["tid"], $ra)) {
+                    array_push($ra, $row["tid"]);
+                }
+            }
+            
+            if (!empty($ra)) {
+                $squery = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`<>0 AND `id` IN (".implode(',', array_map('intval', $ra)).") ORDER BY `id` DESC");
+                
+                $nr = mysqli_num_rows($squery);
+            } else {
+                $nr = 0;
+            }
+            
             $sss = ($nr == 1) ? "" : "s";
             if ($nr == 0) {
 
@@ -184,7 +204,8 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     <tbody>
 
                 <?php
-                while ($row = mysqli_fetch_assoc($squery1)) {
+                
+                while ($row = mysqli_fetch_assoc($squery)) {
 
                     ?>
                     <tr class='forums-entry'>
