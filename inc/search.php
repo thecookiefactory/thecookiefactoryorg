@@ -140,7 +140,14 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                 }
             }
             
-            $nr = count($ra);
+            if (!empty($ra)) {
+                $squery = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`<>0 AND `id` IN (".implode(',', array_map('intval', $ra)).") ORDER BY `id` DESC");
+                
+                $nr = mysqli_num_rows($squery);
+            } else {
+                $nr = 0;
+            }
+            
             $sss = ($nr == 1) ? "" : "s";
             if ($nr == 0) {
 
@@ -197,7 +204,6 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
                     <tbody>
 
                 <?php
-                $squery = mysqli_query($con, "SELECT * FROM `forums` WHERE `id` IN (".implode(',', array_map('intval', $ra)).") ORDER BY `id` DESC");
                 
                 while ($row = mysqli_fetch_assoc($squery)) {
 
