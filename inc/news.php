@@ -98,7 +98,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     $nr = mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `news`"));
     echo "<div class='news-pages'>";
     for ($i = 1; $i <= ceil($nr / 5); $i++) {
-        if ($page == $i)s
+        if ($page == $i)
             echo "<div class='news-page-number'>".$i."&nbsp;</div>";
         else
             echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."&nbsp;</a>";
