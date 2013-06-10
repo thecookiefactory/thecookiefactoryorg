@@ -321,6 +321,10 @@ article {
   float: right;
 }
 
+.menu-item {
+  text-transform: lowercase;
+}
+
 .menu-item>input[name=password] {
   margin-right: 20px;
 }
@@ -515,6 +519,7 @@ article {
 
 div.map-image {
   display: inline-block;
+  text-align: center;
   width: 900px;
 }
 
@@ -667,9 +672,10 @@ img.map-image {
   width: 240px;
 }
 
+/* Hack to remove Chrome's ugly autofill styling */
 .account-input:-webkit-autofill {
     -webkit-text-fill-color: #4188D2;
-    -webkit-box-shadow: 0 0 0px 1000px #141414 inset;
+    box-shadow: 0 0 0px 1000px #141414 inset;
   }
 
 .input-wrapper+.input-wrapper:before {

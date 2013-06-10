@@ -131,7 +131,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
             $sss = ($nr == 1) ? "" : "s";
             if ($nr == 0) {
 
-                if (strlen($term) > 23) {
+                if (strlen($term) > 21) {
                     ?>
 
                     <div class='search-title'>No <?php echo resultbutton(); ?>s found for your search term</div>
@@ -147,7 +147,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
             } else {
 
-                if (strlen($term) > 23) {
+                if (strlen($term) > 21) {
                     ?>
 
                     <div class='search-title'><?php echo $nr." ".resultbutton().$sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
