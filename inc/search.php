@@ -15,7 +15,7 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
     if (strlen($term) >= 3) {
 
-        if (isset($_POST["inn"]) || !isset($_POST["inf"])) {
+        if (isset($_POST["inn"]) || ($_SESSION["lp"] != "forums" && !isset($_POST["inf"]))) {
 
             $nsearch = true;
             $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
