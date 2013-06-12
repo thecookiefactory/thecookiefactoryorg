@@ -99,9 +99,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     echo "<div class='news-pages'>";
     for ($i = 1; $i <= ceil($nr / 5); $i++) {
         if ($page == $i)
-            echo "<div class='news-page-number'>".$i."&nbsp;</div>";
+            echo "<div class='news-page-number'>".$i."</div>";
         else
-            echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."&nbsp;</a>";
+            echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."</a>";
     }
     echo "</div>";
 } else {

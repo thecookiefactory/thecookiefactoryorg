@@ -299,7 +299,7 @@ article {
 }
 
 .news-page-number + .news-page-number:before {
-  content: " \B7  ";
+  content: "\A0\B7\A0";
   color: white;
 }
 
