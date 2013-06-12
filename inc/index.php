@@ -1,3 +1,3 @@
 <?php
-require "../notfound.php";
+header("Location: notfound.php");
 ?>
