@@ -79,7 +79,7 @@ if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "" &&
         require "inc/".$p.".php";
     elseif (in_array($p, $cpages))
         require "inc/custom.php";
-    elseif ($p != "login" || $p != "logout")
+    elseif ($p != "login" && $p != "logout")
         header("Location: notfound.php");
 
 } else {
