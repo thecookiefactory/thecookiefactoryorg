@@ -2,6 +2,7 @@
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-35387303-1']);
+  _gaq.push(['_setDomainName', 'thecookiefactory.org']);
   _gaq.push(['_trackPageview']);
 
   (function() {
