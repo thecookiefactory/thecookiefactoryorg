@@ -71,11 +71,11 @@ login();
 
 <?php
 
-if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "" && strip($_GET["p"] != "essential")) {
+if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "") {
 
     $p = strip($_GET["p"]);
 
-    if (file_exists("inc/".$p.".php"))
+    if (file_exists("inc/".$p.".php") && $p != "essential")
         require "inc/".$p.".php";
     elseif (in_array($p, $cpages))
         require "inc/custom.php";

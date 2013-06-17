@@ -1,6 +1,6 @@
 <?php
 
-checkembed($r_c);
+if (!isset($r_c)) header("Location: notfound.php");
 include "analyticstracking.php";
 
 include "markdown/markdown.php";
