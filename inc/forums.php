@@ -9,7 +9,7 @@ $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 
 if ($action == "add" && checkuser()) {
 
-    if (isset($_POST["addnew"])) {
+    if (isset($_POST["addnew"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
         $authorid = $_SESSION["userid"];
         $cat = strip($_POST["cat"]);
@@ -61,7 +61,7 @@ if ($action == "add" && checkuser()) {
             $row = mysqli_fetch_assoc($query);
             
             //comment processing
-            if (isset($_POST["cp"]) && trim($_POST["text"]) != "") {
+            if (isset($_POST["cp"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
@@ -212,7 +212,7 @@ if ($action == "add" && checkuser()) {
 
         }
 
-        if (isset($_GET["cat"])) {
+        if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
 
             $cat = strip($_GET["cat"]);
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." AND `cat`<>0 ORDER BY `ldt` DESC");
