@@ -24,6 +24,7 @@ if (!checkadmin()) die("403");
     <li><a href='forumtopics.php'>manage forum categories</a></li>
     <li><a href='forums.php'>manage forum threads</a></li>
     <li><a href='cpages.php'>manage custom pages</a></li>
+    <li><a href='users.php'>list users</a></li>
 </ul>
 </p>
 </body>

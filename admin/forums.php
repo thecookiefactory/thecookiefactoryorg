@@ -25,9 +25,43 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     if ($_GET["action"] == "edit") {
     
-        echo "edit".$_GET["id"];
+        $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
+
+        $row = mysqli_fetch_assoc($query);
+
+        ?>
+        <h1>
+            <?php echo $row["title"]; ?>
+        </h1>
+        <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
+        <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>related map</a>" : ""); ?>
         
-        
+        <?php echo "#1"; ?>
+        <?php echo getname($row["authorid"], true); ?>
+        <?php echo displaydate($row["dt"]); ?>
+        <p><?php echo nl2br($row["text"], false); ?></p>
+        <?php
+
+            //fetching comments
+            $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
+
+            $cn = 2;
+
+            while ($cr = mysqli_fetch_assoc($cq)) {
+
+                ?>
+
+                <?php echo "<hr>"; ?>
+                <?php echo "#".$cn; ?>
+                <?php echo getname($cr["authorid"]); ?>
+                <?php echo displaydate($cr["dt"]); ?>
+                <p><?php echo nl2br($cr["text"], false); ?></p>
+
+                <?php
+                $cn++;
+            } ?>
+
+        <?php
     
     } else if ($_GET["action"] == "delete") {
     
@@ -63,7 +97,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         echo "#".$row["id"]." - ".$row["title"]." - ".getname($row["authorid"]);
         echo "</td>";
         echo "<td>";
-        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
+        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a>";
+        if ($row["mapid"] == 0 && $row["newsid"] == 0) echo " <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
         echo "</td>";
         echo "</tr>";
 

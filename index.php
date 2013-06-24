@@ -2,12 +2,11 @@
 
 session_start();
 
-if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"]))
-    $_SESSION["userid"] = $_COOKIE["userid"];
-
 $r_c = 42;
 require "inc/essential.php";
 include "inc/lightopenid/openid.php";
+
+ccookies();
 
 ?>
 

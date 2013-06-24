@@ -98,7 +98,7 @@ if ($action == "add" && checkuser()) {
                         <div class='forums-post-metadata'>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
-                                    <?php echo getname($row["authorid"]); ?>
+                                    <?php echo getname($row["authorid"], true); ?>
                                 </span>
                             </span>
                             <span class='forums-post-metadata-item'>
