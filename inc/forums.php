@@ -47,7 +47,7 @@ if ($action == "add" && checkuser()) {
         while ($cr = mysqli_fetch_assoc($cq)) {
 
             ?>
-            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["name"]; ?></option>
+            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
             <?php
 
         }
