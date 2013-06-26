@@ -343,6 +343,7 @@ article {
 }
 
 .actionbar-username {
+  color: white;
   font-weight: 600;
 }
 
@@ -897,6 +898,24 @@ img.map-image {
 
 .forums-post:last-child {
   margin-bottom: 30px;
+}
+
+.forums-newpost-title {
+  width: 962px;
+  padding: 0;
+  background-color: inherit;
+  box-shadow: inset 0 0 6px 0 rgba(8, 8, 8, .2);
+  border: 0;
+  font: inherit;
+  transition: all 0.2s ease-in-out;
+}
+
+.forums-newpost-title:focus {
+  width: 946px;
+  padding: 0 8px;
+  box-shadow: inset 0 0 8px 0 rgba(8, 8, 8, .9);;
+  background-color: #0D0D0D;
+  outline: 0;
 }
 
 .notfound-box {

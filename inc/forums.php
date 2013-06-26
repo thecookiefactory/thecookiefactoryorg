@@ -26,8 +26,20 @@ if ($action == "add" && checkuser()) {
 
         ?>
         <form action='?p=forums&amp;action=add' method='post'>
-        <input type='text' name='title' required>
-        <textarea name='text' required></textarea>
+            <h1>
+                <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...'>
+            </h1>
+        <div class='forums-post'>
+            <div class='forums-post-header'>
+                <div class='forums-post-number'>
+                    #1
+                </div>
+            </div>
+            <div class='forums-post-text'>
+                <textarea name='text' required></textarea>
+            </div>
+        </div>
+        </form>
         select cateryogy
         <select name='cat'>
         <?php
@@ -43,7 +55,7 @@ if ($action == "add" && checkuser()) {
         ?>
         </select>
         <input type='submit' name='addnew'>
-        </form>
+
         <?php
 
     }
@@ -55,11 +67,11 @@ if ($action == "add" && checkuser()) {
         // SHOW ONE THREAD
         $id = isset($tid) ? strip($tid) : strip($_GET["id"]);
         $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
-        
+
         if (mysqli_num_rows($query) == 1) {
 
             $row = mysqli_fetch_assoc($query);
-            
+
             //comment processing
             if (isset($_POST["cp"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
@@ -82,7 +94,7 @@ if ($action == "add" && checkuser()) {
                 <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
             </h1>
             <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
-            <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>related map</a>" : ""); ?>
+            <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
             <?php
             }
             ?>
@@ -165,11 +177,11 @@ if ($action == "add" && checkuser()) {
                      ?>
                     <hr><h1 class='comments-title'>Reply to this thread</h1>
                     <div class='comment-form'>
-                        <?php 
-                        if (isset($tid)) { 
-                            echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>"; 
-                        } else { 
-                            echo "<form action='?p=forums&amp;id=".$id."' method='post'>"; 
+                        <?php
+                        if (isset($tid)) {
+                            echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>";
+                        } else {
+                            echo "<form action='?p=forums&amp;id=".$id."' method='post'>";
                         }
                         ?>
                             <textarea name='text' class='comment-textarea' required></textarea>
@@ -194,10 +206,10 @@ if ($action == "add" && checkuser()) {
 
             }
         } else {
-        
+
             // redirecting to the main page instead of giving an error message
             header("Location: ?p=forums");
-        
+
         }
 
     } else {
@@ -217,7 +229,7 @@ if ($action == "add" && checkuser()) {
             $cat = strip($_GET["cat"]);
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." AND `cat`<>0 ORDER BY `ldt` DESC");
             ?>
-            <a class='forums-clearfilter' href='?p=forums'>↩ clear category filter</a>
+            <a class='forums-clearfilter' href='?p=forums'>&#x21A9; clear category filter</a>
             <?php
 
         } else {
