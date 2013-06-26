@@ -54,7 +54,7 @@ Someone is streaming!!
 
 <div class='nav-actionbar'>
 <form class='menu-item' action='?p=search' method='post'>
-<input type='text' name='searchb' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off'>
+<input type='text' name='searchb' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
 </form>
 <?php
 

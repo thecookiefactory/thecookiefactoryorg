@@ -27,7 +27,7 @@ if ($action == "add" && checkuser()) {
         ?>
         <form action='?p=forums&amp;action=add' method='post'>
             <h1>
-                <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...'>
+                <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37'>
             </h1>
         <div class='forums-post'>
             <div class='forums-post-header'>
@@ -184,7 +184,7 @@ if ($action == "add" && checkuser()) {
                             echo "<form action='?p=forums&amp;id=".$id."' method='post'>";
                         }
                         ?>
-                            <textarea name='text' class='comment-textarea' required></textarea>
+                            <textarea name='text' class='comment-textarea' required maxlength='20000'></textarea>
                             <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
                         </form>
                     </div>
