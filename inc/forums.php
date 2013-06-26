@@ -35,13 +35,12 @@ if ($action == "add" && checkuser()) {
                     #1
                 </div>
             </div>
-            <div class='forums-post-text'>
-                <textarea name='text' required></textarea>
+            <div>
+                <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'></textarea>
             </div>
         </div>
-        </form>
-        select cateryogy
-        <select name='cat'>
+        <label for="cat">Category: </label>
+        <select class='forums-newpost-select' name='cat'>
         <?php
         $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
 
@@ -55,6 +54,7 @@ if ($action == "add" && checkuser()) {
         ?>
         </select>
         <input type='submit' name='addnew'>
+        </form>
 
         <?php
 
