@@ -278,17 +278,11 @@ if ($action == "add" && checkuser()) {
                     </span>
                 </td>
                 <td class='forums-entry-modifydate'>
-                    <span class='forums-entry-miniheader'>
-                        <?php echo "Last reply posted"?>
-                    </span>
-                    <br>
+                    <span class='forums-entry-miniheader'>Last reply posted</span><br>
                     <?php echo displaydate($row["ldt"]); ?>
                 </td>
                 <td class='forums-entry-postcount'>
-                    <span class='forums-entry-miniheader'>
-                        Thread has
-                    </span>
-                    <br>
+                    <span class='forums-entry-miniheader'>Thread has</span><br>
                     <?php
                         echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
                     ?>
