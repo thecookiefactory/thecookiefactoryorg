@@ -97,6 +97,7 @@ if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "") {
 2013 thecookiefactory.org<br>
 <div class='contact-us'>
     <span class='contact-us-link'><a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a></span>
+    <span class='contact-us-link'><a href='https://plus.google.com/u/0/b/116944885541785548027/116944885541785548027' target='_blank'>Google+</a></span>
     <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
     <span class='contact-us-link'><a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a></span>
     <span class='contact-us-link'><a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a></span>

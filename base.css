@@ -485,7 +485,7 @@ article {
 }
 
 .map-rightarrow {
-  left: 833px;
+  left: 834px;
   background-position: 17px 232.5px;
   background-image: url(img/next.png);
 }
@@ -893,7 +893,8 @@ img.map-image {
 }
 
 .forums-post p {
-  margin: 8px;
+  margin: 0;
+  padding: 8px;
 }
 
 .forums-post:last-child {
@@ -919,11 +920,11 @@ img.map-image {
 }
 
 .forums-newpost-text {
-  width: 942px;
+  width: 938px;
   height: 6em;
   resize: vertical;
   border: 0;
-  padding: 2px;
+  padding: 4px;
   background-color: inherit;
   margin: 8px;
   font-family: "Open Sans", "Arial", sans-serif;
