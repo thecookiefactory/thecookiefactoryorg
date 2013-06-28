@@ -168,7 +168,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             
             }
         
-            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dltype`='".$dli."' WHERE `id`=".$id);
+            $editdt = time();
+            
+            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dltype`='".$dli."', editdt='".$editdt."' WHERE `id`=".$id);
         
         }
         
@@ -299,7 +301,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $dt = time();
             
             //inserting the basic data and returning the map id
-            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$comments','$dt')");
+            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$comments','$dt','0')");
             $id = mysqli_insert_id($con);
             echo "Basic values inserted...<br>";
             echo "The map id is ".$id."<br>";

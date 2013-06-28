@@ -97,7 +97,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
                 
                     if (move_uploaded_file($tmp_name, $location.$filename)) {
                     
-                        mysqli_query($con, "INSERT INTO `gallery` VALUES('','".$id."','".$desc."','".$filename."')");
+                        $dt = time();
+                        mysqli_query($con, "INSERT INTO `gallery` VALUES('','".$id."','".$desc."','".$filename."','".$dt."')");
                         echo "Image successfully uploaded.<br>";
             
                     } else {

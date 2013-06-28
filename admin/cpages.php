@@ -42,7 +42,8 @@ echo "</form>";
 }
 
 if (isset($_POST["text"])) {
-mysqli_query($con, "UPDATE `cpages` SET `text`='".strip($_POST["text"])."', `name`='".strip($_POST["name"])."' WHERE `id`=".strip($_POST["id"]));
+$editdt = time();
+mysqli_query($con, "UPDATE `cpages` SET `text`='".strip($_POST["text"])."', `name`='".strip($_POST["name"])."', editdt='".$editdt."' WHERE `id`=".strip($_POST["id"]));
 }
 
 ?>
