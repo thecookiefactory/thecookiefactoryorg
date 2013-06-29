@@ -72,5 +72,6 @@ echo "<form action='forumtopics.php' method='post'>
 
 ?>
 
+<a href='index.php'> &lt;&lt; back to the main page</a>
 </body>
 </html>

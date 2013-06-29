@@ -62,5 +62,6 @@ echo "> (there is a chance your stream will be live sometime soon)<br>
 
 ?>
 
+<a href='index.php'> &lt;&lt; back to the main page</a>
 </body>
 </html>

@@ -47,5 +47,6 @@ mysqli_query($con, "UPDATE `cpages` SET `text`='".strip($_POST["text"])."', `nam
 }
 
 ?>
+<a href='index.php'> &lt;&lt; back to the main page</a>
 </body>
 </html>

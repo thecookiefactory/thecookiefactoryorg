@@ -109,5 +109,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 }
 ?>
 
+<a href='index.php'> &lt;&lt; back to the main page</a>
 </body>
 </html>

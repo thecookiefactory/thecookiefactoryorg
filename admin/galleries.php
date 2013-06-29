@@ -165,5 +165,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
 ?>
 
+<a href='index.php'> &lt;&lt; back to the main page</a>
 </body>
 </html>
