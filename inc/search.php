@@ -13,7 +13,11 @@ if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
 
     $term = strip($_POST["searchb"]);
 
-    if (strlen($term) >= 3) {
+    if (strlen($term) > 50) {
+        ?>
+        <div class='search-title'>Please enter a keyword shorter than 50 characters.</div>
+        <?php
+    } elseif (strlen($term) >= 3) {
 
         if (isset($_POST["inn"]) || ($_SESSION["lp"] != "forums" && !isset($_POST["inf"]))) {
 

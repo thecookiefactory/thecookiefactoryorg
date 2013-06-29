@@ -13,14 +13,30 @@ if ($action == "add" && checkuser()) {
 
         $authorid = $_SESSION["userid"];
         $cat = strip($_POST["cat"]);
-        $title = strip($_POST["title"]);
-        $text = strip($_POST["text"]);
-        $dt = time();
+        if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
+            echo "that does not seem like a real forum categorny+";
+        } else {
+            $title = strip($_POST["title"]);
+            
+            if (strlen($title) > 37) {
+                echo "please enter a title shorter than 38 characters";
+            } else {
+                $text = strip($_POST["text"]);
+                
+                if (strlen($text) > 20000) {
+                    echo "Your comment must be less than 20 000 characters long.";
+                } else {
+                    $dt = time();
 
-        mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
-        ?>
-        added.
-        <?php
+                    mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
+                    ?>
+                    added.
+                    <?php
+                }
+                
+            }
+            
+        }
 
     } else {
 
@@ -73,15 +89,20 @@ if ($action == "add" && checkuser()) {
             $row = mysqli_fetch_assoc($query);
 
             //comment processing
-            if (isset($_POST["cp"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"])) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
-                $dt = time();
+                
+                if (strlen($text) > 20000) {
+                    echo "Your comment must be less than 20 000 characters long.";
+                } else {
+                    $dt = time();
 
-                $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
+                    $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
 
-                $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
+                    $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
+                }
 
             }
 

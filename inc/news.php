@@ -135,7 +135,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         </div><article>
         <span class='article-text'><?php echo Markdown($row["text"]); ?></span>
-        </article><hr>
+        </article><hr id='comments'>
 
         <?php
 
