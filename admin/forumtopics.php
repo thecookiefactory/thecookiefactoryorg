@@ -45,7 +45,7 @@ if (isset($_POST["addnew"])) {
     $pname = strip($_POST["pname"]);
     $hex = strip($_POST["hex"]);
     $hexh = strip($_POST["hexh"]);
-    mysqli_query($con, "INSERT INTO `forumcat` VALUES('','".$name."','".$hex."','".$hexh."')");
+    mysqli_query($con, "INSERT INTO `forumcat` VALUES('','".$name."','".$pname."','".$hex."','".$hexh."')");
 
 }
 
@@ -67,7 +67,7 @@ echo "<input type='submit' value='update' name='update'>";
 echo "</form>";
 echo "<hr>";
 echo "<form action='forumtopics.php' method='post'>
-<input type='text' name='name'><input type='text' name='hex'><input type='text' name='hexh'><input type='submit' name='addnew' value='add new'>
+<input type='text' name='name'><input type='text' name='pname'><input type='text' name='hex'><input type='text' name='hexh'><input type='submit' name='addnew' value='add new'>
 </form>";
 
 ?>

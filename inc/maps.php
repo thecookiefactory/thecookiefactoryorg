@@ -74,7 +74,7 @@ while ($r = mysqli_fetch_assoc($q)) {
 
             <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
         </span>
-        <span class='map-desc'><?php echo nl2br($r["desc"], false); ?></span>
+        <span class='map-desc'><?php echo tformat($r["desc"]); ?></span>
         <span class='map-dl'>
 
         <?php

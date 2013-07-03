@@ -39,7 +39,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         <?php echo "#1"; ?>
         <?php echo getname($row["authorid"], true); ?>
         <?php echo displaydate($row["dt"]); ?>
-        <p><?php echo nl2br($row["text"], false); ?></p>
+        <p><?php echo tformat($row["text"]); ?></p>
         <?php
 
             //fetching comments
@@ -55,7 +55,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 <?php echo "#".$cn; ?>
                 <?php echo getname($cr["authorid"]); ?>
                 <?php echo displaydate($cr["dt"]); ?>
-                <p><?php echo nl2br($cr["text"], false); ?></p>
+                <p><?php echo tformat($cr["text"]); ?></p>
 
                 <?php
                 $cn++;

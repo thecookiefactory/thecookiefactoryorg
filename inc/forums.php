@@ -142,7 +142,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                     </div>
                     <div class='forums-post-text'>
-                        <p><?php echo nl2br($row["text"], false); ?></p>
+                        <p><?php echo tformat($row["text"]); ?></p>
                     </div>
                 </div>
 
@@ -179,7 +179,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                         </div>
                         <div class='forums-post-text'>
-                                <p><?php echo nl2br($cr["text"], false); ?></p>
+                                <p><?php echo tformat($cr["text"]); ?></p>
                         </div>
                     </div>
 
