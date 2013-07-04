@@ -105,17 +105,26 @@ if ($action == "add" && checkuser()) {
 
                 if (isset($_POST["edit"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
-                    $text = strip($_POST["text"]);
-
-                    if (strlen($text) > 20000) {
-                        echo "Your comment must be less than 20 000 characters long.";
+                    if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+                    
+                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid`=".$tid." AND `id`=".$pid);
+                        echo "deleted";
+                    
                     } else {
-                        $edt = time();
+                    
+                        $text = strip($_POST["text"]);
 
-                        mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."', `edt`='".$edt."' WHERE `tid`=".$tid." AND `id`=".$pid);
-                        ?>
-                        updated
-                        <?php
+                        if (strlen($text) > 20000) {
+                            echo "Your comment must be less than 20 000 characters long.";
+                        } else {
+                            $edt = time();
+
+                            mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."', `edt`='".$edt."' WHERE `tid`=".$tid." AND `id`=".$pid);
+                            ?>
+                            updated
+                            <?php
+                        }
+                    
                     }
 
                 } else {
@@ -132,6 +141,11 @@ if ($action == "add" && checkuser()) {
                             <textarea class='forums-newpost-text' name='text' required autofocus placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
                         </div>
                     </div>
+                    <?php
+                        if (checkadmin()) {
+                            echo "delete this reply <input type='checkbox' name='delete'>";
+                        }
+                    ?>
                     <input type='submit' name='edit'>
                     </form>
                     
@@ -166,26 +180,36 @@ if ($action == "add" && checkuser()) {
                 
                 if (isset($_POST["edit"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
                 
-                    $cat = strip($_POST["cat"]);
-                    if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
-                        echo "that does not seem like a real forum categorny+";
+                    if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+                    
+                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$id);
+                        mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$id);
+                        echo "deleted";
+                    
                     } else {
-                        $title = strip($_POST["title"]);
-                        
-                        if (strlen($title) > 37) {
-                            echo "please enter a title shorter than 38 characters";
+                    
+                        $cat = strip($_POST["cat"]);
+                        if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
+                            echo "that does not seem like a real forum categorny+";
                         } else {
-                            $text = strip($_POST["text"]);
+                            $title = strip($_POST["title"]);
                             
-                            if (strlen($text) > 20000) {
-                                echo "Your comment must be less than 20 000 characters long.";
+                            if (strlen($title) > 37) {
+                                echo "please enter a title shorter than 38 characters";
                             } else {
-                                $edt = time();
+                                $text = strip($_POST["text"]);
+                                
+                                if (strlen($text) > 20000) {
+                                    echo "Your comment must be less than 20 000 characters long.";
+                                } else {
+                                    $edt = time();
 
-                                mysqli_query($con, "UPDATE `forums` SET `cat`='".$cat."', `title`='".$title."', `text`='".$text."', `edt`='".$edt."' WHERE `id`=".$tid);
-                                ?>
-                                updated
-                                <?php
+                                    mysqli_query($con, "UPDATE `forums` SET `cat`='".$cat."', `title`='".$title."', `text`='".$text."', `edt`='".$edt."' WHERE `id`=".$tid);
+                                    ?>
+                                    updated
+                                    <?php
+                                }
+                                
                             }
                             
                         }
@@ -223,6 +247,11 @@ if ($action == "add" && checkuser()) {
                     }
                     ?>
                     </select>
+                    <?php
+                        if (checkadmin()) {
+                            echo "delete this whole thread <input type='checkbox' name='delete'>";
+                        }
+                    ?>
                     <input type='submit' name='edit'>
                     </form>
                     
