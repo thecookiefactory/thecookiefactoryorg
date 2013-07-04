@@ -771,6 +771,24 @@ img.map-image {
   left: -60px;
 }
 
+.forums-createthread {
+  display: block;
+  margin-bottom: 13px;
+  font-family: Bitter;
+  font-weight: 700;
+}
+
+.forums-createthread-sign {
+  position: relative;
+  left: 1px;
+  font-size: 24px;
+}
+.forums-createthread-text {
+  position: relative;
+  font-size: 20px;
+  left: 2px;
+}
+
 .forums-table {
   table-layout: fixed;
   width: 100%;
@@ -785,7 +803,7 @@ img.map-image {
   background-color: #1C1C1C;
 }
 
-.forums-column-category   {width:  12px; cursor: pointer; }
+.forums-column-category   {width:  13px; cursor: pointer; }
 .forums-column-modifydate {width: 180px; }
 .forums-column-postcount  {width: 120px; }
 
@@ -803,8 +821,8 @@ img.map-image {
   text-transform: uppercase;
   transform-origin: center;
   -webkit-transform-origin: center;
-  transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg) translateY(-0.4px);
+  -webkit-transform: rotate(-90deg) translateY(-0.4px);
 }
 
 .forums-entry-category-text:hover {
@@ -832,6 +850,7 @@ img.map-image {
 .forums-entry-miniheader {
   font-weight: 400;
   font-size: 14px;
+  color: #AAA;
 }
 
 .forums-entry-postcount {

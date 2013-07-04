@@ -17,12 +17,12 @@ if ($action == "add" && checkuser()) {
             echo "that does not seem like a real forum categorny+";
         } else {
             $title = strip($_POST["title"]);
-            
+
             if (strlen($title) > 37) {
                 echo "please enter a title shorter than 38 characters";
             } else {
                 $text = strip($_POST["text"]);
-                
+
                 if (strlen($text) > 20000) {
                     echo "Your comment must be less than 20 000 characters long.";
                 } else {
@@ -33,9 +33,9 @@ if ($action == "add" && checkuser()) {
                     added.
                     <?php
                 }
-                
+
             }
-            
+
         }
 
     } else {
@@ -79,26 +79,26 @@ if ($action == "add" && checkuser()) {
 } else if ($action == "edit" && checkuser() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
 
     $tid = strip($_GET["tid"]);
-    
+
     if (isset($_GET["pid"]) && is_numeric($_GET["pid"])) {
-    
+
         // editing a reply
         $pid = strip($_GET["pid"]);
-        
+
         $eq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `id`=".$pid." AND `tid`=".$tid);
-        
+
         if (mysqli_num_rows($eq) != 1) {
-        
+
             echo "Something went wrong.";
-        
+
         } else {
-            
+
             $er = mysqli_fetch_assoc($eq);
-            
+
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
-            
+
                 echo "You dont have the right!!";
-            
+
             } else {
 
                 // editing
@@ -106,12 +106,12 @@ if ($action == "add" && checkuser()) {
                 if (isset($_POST["edit"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
-                    
+
                         mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid`=".$tid." AND `id`=".$pid);
                         echo "deleted";
-                    
+
                     } else {
-                    
+
                         $text = strip($_POST["text"]);
 
                         if (strlen($text) > 20000) {
@@ -124,11 +124,11 @@ if ($action == "add" && checkuser()) {
                             updated
                             <?php
                         }
-                    
+
                     }
 
                 } else {
-                
+
                     ?>
                     <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>&amp;pid=<?php echo $pid; ?>' method='post'>
                     <div class='forums-post'>
@@ -148,57 +148,57 @@ if ($action == "add" && checkuser()) {
                     ?>
                     <input type='submit' name='edit'>
                     </form>
-                    
+
                     <?php
-                    
+
                 }
-            
+
             }
-        
+
         }
-    
+
     } else {
-    
+
         // editing the main post
         $eq = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$tid);
-        
+
         if (mysqli_num_rows($eq) != 1) {
-        
+
             echo "Something went wrong.";
-        
+
         } else {
-            
+
             $er = mysqli_fetch_assoc($eq);
-            
+
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
-            
+
                 echo "You dont have the right!!";
-            
+
             } else {
-            
+
                 // editing
-                
+
                 if (isset($_POST["edit"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
-                
+
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
-                    
+
                         mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$id);
                         mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$id);
                         echo "deleted";
-                    
+
                     } else {
-                    
+
                         $cat = strip($_POST["cat"]);
                         if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
                             echo "that does not seem like a real forum categorny+";
                         } else {
                             $title = strip($_POST["title"]);
-                            
+
                             if (strlen($title) > 37) {
                                 echo "please enter a title shorter than 38 characters";
                             } else {
                                 $text = strip($_POST["text"]);
-                                
+
                                 if (strlen($text) > 20000) {
                                     echo "Your comment must be less than 20 000 characters long.";
                                 } else {
@@ -209,15 +209,15 @@ if ($action == "add" && checkuser()) {
                                     updated
                                     <?php
                                 }
-                                
+
                             }
-                            
+
                         }
-                        
+
                     }
-                
+
                 } else {
-                
+
                     ?>
                     <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>' method='post'>
                         <h1>
@@ -254,15 +254,15 @@ if ($action == "add" && checkuser()) {
                     ?>
                     <input type='submit' name='edit'>
                     </form>
-                    
+
                     <?php
-                    
+
                 }
-            
+
             }
-        
+
         }
-    
+
     }
 
 } else {
@@ -282,7 +282,7 @@ if ($action == "add" && checkuser()) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
-                
+
                 if (strlen($text) > 20000) {
                     echo "Your comment must be less than 20 000 characters long.";
                 } else {
@@ -433,7 +433,12 @@ if ($action == "add" && checkuser()) {
         if (checkuser()) {
 
             ?>
-            <a class='forums-createthread' href='?p=forums&amp;action=add'>Create a new thread</a>
+
+            <a class='forums-createthread' href='?p=forums&amp;action=add'>
+                <span class='forums-createthread-sign'>+</span>
+                <span class='forums-createthread-text'>create a new thread</span>
+            </a>
+
             <?php
 
         }
