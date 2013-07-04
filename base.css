@@ -6,46 +6,46 @@
 body {
   margin: 0;
   background-image: url(img/bg2.png);
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-weight: 400;
   color: #DDD;
   text-align: left;
+  font-weight: 400;
+  font-family: "Open Sans", "Arial", sans-serif;
 }
 
 .wrapper {
-  width: 1000px;
   margin: 10px auto;
-  box-shadow: 0 0 12px 0 rgba(5, 5, 5, .5);
-  border-radius: 4px;
   padding-bottom: 10px;
+  width: 1000px;
+  border-radius: 4px;
   background-color: #141414;
+  box-shadow: 0 0 12px 0 rgba(5, 5, 5, .5);
 }
 
 header {
+  margin: auto;
   width: 1000px;
   height: 200px;
-  margin: auto;
   background-image: url(img/thecookiefactory-header.svg);
 }
 
 nav {
-  width: 962px;
   margin: auto;
   padding-top: 10px;
   padding-bottom: 30px;
-  font-size: 20px;
+  width: 962px;
   font-weight: 300;
+  font-size: 20px;
 }
 
 .searchbox {
   width: 62px;
   border: 0;
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 20px;
-  font-weight: 300;
+  background: transparent;
   color: white;
   text-align: right;
-  background: transparent;
+  font-weight: 300;
+  font-size: 20px;
+  font-family: "Open Sans", "Arial", sans-serif;
   cursor: pointer;
 }
 
@@ -69,8 +69,8 @@ nav {
 }
 
 .searchbox:focus {
-  cursor: text;
   outline: none;
+  cursor: text;
 }
 
 .searchbox:focus::-webkit-input-placeholder {
@@ -82,19 +82,19 @@ nav {
 }
 
 .include-section {
-  width: 962px;
-  margin: 10px auto;
   position: relative;
+  margin: 10px auto;
+  width: 962px;
 }
 
 footer {
-  border: 0 solid #F93;
   padding-top: 1em;
   padding-bottom: 1em;
-  font-family: Bitter;
-  font-size: 12px;
+  border: 0 solid #F93;
   color: white;
   text-align: center;
+  font-size: 12px;
+  font-family: Bitter;
   line-height: 1.4em;
 }
 
@@ -129,11 +129,11 @@ a:hover, a:active {
 
 hr {
   clear: both;
-  width: 960px;
-  background-color: #4188D2;
   margin: 5px auto 10px;
+  width: 960px;
   border-style: solid;
   border-color: #4188D2;
+  background-color: #4188D2;
 }
 
 form {
@@ -141,23 +141,23 @@ form {
 }
 
 input {
-  background-color: #141414;
   border: 1px solid #4188D2;
+  background-color: #141414;
   color: #DDD;
 }
 
 .stream-menu {
-  list-style: none;
   padding: 0;
+  list-style: none;
   text-align: center;
 }
 
 .stream-button {
   display: inline-block;
-  width: 130px;
   margin: 7px 10px 0;
-  border: 1px solid white;
   padding: 5px 0;
+  width: 130px;
+  border: 1px solid white;
   color: white;
   transition: border-color 0.3s ease-in-out;
 }
@@ -185,15 +185,15 @@ input {
 
 .stream-player {
   float: left;
-  height: 378px;
   width: 620px;
+  height: 378px;
 }
 
 .stream-description {
   float: right;
-  height: 378px;
-  width: 321px;
   overflow-y: auto;
+  width: 321px;
+  height: 378px;
   color: #DDD;
   text-align: justify;
 }
@@ -203,8 +203,8 @@ input {
 }
 
 .stream-content:after, .stream-content:before {
-  content: "";
   display: table;
+  content: "";
 }
 
 .stream-content:after {
@@ -213,10 +213,10 @@ input {
 
 h1 {
   margin: 0;
-  font-size: 36px;
-  font-weight: 400;
-  font-family: Bitter;
   text-align: left;
+  font-weight: 400;
+  font-size: 36px;
+  font-family: Bitter;
 }
 
 .article-header {
@@ -235,25 +235,25 @@ h1 {
 }
 
 .article-title {
-  width: 600px;
   float: left;
+  width: 600px;
 }
 
 .article-metadata {
-  margin-top: 4px;
-  font-size: 14px;
-  font-style: italic;
-  color: #999;
   float: right;
+  margin-top: 4px;
+  color: #999;
+  font-style: italic;
+  font-size: 14px;
 }
 
 .article-edit-metadata {
   position: absolute;
   top: 20px;
   right: 0;
-  font-size: 14px;
-  font-style: italic;
   color: #555;
+  font-style: italic;
+  font-size: 14px;
 }
 
 .article-edit-metadata:before {
@@ -274,9 +274,9 @@ article {
 }
 
 .article-separator {
+  margin-top: 20px;
   width: 800px;
   height: 1px;
-  margin-top: 20px;
   border-width: 0;
   background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
@@ -291,21 +291,21 @@ article {
 
 .news-page-number {
   display: inline-block;
-  font-family: "Open Sans";
-  font-weight: 300;
-  font-size: 18px;
   color: white;
   text-align: center;
+  font-weight: 300;
+  font-size: 18px;
+  font-family: "Open Sans";
 }
 
 .news-page-number + .news-page-number:before {
-  content: "\A0\B7\A0";
   color: white;
+  content: "\A0\B7\A0";
 }
 
 .nav-menubar {
-  float: left;
   z-index: 1;
+  float: left;
 }
 
 .nav-actionbar {
@@ -316,9 +316,9 @@ article {
 
 .nav-loginbar {
   display: none;
+  float: right;
   margin-top: -2px;
   color: #DDD;
-  float: right;
 }
 
 .menu-item {
@@ -330,8 +330,8 @@ article {
 }
 
 .menu-item+.menu-item:before {
-  content: " / ";
   color: #4188D2;
+  content: " / ";
 }
 
 .menu-item+.menu-item:before:hover {
@@ -359,13 +359,13 @@ article {
 
 .comment-metadata {
   clear: both;
-  font-weight: 200;
   color: white;
+  font-weight: 200;
 }
 
 .comment-author {
-  font-weight: 600;
   color: #DDD;
+  font-weight: 600;
 }
 
 .comment-date:before {
@@ -377,9 +377,9 @@ article {
 }
 
 .comment-text {
+  color: #DDD;
   text-align: justify;
   font-size: 14px;
-  color: #DDD;
 }
 
 .comment-form {
@@ -388,15 +388,15 @@ article {
 }
 
 .comment-textarea {
-  height: 60px;
-  width: 500px;
   margin-top: 4px;
+  width: 500px;
+  height: 60px;
   border-color: #4188D2;
   border-radius: 2px;
   background-color: inherit;
+  color: white;
   font: inherit;
   font-size: 14px;
-  color: white;
   transition: border-color 0.3s ease-in-out;
 }
 
@@ -409,13 +409,13 @@ article {
   position: relative;
   top: -24px;
   left: 4px;
-  height: 66px;
-  width: 41px;
   margin-left: -5px;
+  width: 41px;
+  height: 66px;
   border-color: #4188D2;
   border-radius: 2px;
-  font-size: 28px;
   color: #DDD;
+  font-size: 28px;
   transition: border-color 0.3s, color 0.1s;
 }
 
@@ -453,21 +453,21 @@ article {
 
 .map-container {
   position: relative;
-  width: 900px;
-  margin: auto;
   overflow: hidden;
+  margin: auto;
+  width: 900px;
 }
 
 .map-leftarrow, .map-rightarrow {
   position: absolute;
+  z-index: 1;
+  display: block;
   width: 65px;
   height: 504px;
-  display: block;
-  z-index: 1;
-  opacity: 0;
   background-color: #CCC;
   background-color: rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
+  opacity: 0;
 
   -webkit-animation-duration: 0.2s;
   animation-duration: 0.2s;
@@ -480,20 +480,20 @@ article {
 }
 
 .map-leftarrow {
-  background-position: -3px 232.5px;
   background-image: url(img/prev.png);
+  background-position: -3px 232.5px;
 }
 
 .map-rightarrow {
   left: 834px;
-  background-position: 17px 232.5px;
   background-image: url(img/next.png);
+  background-position: 17px 232.5px;
 }
 
 .map-leftarrow:hover, .map-rightarrow:hover {
-  cursor: pointer;
   background-color: #999;
   background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
 .map-arrow-disabled {
@@ -520,8 +520,8 @@ article {
 
 div.map-image {
   display: inline-block;
-  text-align: center;
   width: 900px;
+  text-align: center;
 }
 
 img.map-image {
@@ -529,57 +529,57 @@ img.map-image {
 }
 
 .map-name {
-  width: 100%;
   z-index: 1;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family: "TF2 Build";
-  font-size: 56px;
-  -webkit-text-stroke: 2px #141414;
+  width: 100%;
   color: white;
   text-align: center;
+  font-size: 56px;
+  font-family: "TF2 Build";
+  -webkit-text-stroke: 2px #141414;
 }
 
 .search-separator {
-  width: 30%;
   margin-bottom: 40px;
+  width: 30%;
   border-color: #F93;
 }
 
 .search-title:before {
-  content: "";
   position: absolute;
-  height: 30px;
   top: -12px;
   left: -12px;
   width: 11px;
+  height: 30px;
   border: 2px solid #4188D2;
   border-right: 0;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  content: "";
 }
 
 .search-title:after {
-  content: "";
   position: absolute;
-  height: 2px;
-  width: 12px;
   top: 77px;
   left: -12px;
+  width: 12px;
+  height: 2px;
   background-color: #4188D2;
+  content: "";
 }
 
 .search-title {
   display: inline-block;
   margin-top: 20px;
+  padding: 11px 11px 11px 0;
   border: 2px solid #4188D2;
   border-left: 0;
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
-  padding: 11px 11px 11px 0;
-  font-family: Bitter;
-  font-size: 28px;
   color: #F93;
+  font-size: 28px;
+  font-family: Bitter;
 }
 
 @-moz-document url-prefix() {
@@ -589,22 +589,22 @@ img.map-image {
 }
 
 .search-type {
-  line-height: 25px;
-  background-color: inherit;
+  margin-right: 1px;
+  padding: 0;
   border: 0;
   border-bottom: 2px dotted #DDD;
-  padding: 0;
-  margin-right: 1px;
-  font-family: inherit;
-  font-size: inherit;
+  background-color: inherit;
   color: #DDD;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: 25px;
   transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .search-type:hover {
-  cursor: pointer;
   border-bottom-color: #A0C4E8;
   color: #4188D2;
+  cursor: pointer;
 }
 
 .search-term {
@@ -630,25 +630,25 @@ img.map-image {
 }
 
 .account-form {
-  width: 800px;
   margin: auto;
+  width: 800px;
+  color: #DDD;
   text-align: justify;
   font-size: 18px;
   font-family: Bitter;
   line-height: 1.3em;
-  color: #DDD;
 }
 
 .account-input {
+  padding: 0;
   width: 140px;
   border-width: 0;
   border-bottom-width: 2px;
   border-bottom-style: solid;
   border-bottom-color: #666;
-  padding: 0;
-  font: inherit;
   color: #141414;
   text-align: left;
+  font: inherit;
 }
 
 @-webkit-keyframes blink { from{border-bottom-color: #888;} to{border-bottom-color: #333;} }
@@ -675,22 +675,22 @@ img.map-image {
 
 /* Hack to remove Chrome's ugly autofill styling */
 .account-input:-webkit-autofill {
-    -webkit-text-fill-color: #4188D2;
     box-shadow: 0 0 0px 1000px #141414 inset;
+    -webkit-text-fill-color: #4188D2;
   }
 
 .input-wrapper+.input-wrapper:before {
-  content: " / ";
   color: #4188D2;
+  content: " / ";
 }
 
 .account-button {
-  width: auto;
   padding: 0;
-  cursor: pointer;
+  width: auto;
+  border: 0;
   color: #F93;
   font-weight: 700;
-  border: 0;
+  cursor: pointer;
   transition: color 0.2s ease-in-out;
 }
 
@@ -739,9 +739,9 @@ img.map-image {
   right: 0;
   opacity: 0;
   -webkit-filter: blur(1px) saturate(0);
+  transition: -webkit-transform 0.5s ease-out 0.1s, -webkit-filter 0.4s ease-out, opacity 0.5s ease-in-out 0.1s;
   -webkit-transform: translateY(-30px);
   transform: translateY(-30px);
-  transition: -webkit-transform 0.5s ease-out 0.1s, -webkit-filter 0.4s ease-out, opacity 0.5s ease-in-out 0.1s;
 }
 
 .login-text:hover ~ .login-button {
@@ -774,8 +774,8 @@ img.map-image {
 .forums-createthread {
   display: block;
   margin-bottom: 13px;
-  font-family: Bitter;
   font-weight: 700;
+  font-family: Bitter;
 }
 
 .forums-createthread-sign {
@@ -785,13 +785,13 @@ img.map-image {
 }
 .forums-createthread-text {
   position: relative;
-  font-size: 20px;
   left: 2px;
+  font-size: 20px;
 }
 
 .forums-table {
-  table-layout: fixed;
   width: 100%;
+  table-layout: fixed;
 }
 
 .forums-entry {
@@ -816,13 +816,13 @@ img.map-image {
   margin: 0 -10px;
   color: white;
   text-align: center;
-  font-size: 10px;
-  font-weight: 300;
   text-transform: uppercase;
-  transform-origin: center;
-  -webkit-transform-origin: center;
-  transform: rotate(-90deg) translateY(-0.4px);
+  font-weight: 300;
+  font-size: 10px;
   -webkit-transform: rotate(-90deg) translateY(-0.4px);
+  transform: rotate(-90deg) translateY(-0.4px);
+  -webkit-transform-origin: center;
+  transform-origin: center;
 }
 
 .forums-entry-category-text:hover {
@@ -834,8 +834,8 @@ img.map-image {
 }
 
 .forums-entry-title {
-  font-family: Bitter;
   font-weight: 700;
+  font-family: Bitter;
 }
 
 .forums-entry-metadata {
@@ -848,9 +848,9 @@ img.map-image {
 }
 
 .forums-entry-miniheader {
+  color: #AAA;
   font-weight: 400;
   font-size: 14px;
-  color: #AAA;
 }
 
 .forums-entry-postcount {
@@ -861,13 +861,13 @@ img.map-image {
 
 .forums-post-header {
   height: 28px;
-  background-color: #1C1C1C;
   border-bottom: groove #262626 2px;
+  background-color: #1C1C1C;
 }
 
 .forums-post-header:before,.forums-post-header:after {
-  content: "";
   display: table;
+  content: "";
 }
 
 .forums-post-header:after {
@@ -879,18 +879,18 @@ img.map-image {
   width: 40px;
   height: 28px;
   border-right: groove #262626 2px;
-  font-weight: 300;
   text-align: center;
+  font-weight: 300;
   line-height: 28px;
 }
 
 .forums-post-metadata {
-  height: 28px;
-  margin-right: 12px;
-  font-size: 16px;
-  font-style: italic;
-  color: #999;
   float: right;
+  margin-right: 12px;
+  height: 28px;
+  color: #999;
+  font-style: italic;
+  font-size: 16px;
   line-height: 28px;
 }
 
@@ -903,10 +903,10 @@ img.map-image {
 }
 
 .forums-post {
-  min-height: 120px;
   margin: 10px 0;
-  background-color: #181818;
+  min-height: 120px;
   border-radius: 2px;
+  background-color: #181818;
   box-shadow: 0 0 4px 0 rgba(14, 14, 14, .9);
   text-align: justify;
 }
@@ -921,46 +921,46 @@ img.map-image {
 }
 
 .forums-newpost-title {
-  width: 962px;
   padding: 0;
+  width: 962px;
+  border: 0;
   background-color: inherit;
   box-shadow: inset 0 0 4px 0 rgba(8, 8, 8, .4);
-  border: 0;
   font: inherit;
   transition: all 0.2s ease-in-out;
 }
 
 .forums-newpost-title:focus {
-  width: 946px;
   padding: 0 8px;
-  box-shadow: inset 0 0 8px 0 rgba(8, 8, 8, .9);
-  background-color: #0D0D0D;
+  width: 946px;
   outline: 0;
+  background-color: #0D0D0D;
+  box-shadow: inset 0 0 8px 0 rgba(8, 8, 8, .9);
 }
 
 .forums-newpost-text {
+  margin: 8px;
+  padding: 4px;
   width: 938px;
   height: 140px;
-  resize: vertical;
   border: 0;
-  padding: 4px;
   background-color: inherit;
-  margin: 8px;
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  color: #DDD;
   box-shadow: inset 0 0 4px 0 rgba(8, 8, 8, .4);
+  color: #DDD;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: "Open Sans", "Arial", sans-serif;
+  resize: vertical;
   transition: all 0.2s ease-in-out;
 }
 
 .forums-newpost-text:focus {
+  padding: 8px;
   width: 930px;
   height: 132px;
-  padding: 8px;
+  outline: 0;
   background-color: #101010;
   box-shadow: inset 0 0 8px 0 rgba(8, 8, 8, .9);
-  outline: 0;
 }
 
 .forums-newpost-text::-webkit-input-placeholder, .forums-newpost-title::-webkit-input-placeholder {
@@ -977,28 +977,28 @@ img.map-image {
 }
 
 .notfound-box {
+  margin: 20px auto;
   width: 900px;
   height: 300px;
-  margin: 20px auto;
+  border-radius: 4px;
   background-image: url(img/bg2.png);
   box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
-  border-radius: 4px;
 }
 
 .notfound-quote {
-  width: 900px;
   margin: 40px auto;
+  width: 900px;
 }
 
 .notfound-quote-text {
-  font-family: "Bitter";
-  font-size: 50px;
   text-shadow: 1px 1px 2px rgba(5, 5, 5, .5);
+  font-size: 50px;
+  font-family: "Bitter";
 }
 
 .notfound-quote-data {
   float: right;
-  font-size: 20px;
-  font-variant: small-caps;
   font-weight: 300;
+  font-variant: small-caps;
+  font-size: 20px;
 }
