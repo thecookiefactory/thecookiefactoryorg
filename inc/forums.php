@@ -76,6 +76,64 @@ if ($action == "add" && checkuser()) {
 
     }
 
+} else if ($action == "edit" && checkuser() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
+
+    $tid = strip($_GET["tid"]);
+    
+    if (isset($_GET["pid"]) && is_numeric($_GET["pid"])) {
+    
+        // editing a reply
+        $pid = strip($_GET["pid"]);
+        
+        $eq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `id`=".$pid." AND `tid`=".$tid);
+        
+        if (mysqli_num_rows($eq) != 1) {
+        
+            echo "Something went wrong.";
+        
+        } else {
+            
+            $er = mysqli_fetch_assoc($eq);
+            
+            if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
+            
+                echo "You dont have the right!!";
+            
+            } else {
+            
+                // editing
+            
+            }
+        
+        }
+    
+    } else {
+    
+        // editing the main post
+        $eq = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$tid);
+        
+        if (mysqli_num_rows($eq) != 1) {
+        
+            echo "Something went wrong.";
+        
+        } else {
+            
+            $er = mysqli_fetch_assoc($eq);
+            
+            if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
+            
+                echo "You dont have the right!!";
+            
+            } else {
+            
+                // editing
+            
+            }
+        
+        }
+    
+    }
+
 } else {
 
     if ((isset($_GET["id"]) && is_numeric($_GET["id"])) || (isset($tid) && is_numeric($tid))) {
@@ -129,6 +187,7 @@ if ($action == "add" && checkuser()) {
                             <?php echo "#1"; ?>
                         </div>
                         <div class='forums-post-metadata'>
+                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."'>edit</a>"; ?>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
                                     <?php echo getname($row["authorid"], true); ?>
@@ -166,6 +225,7 @@ if ($action == "add" && checkuser()) {
                                 <?php echo "#".$cn; ?>
                             </div>
                             <div class='forums-post-metadata'>
+                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."&amp;pid=".$cr["id"]."'>edit</a>"; ?>
                                 <span class='forums-post-metadata-item'>
                                     <span class='forums-post-author'>
                                         <?php echo getname($cr["authorid"]); ?>
