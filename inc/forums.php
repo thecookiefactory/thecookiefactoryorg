@@ -28,7 +28,7 @@ if ($action == "add" && checkuser()) {
                 } else {
                     $dt = time();
 
-                    mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
+                    mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','0','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
                     ?>
                     added.
                     <?php
@@ -127,6 +127,72 @@ if ($action == "add" && checkuser()) {
             } else {
             
                 // editing
+                
+                if (isset($_POST["edit"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
+                
+                    $cat = strip($_POST["cat"]);
+                    if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
+                        echo "that does not seem like a real forum categorny+";
+                    } else {
+                        $title = strip($_POST["title"]);
+                        
+                        if (strlen($title) > 37) {
+                            echo "please enter a title shorter than 38 characters";
+                        } else {
+                            $text = strip($_POST["text"]);
+                            
+                            if (strlen($text) > 20000) {
+                                echo "Your comment must be less than 20 000 characters long.";
+                            } else {
+                                $edt = time();
+
+                                mysqli_query($con, "UPDATE `forums` SET `cat`='".$cat."', `title`='".$title."', `text`='".$text."', `edt`='".$edt."' WHERE `id`=".$tid);
+                                ?>
+                                updated
+                                <?php
+                            }
+                            
+                        }
+                        
+                    }
+                
+                } else {
+                
+                    ?>
+                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>' method='post'>
+                        <h1>
+                            <input class='forums-newpost-title' type='text' name='title' required placeholder='Enter a title here...' maxlength='37' value='<?php echo $er["title"]; ?>'>
+                        </h1>
+                    <div class='forums-post'>
+                        <div class='forums-post-header'>
+                            <div class='forums-post-number'>
+                                #1
+                            </div>
+                        </div>
+                        <div>
+                            <textarea class='forums-newpost-text' name='text' required autofocus placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
+                        </div>
+                    </div>
+                    <label for="cat">Category: </label>
+                    <select class='forums-newpost-select' name='cat'>
+                    <?php
+                    $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+
+                    while ($cr = mysqli_fetch_assoc($cq)) {
+
+                        ?>
+                        <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
+                        <?php
+
+                    }
+                    ?>
+                    </select>
+                    <input type='submit' name='edit'>
+                    </form>
+                    
+                    <?php
+                    
+                }
             
             }
         

@@ -152,7 +152,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$dt."','".$text."','".$comments."','','','".$live."')");
             $id = mysqli_insert_id($con);
-            mysqli_query($con, "INSERT INTO `forums` VALUES('','".$author."','".$dt."','".$title."','".$text."','0','0','".$dt."','0','".$id."')");
+            mysqli_query($con, "INSERT INTO `forums` VALUES('','".$author."','".$dt."','0','".$title."','".$text."','0','0','".$dt."','0','".$id."')");
             
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
