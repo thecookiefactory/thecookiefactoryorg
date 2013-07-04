@@ -100,8 +100,44 @@ if ($action == "add" && checkuser()) {
                 echo "You dont have the right!!";
             
             } else {
-            
+
                 // editing
+
+                if (isset($_POST["edit"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
+
+                    $text = strip($_POST["text"]);
+
+                    if (strlen($text) > 20000) {
+                        echo "Your comment must be less than 20 000 characters long.";
+                    } else {
+                        $edt = time();
+
+                        mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."', `edt`='".$edt."' WHERE `tid`=".$tid." AND `id`=".$pid);
+                        ?>
+                        updated
+                        <?php
+                    }
+
+                } else {
+                
+                    ?>
+                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>&amp;pid=<?php echo $pid; ?>' method='post'>
+                    <div class='forums-post'>
+                        <div class='forums-post-header'>
+                            <div class='forums-post-number'>
+                                #N
+                            </div>
+                        </div>
+                        <div>
+                            <textarea class='forums-newpost-text' name='text' required autofocus placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
+                        </div>
+                    </div>
+                    <input type='submit' name='edit'>
+                    </form>
+                    
+                    <?php
+                    
+                }
             
             }
         
@@ -254,6 +290,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                         <div class='forums-post-metadata'>
                             <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."'>edit</a>"; ?>
+                            <?php if ($row["edt"] != 0) echo "last edited ".displaydate($row["edt"]); ?>
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
                                     <?php echo getname($row["authorid"], true); ?>
@@ -292,6 +329,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                             <div class='forums-post-metadata'>
                                 <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."&amp;pid=".$cr["id"]."'>edit</a>"; ?>
+                                <?php if ($row["edt"] != 0) echo "last edited ".displaydate($row["edt"]); ?>
                                 <span class='forums-post-metadata-item'>
                                     <span class='forums-post-author'>
                                         <?php echo getname($cr["authorid"]); ?>
