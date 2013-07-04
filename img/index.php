@@ -1,3 +1,3 @@
 <?php
-header("Location: notfound.php");
+header("Location: /notfound.php");
 ?>

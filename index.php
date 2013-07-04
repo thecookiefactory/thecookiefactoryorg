@@ -3,7 +3,7 @@
 session_start();
 
 $r_c = 42;
-require "inc/essential.php";
+require "inc/functions.php";
 include "inc/lightopenid/openid.php";
 
 ccookies();
