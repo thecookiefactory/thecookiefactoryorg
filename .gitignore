@@ -1,5 +1,5 @@
 inc/essential.php
-inc/checkuser.php
+inc/config.php
 img/maps/*
 _OTHERS
 tf
