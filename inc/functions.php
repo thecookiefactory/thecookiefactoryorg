@@ -2,7 +2,12 @@
 
 if (!isset($r_c)) header("Location: notfound.php");
 
-require "inc/config.php";
+if ($r_c == 42)
+    require "inc/config.php";
+
+if ($r_c == 41)
+    require "../inc/config.php";
+
 
 function strip($x) {
 
