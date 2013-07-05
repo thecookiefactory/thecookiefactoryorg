@@ -36,6 +36,16 @@ while ($r = mysqli_fetch_assoc($q)) {
     <div class='map-container'>
       <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
       <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
+      <div class="map-actionbar">
+        <span class="map-actionbar-button">More info</span>
+          <?php
+            switch ($r["dltype"]) {
+              case 0: ?><a href='<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
+              case 1: ?><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
+              case 2: ?><span class='map-actionbar-button-disabled'>Download</span><?php break;
+            }
+          ?>
+      </div>
       <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
       <script type='text/javascript'> lendict["map-<?php echo $r["id"]; ?>"] = <?php echo (mysqli_num_rows($gq)+1); ?>; initialize("map-<?php echo $r["id"]; ?>");</script>
 
@@ -75,17 +85,6 @@ while ($r = mysqli_fetch_assoc($q)) {
             <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
         </span>
         <span class='map-desc'><?php echo tformat($r["desc"]); ?></span>
-        <span class='map-dl'>
-
-        <?php
-        switch ($r["dltype"]) {
-            case 0: ?><a href='<?php echo $r["dl"]; ?>' target='_blank'>DOWNLOAD</a><?php break;
-            case 1: ?><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'>DOWNLOAD</a><?php break;
-            case 2: ?>No dowload available yet.<?php break;
-        }
-        ?>
-
-        </span>
       </div>
 
 

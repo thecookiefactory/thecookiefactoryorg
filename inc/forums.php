@@ -481,10 +481,8 @@ if ($action == "add" && checkuser()) {
             ?>
             <tr class='forums-entry'>
                 <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
-                    <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
-                        <div class='forums-entry-category-text'>
+                    <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
                             <?php echo getcatname($row["cat"]); ?>
-                        </div>
                     </a>
                 </td>
                 <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>

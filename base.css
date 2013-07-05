@@ -278,11 +278,8 @@ article {
   width: 800px;
   height: 1px;
   border-width: 0;
-  background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -moz-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -ms-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
 }
 
 .news-pages {
@@ -468,6 +465,7 @@ article {
   background-color: rgba(0, 0, 0, 0.2);
   background-repeat: no-repeat;
   opacity: 0;
+  transition: background-color 0.2s ease-in-out;
 
   -webkit-animation-duration: 0.2s;
   animation-duration: 0.2s;
@@ -538,6 +536,61 @@ img.map-image {
   font-size: 56px;
   font-family: "TF2 Build";
   -webkit-text-stroke: 2px #141414;
+}
+
+.map-actionbar {
+  position: absolute;
+  top: 420px;
+  left: 300px;
+  z-index: 1;
+  display: table;
+  margin: auto;
+  width: 300px;
+  height: 36px;
+  text-align: center;
+  font-weight: 300;
+  font-size: 18px;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.map-actionbar-button {
+  display: inline-block;
+  border: 1px outset #333;
+  width: 146px;
+  line-height: 36px;
+  vertical-align: middle;
+  background: linear-gradient(to bottom, #010101, #0A0A0A);
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.map-actionbar-button:hover {
+  opacity: 0.8;2
+  background: linear-gradient(to bottom, #010101, #0A0A0A));
+}
+
+.map-actionbar-button:active {
+  border: 1px inset #333;
+}
+
+.map-actionbar > a {
+  color: white;
+}
+
+.map-actionbar-button-disabled {
+  display: inline-block;
+  border: 1px outset #333;
+  width: 146px;
+  line-height: 36px;
+  vertical-align: middle;
+  background: linear-gradient(to bottom, #010101, #0A0A0A);
+  opacity: 0.3;
+  cursor: default;
 }
 
 .search-separator {
@@ -813,6 +866,7 @@ img.map-image {
 }
 
 .forums-entry-category-text {
+  display: block;
   margin: 0 -10px;
   color: white;
   text-align: center;
