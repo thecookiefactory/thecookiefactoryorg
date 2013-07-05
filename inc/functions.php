@@ -30,11 +30,13 @@ function vf($x) {
 
 function ccookies() {
 
+    global $con;
+
     if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"])) {
         $cv = $_COOKIE["userid"];
         $cq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `cookieh`='".$cv."'");
         $cr = mysqli_fetch_assoc($cq);
-        if (mysqli_num_rows($cr) == 1) {
+        if (mysqli_num_rows($cq) == 1) {
             $_SESSION["userid"] = $cr["id"];
         }
     }
