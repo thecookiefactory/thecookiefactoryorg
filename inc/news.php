@@ -21,7 +21,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     if (mysqli_num_rows($query) == 0) {
         ?>
 
-        No news posts found.
+        There are no news posts.
 
         <?php
     } else {

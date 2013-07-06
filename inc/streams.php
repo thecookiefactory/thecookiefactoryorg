@@ -15,61 +15,68 @@ $q = mysqli_query($con, "SELECT `id`,`authorid`,`twitch`,`active` FROM `streams`
 
 <?php
 
-while ($r = mysqli_fetch_assoc($q)) {
+if (mysqli_num_rows($q) != 0) {
 
-    ?>
-    <a href='?p=streams&amp;id=<?php echo $r["id"]; ?>'>
+    while ($r = mysqli_fetch_assoc($q)) {
 
-    <?php
-
-    if (isset($_GET["id"]) && $r["id"] == $_GET["id"]) {
-
-    ?>
-        <li class='stream-button stream-button-selected
+        ?>
+        <a href='?p=streams&amp;id=<?php echo $r["id"]; ?>'>
 
         <?php
 
-        if (islive($r["twitch"])) {
+        if (isset($_GET["id"]) && $r["id"] == $_GET["id"]) {
 
-            ?>
-
-            stream-live
+        ?>
+            <li class='stream-button stream-button-selected
 
             <?php
 
+            if (islive($r["twitch"])) {
+
+                ?>
+
+                stream-live
+
+                <?php
+
+            }
+
         }
 
-    }
+        else {
 
-    else {
+            ?>
+
+            <li class='stream-button
+
+            <?php
+
+            if (islive($r["twitch"])) {
+
+                ?>
+
+                stream-live
+
+                <?php
+
+            }
+
+        }
 
         ?>
 
-        <li class='stream-button
+        '><?php echo getname($r["authorid"]); ?></li>
+        </a>
 
         <?php
 
-        if (islive($r["twitch"])) {
-
-            ?>
-
-            stream-live
-
-            <?php
-
-        }
-
     }
 
-    ?>
+} else {
 
-    '><?php echo getname($r["authorid"]); ?></li>
-    </a>
-
-    <?php
+    echo "There are no active streams.";
 
 }
-
 ?>
 </ul>
 

@@ -182,8 +182,8 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$id);
-                        mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$id);
+                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$tid);
+                        mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$tid);
                         echo "deleted";
 
                     } else {
@@ -476,37 +476,45 @@ if ($action == "add" && checkuser()) {
             <tbody>
 
         <?php
-        while ($row = mysqli_fetch_assoc($query)) {
+        if (mysqli_num_rows($query) != 0) {
+        
+            while ($row = mysqli_fetch_assoc($query)) {
 
-            ?>
-            <tr class='forums-entry'>
-                <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
-                    <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
-                            <?php echo getcatname($row["cat"]); ?>
-                    </a>
-                </td>
-                <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
-                    <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
-                        <?php echo $row["title"]; ?>
-                    </a>
-                    <br>
-                    <span class='forums-entry-metadata'>
-                        created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
-                    </span>
-                </td>
-                <td class='forums-entry-modifydate'>
-                    <span class='forums-entry-miniheader'>Last reply posted</span><br>
-                    <?php echo displaydate($row["ldt"]); ?>
-                </td>
-                <td class='forums-entry-postcount'>
-                    <span class='forums-entry-miniheader'>Thread has</span><br>
-                    <?php
-                        echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
-                    ?>
-                </td>
-            </tr>
-            <?php
+                ?>
+                <tr class='forums-entry'>
+                    <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
+                        <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                                <?php echo getcatname($row["cat"]); ?>
+                        </a>
+                    </td>
+                    <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
+                        <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                            <?php echo $row["title"]; ?>
+                        </a>
+                        <br>
+                        <span class='forums-entry-metadata'>
+                            created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
+                        </span>
+                    </td>
+                    <td class='forums-entry-modifydate'>
+                        <span class='forums-entry-miniheader'>Last reply posted</span><br>
+                        <?php echo displaydate($row["ldt"]); ?>
+                    </td>
+                    <td class='forums-entry-postcount'>
+                        <span class='forums-entry-miniheader'>Thread has</span><br>
+                        <?php
+                            echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
+                        ?>
+                    </td>
+                </tr>
+                <?php
 
+            }
+            
+        } else {
+        
+            echo "There are no forum threads. Why dont you create one?";
+        
         }
 
         ?>
