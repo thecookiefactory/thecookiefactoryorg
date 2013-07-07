@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 $r_c = 41;
 require "../inc/functions.php";
 
@@ -27,7 +28,9 @@ if (!checkadmin()) die("403");
 $q = mysqli_query($con, "SELECT `id` FROM `users`");
 
 while ($r = mysqli_fetch_assoc($q)) {
+
     echo getname($r["id"])."<br>";
+
 }
 
 ?>

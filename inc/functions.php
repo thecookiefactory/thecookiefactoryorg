@@ -21,16 +21,16 @@ function strip($x) {
 }
 
 function tformat($x) {
-    
+
     //return preg_replace('/(<br[^>]*>\s*){3,}/', '<br><br>', nl2br($x, false));
     return nl2br($x, false);
-    
+
 }
 
 function vf($x) {
 
     return (strip($x) != "" || strip($x) != null) ? true : false;
-    
+
 }
 
 function ccookies() {
@@ -38,12 +38,19 @@ function ccookies() {
     global $con;
 
     if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"])) {
+
         $cv = $_COOKIE["userid"];
+
         $cq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `cookieh`='".$cv."'");
+
         $cr = mysqli_fetch_assoc($cq);
+
         if (mysqli_num_rows($cq) == 1) {
+
             $_SESSION["userid"] = $cr["id"];
+
         }
+
     }
 
 }
@@ -61,17 +68,26 @@ function checkadmin() {
     if (isset($_SESSION["userid"])) {
 
         $x = $_SESSION["userid"];
+
         $cq = mysqli_query($con, "SELECT `admin` FROM `users` WHERE `id`=".$x);
+
         $cr = mysqli_fetch_assoc($cq);
 
-        if ($cr["admin"] == 1)
+        if ($cr["admin"] == 1) {
+
             return true;
-        else
+
+        } else {
+
             return false;
 
-    } else
+        }
+
+    } else {
 
         return false;
+
+    }
 
 }
 
@@ -82,10 +98,16 @@ function getname($id, $span = false) {
     $nq = mysqli_query($con, "SELECT `name`,`admin` FROM `users` WHERE `id`=".$id);
     $nr = mysqli_fetch_assoc($nq);
 
-    if ($nr["admin"] == 0 || $span == false)
+    if ($nr["admin"] == 0 || $span == false) {
+
         return $nr["name"];
-    elseif (isset($span) && $span == true)
+
+    } else if (isset($span) && $span == true) {
+
         return "<span class='admin-name'>".$nr["name"]."</span>";
+
+    }
+
 }
 
 function displaydate($x) {
@@ -107,7 +129,7 @@ function longago($x) {
         return $diff." seconds ago";
 
     } else if ($diff < 120) {
-    
+
         return "a minute ago";
 
     } else if ($diff < 60*60) {
@@ -115,9 +137,9 @@ function longago($x) {
         return ((int)($diff/60))." minutes ago";
 
     } else if ($diff < 60*60*2) {
-    
+
         return "an hour ago";
-    
+
     } else if ($diff < 60*60*24) {
 
         return ((int)($diff/(60*60)))." hours ago";
@@ -134,17 +156,23 @@ function islive($x) {
 
     $json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
     $json_array = json_decode($json_file, true);
-    
+
     if (empty($json_array)) {
+
         return false;
+
     }
 
     if ($json_array[0]['name'] == "live_user_$x") {
+
         return true;
+
     } else {
+
         return false;
+
     }
-    
+
 }
 
 function register($username) {
@@ -173,26 +201,33 @@ function register($username) {
     $cq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `name`='".$username."'");
 
     if (mysqli_num_rows($cq) != 0) {
+
         echo "We're sorry, that user already exists!";
         return;
+
     }
 
     $dt = time();
-    
+
     $cookieh = cookieh();
-    
+
     //registering the user and redirecting to the login form
     $query = mysqli_query($con, "INSERT INTO `users` VALUES('','".$username."','".$_SESSION["steamid"]."','0','".$cookieh."','".$dt."')");
     $id = mysqli_insert_id($con);
-    
+
     $_SESSION["userid"] = $id;
     setcookie("userid", $cookieh, time() + 2592000);
+
     echo "Successfully registered! You will get redirected in 5 seconds. <a href='?p=news'>Click here if you don't want to wait.</a>";
 
     if (isset($_SESSION["lp"])) {
+
         $redirect = $_SESSION["lp"];
+
     } else {
+
         $redirect = "news";
+
     }
 
 }
@@ -206,18 +241,24 @@ function login() {
     global $domain;
 
     if (!isset($OpenID)) {
+
         $OpenID = new LightOpenID($domain);
+
     }
 
     if (!$OpenID->mode) {
 
         if (isset($_GET["p"]) && $_GET["p"] == "login") {
+
             $OpenID->identity = "http://steamcommunity.com/openid";
             header("Location: {$OpenID->authUrl()}");
+
         }
 
         if (!isset($_SESSION["userid"])) {
+
             echo "<a class='menu-item' href='?p=login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
+
         }
 
     } elseif ($OpenID->mode == "cancel") {
@@ -238,6 +279,7 @@ function login() {
 
             // checking if the user has an account
             $uq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `steamid`='".$_SESSION["steamid"]."'");
+
             if (mysqli_num_rows($uq) == 1) {
 
                 // yes
@@ -247,14 +289,20 @@ function login() {
                 setcookie("userid", $ua["cookieh"], time() + 2592000);
 
                 if (isset($_SESSION["lp"])) {
+
                     header("Location: ?p=".$_SESSION["lp"]);
+
                 } else {
+
                     header("Location: ?p=news");
+
                 }
 
             } else {
+
                 // no
                 header("Location: ?p=register");
+
             }
 
         }
@@ -264,9 +312,13 @@ function login() {
     if (isset($_SESSION["userid"])) {
 
         echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> ".getname($_SESSION["userid"])."</span></span>";
+
         if (checkadmin()) {
+
             echo "<span class='menu-item'><a href='admin' target='_blank'>admin menu</a></span>";
+
         }
+
         echo "<span class='menu-item'><a href='?p=logout'>log out</a></span>";
 
     }
@@ -277,13 +329,19 @@ function login() {
         unset($_SESSION["steamid"]);
         unset($_SESSION["userid"]);
         setcookie("userid", $ua["id"], time() - 100000);
+
         if (isset($_SESSION["lp"])) {
+
             header("Location: ?p=".$_SESSION["lp"]);
+
         } else {
+
             header("Location: ?p=news");
+
         }
 
     }
+
 }
 
 ?>

@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 $r_c = 41;
 require "../inc/functions.php";
 

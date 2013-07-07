@@ -1,8 +1,8 @@
 <?php
 
 if (!isset($r_c)) header("Location: notfound.php");
-include "analyticstracking.php";
 
+include "analyticstracking.php";
 include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
@@ -40,13 +40,17 @@ if (mysqli_num_rows($q) != 0) {
           <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
           <div class="map-actionbar">
             <span class="map-actionbar-button">More info</span>
+
               <?php
                 switch ($r["dltype"]) {
+
                   case 0: ?><a href='<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
                   case 1: ?><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
                   case 2: ?><span class='map-actionbar-button-disabled'>Download</span><?php break;
+
                 }
               ?>
+
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
           <script type='text/javascript'> lendict["map-<?php echo $r["id"]; ?>"] = <?php echo (mysqli_num_rows($gq)+1); ?>; initialize("map-<?php echo $r["id"]; ?>");</script>
@@ -56,6 +60,7 @@ if (mysqli_num_rows($q) != 0) {
         //display the main image
 
             ?>
+
             <div class='map-image'>
               <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["ext"]; ?>'>
             </div>

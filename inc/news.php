@@ -1,8 +1,8 @@
 <?php
 
 if (!isset($r_c)) header("Location: notfound.php");
-include "analyticstracking.php";
 
+include "analyticstracking.php";
 include "markdown/markdown.php";
 
 $_SESSION["lp"] = "news";
@@ -10,10 +10,15 @@ $_SESSION["lp"] = "news";
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 // DISPLAY ALL THE NEWS
 
-    if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1)
+    if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
+
         $page = 1;
-    else
+
+    } else {
+
         $page = strip($_GET["page"]);
+
+    }
 
     $xo = ($page - 1) * 5;
     $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 1 ORDER BY `id` DESC LIMIT ".$xo.", 5");
@@ -96,15 +101,27 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     //page links
     $nr = mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `news`"));
+
     echo "<div class='news-pages'>";
+
     for ($i = 1; $i <= ceil($nr / 5); $i++) {
-        if ($page == $i)
+
+        if ($page == $i) {
+
             echo "<div class='news-page-number'>".$i."</div>";
-        else
+
+        } else {
+
             echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."</a>";
+
+        }
+
     }
+
     echo "</div>";
+
 } else {
+
     // DISPLAY ONE PIECE OF NEWS
 
     $id = strip($_GET["id"]);
@@ -160,4 +177,5 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         header("Location: ?p=news");
 
     }
+
 }

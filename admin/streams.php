@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+
 $r_c = 41;
 require "../inc/functions.php";
 
@@ -22,13 +23,19 @@ if (isset($_POST["submit"])) {
 
     $twitch = strip($_POST["twitch"]);
     $desc = strip($_POST["description"]);
-    
-    if (isset($_POST["active"]) && $_POST["active"] == "on")
+
+    if (isset($_POST["active"]) && $_POST["active"] == "on") {
+
         $active = 1;
-    else
+
+    } else {
+
         $active = 0;
-        
+
+    }
+
     $uq = mysqli_query($con, "UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `authorid`=".$_SESSION["userid"]);
+
     echo "Stream successfully updated.<br>";
 
 }
@@ -40,7 +47,7 @@ if (mysqli_num_rows($sq) == 0) {
     echo "Your stream page is being created now...<br>";
     $cq = mysqli_query($con, "INSERT INTO `streams` VALUES('','".$_SESSION["userid"]."','','','0')");
     echo "Done. Please fill out the fields below.<br>";
-    
+
 }
 
 $sq = mysqli_query($con, "SELECT * FROM `streams` WHERE `authorid`=".$_SESSION["userid"]);
@@ -52,10 +59,13 @@ twitch.tv username<br>
 description<br>
 <textarea name='description' rows='7' cols='50' required>".$sr["description"]."</textarea><br>
 Active stream <input type='checkbox' name='active'";
-    
-if ($sr["active"] == 1)
+
+if ($sr["active"] == 1) {
+
     echo " checked";
-    
+
+}
+
 echo "> (there is a chance your stream will be live sometime soon)<br>
 <input type='submit' name='submit'>
 </form>";

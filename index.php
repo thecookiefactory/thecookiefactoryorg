@@ -35,20 +35,30 @@ ccookies();
 <a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
 
 <?php
+
+// fetching the custom pages' names
 $q = mysqli_query($con, "SELECT `name` FROM `cpages`");
+
 $cpages = Array();
+
 while ($row = mysqli_fetch_assoc($q)) {
-$cpages[] = $row["name"];
-?>
-<a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
-<?php
+
+    // and storing them in an array
+    $cpages[] = $row["name"];
+    ?>
+    <a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
+    <?php
+
 }
 
 /*if (IsAnyoneLive()) {
-?>
-Someone is streaming!!
-<?php
+
+    ?>
+    Someone is streaming!!
+    <?php
+
 }*/
+
 ?>
 </span>
 
@@ -58,6 +68,7 @@ Someone is streaming!!
 </form>
 <?php
 
+// see description in functions.php
 login();
 
 ?>
@@ -70,16 +81,23 @@ login();
 
 <?php
 
-if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "") {
+if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     $p = strip($_GET["p"]);
 
-    if (file_exists("inc/".$p.".php") && $p != "essential")
+    if (file_exists("inc/".$p.".php") && $p != "functions" && $p != "config") {
+
         require "inc/".$p.".php";
-    elseif (in_array($p, $cpages))
+
+    } else if (in_array($p, $cpages)) {
+
         require "inc/custom.php";
-    elseif ($p != "login" && $p != "logout")
+
+    } else if ($p != "login" && $p != "logout") {
+
         header("Location: notfound.php");
+
+    }
 
 } else {
 
@@ -104,19 +122,26 @@ if (isset($_GET["p"]) && strip($_GET["p"]) != null && strip($_GET["p"]) != "") {
 </div>
 </footer>
 
-
 <?php
-if (isset($redirect))
+
+if (isset($redirect)) {
+
     echo "<script type='text/javascript'>
     <!--
     setTimeout('window.location = \"?p=".$redirect."\"')
     //-->
     </script>";
+
+}
+
 ?>
+
 </body>
 </html>
+
 <?php
-function IsAnyoneLive() {
+
+/*function IsAnyoneLive() {
 
     global $con;
 
@@ -130,4 +155,4 @@ function IsAnyoneLive() {
 
     return false;
 
-}
+}*/
