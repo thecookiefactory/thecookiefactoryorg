@@ -9,7 +9,7 @@ include "markdown/markdown.php";
 
 <?php
 
-if (isset($_POST["searchb"]) && strip($_POST["searchb"]) != "") {
+if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
     $term = strip($_POST["searchb"]);
 

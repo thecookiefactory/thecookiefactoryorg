@@ -7,7 +7,7 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-if (isset($_POST["submit"]) && strip($_POST["text"]) != "") {
+if (isset($_POST["submit"]) && vf($_POST["text"])) {
 
     $text = strip($_POST["text"]);
     $m_id = strip($_POST["m_id"]);

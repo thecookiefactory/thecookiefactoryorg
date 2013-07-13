@@ -315,7 +315,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
 
-            if (isset($_POST["topicname"]) && strip($_POST["topicname"]) != "") {
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
 
                 $comments = 1;
 
@@ -439,7 +439,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if (isset($_POST["topicname"]) && strip($_POST["topicname"]) != "") {
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
                 // creating forum entry for comments
 
                 $authorid = $_SESSION["userid"];
