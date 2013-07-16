@@ -1,9 +1,17 @@
+srv/config.py
 inc/config.php
 img/maps/*
+cache/*
+
+# mici
 _OTHERS
 tf
 xampp
-cache/*
+
+# Python
+*.pyc
+*.pyo
+*/__pycache__
 
 # Windows image file caches
 Thumbs.db
