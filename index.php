@@ -51,13 +51,13 @@ while ($row = mysqli_fetch_assoc($q)) {
 
 }
 
-/*if (IsAnyoneLive()) {
+if (IsAnyoneLive()) {
 
     ?>
     Someone is streaming!!
     <?php
 
-}*/
+}
 
 ?>
 </span>
@@ -141,7 +141,7 @@ if (isset($redirect)) {
 
 <?php
 
-/*function IsAnyoneLive() {
+function IsAnyoneLive() {
 
     global $con;
 
@@ -149,10 +149,12 @@ if (isset($redirect)) {
 
     while ($frow = mysqli_fetch_assoc($fquery)) {
         if (islive($frow["twitch"])) {
+
             return true;
+
         }
     }
 
     return false;
 
-}*/
+}

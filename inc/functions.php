@@ -29,7 +29,7 @@ function tformat($x) {
 
 function vf($x) {
 
-    return (strip($x) != "" || strip($x) != null) ? true : false;
+    return (strip($x) != "" && strip($x) != null) ? true : false;
 
 }
 
@@ -154,16 +154,12 @@ function longago($x) {
 
 function islive($x) {
 
-    $json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
-    $json_array = json_decode($json_file, true);
+    global $con;
 
-    if (empty($json_array)) {
+    $sq = mysqli_query($con, "SELECT `title` FROM `streams` WHERE `twitch`='".$x."'");
+    $sr = mysqli_fetch_assoc($sq);
 
-        return false;
-
-    }
-
-    if ($json_array[0]['name'] == "live_user_$x") {
+    if (vf($sr["title"])) {
 
         return true;
 
