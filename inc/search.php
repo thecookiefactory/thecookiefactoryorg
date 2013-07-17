@@ -101,7 +101,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                     <?php
 
                     //if edited
-                    if ($srow["editorid"] > 0) {
+                    if ($srow["editorid"] > 0 && $srow["editdt"] > $srow["dt"]) {
                         ?>
 
                         <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["editdt"]); ?></span></span></div>

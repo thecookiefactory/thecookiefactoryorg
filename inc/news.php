@@ -72,7 +72,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             <?php
 
             //if edited
-            if ($row["editorid"] > 0) {
+            if ($row["editorid"] > 0 && $row["editdt"] > $row["dt"]) {
                 ?>
 
                 <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdt"]); ?></span></span></div>
@@ -141,7 +141,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         <?php
         //if edited
-        if ($row["editorid"] > 0) {
+        if ($row["editorid"] > 0 && $row["editdt"] > $row["dt"]) {
             ?>
 
             <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdt"]); ?></span></span></div>
