@@ -53,6 +53,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                         $live = 1;
 
+                        if ($er["live"] == 0) {
+
+                            mysqli_query($con, "UPDATE `news` SET `dt`='".time()."' WHERE `id`=".$id);
+
+                        }
+
                     } else {
 
                         $live = 0;
