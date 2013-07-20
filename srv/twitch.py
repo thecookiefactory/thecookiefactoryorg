@@ -1,26 +1,28 @@
 import requests
-import mysql.connector
-from config import *
+from sql import *
 
 API_ADDRESS = 'https://api.twitch.tv/kraken/'
-CON = mysql.connector.connect(**dbconfig)
-CRS = CON.cursor()
 
-def getStreamNames():
-  CRS.execute('SELECT `twitch` FROM `streams`')
-  return [twitch[0] for twitch in CRS]
+
+def getStreamNames(sql):
+  sql.crs.execute('SELECT `twitch` FROM `streams`')
+  return [twitch[0] for twitch in sql.crs]
+
 
 def getFromAPI(method, param=''):
   return requests.get(API_ADDRESS + '/' + method + '/' + param).json()
 
-def insertStreamTitle(stream, title):
-  if title:
-    CRS.execute("UPDATE `streams` SET `title`='{t}' WHERE `twitch`='{s}'".format(t=title, s=stream))
-  else:
-    CRS.execute("UPDATE `streams` SET `title`=NULL WHERE `twitch`='{s}'".format(s=stream))
 
-def main()
-  streamnames = getStreamNames()
+def insertStreamTitle(sql, stream, title):
+  if title:
+    sql.crs.execute("UPDATE `streams` SET `title`='{t}' WHERE `twitch`='{s}'".format(t=title, s=stream))
+  else:
+    sql.crs.execute("UPDATE `streams` SET `title`=NULL WHERE `twitch`='{s}'".format(s=stream))
+
+
+def main():
+  sql = SQLConnection()
+  streamnames = getStreamNames(sql)
   streamdata = {}
 
   for name in streamnames:
@@ -31,12 +33,10 @@ def main()
       streamdata[name] = streamjson['stream']['channel']['status']
 
   for stream in streamdata:
-    insertStreamTitle(stream, streamdata[stream])
+    insertStreamTitle(sql, stream, streamdata[stream])
 
-  CON.commit()
+  sql.close()
+
 
 if __name__ == '__main__':
   main()
-
-CRS.close()
-CON.close()
