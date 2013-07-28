@@ -42,13 +42,33 @@ if (mysqli_num_rows($q) != 0) {
             <span class="map-actionbar-button">More info</span>
 
               <?php
-                switch ($r["dltype"]) {
 
-                  case 0: ?><a href='<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
-                  case 1: ?><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a><?php break;
-                  case 2: ?><span class='map-actionbar-button-disabled'>Download</span><?php break;
+                if (!vf($r["dl"])) {
+
+                    ?>
+
+                    <span class='map-actionbar-button-disabled'>Download</span>
+
+                    <?php
+
+                } else if (is_numeric($r["dl"])) {
+
+                    ?>
+
+                    <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
+
+                    <?php
+
+                } else {
+
+                    ?>
+
+                    <a href='<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
+
+                    <?php
 
                 }
+
               ?>
 
           </div>
