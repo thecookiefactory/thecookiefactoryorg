@@ -43,7 +43,7 @@ if (mysqli_num_rows($q) != 0) {
 
               <?php
 
-                if (!vf($r["dl"])) {
+                if (!vf($r["link"])) {
 
                     ?>
 
@@ -51,19 +51,11 @@ if (mysqli_num_rows($q) != 0) {
 
                     <?php
 
-                } else if (is_numeric($r["dl"])) {
-
-                    ?>
-
-                    <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
-
-                    <?php
-
                 } else {
 
                     ?>
 
-                    <a href='<?php echo $r["dl"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
+                    <a href='<?php echo $r["link"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
 
                     <?php
 
