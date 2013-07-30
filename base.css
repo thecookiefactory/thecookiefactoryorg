@@ -94,7 +94,7 @@ footer {
   color: white;
   text-align: center;
   font-size: 12px;
-  font-family: Bitter;
+  font-family: "Bitter", serif;
   line-height: 1.4em;
 }
 
@@ -216,7 +216,7 @@ h1 {
   text-align: left;
   font-weight: 400;
   font-size: 36px;
-  font-family: Bitter;
+  font-family: "Roboto Slab", serif;
 }
 
 .article-header {
@@ -269,6 +269,8 @@ h1 {
 }
 
 article {
+  font-family: "Roboto Slab", serif;
+  font-size: 18px;
   color: #DDD;
   text-align: justify;
 }
@@ -632,7 +634,7 @@ img.map-image {
   border-bottom-right-radius: 16px;
   color: #F93;
   font-size: 28px;
-  font-family: Bitter;
+  font-family: "Roboto Slab", serif;
 }
 
 @-moz-document url-prefix() {
@@ -688,7 +690,7 @@ img.map-image {
   color: #DDD;
   text-align: justify;
   font-size: 18px;
-  font-family: Bitter;
+  font-family: "Roboto Slab", serif;
   line-height: 1.3em;
 }
 
@@ -828,7 +830,7 @@ img.map-image {
   display: block;
   margin-bottom: 13px;
   font-weight: 700;
-  font-family: Bitter;
+  font-family: "Bitter", serif;
 }
 
 .forums-createthread-sign {
@@ -889,7 +891,7 @@ img.map-image {
 
 .forums-entry-title {
   font-weight: 700;
-  font-family: Bitter;
+  font-family: "Bitter", serif;
 }
 
 .forums-entry-metadata {
@@ -1047,7 +1049,7 @@ img.map-image {
 .notfound-quote-text {
   text-shadow: 1px 1px 2px rgba(5, 5, 5, .5);
   font-size: 50px;
-  font-family: "Bitter";
+  font-family: "Roboto Slab", serif;
 }
 
 .notfound-quote-data {

@@ -16,7 +16,7 @@ ccookies();
     <title>thecookiefactory.org</title>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
     <link rel='stylesheet' type='text/css' href='base.css'>
-    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:400,700|Open+Sans:400,300,600'>
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600|Roboto+Slab'>
     <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
     <script src='js/main.js'></script>
 </head>
@@ -115,7 +115,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 2013 thecookiefactory.org<br>
 <div class='contact-us'>
     <span class='contact-us-link'><a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a></span>
-    <span class='contact-us-link'><a href='https://plus.google.com/u/0/b/116944885541785548027/116944885541785548027' target='_blank'>Google+</a></span>
+    <span class='contact-us-link'><a href='http://gplus.to/thecookiefactory' target='_blank'>Google+</a></span>
     <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
     <span class='contact-us-link'><a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a></span>
     <span class='contact-us-link'><a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a></span>
