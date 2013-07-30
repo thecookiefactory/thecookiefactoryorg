@@ -5,7 +5,7 @@
 
 body {
   margin: 0;
-  background-image: url(img/bg2.png);
+  background-image: url(img/bg.png);
   color: #DDD;
   text-align: left;
   font-weight: 400;
@@ -1037,7 +1037,7 @@ img.map-image {
   width: 900px;
   height: 300px;
   border-radius: 4px;
-  background-image: url(img/bg2.png);
+  background-image: url(img/bg.png);
   box-shadow: inset 0 0 12px 0 rgba(5, 5, 5, .5);
 }
 

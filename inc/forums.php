@@ -15,10 +15,10 @@ if ($action == "add" && checkuser()) {
         $authorid = $_SESSION["userid"];
         $cat = strip($_POST["cat"]);
 
-        // checking if the entred category is valid
+        // checking if the selected category is valid
         if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
 
-            echo "that does not seem like a real forum categorny+";
+            echo "That does not seem like a real forum category. Sorry, kiddo.";
 
         } else {
 
@@ -26,7 +26,7 @@ if ($action == "add" && checkuser()) {
 
             if (strlen($title) > 37) {
 
-                echo "please enter a title shorter than 38 characters";
+                echo "Please enter a title shorter than 38 characters.";
 
             } else {
 
@@ -34,7 +34,7 @@ if ($action == "add" && checkuser()) {
 
                 if (strlen($text) > 20000) {
 
-                    echo "Your comment must be less than 20 000 characters long.";
+                    echo "Your comment must be less than 20,000 characters long.";
 
                 } else {
 
@@ -524,36 +524,36 @@ if ($action == "add" && checkuser()) {
         if (isset($_GET["cat"]) && is_numeric($_GET["cat"])) {
 
             $cat = strip($_GET["cat"]);
-            
+
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." AND `cat`<>0 ORDER BY `ldt` DESC");
-            
+
             ?>
-            
+
             <a class='forums-clearfilter' href='?p=forums'>&#x21A9; clear category filter</a>
-            
+
             <?php
 
         } else {
-        
+
             $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`<>0 ORDER BY `ldt` DESC");
-            
+
         }
-        
+
         ?>
 
         <style type='text/css' scoped>
 
             <?php
             $cq = mysqli_query($con, "SELECT * FROM `forumcat`");
-            
+
             while ($cr = mysqli_fetch_assoc($cq)) {
-            
+
                 echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hex"]."; }\n";
                 echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hexh"]."; }\n";
-                
+
             }
             ?>
-            
+
         </style>
         <table class='forums-table'>
                 <colgroup>
@@ -565,50 +565,50 @@ if ($action == "add" && checkuser()) {
             <tbody>
 
         <?php
-        
+
         if (mysqli_num_rows($query) != 0) {
 
             while ($row = mysqli_fetch_assoc($query)) {
 
                 ?>
-                
+
                 <tr class='forums-entry'>
                     <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
                         <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
-                        
+
                                 <?php echo getcatname($row["cat"]); ?>
-                                
+
                         </a>
                     </td>
                     <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
                         <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
-                        
+
                             <?php echo $row["title"]; ?>
-                            
+
                         </a>
                         <br>
                         <span class='forums-entry-metadata'>
-                        
+
                             created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
-                            
+
                         </span>
                     </td>
                     <td class='forums-entry-modifydate'>
                         <span class='forums-entry-miniheader'>Last reply posted</span><br>
-                        
+
                         <?php echo displaydate($row["ldt"]); ?>
-                        
+
                     </td>
                     <td class='forums-entry-postcount'>
                         <span class='forums-entry-miniheader'>Thread has</span><br>
-                        
+
                         <?php
                             echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
                         ?>
-                        
+
                     </td>
                 </tr>
-                
+
                 <?php
 
             }
@@ -620,10 +620,10 @@ if ($action == "add" && checkuser()) {
         }
 
         ?>
-        
+
             </tbody>
         </table>
-        
+
         <?php
 
     }
