@@ -269,10 +269,10 @@ h1 {
 }
 
 article {
-  font-family: "Roboto Slab", serif;
-  font-size: 18px;
   color: #DDD;
   text-align: justify;
+  font-size: 18px;
+  font-family: "Roboto Slab", serif;
 }
 
 .article-separator {
