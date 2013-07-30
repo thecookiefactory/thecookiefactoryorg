@@ -33,106 +33,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $name = strip($_POST["name"]);
             $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
-
-            switch($_POST["dli"]) {
-
-                case "file":
-                    //file upload
-
-                    $dli = 0;
-
-                    $bsp_name = strtolower($_FILES["bsp"]["name"]);
-                    $bsp_type = $_FILES["bsp"]["type"];
-                    $bsp_size = $_FILES["bsp"]["size"];
-                    $bsp_tmp = $_FILES["bsp"]["tmp_name"];
-                    $bsp_error = $_FILES["bsp"]["error"];
-
-                    $extension = substr($bsp_name, strpos($bsp_name, ".") + 1);
-
-                    if (!empty($bsp_name) && $bsp_size > 0) {
-
-                        if ($extension == "bsp" && $bsp_type == "application/octet-stream") {
-
-                            $location = "../img/maps/";
-                            $dl = $name.".bsp";
-
-                            if (file_exists("../img/maps/".$name.".bsp")) {
-
-                                echo "Deleting the old bsp file...<br>";
-                                unlink("../img/maps/".$name.".bsp");
-
-                            } else {
-
-                                echo "No old .bsp file found, continuing...<br>";
-
-                            }
-
-                            if (move_uploaded_file($bsp_tmp, $location.$dl)) {
-
-                                echo ".bsp file successfully uploaded...<br>";
-
-                                mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
-
-                            } else {
-
-                                echo "There was an error while uploading the file. It is highly recommended to try again or change the download to not available.<br>";
-
-                            }
-
-                        } else {
-
-                            echo "The specified file does not appear to be a .bsp. It is highly recommended to try again or change the download to not available.<br>";
-
-                        }
-
-                    } else {
-
-                        echo "There was no file defined. It is highly recommended to change the download to not available.";
-
-                    }
-
-                    break;
-
-                case "link":
-                    //steamcommunity id
-
-                    $dli = 1;
-
-                    if (file_exists("../img/maps/".$name.".bsp")) {
-
-                        echo "Deleting the old bsp file...<br>";
-                        unlink("../img/maps/".$name.".bsp");
-
-                    } else {
-
-                        echo "No old .bsp file found, continuing...<br>";
-
-                    }
-
-                    $dl = strip($_POST["dl"]);
-                    $uq = mysqli_query($con, "UPDATE maps SET `dl`='".$dl."' WHERE `id`=".$id);
-
-                    break;
-
-                case "none":
-                    //no download specified
-
-                    $dli = 2;
-
-                    if (file_exists("../img/maps/".$name.".bsp")) {
-
-                        echo "Deleting the old bsp file...<br>";
-                        unlink("../img/maps/".$name.".bsp");
-
-                    } else {
-
-                        echo "No old .bsp file found, continuing...<br>";
-
-                    }
-
-                    break;
-
-            }
+            $download = strip($_POST["download"]);
 
             //image file
             $image_name = $_FILES["image"]["name"];
@@ -178,7 +79,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $editdt = time();
 
-            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dltype`='".$dli."', editdt='".$editdt."' WHERE `id`=".$id);
+            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dl`='".$download."', editdt='".$editdt."' WHERE `id`=".$id);
 
         }
 
@@ -213,12 +114,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             echo "</select><br>
             Description<br>
             <textarea name='desc' required>".$mr["desc"]."</textarea><br>
-
-            <input type='radio' name='dli' value='file'  "; if ($mr["dltype"] == 0) echo "checked "; echo ">bsp file <input type='file' name='bsp'>
-            <br>
-            <input type='radio' name='dli' value='link' "; if ($mr["dltype"] == 1) echo "checked "; echo " required>download link <input type='text' name='dl' value='"; if ($mr["dltype"] == 1) echo $mr["dl"]; echo "'>
-            <br>
-            <input type='radio' name='dli' value='none'  "; if ($mr["dltype"] == 2) echo "checked "; echo ">no dl
+            download (empty for none, repo name for github, steam file id for workshop file):
+            <input type='text' name='download' value='".$mr["dl"]."'>
             <br>
             main image<br>
             <img style='width: 300px;' src='../img/maps/".$mr["id"].".".$mr["ext"]."' alt=''>
@@ -247,14 +144,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 $er = mysqli_fetch_assoc($eq);
 
                 if (isset($_POST["delete"])) {
-
-                    //deleting the bsp if present
-                    if ($er["dltype"] == 0) {
-
-                        unlink("../".$er["dl"]);
-                        echo ".bsp file deleted.<br>";
-
-                    }
 
                     //deleting the main image
                     unlink("../img/maps/".$er["id"].".".$er["ext"]);
@@ -314,6 +203,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $author = $_SESSION["userid"];
             $game = strip($_POST["game"]);
             $desc = strip($_POST["desc"]);
+            $download = strip($_POST["download"]);
 
             if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
 
@@ -328,7 +218,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $dt = time();
 
             //inserting the basic data and returning the map id
-            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','','0','','0','0','$comments','$dt','0')");
+            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$download','0','','0','0','$comments','$dt','0')");
             $id = mysqli_insert_id($con);
             echo "Basic values inserted...<br>";
             echo "The map id is ".$id."<br>";
@@ -336,74 +226,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             //create the directory
             mkdir("../img/maps/".$id, 0777);
             echo "Directory created...<br>";
-
-            //map file
-            switch($_POST["dli"]) {
-
-                case "none":
-
-                    echo "No download link specified...<br>";
-                    mysqli_query($con, "UPDATE `maps` SET `dltype`='2' WHERE `id`=".$id);
-
-                    break;
-
-                case "link":
-                    //steam community link
-
-                    $dl = strip($_POST["dl"]);
-                    echo "Steam community id read...<br>";
-                    mysqli_query($con, "UPDATE `maps` SET `dltype`='1' WHERE `id`=".$id);
-                    mysqli_query($con, "UPDATE `maps` SET `dl`='".$dl."' WHERE `id`=".$id);
-                    echo "Download url added...<br>";
-
-                    break;
-
-                case "file":
-                    //file upload
-
-                    print_r($_FILES)."<br>";
-
-                    $bsp_name = strtolower($_FILES["bsp"]["name"]);
-                    $bsp_type = $_FILES["bsp"]["type"];
-                    $bsp_size = $_FILES["bsp"]["size"];
-                    $bsp_tmp = $_FILES["bsp"]["tmp_name"];
-                    $bsp_error = $_FILES["bsp"]["error"];
-
-                    $extension = substr($bsp_name, strpos($bsp_name, ".") + 1);
-
-                    if (!empty($bsp_name)) {
-
-                        if ($extension == "bsp" && $bsp_type == "application/octet-stream") {
-
-                            $location = "../img/maps/";
-                            $dl = $name.".bsp";
-
-                            if (move_uploaded_file($bsp_tmp, $location.$dl)) {
-
-                                mysqli_query($con, "UPDATE `maps` SET `dl`='img/maps/".$dl."' WHERE `id`=".$id);
-                                echo "File successfully uploaded...<br>";
-
-                            } else {
-
-                                echo "There was an error while uploading the file. It is highly recommended to try again or change the download to not available.<br>";
-
-                            }
-
-                        } else {
-
-                            echo "The specified file does not appear to be a .bsp. It is highly recommended to try again or change the download to not available.<br>";
-
-                        }
-
-                    } else {
-
-                        echo "There was no file defined. It is highly recommended to change the download to not available.";
-
-                    }
-
-                    break;
-
-            }
 
             //image file
             $image_name = strtolower($_FILES["image"]["name"]);
@@ -476,12 +298,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             </select><br>
             Description<br>
             <textarea name='desc' required></textarea><br>
-
-            <input type='radio' name='dli' value='file'>bsp file <input type='file' name='bsp'>
-            <br>
-            <input type='radio' name='dli' value='link' required>steamcommunity id <input type='text' name='dl'>
-            <br>
-            <input type='radio' name='dli' value='none'>No download available
+            download (empty for none, repo name for github, steam file id for workshop file):
+            <input type='text' name='download'>
             <br>
             Main image<br>
             <input type='file' name='image' required><br>
