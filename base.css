@@ -302,6 +302,14 @@ article {
   content: "\A0\B7\A0";
 }
 
+.news-rsslink {
+  position: relative;
+  bottom: 8px;
+  float: right;
+  font-weight: 700;
+  font-size: 10px;
+}
+
 .nav-menubar {
   z-index: 1;
   float: left;

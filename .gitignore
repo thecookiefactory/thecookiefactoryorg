@@ -2,6 +2,7 @@ srv/config.py
 inc/config.php
 img/maps/*
 cache/*
+rss.xml
 
 # mici
 _OTHERS
