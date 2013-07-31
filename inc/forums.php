@@ -70,6 +70,7 @@ if ($action == "add" && checkuser()) {
             ?>
 
         </select></label>
+        <input class='forums-newpost-submit' type='submit' name='addnew'>
             <h1>
                 <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37'>
             </h1>
@@ -84,8 +85,6 @@ if ($action == "add" && checkuser()) {
             </div>
         </div>
 
-
-        <input type='submit' name='addnew'>
         </form>
 
         <?php

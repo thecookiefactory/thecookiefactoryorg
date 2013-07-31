@@ -1006,10 +1006,16 @@ img.map-image {
   padding: 0 6px;
   background: #141414;
   color: white;
-  content: "?";
+  content: " \25BC ";
   font-size: 12px;
   line-height: 40px;
   pointer-events: none;
+}
+
+.forums-newpost-submit {
+  float: right;
+  text-transform: lowercase;
+  border: 0;
 }
 
 .forums-newpost-title {
