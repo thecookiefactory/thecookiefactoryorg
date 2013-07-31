@@ -55,6 +55,21 @@ if ($action == "add" && checkuser()) {
 
         ?>
         <form action='?p=forums&amp;action=add' method='post'>
+            <label class='forums-newpost-select-label' for="cat">Category:
+            <select class='forums-newpost-select' name='cat'>
+
+            <?php
+        $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+        while ($cr = mysqli_fetch_assoc($cq)) {
+            ?>
+
+            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
+
+            <?php
+        }
+            ?>
+
+        </select></label>
             <h1>
                 <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37'>
             </h1>
@@ -68,24 +83,8 @@ if ($action == "add" && checkuser()) {
                 <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'></textarea>
             </div>
         </div>
-        <label for="cat">Category: </label>
-        <select class='forums-newpost-select' name='cat'>
 
-        <?php
 
-        $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
-
-        while ($cr = mysqli_fetch_assoc($cq)) {
-
-            ?>
-            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
-            <?php
-
-        }
-
-        ?>
-
-        </select>
         <input type='submit' name='addnew'>
         </form>
 

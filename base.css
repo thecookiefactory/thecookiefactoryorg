@@ -976,6 +976,42 @@ img.map-image {
   margin-bottom: 30px;
 }
 
+.forums-newpost-select-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.forums-newpost-select {
+  display: inline-block;
+  padding: 4px;
+  margin: 0;
+  font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  font-size: inherit;
+  outline: none;
+  background: #141414;
+  color: inherit;
+  border: 0;
+}
+
+.forums-newpost-select-label:after {
+  content: "▼";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 12px;
+  line-height: 40px;
+  padding: 0 6px;
+  background: #141414;
+  color: white;
+  pointer-events: none;
+}
+
 .forums-newpost-title {
   padding: 0;
   width: 962px;
@@ -1026,10 +1062,6 @@ img.map-image {
 .forums-newpost-text::-moz-placeholder, .forums-newpost-title::-moz-placeholder {
   color: #555;
   opacity: 1;
-}
-
-.forums-newpost-select {
-
 }
 
 .notfound-box {
