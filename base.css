@@ -387,6 +387,7 @@ article {
   color: #DDD;
   text-align: justify;
   font-size: 14px;
+  font-family: 'Roboto Slab', serif;
 }
 
 .comment-form {
@@ -404,6 +405,7 @@ article {
   color: white;
   font: inherit;
   font-size: 14px;
+  font-family: 'Roboto Slab', serif;
   transition: border-color 0.3s ease-in-out;
 }
 
@@ -978,6 +980,7 @@ img.map-image {
 .forums-post p {
   margin: 0;
   padding: 8px;
+  font-family: 'Roboto Slab', serif;
 }
 
 .forums-post:last-child {
@@ -1021,14 +1024,19 @@ img.map-image {
 }
 
 .forums-newpost-submit {
+  float: right;
   margin-top: 6px;
+  border: 0;
+  background: none;
+  text-transform: uppercase;
   font-weight: 600;
   font-size: 20px;
-  float: right;
-  text-transform: uppercase;
-  border: 0;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
+}
+
+.forums-edit-submit {
+  margin-top: 2px;
 }
 
 .forums-newpost-submit:hover {
@@ -1064,7 +1072,7 @@ img.map-image {
   color: #DDD;
   font-weight: 400;
   font-size: 16px;
-  font-family: "Open Sans", "Arial", sans-serif;
+  font-family: "Roboto Slab", serif;
   resize: vertical;
   transition: all 0.2s ease-in-out;
 }

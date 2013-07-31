@@ -150,6 +150,8 @@ if ($action == "add" && checkuser()) {
 
                     ?>
                     <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>&amp;pid=<?php echo $pid; ?>' method='post'>
+
+                    <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
                     <div class='forums-post'>
                         <div class='forums-post-header'>
                             <div class='forums-post-number'>
@@ -157,9 +159,11 @@ if ($action == "add" && checkuser()) {
                             </div>
                         </div>
                         <div>
-                            <textarea class='forums-newpost-text' name='text' required autofocus placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
+                            <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
                         </div>
                     </div>
+
+                    </form>
 
                     <?php
                         if (checkadmin()) {
@@ -167,12 +171,6 @@ if ($action == "add" && checkuser()) {
                             echo "delete this reply <input type='checkbox' name='delete'>";
 
                         }
-                    ?>
-
-                    <input type='submit' name='edit'>
-                    </form>
-
-                    <?php
 
                 }
 
@@ -254,8 +252,24 @@ if ($action == "add" && checkuser()) {
 
                     ?>
                     <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>' method='post'>
+                        <label class='forums-newpost-select-label' for="cat">Category:
+                        <select class='forums-newpost-select' name='cat'>
+
+                        <?php
+                    $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+                    while ($cr = mysqli_fetch_assoc($cq)) {
+                        ?>
+
+                        <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
+
+                        <?php
+                    }
+                        ?>
+
+                    </select></label>
+                    <input class='forums-newpost-submit' type='submit' name='edit' value='Submit &#x27A8;'>
                         <h1>
-                            <input class='forums-newpost-title' type='text' name='title' required placeholder='Enter a title here...' maxlength='37' value='<?php echo $er["title"]; ?>'>
+                            <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37' value='<?php echo $er["title"]; ?>'>
                         </h1>
                     <div class='forums-post'>
                         <div class='forums-post-header'>
@@ -264,27 +278,11 @@ if ($action == "add" && checkuser()) {
                             </div>
                         </div>
                         <div>
-                            <textarea class='forums-newpost-text' name='text' required autofocus placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
+                            <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
                         </div>
                     </div>
-                    <label for="cat">Category: </label>
-                    <select class='forums-newpost-select' name='cat'>
 
-                    <?php
-
-                    $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
-
-                    while ($cr = mysqli_fetch_assoc($cq)) {
-
-                        ?>
-                        <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
-                        <?php
-
-                    }
-
-                    ?>
-
-                    </select>
+                    </form>
 
                     <?php
                         if (checkadmin()) {
@@ -294,7 +292,6 @@ if ($action == "add" && checkuser()) {
                         }
                     ?>
 
-                    <input type='submit' name='edit'>
                     </form>
 
                     <?php
