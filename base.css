@@ -1021,9 +1021,18 @@ img.map-image {
 }
 
 .forums-newpost-submit {
+  margin-top: 6px;
+  font-weight: 600;
+  font-size: 20px;
   float: right;
-  text-transform: lowercase;
+  text-transform: uppercase;
   border: 0;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.forums-newpost-submit:hover {
+  color: #4188D2;
 }
 
 .forums-newpost-title {
