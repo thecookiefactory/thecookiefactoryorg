@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = 42;
+$r_c = True;
 require "inc/functions.php";
 include "inc/lightopenid/openid.php";
 

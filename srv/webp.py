@@ -14,5 +14,6 @@ def main():
     except PermissionError:
         sys.exit('No sufficient permissions to save output file.')
 
+
 if __name__ == '__main__':
     main()

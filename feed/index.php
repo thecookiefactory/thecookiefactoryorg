@@ -1,8 +1,8 @@
 <?php
 
 header("Content-Type: application/rss+xml; charset=utf-8");
-$r_c = 42;
-require "../inc/essential.php";
+$r_c = True;
+require "../inc/functions.php";
 
 $query = mysqli_query($con, "SELECT * FROM `news` ORDER BY `id` DESC");
 
@@ -13,7 +13,7 @@ $rssfeed .= "<title>thecookiefactory.org RSS</title>";
 $rssfeed .= "<link>http://thecookiefactory.org</link>";
 $rssfeed .= "<description>The RSS feed of thecookiefactory.org</description>";
 $rssfeed .= "<language>en-us</language>";
-$rssfeed .= "<copyright>Copyright (C) 2012 thecookiefactory.org</copyright>";
+$rssfeed .= "<copyright>Copyright (C) 2013 thecookiefactory.org</copyright>";
 
 while($row = mysqli_fetch_assoc($query)) {
 
