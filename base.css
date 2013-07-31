@@ -977,38 +977,38 @@ img.map-image {
 }
 
 .forums-newpost-select-label {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
   position: relative;
   display: inline-block;
-  font-weight: 600;
   text-transform: uppercase;
+  font-weight: 600;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .forums-newpost-select {
   display: inline-block;
-  padding: 4px;
   margin: 0;
-  font-weight: 300;
-  font-family: 'Open Sans', sans-serif;
-  font-size: inherit;
+  padding: 4px;
   outline: none;
+  border: 0;
   background: #141414;
   color: inherit;
-  border: 0;
+  font-weight: 300;
+  font-size: inherit;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .forums-newpost-select-label:after {
-  content: "▼";
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  font-size: 12px;
-  line-height: 40px;
   padding: 0 6px;
   background: #141414;
   color: white;
+  content: "?";
+  font-size: 12px;
+  line-height: 40px;
   pointer-events: none;
 }
 
