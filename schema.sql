@@ -2,108 +2,108 @@ CREATE DATABASE IF NOT EXISTS `data` DEFAULT CHARACTER SET utf8 COLLATE utf8_gen
 USE `data`;
 
 CREATE TABLE IF NOT EXISTS `custompages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `text` text NOT NULL,
-  `editdate` int(11) NOT NULL,
+  `id` TINYINT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(128) NOT NULL,
+  `text` TEXT NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `editdate` TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `forumcategories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `longname` varchar(100) NOT NULL,
-  `hexcode` varchar(10) NOT NULL,
-  `hoverhexcode` varchar(10) NOT NULL,
+  `id` TINYINT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(6) NOT NULL,
+  `longname` VARCHAR(32) NOT NULL,
+  `hexcode` CHAR(6) NOT NULL,
+  `hoverhexcode` CHAR(6) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `forumposts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
-  `authorid` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `editdate` int(11) NOT NULL,
-  `threadid` int(11) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `text` TEXT NOT NULL,
+  `authorid` INT NOT NULL,
+  `date` NOT NULL TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `editdate` TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `threadid` INT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `forumthreads` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `text` text NOT NULL,
-  `authorid` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `editdate` int(11) NOT NULL,
-  `lastdate` int(11) NOT NULL,
-  `forumcategory` int(11) NOT NULL,
-  `mapid` int(11) NOT NULL,
-  `newsid` int(11) NOT NULL,
-  `closed` tinyint(1) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(256) NOT NULL,
+  `text` TEXT NOT NULL,
+  `authorid` INT NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `editdate` TIMESTAMP DEFAULT NULL,
+  `lastdate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `forumcategory` TINYINT NOT NULL,
+  `mapid` TINYINT DEFAULT NULL,
+  `newsid` SMALLINT DEFAULT NULL,
+  `closed` BIT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `games` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `steam` int(11) NOT NULL,
+  `id` TINYINT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(128) NOT NULL,
+  `steamid` INT DEFAULT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `maps` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `text` text NOT NULL,
-  `authorid` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `editdate` int(11) NOT NULL,
-  `download` varchar(255) NOT NULL,
-  `extension` varchar(10) NOT NULL,
-  `rating` int(11) NOT NULL,
-  `ratecount` int(11) NOT NULL,
-  `comments` int(11) NOT NULL,
-  `gameid` int(11) NOT NULL,
+  `id` TINYINT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(64) NOT NULL,
+  `text` TEXT NOT NULL,
+  `authorid` INT NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `editdate` TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `download` VARCHAR(256) NOT NULL,
+  `extension` VARCHAR(4) NOT NULL,
+  `comments` BIT NOT NULL,
+  `gameid` TINYINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `text` text NOT NULL,
-  `authorid` int(11) NOT NULL,
-  `date` int(11) NOT NULL,
-  `editorid` int(11) NOT NULL,
-  `editdate` int(11) NOT NULL,
-  `comments` tinyint(1) NOT NULL,
-  `live` tinyint(1) NOT NULL,
+  `id` SMALLINT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(256) NOT NULL,
+  `text` TEXT NOT NULL,
+  `authorid` INT NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `editorid` INT NOT NULL,
+  `editdate` TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `comments` BIT NOT NULL,
+  `live` BIT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `pictures` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` varchar(100) NOT NULL,
-  `date` int(11) NOT NULL,
-  `filename` varchar(200) NOT NULL,
-  `mapid` int(11) NOT NULL,
+  `id` SMALLINT NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(128) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `filename` VARCHAR(256) NOT NULL,
+  `mapid` TINYINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `streams` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `text` text NOT NULL,
-  `authorid` int(11) NOT NULL,
-  `twitchname` varchar(100) NOT NULL,
-  `active` int(11) NOT NULL,
+  `id` TINYINT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(128) DEFAULT NULL,
+  `text` TEXT,
+  `authorid` INT NOT NULL,
+  `twitchname` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `steamid` varchar(100) NOT NULL,
-  `admin` tinyint(1) NOT NULL,
-  `cookieh` varchar(255) NOT NULL,
-  `dt` int(11) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(10) NOT NULL,
+  `steamid` CHAR(17) NOT NULL,
+  `admin` BIT NOT NULL DEFAULT '0',
+  `cookieh` CHAR(64) NOT NULL,
+  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
