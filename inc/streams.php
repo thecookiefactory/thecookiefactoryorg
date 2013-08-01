@@ -7,7 +7,7 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-$q = $con->query("SELECT `streams`.`id`,`streams`.`authorid`,`streams`.`twitchname`,`streams`.`active` FROM `streams` WHERE `streams`.`active` = 1");
+$q = $con->query("SELECT `streams`.`id`,`streams`.`authorid`,`streams`.`twitchname` FROM `streams`");
 
 ?>
 

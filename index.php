@@ -145,7 +145,7 @@ function IsAnyoneLive() {
 
     global $con;
 
-    $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`active` = 1");
+    $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams`");
 
     while ($streamsrow = $streamsquery->fetch(PDO::FETCH_ASSOC)) {
         if (vf($streamsrow["title"])) {
