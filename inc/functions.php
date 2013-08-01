@@ -4,13 +4,15 @@ if (!isset($r_c)) header("Location: notfound.php");
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/config.php";
 
+$con = new PDO("mysql:host=" . $config["db"]["host"] . ";dbname=" . $config["db"]["dbname"] . ";charset=utf8", $config["db"]["username"], $config["db"]["password"]);
+$con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
 function strip($x) {
 
     global $con;
 
     $x = trim($x);
     $x = htmlentities($x, ENT_QUOTES, "UTF-8");
-    $x = mysqli_real_escape_string($con, $x);
     return $x;
 
 }
@@ -36,11 +38,13 @@ function ccookies() {
 
         $cv = $_COOKIE["userid"];
 
-        $cq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `cookieh`='".$cv."'");
+        $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
+        $cq->bindValue("cv", $cv,  PDO::PARAM_STR);
+        $cq->execute();
 
-        $cr = mysqli_fetch_assoc($cq);
+        $cr = $cq->fetch(PDO::FETCH_ASSOC);
 
-        if (mysqli_num_rows($cq) == 1) {
+        if ($cq->rowCount() == 1) {
 
             $_SESSION["userid"] = $cr["id"];
 
@@ -64,9 +68,11 @@ function checkadmin() {
 
         $x = $_SESSION["userid"];
 
-        $cq = mysqli_query($con, "SELECT `admin` FROM `users` WHERE `id`=".$x);
+        $cq = $con->prepare("SELECT `users`.`admin` FROM `users` WHERE `users`.`id` = :x");
+        $cq->bindValue("x", $x, PDO::PARAM_INT);
+        $cq->execute();
 
-        $cr = mysqli_fetch_assoc($cq);
+        $cr = $cq->fetch(PDO::FETCH_ASSOC);
 
         if ($cr["admin"] == 1) {
 
@@ -90,8 +96,11 @@ function getname($id, $span = false) {
 
     global $con;
 
-    $nq = mysqli_query($con, "SELECT `name`,`admin` FROM `users` WHERE `id`=".$id);
-    $nr = mysqli_fetch_assoc($nq);
+    $nq = $con->prepare("SELECT `users`.`name`, `users`.`admin` FROM `users` WHERE `users`.`id` = :id");
+    $nq->bindValue("id", $id, PDO::PARAM_INT);
+    $nq->execute();
+
+    $nr = $nq->fetch(PDO::FETCH_ASSOC);
 
     if ($nr["admin"] == 0 || $span == false) {
 
@@ -151,8 +160,11 @@ function islive($x) {
 
     global $con;
 
-    $sq = mysqli_query($con, "SELECT `title` FROM `streams` WHERE `twitch`='".$x."'");
-    $sr = mysqli_fetch_assoc($sq);
+    $sq = $con->prepare("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`twitch` = :x");
+    $sq->bindValue("x", $x, PDO::PARAM_STR);
+    $sq->execute();
+
+    $sr = $sq->fetch(PDO::FETCH_ASSOC);
 
     if (vf($sr["title"])) {
 
@@ -189,25 +201,32 @@ function register($username) {
     }
 
     //checking if that user already exists
-    $cq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `name`='".$username."'");
+    $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :username");
+    $cq->bindValue("username", $username, PDO::PARAM_STR);
+    $cq->execute();
 
-    if (mysqli_num_rows($cq) != 0) {
+    if ($cq->rowCount() != 0) {
 
         echo "We're sorry, that user already exists!";
         return;
 
     }
 
-    $dt = time();
+    $date = time();
 
-    $cookieh = cookieh();
+    //$cookieh = cookieh();
 
     //registering the user and redirecting to the login form
-    $query = mysqli_query($con, "INSERT INTO `users` VALUES('','".$username."','".$_SESSION["steamid"]."','0','".$cookieh."','".$dt."')");
-    $id = mysqli_insert_id($con);
+    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, '', :date)");
+    $query->bindValue("username", $username, PDO::PARAM_STR);
+    $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+    $query->bindValue("date", $date, PDO::PARAM_INT);
+    $query->execute();
+
+    $id = $con->lastInsertId();
 
     $_SESSION["userid"] = $id;
-    setcookie("userid", $cookieh, time() + 2592000);
+    //setcookie("userid", $cookieh, time() + 2592000);
 
     echo "Successfully registered! You will get redirected in 5 seconds. <a href='?p=news'>Click here if you don't want to wait.</a>";
 
@@ -227,13 +246,11 @@ function login() {
 
     global $redirect;
     global $con;
-    global $apikey;
-    global $redirect;
-    global $domain;
+    global $config;
 
     if (!isset($OpenID)) {
 
-        $OpenID = new LightOpenID($domain);
+        $OpenID = new LightOpenID($config["domain"]);
 
     }
 
@@ -263,18 +280,20 @@ function login() {
             $_SESSION["steamauth"] = $OpenID->validate() ? $OpenID->identity : null;
             $_SESSION["steamid"] = str_replace("http://steamcommunity.com/openid/id/", "", $_SESSION["steamauth"]);
 
-            //$profile = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$apikey."&steamids=".$_SESSION["steamid"]."&format=json");
+            //$profile = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$config["apikey"]."&steamids=".$_SESSION["steamid"]."&format=json");
             //$buffer = fopen("cache/{$_SESSION["steamid"]}.json", "w");
             //fwrite($buffer, $profile);
             //fclose($buffer);
 
             // checking if the user has an account
-            $uq = mysqli_query($con, "SELECT `id` FROM `users` WHERE `steamid`='".$_SESSION["steamid"]."'");
+            $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
+            $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+            $uq->execute();
 
-            if (mysqli_num_rows($uq) == 1) {
+            if ($uq->rowCount() == 1) {
 
                 // yes
-                $ua = mysqli_fetch_assoc($uq);
+                $ua = $uq->fetch(PDO::FETCH_ASSOC);
 
                 $_SESSION["userid"] = $ua["id"];
                 setcookie("userid", $ua["cookieh"], time() + 2592000);

@@ -7,8 +7,10 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-$q = mysqli_query($con, "SELECT `text` FROM `cpages` WHERE name='".$p."'");
+$q = $con->prepare("SELECT `custompages`.`text` FROM `custompages` WHERE `custompages`.`name` = :p");
+$q->bindValue("p", $p, PDO::PARAM_STR);
+$q->execute();
 
-$r = mysqli_fetch_assoc($q);
+$r = $q->fetch(PDO::FETCH_ASSOC);
 
 echo Markdown($r["text"]);

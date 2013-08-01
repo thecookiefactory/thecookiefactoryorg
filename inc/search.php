@@ -25,8 +25,11 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             $nsearch = true;
 
-            $squery = mysqli_query($con, "SELECT * FROM `news` WHERE `text` LIKE '%".$term."%' or `title` LIKE '%".$term."%' ORDER BY `id` DESC");
-            $nr = mysqli_num_rows($squery);
+            $squery = $con->prepare("SELECT * FROM `news` WHERE `news`.`text` LIKE :term or `news`.`title` LIKE :term ORDER BY `news`.`id` DESC");
+            $squery->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+            $squery->execute();
+
+            $nr = $squery->rowCount();
 
             $sss = ($nr == 1) ? "" : "s";
 
@@ -68,7 +71,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                 <?php
 
-                while ($srow = mysqli_fetch_assoc($squery)) {
+                while ($srow = $squery->fetch(PDO::FETCH_ASSOC)) {
                     // TITLE, AUTHOR & DATE
                     ?>
 
@@ -80,12 +83,19 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                     if ($srow["comments"] == 1) {
 
-                        $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$srow["id"]);
-                        $tid = mysqli_fetch_assoc($ct);
+                        $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                        $ct->bindValue("id", $srow["id"], PDO::PARAM_INT);
+                        $ct->execute();
+
+                        $tid = $ct->fetch(PDO::FETCH_ASSOC);
+
                         $tid = $tid["id"];
 
-                        $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$tid);
-                        $commnum = mysqli_num_rows($cq);
+                        $cq = $con->prepare("SELECT `forumsposts`.`id` FROM `forumposts` WHERE `forumposts`.`tid` = :tid");
+                        $cq->bindValue("tid", $tid, PDO::PARAM_INT);
+                        $cq->execute();
+
+                        $commnum = $cq->rowCount();
                         ?>
 
                         <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $srow["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
@@ -96,15 +106,15 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                     ?>
 
-                    <span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["dt"]); ?></span></span></div>
+                    <span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["date"]); ?></span></span></div>
 
                     <?php
 
                     //if edited
-                    if ($srow["editorid"] > 0 && $srow["editdt"] > $srow["dt"]) {
+                    if ($srow["editorid"] > 0 && $srow["editdate"] > $srow["date"]) {
                         ?>
 
-                        <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["editdt"]); ?></span></span></div>
+                        <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($srow["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($srow["editdate"]); ?></span></span></div>
 
                         <?php
                     }
@@ -133,12 +143,18 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
         } else {
 
-            $squery1 = mysqli_query($con, "SELECT * FROM `forums` WHERE (`text` LIKE '%".$term."%' or `title` LIKE '%".$term."%') and `cat`<>0 ORDER BY `id` DESC") or die(mysqli_error($con));
-            $squery2 = mysqli_query($con, "SELECT `tid` FROM `forumposts` WHERE `text` LIKE '%".$term."%' ORDER BY `id` DESC") or die(mysqli_error($con));
+            $squery1 = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE CONCAT('%', :term, '%') OR `forumthreads`.`title` LIKE CONCAT('%', :termm, '%')) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
+            $squery1->bindValue("term", $term, PDO::PARAM_STR);
+            $squery1->bindValue("termm", $term, PDO::PARAM_STR);
+            $squery1->execute();
+
+            $squery2 = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE CONCAT('%', :term, '%') ORDER BY `forumposts`.`id` DESC");
+            $squery2->bindValue("term", $term, PDO::PARAM_STR);
+            $squery2->execute();
 
             $ra = array();
 
-            while ($row = mysqli_fetch_assoc($squery1)) {
+            while ($row = $squery1->fetch(PDO::FETCH_ASSOC)) {
 
                 if (!in_array($row["id"], $ra)) {
 
@@ -148,11 +164,11 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             }
 
-            while ($row = mysqli_fetch_assoc($squery2)) {
+            while ($row = $squery2->fetch(PDO::FETCH_ASSOC)) {
 
-                if (!in_array($row["tid"], $ra)) {
+                if (!in_array($row["threadid"], $ra)) {
 
-                    array_push($ra, $row["tid"]);
+                    array_push($ra, $row["threadid"]);
 
                 }
 
@@ -160,9 +176,9 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             if (!empty($ra)) {
 
-                $squery = mysqli_query($con, "SELECT * FROM `forums` WHERE `cat`<>0 AND `id` IN (".implode(',', array_map('intval', $ra)).") ORDER BY `id` DESC");
+                $squery = $con->query("SELECT * FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 AND `forumthreads`.`id` IN (" . implode(',', array_map('intval', $ra)) . ") ORDER BY `forumthreads`.`id` DESC");
 
-                $nr = mysqli_num_rows($squery);
+                $nr = $squery->rowCount();
 
             } else {
 
@@ -210,12 +226,12 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                 <style type='text/css' scoped>
 
                     <?php
-                    $cq = mysqli_query($con, "SELECT * FROM `forumcat`");
+                    $cq = $con->query("SELECT * FROM `forumcategories`");
 
-                    while ($cr = mysqli_fetch_assoc($cq)) {
+                    while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
 
-                        echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hex"]."; }\n";
-                        echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hexh"]."; }\n";
+                        echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
+                        echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
 
                     }
                     ?>
@@ -232,15 +248,15 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                 <?php
 
-                while ($row = mysqli_fetch_assoc($squery)) {
+                while ($row = $squery->fetch(PDO::FETCH_ASSOC)) {
 
                     ?>
                     <tr class='forums-entry'>
-                        <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
-                            <a href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                        <td class='forums-entry-category forums-category-<?php echo getcatname($row["forumcategory"]); ?>'>
+                            <a href='?p=forums&cat=<?php echo $row["forumcategory"]; ?>'>
                                 <div class='forums-entry-category-text'>
 
-                                    <?php echo getcatname($row["cat"]); ?>
+                                    <?php echo getcatname($row["forumcategory"]); ?>
 
                                 </div>
                             </a>
@@ -254,7 +270,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                             <br>
                             <span class='forums-entry-metadata'>
 
-                                created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
+                                created by <?php echo getname($row["authorid"])." ".displaydate($row["date"]); ?>
 
                             </span>
                         </td>
@@ -266,7 +282,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                             </span>
                             <br>
 
-                            <?php echo displaydate($row["ldt"]); ?>
+                            <?php echo displaydate($row["lastdate"]); ?>
 
                         </td>
                         <td class='forums-entry-postcount'>
@@ -276,7 +292,10 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                             <br>
 
                             <?php
-                                echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
+                                $q = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+                                $q->bindValue("id", $row["id"], PDO::PARAM_INT);
+                                $q->execute();
+                                echo $q->rowCount().(($q->rowCount()) == 1 ? " reply" : " replies");
                             ?>
 
                         </td>
@@ -329,8 +348,10 @@ function getcatname($x) {
 
     global $con;
 
-    $fq = mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$x);
-    $fr = mysqli_fetch_assoc($fq);
+    $fq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :x");
+    $fq->bindValue("x", $x, PDO::PARAM_INT);
+    $fq->execute();
+    $fr = $fq->fetch(PDO::FETCH_ASSOC);
 
     return $fr["name"];
 

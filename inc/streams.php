@@ -7,7 +7,7 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-$q = mysqli_query($con, "SELECT `id`,`authorid`,`twitch`,`active` FROM `streams` WHERE `active`=1");
+$q = $con->query("SELECT `streams`.`id`,`streams`.`authorid`,`streams`.`twitchname`,`streams`.`active` FROM `streams` WHERE `streams`.`active` = 1");
 
 ?>
 
@@ -15,9 +15,9 @@ $q = mysqli_query($con, "SELECT `id`,`authorid`,`twitch`,`active` FROM `streams`
 
 <?php
 
-if (mysqli_num_rows($q) != 0) {
+if ($q->rowCount() != 0) {
 
-    while ($r = mysqli_fetch_assoc($q)) {
+    while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
         ?>
 
@@ -90,11 +90,13 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     // DISPLAY A STREAM
     $id = strip($_GET["id"]);
 
-    $q = mysqli_query($con, "SELECT `twitch`,`description` FROM `streams` WHERE `id`=".$id);
+    $q = $con->prepare("SELECT `streams`.`twitch`,`streams`.`description` FROM `streams` WHERE `streams`.`id` = :id");
+    $q->bindValue("id", $id, PDO::PARAM_INT);
+    $q->execute();
 
-    if (mysqli_num_rows($q) == 1) {
+    if ($q->rowCount() == 1) {
 
-        $r = mysqli_fetch_assoc($q);
+        $r = $q->fetch(PDO::FETCH_ASSOC);
 
         if (islive($r["twitch"])) {
 

@@ -16,7 +16,11 @@ if ($action == "add" && checkuser()) {
         $cat = strip($_POST["cat"]);
 
         // checking if the selected category is valid
-        if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
+        $cq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :cat");
+        $cq->bindValue("cat", $cat, PDO::PARAM_INT);
+        $cq->execute();
+
+        if ($cq->rowCount() != 1) {
 
             echo "That does not seem like a real forum category. Sorry, kiddo.";
 
@@ -38,9 +42,16 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $dt = time();
+                    $date = time();
 
-                    mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','0','".$title."','".$text."','".$cat."','0','".$dt."','0','0')");
+                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, :date, 0, :datee, :cat, 0, 0, 0)");
+                    $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                    $iq->bindValue("date", $date, PDO::PARAM_INT);
+                    $iq->bindValue("datee", $date, PDO::PARAM_INT);
+                    $iq->bindValue("title", $title, PDO::PARAM_STR);
+                    $iq->bindValue("text", $text, PDO::PARAM_STR);
+                    $iq->bindValue("cat", $cat, PDO::PARAM_INT);
+                    $iq->execute();
 
                     ?>
                     added.
@@ -59,14 +70,15 @@ if ($action == "add" && checkuser()) {
             <select class='forums-newpost-select' name='cat'>
 
             <?php
-        $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
-        while ($cr = mysqli_fetch_assoc($cq)) {
-            ?>
+            $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
+            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                ?>
 
-            <?php
-        }
+                <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
+
+                <?php
+            }
             ?>
 
         </select></label>
@@ -100,15 +112,18 @@ if ($action == "add" && checkuser()) {
         // editing a reply
         $pid = strip($_GET["pid"]);
 
-        $eq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `id`=".$pid." AND `tid`=".$tid);
+        $eq = $con->prepare("SELECT * FROM `forumposts` WHERE `forumposts`.`id` = :pid AND `forumposts`.`threadid` = :tid");
+        $eq->bindValue("pid", $pid, PDO::PARAM_INT);
+        $eq->bindValue("tid", $tid, PDO::PARAM_INT);
+        $eq->execute();
 
-        if (mysqli_num_rows($eq) != 1) {
+        if ($eq->rowCount() != 1) {
 
             echo "Something went wrong.";
 
         } else {
 
-            $er = mysqli_fetch_assoc($eq);
+            $er = $eq->fetch(PDO::FETCH_ASSOC);
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -122,7 +137,10 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid`=".$tid." AND `id`=".$pid);
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid AND `forumposts`.`id` = :pid");
+                        $dq->bindValue("pid", $pid, PDO::PARAM_INT);
+                        $dq->bindValue("tid", $tid, PDO::PARAM_INT);
+                        $dq->execute();
                         echo "deleted";
 
                     } else {
@@ -135,9 +153,14 @@ if ($action == "add" && checkuser()) {
 
                         } else {
 
-                            $edt = time();
+                            $editdate = time();
 
-                            mysqli_query($con, "UPDATE `forumposts` SET `text`='".$text."', `edt`='".$edt."' WHERE `tid`=".$tid." AND `id`=".$pid);
+                            $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text, `forumposts`.`editdate` = :editdate WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
+                            $uq->bindvalue("text", $text, PDO::PARAM_STR);
+                            $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
+                            $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
+                            $uq->bindvalue("pid", $pid, PDO::PARAM_INT);
+                            $uq->execute();
 
                             ?>
                             updated
@@ -181,15 +204,17 @@ if ($action == "add" && checkuser()) {
     } else {
 
         // editing the main post
-        $eq = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$tid);
+        $eq = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+        $eq->bindValue("tid", $tid, PDO::PARAM_INT);
+        $eq->execute();
 
-        if (mysqli_num_rows($eq) != 1) {
+        if ($eq->rowCount() != 1) {
 
             echo "Something went wrong.";
 
         } else {
 
-            $er = mysqli_fetch_assoc($eq);
+            $er = $eq->fetch(PDO::FETCH_ASSOC);
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -203,15 +228,24 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        mysqli_query($con, "DELETE FROM `forumposts` WHERE `tid` = ".$tid);
-                        mysqli_query($con, "DELETE FROM `forums` WHERE `id` = ".$tid);
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid");
+                        $dq->bindValue("tid", $tid, PDO::PARAM_INT);
+                        $dq->execute();
+
+                        $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                        $dq->bindValue("tid", $tid, PDO::PARAM_INT);
+                        $dq->execute();
                         echo "deleted";
 
                     } else {
 
                         $cat = strip($_POST["cat"]);
 
-                        if (mysqli_num_rows(mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$cat)) != 1) {
+                        $q = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :cat");
+                        $q->bindValue("cat", $cat, PDO::PARAM_INT);
+                        $q->execute();
+
+                        if ($q->rowCount() != 1) {
 
                             echo "that does not seem like a real forum categorny+";
 
@@ -233,9 +267,15 @@ if ($action == "add" && checkuser()) {
 
                                 } else {
 
-                                    $edt = time();
+                                    $editdate = time();
 
-                                    mysqli_query($con, "UPDATE `forums` SET `cat`='".$cat."', `title`='".$title."', `text`='".$text."', `edt`='".$edt."' WHERE `id`=".$tid);
+                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = :editdate WHERE `forumthreads`.`id` = :tid");
+                                    $uq->bindvalue("cat", $cat, PDO::PARAM_INT);
+                                    $uq->bindvalue("title", $title, PDO::PARAM_STR);
+                                    $uq->bindvalue("text", $text, PDO::PARAM_STR);
+                                    $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
+                                    $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
+                                    $uq->execute();
 
                                     ?>
                                     updated
@@ -256,14 +296,15 @@ if ($action == "add" && checkuser()) {
                         <select class='forums-newpost-select' name='cat'>
 
                         <?php
-                    $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
-                    while ($cr = mysqli_fetch_assoc($cq)) {
-                        ?>
+                            $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                        <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["pname"]; ?></option>
+                            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                                ?>
 
-                        <?php
-                    }
+                                <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
+
+                                <?php
+                            }
                         ?>
 
                     </select></label>
@@ -310,11 +351,13 @@ if ($action == "add" && checkuser()) {
 
         // SHOW ONE THREAD
         $id = isset($tid) ? strip($tid) : strip($_GET["id"]);
-        $query = mysqli_query($con, "SELECT * FROM `forums` WHERE `id`=".$id);
+        $query = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`id` = :id");
+        $query->bindValue("id", $id, PDO::PARAM_INT);
+        $query->execute();
 
-        if (mysqli_num_rows($query) == 1) {
+        if ($query->rowCount() == 1) {
 
-            $row = mysqli_fetch_assoc($query);
+            $row = $query->fetch(PDO::FETCH_ASSOC);
 
             //comment processing
             if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"])) {
@@ -328,11 +371,19 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $dt = time();
+                    $date = time();
 
-                    $iq = mysqli_query($con, "INSERT INTO `forumposts` VALUES('','$author','$text','$dt','0','$id')");
+                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, :date, 0, :id)");
+                    $iq->bindValue("author", $author, PDO::PARAM_INT);
+                    $iq->bindValue("text", $text, PDO::PARAM_STR);
+                    $iq->bindValue("date", $date, PDO::PARAM_INT);
+                    $iq->bindValue("id", $id, PDO::PARAM_INT);
+                    $iq->execute();
 
-                    $uq = mysqli_query($con, "UPDATE `forums` SET `ldt`=".$dt." WHERE `id`=".$row["id"]);
+                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = :date WHERE `forumthreads`.`id` = :id");
+                    $uq->bindValue("date", $date, PDO::PARAM_INT);
+                    $uq->bindValue("id", $id, PDO::PARAM_INT);
+                    $uq->execute();
 
                 }
 
@@ -369,7 +420,7 @@ if ($action == "add" && checkuser()) {
                         <div class='forums-post-metadata'>
 
                             <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."'>edit</a>"; ?>
-                            <?php if ($row["edt"] != 0) echo "last edited ".displaydate($row["edt"]); ?>
+                            <?php if ($row["editdate"] != 0) echo "last edited ".displaydate($row["editdate"]); ?>
 
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-author'>
@@ -381,7 +432,7 @@ if ($action == "add" && checkuser()) {
                             <span class='forums-post-metadata-item'>
                                 <span class='forums-post-date'>
 
-                                    <?php echo displaydate($row["dt"]); ?>
+                                    <?php echo displaydate($row["date"]); ?>
 
                                 </span>
                             </span>
@@ -400,11 +451,13 @@ if ($action == "add" && checkuser()) {
                 <?php
 
                 //fetching comments
-                $cq = mysqli_query($con, "SELECT * FROM `forumposts` WHERE `tid`=".$id);
+                $cq = $con->prepare("SELECT * FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+                $cq->bindValue("id", $id, PDO::PARAM_INT);
+                $cq->execute();
 
                 $cn = isset($tid) ? 1 : 2;
 
-                while ($cr = mysqli_fetch_assoc($cq)) {
+                while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
 
                     ?>
 
@@ -418,7 +471,7 @@ if ($action == "add" && checkuser()) {
                             <div class='forums-post-metadata'>
 
                                 <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."&amp;pid=".$cr["id"]."'>edit</a>"; ?>
-                                <?php if ($row["edt"] != 0) echo "last edited ".displaydate($row["edt"]); ?>
+                                <?php if ($cr["editdate"] != 0) echo "last edited ".displaydate($cr["editdate"]); ?>
 
                                 <span class='forums-post-metadata-item'>
                                     <span class='forums-post-author'>
@@ -430,7 +483,7 @@ if ($action == "add" && checkuser()) {
                                 <span class='forums-post-metadata-item'>
                                     <span class='forums-post-date'>
 
-                                        <?php echo displaydate($cr["dt"]); ?>
+                                        <?php echo displaydate($cr["date"]); ?>
 
                                     </span>
                                 </span>
@@ -520,7 +573,9 @@ if ($action == "add" && checkuser()) {
 
             $cat = strip($_GET["cat"]);
 
-            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`=".$cat." AND `cat`<>0 ORDER BY `ldt` DESC");
+            $query = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`forumcategory` = :cat AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
+            $query->bindValue("cat", $cat, PDO::PARAM_INT);
+            $query->execute();
 
             ?>
 
@@ -530,7 +585,7 @@ if ($action == "add" && checkuser()) {
 
         } else {
 
-            $query = mysqli_query($con, "SELECT `id`,`authorid`,`dt`,`title`,`cat`,`closed`,`ldt` FROM `forums` WHERE `cat`<>0 ORDER BY `ldt` DESC");
+            $query = $con->query("SELECT * FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
 
         }
 
@@ -539,12 +594,12 @@ if ($action == "add" && checkuser()) {
         <style type='text/css' scoped>
 
             <?php
-            $cq = mysqli_query($con, "SELECT * FROM `forumcat`");
+            $cq = $con->query("SELECT * FROM `forumcategories`");
 
-            while ($cr = mysqli_fetch_assoc($cq)) {
+            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
 
-                echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hex"]."; }\n";
-                echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hexh"]."; }\n";
+                echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
+                echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
 
             }
             ?>
@@ -561,17 +616,17 @@ if ($action == "add" && checkuser()) {
 
         <?php
 
-        if (mysqli_num_rows($query) != 0) {
+        if ($query->rowCount() != 0) {
 
-            while ($row = mysqli_fetch_assoc($query)) {
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
                 ?>
 
                 <tr class='forums-entry'>
-                    <td class='forums-entry-category forums-category-<?php echo getcatname($row["cat"]); ?>'>
-                        <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["cat"]; ?>'>
+                    <td class='forums-entry-category forums-category-<?php echo getcatname($row["forumcategory"]); ?>'>
+                        <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["forumcategory"]; ?>'>
 
-                                <?php echo getcatname($row["cat"]); ?>
+                                <?php echo getcatname($row["forumcategory"]); ?>
 
                         </a>
                     </td>
@@ -584,21 +639,24 @@ if ($action == "add" && checkuser()) {
                         <br>
                         <span class='forums-entry-metadata'>
 
-                            created by <?php echo getname($row["authorid"])." ".displaydate($row["dt"]); ?>
+                            created by <?php echo getname($row["authorid"])." ".displaydate($row["date"]); ?>
 
                         </span>
                     </td>
                     <td class='forums-entry-modifydate'>
                         <span class='forums-entry-miniheader'>Last reply posted</span><br>
 
-                        <?php echo displaydate($row["ldt"]); ?>
+                        <?php echo displaydate($row["lastdate"]); ?>
 
                     </td>
                     <td class='forums-entry-postcount'>
                         <span class='forums-entry-miniheader'>Thread has</span><br>
 
                         <?php
-                            echo mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])).(mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$row["id"])) == 1 ? " reply" : " replies");
+                            $q = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+                            $q->bindValue("id", $row["id"], PDO::PARAM_INT);
+                            $q->execute();
+                            echo $q->rowCount().(($q->rowCount()) == 1 ? " reply" : " replies");
                         ?>
 
                     </td>
@@ -629,8 +687,10 @@ function getcatname($x) {
 
     global $con;
 
-    $fq = mysqli_query($con, "SELECT `name` FROM `forumcat` WHERE `id`=".$x);
-    $fr = mysqli_fetch_assoc($fq);
+    $fq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :x");
+    $fq->bindValue("x", $x, PDO::PARAM_INT);
+    $fq->execute();
+    $fr = $fq->fetch(PDO::FETCH_ASSOC);
 
     return $fr["name"];
 

@@ -37,16 +37,16 @@ ccookies();
 <?php
 
 // fetching the custom pages' names
-$q = mysqli_query($con, "SELECT `name` FROM `cpages`");
+$pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages`");
 
-$cpages = Array();
+$pages = Array();
 
-while ($row = mysqli_fetch_assoc($q)) {
+while ($pagesrow = $pagesquery->fetch(PDO::FETCH_ASSOC)){
 
     // and storing them in an array
-    $cpages[] = $row["name"];
+    $pages[] = $pagesrow["title"];
     ?>
-    <a class='menu-item' href='?p=<?php echo $row["name"]; ?>'><?php echo $row["name"]; ?></a>
+    <a class='menu-item' href='?p=<?php echo $row["title"]; ?>'><?php echo $row["title"]; ?></a>
     <?php
 
 }
@@ -145,10 +145,10 @@ function IsAnyoneLive() {
 
     global $con;
 
-    $fquery = mysqli_query($con, "SELECT `twitch` FROM `streams` WHERE `active`=1");
+    $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`active` = 1");
 
-    while ($frow = mysqli_fetch_assoc($fquery)) {
-        if (islive($frow["twitch"])) {
+    while ($streamsrow = $streamsquery->fetch(PDO::FETCH_ASSOC)) {
+        if (vf($streamsrow["title"])) {
 
             return true;
 

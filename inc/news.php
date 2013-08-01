@@ -21,9 +21,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 1 ORDER BY `id` DESC LIMIT ".$xo.", 5");
+    $query = $con->prepare("SELECT * FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
+    $query->bindValue("xo", $xo, PDO::PARAM_INT);
+    $query->execute();
 
-    if (mysqli_num_rows($query) == 0) {
+    if ($query->rowCount() == 0) {
         ?>
 
         There are no news posts.
@@ -31,7 +33,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <?php
     } else {
 
-        while ($row = mysqli_fetch_assoc($query)) {
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
             // TITLE, AUTHOR & DATE
             ?>
@@ -44,12 +46,19 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             if ($row["comments"] == 1) {
 
-                $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
-                $tid = mysqli_fetch_assoc($ct);
+                $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
+                $ct->execute();
+
+                $tid = $ct->fetch(PDO::FETCH_ASSOC);
+
                 $tid = $tid["id"];
 
-                $cq = mysqli_query($con, "SELECT `id` FROM `forumposts` WHERE `tid`=".$tid);
-                $commnum = mysqli_num_rows($cq);
+                $cq = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+                $cq->bindValue("tid", $tid, PDO::PARAM_INT);
+                $cq->execute();
+
+                $commnum = $cq->rowCount();
                 ?>
 
                 <?php
@@ -67,15 +76,15 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             ?>
 
-            <span class='article-metadata-item'><span class='article-author'><?php echo getname($row["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["dt"]); ?></span></span></div>
+            <span class='article-metadata-item'><span class='article-author'><?php echo getname($row["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["date"]); ?></span></span></div>
 
             <?php
 
             //if edited
-            if ($row["editorid"] > 0 && $row["editdt"] > $row["dt"]) {
+            if ($row["editorid"] > 0 && $row["editdate"] > $row["date"]) {
                 ?>
 
-                <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdt"]); ?></span></span></div>
+                <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdate"]); ?></span></span></div>
 
                 <?php
             }
@@ -100,7 +109,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     //page links
-    $nr = mysqli_num_rows(mysqli_query($con, "SELECT `id` FROM `news`"));
+    $nr = $query->rowCount();
 
     echo "<div class='news-pages'>";
 
@@ -108,11 +117,15 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         if ($page == $i) {
 
-            echo "<div class='news-page-number'>".$i."</div>";
+            ?>
+            <div class='news-page-number'><?php echo $i; ?></div>
+            <?php
 
         } else {
 
-            echo "<a class='news-page-number' href='?p=news&amp;page=".$i."'>".$i."</a>";
+            ?>
+            <a class='news-page-number' href='?p=news&amp;page=<?php echo $i; ?>'><?php echo $i; ?></a>
+            <?php
 
         }
 
@@ -126,25 +139,27 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     $id = strip($_GET["id"]);
 
-    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$id);
+    $query = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+    $query->bindValue("id", $id, PDO::PARAM_INT);
+    $query->execute();
 
-    if (mysqli_num_rows($query) == 1) {
+    if ($query->rowCount() == 1) {
 
-        $row = mysqli_fetch_assoc($query);
+        $row = $query->fetch(PDO::FETCH_ASSOC);
 
         ?>
 
         <div class='article-header'>
         <div class='article-title'><h1><?php echo $row["title"]; ?></h1></div><div class='article-metadata'>
 
-        <span class='article-metadata-item'><span class='article-author'><?php echo getname($row["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["dt"]); ?></span></span></div>
+        <span class='article-metadata-item'><span class='article-author'><?php echo getname($row["authorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["date"]); ?></span></span></div>
 
         <?php
         //if edited
-        if ($row["editorid"] > 0 && $row["editdt"] > $row["dt"]) {
+        if ($row["editorid"] > 0 && $row["editdate"] > $row["date"]) {
             ?>
 
-            <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdt"]); ?></span></span></div>
+            <div class='article-edit-metadata'><span class='article-metadata-item'><span class='article-author'><?php echo getname($row["editorid"]); ?></span></span><span class='article-metadata-item'><span class='article-date'><?php echo displaydate($row["editdate"]); ?></span></span></div>
 
             <?php
         }
@@ -158,8 +173,12 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         if ($row["comments"] == 1) {
 
-            $ct = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `newsid`=".$row["id"]);
-            $tid = mysqli_fetch_assoc($ct);
+            $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+            $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
+            $ct->execute();
+
+            $tid = $ct->fetch(PDO::FETCH_ASSOC);
+
             $tid = $tid["id"];
             require_once "forums.php";
 

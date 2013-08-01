@@ -7,30 +7,21 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-if (isset($_POST["submit"]) && vf($_POST["text"])) {
-
-    $text = strip($_POST["text"]);
-    $m_id = strip($_POST["m_id"]);
-    $userid = $_SESSION["userid"];
-    $dt = time();
-
-    mysqli_query($con, "INSERT INTO `mapscomments` VALUES('','".$userid."','".$text."','".$dt."','".$m_id."')");
-
-}
-
 ?>
 
 <script src='js/maps.js'></script>
 
 <?php
 
-$q = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
+$q = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
 
-if (mysqli_num_rows($q) != 0) {
+if ($q->rowCount() != 0) {
 
-    while ($r = mysqli_fetch_assoc($q)) {
+    while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
-        $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$r["id"]);
+        $gq = $con->prepare("SELECT * FROM `gallery` WHERE `gallery`.`mapid` = :id");
+        $gq->bindValue("id", $r["id"], PDO::PARAM_INT);
+        $gq->execute();
         ?>
 
         <div class='map-name'>
@@ -65,7 +56,7 @@ if (mysqli_num_rows($q) != 0) {
 
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
-          <script type='text/javascript'> lendict["map-<?php echo $r["id"]; ?>"] = <?php echo (mysqli_num_rows($gq)+1); ?>; initialize("map-<?php echo $r["id"]; ?>");</script>
+          <script type='text/javascript'> lendict["map-<?php echo $r["id"]; ?>"] = <?php echo ($gq->rowCount()+1); ?>; initialize("map-<?php echo $r["id"]; ?>");</script>
 
         <?php
 
@@ -79,7 +70,7 @@ if (mysqli_num_rows($q) != 0) {
 
         <?php
         //display additional images
-        while ($gr = mysqli_fetch_assoc($gq)) {
+        while ($gr = $gq->fetch(PDO::FETCH_ASSOC)) {
             ?>
 
             <div class='map-image'>
@@ -97,8 +88,10 @@ if (mysqli_num_rows($q) != 0) {
             <span class='map-game'>
 
                 <?php
-                $gq = mysqli_query($con, "SELECT * FROM `games` WHERE `id`=".$r["gameid"]);
-                $gr = mysqli_fetch_assoc($gq);
+                $gq = $con->prepare("SELECT * FROM `games` WHERE `games`.`id` = :id");
+                $gq->bindValue("id", $r["gameid"], PDO::PARAM_INT);
+                $gq->execute();
+                $gr = $gq->fetch(PDO::FETCH_ASSOC);
                 ?>
 
                 <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
@@ -113,8 +106,10 @@ if (mysqli_num_rows($q) != 0) {
           <div class='comments'>
 
           <?php
-            $cq = mysqli_query($con, "SELECT `id` FROM `forums` WHERE `mapid`=".$r["id"]);
-            $ca = mysqli_fetch_assoc($cq);
+            $cq = $con->prepare("SELECT `forums`.`id` FROM `forums` WHERE `forums`.`mapid` = :id");
+            $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
+            $cq->execute();
+            $ca = $cq->fetch(PDO::FETCH_ASSOC);
             echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Link to the related forum topic if</a>";
           ?>
           </div>
