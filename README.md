@@ -20,7 +20,7 @@
    `inc/config.php` and `srv/config.py`, respectively, and fill out all fields
    set to placeholder values.
 
-6. Schedule certain scripts to be ran regularly according to srv/README.md
+6. Schedule certain scripts to be ran regularly according to `srv/README.md`
 
 # Dependencies
 
