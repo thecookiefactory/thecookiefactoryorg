@@ -18,44 +18,47 @@ if (!checkadmin()) die("403");
 
 <?php
 
-$q = mysqli_query($con, "SELECT * FROM `cpages` ORDER BY `name` ASC");
+if (isset($_POST["text"])) {
 
-echo "<form action='cpages.php' method='post'>";
-echo "<select name='cpage'>";
-
-while ($r = mysqli_fetch_assoc($q)) {
-
-    echo "<option value='".$r["name"]."'>".$r["name"]."</option>";
+    $query = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name WHERE `custompages`.`id` = :id");
+    $query->bindValue("text", strip($_POST["text"]), PDO::PARAM_STR);
+    $query->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
+    $query->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
+    $query->execute();
 
 }
 
-echo "</select>";
-echo "<input type='submit' value=''>";
-echo "</form>";
-
-?>
-
-<?php
-
 if (isset($_POST["cpage"])) {
 
-    $q = mysqli_query($con, "SELECT * FROM `cpages` WHERE `name`='".strip($_POST["cpage"])."'");
-    $r = mysqli_fetch_assoc($q);
+    $q = $con->prepare("SELECT * FROM `custompages` WHERE `custompages`.`title` = :cpage");
+    $q->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
+    $q->execute();
+    
+    $r = $q->fetch();
 
     echo "<form action='cpages.php' method='post'>";
     echo "<input type='hidden' name='id' value='".$r["id"]."'>";
-    echo "<input type='text' name='name' value='".$r["name"]."'>";
+    echo "<input type='text' name='name' value='".$r["title"]."'>";
     echo "<textarea name='text' rows='30' cols='100'>".$r["text"]."</textarea>";
     echo "<input type='submit' value=''>";
     echo "</form>";
 
-}
+} else {
 
-if (isset($_POST["text"])) {
+    $q = $con->query("SELECT * FROM `custompages` ORDER BY `custompages`.`title` ASC");
 
-    $editdt = time();
+    echo "<form action='cpages.php' method='post'>";
+    echo "<select name='cpage'>";
 
-    mysqli_query($con, "UPDATE `cpages` SET `text`='".strip($_POST["text"])."', `name`='".strip($_POST["name"])."', editdt='".$editdt."' WHERE `id`=".strip($_POST["id"]));
+    while ($r = $q->fetch()) {
+
+        echo "<option value='".$r["title"]."'>".$r["title"]."</option>";
+
+    }
+
+    echo "</select>";
+    echo "<input type='submit' value=''>";
+    echo "</form>";
 
 }
 

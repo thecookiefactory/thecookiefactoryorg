@@ -41,12 +41,12 @@ $pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages`");
 
 $pages = Array();
 
-while ($pagesrow = $pagesquery->fetch(PDO::FETCH_ASSOC)){
+while ($pagesrow = $pagesquery->fetch()){
 
     // and storing them in an array
     $pages[] = $pagesrow["title"];
     ?>
-    <a class='menu-item' href='?p=<?php echo $row["title"]; ?>'><?php echo $row["title"]; ?></a>
+    <a class='menu-item' href='?p=<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
     <?php
 
 }
@@ -89,7 +89,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
         require "inc/".$p.".php";
 
-    } else if (in_array($p, $cpages)) {
+    } else if (in_array($p, $pages)) {
 
         require "inc/custom.php";
 
@@ -147,7 +147,7 @@ function IsAnyoneLive() {
 
     $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams`");
 
-    while ($streamsrow = $streamsquery->fetch(PDO::FETCH_ASSOC)) {
+    while ($streamsrow = $streamsquery->fetch()) {
         if (vf($streamsrow["title"])) {
 
             return true;

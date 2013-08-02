@@ -26,17 +26,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$id);
+            $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+            $eq->bindValue("id", $id, PDO::PARAM_INT);
 
-            if (mysqli_num_rows($eq) == 1) {
+            if ($eq->rowCount() == 1) {
 
-                $er = mysqli_fetch_assoc($eq);
+                $er = $eq->fetch();
 
                 if (isset($_POST["submit"])) {
 
                     $title = strip($_POST["title"]);
                     $editorid = $_SESSION["userid"];
-                    $editdt = time();
                     $text = strip($_POST["text"]);
 
                     if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
@@ -55,7 +55,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                         if ($er["live"] == 0) {
 
-                            mysqli_query($con, "UPDATE `news` SET `dt`='".time()."' WHERE `id`=".$id);
+                            $uq = $con->prepare("UPDATE `news` SET `news`.`date` = now() WHERE `news`.`id` = :id");
+                            $uq->bindValue("id", $id, PDO::PARAM_INT);
+                            $uq->execute();
 
                         }
 
@@ -65,7 +67,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                     }
 
-                    mysqli_query($con, "UPDATE `news` SET `title`='".$title."', `editorid`='".$editorid."', `text`='".$text."', `comments`=".$comments.", `live`=".$live.", `editdt`='".$editdt."' WHERE `id`=".$id);
+                    $uq = $con->prepare("UPDATE `news` SET `news`.`title` = :title, `news`.`editorid` = :editorid, `news`.`text` = :text, `news`.`comments` = :comments, `news`.`live` = :live WHERE `news`.`id` = :id");
+                    $uq->bindValue("title", $title, PDO::PARAM_STR);
+                    $uq->bindValue("editorid", $editorid, PDO::PARAM_INT);
+                    $uq->bindValue("text", $text, PDO::PARAM_STR);
+                    $uq->bindValue("comments", $comments, PDO::PARAM_INT);
+                    $uq->bindValue("live", $live, PDO::PARAM_INT);
+                    $uq->bindValue("id", $id, PDO::PARAM_INT);
+                    $uq->execute();
 
                     echo "Piece of news successfully updated.<br>";
                     echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
@@ -121,16 +130,22 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = mysqli_query($con, "SELECT * FROM `news` WHERE `id`=".$id);
+            $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+            $eq->bindValue("id", $id, PDO::PARAM_INT);
+            $eq->execute();
 
-            if (mysqli_num_rows($eq) == 1) {
+            if ($eq->rowCount() == 1) {
 
                 if (isset($_POST["delete"])) {
 
-                    $dq = mysqli_query($con, "DELETE FROM `news` WHERE `id`=".$id);
+                    $dq = $con->prepare("DELETE FROM `news` WHERE `news`.`id` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
                     echo "News post successfully deleted.<br>";
 
-                    mysqli_query($con, "DELETE FROM `forums` WHERE `newsid`=".$id);
+                    $dq = $con->prepare("DELETE FROM `forums` WHERE `forums`.`newsid` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
                     // comments are not actually deleted at this point, but w/e
                     echo "Related comments successfully deleted.<br>";
                     echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
@@ -165,7 +180,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $title = strip($_POST["title"]);
             $author = $_SESSION["userid"];
-            $dt = time();
             $text = strip($_POST["text"]);
 
             if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
@@ -188,10 +202,21 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            mysqli_query($con, "INSERT INTO `news` VALUES('','".$title."','".$author."','".$dt."','".$text."','".$comments."','','','".$live."')");
-            $id = mysqli_insert_id($con);
+            $iq = $con->prepare("INSERT INTO `news` VALUES('', :title, :text, :author, now(), NULL, NULL, :comments, :live)");
+            $iq->bindValue("title", $title, PDO::PARAM_STR);
+            $iq->bindValue("text", $text, PDO::PARAM_STR);
+            $iq->bindValue("author", $author, PDO::PARAM_INT);
+            $iq->bindValue("comments", $comments, PDO::PARAM_INT);
+            $iq->bindValue("live", $live, PDO::PARAM_INT);
+            $iq->execute();
+            
+            $id = $con->lastInsertId();
 
-            mysqli_query($con, "INSERT INTO `forums` VALUES('','".$author."','".$dt."','0','".$title."','".$text."','0','0','".$dt."','0','".$id."')");
+            $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :author, now(), NULL, now(), 0, NULL, :id, 0)");
+            $iq->bindValue("title", $title, PDO::PARAM_STR);
+            $iq->bindValue("text", $text, PDO::PARAM_STR);
+            $iq->bindValue("author", $author, PDO::PARAM_INT);
+            $iq->execute();
 
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
@@ -221,12 +246,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     echo "<h2>unpublished newz</h2>";
 
-    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 0 ORDER BY `id` DESC");
+    $query = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 0 ORDER BY `news`.`id` DESC");
 
     echo "<table style='border-spacing: 5px;'>";
     echo "<tr><th>news</th><th>editing tools</th></tr>";
 
-    while ($row = mysqli_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
 
         echo "<tr>";
         echo "<td>";
@@ -243,12 +268,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     echo "<h2>published newz</h2>";
 
-    $query = mysqli_query($con, "SELECT * FROM `news` WHERE `live` = 1 ORDER BY `id` DESC");
+    $query = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC");
 
     echo "<table style='border-spacing: 5px;'>";
     echo "<tr><th>news</th><th>editing tools</th></tr>";
 
-    while ($row = mysqli_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
 
         echo "<tr>";
         echo "<td>";

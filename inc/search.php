@@ -71,7 +71,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                 <?php
 
-                while ($srow = $squery->fetch(PDO::FETCH_ASSOC)) {
+                while ($srow = $squery->fetch()) {
                     // TITLE, AUTHOR & DATE
                     ?>
 
@@ -87,7 +87,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                         $ct->bindValue("id", $srow["id"], PDO::PARAM_INT);
                         $ct->execute();
 
-                        $tid = $ct->fetch(PDO::FETCH_ASSOC);
+                        $tid = $ct->fetch();
 
                         $tid = $tid["id"];
 
@@ -154,7 +154,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             $ra = array();
 
-            while ($row = $squery1->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $squery1->fetch()) {
 
                 if (!in_array($row["id"], $ra)) {
 
@@ -164,7 +164,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             }
 
-            while ($row = $squery2->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $squery2->fetch()) {
 
                 if (!in_array($row["threadid"], $ra)) {
 
@@ -228,7 +228,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                     <?php
                     $cq = $con->query("SELECT * FROM `forumcategories`");
 
-                    while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                    while ($cr = $cq->fetch()) {
 
                         echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
                         echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
@@ -248,7 +248,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                 <?php
 
-                while ($row = $squery->fetch(PDO::FETCH_ASSOC)) {
+                while ($row = $squery->fetch()) {
 
                     ?>
                     <tr class='forums-entry'>
@@ -351,7 +351,7 @@ function getcatname($x) {
     $fq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :x");
     $fq->bindValue("x", $x, PDO::PARAM_INT);
     $fq->execute();
-    $fr = $fq->fetch(PDO::FETCH_ASSOC);
+    $fr = $fq->fetch();
 
     return $fr["name"];
 

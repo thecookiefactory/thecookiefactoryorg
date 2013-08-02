@@ -72,7 +72,7 @@ if ($action == "add" && checkuser()) {
             <?php
             $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+            while ($cr = $cq->fetch()) {
                 ?>
 
                 <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
@@ -123,7 +123,7 @@ if ($action == "add" && checkuser()) {
 
         } else {
 
-            $er = $eq->fetch(PDO::FETCH_ASSOC);
+            $er = $eq->fetch();
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -156,10 +156,10 @@ if ($action == "add" && checkuser()) {
                             $editdate = time();
 
                             $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text, `forumposts`.`editdate` = :editdate WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
-                            $uq->bindvalue("text", $text, PDO::PARAM_STR);
-                            $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
-                            $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
-                            $uq->bindvalue("pid", $pid, PDO::PARAM_INT);
+                            $uq->bindValue("text", $text, PDO::PARAM_STR);
+                            $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
+                            $uq->bindValue("tid", $tid, PDO::PARAM_INT);
+                            $uq->bindValue("pid", $pid, PDO::PARAM_INT);
                             $uq->execute();
 
                             ?>
@@ -214,7 +214,7 @@ if ($action == "add" && checkuser()) {
 
         } else {
 
-            $er = $eq->fetch(PDO::FETCH_ASSOC);
+            $er = $eq->fetch();
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -270,11 +270,11 @@ if ($action == "add" && checkuser()) {
                                     $editdate = time();
 
                                     $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = :editdate WHERE `forumthreads`.`id` = :tid");
-                                    $uq->bindvalue("cat", $cat, PDO::PARAM_INT);
-                                    $uq->bindvalue("title", $title, PDO::PARAM_STR);
-                                    $uq->bindvalue("text", $text, PDO::PARAM_STR);
-                                    $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
-                                    $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
+                                    $uq->bindValue("cat", $cat, PDO::PARAM_INT);
+                                    $uq->bindValue("title", $title, PDO::PARAM_STR);
+                                    $uq->bindValue("text", $text, PDO::PARAM_STR);
+                                    $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
+                                    $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                                     $uq->execute();
 
                                     ?>
@@ -298,7 +298,7 @@ if ($action == "add" && checkuser()) {
                         <?php
                             $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                            while ($cr = $cq->fetch()) {
                                 ?>
 
                                 <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
@@ -357,7 +357,7 @@ if ($action == "add" && checkuser()) {
 
         if ($query->rowCount() == 1) {
 
-            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $row = $query->fetch();
 
             //comment processing
             if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"])) {
@@ -457,7 +457,7 @@ if ($action == "add" && checkuser()) {
 
                 $cn = isset($tid) ? 1 : 2;
 
-                while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                while ($cr = $cq->fetch()) {
 
                     ?>
 
@@ -596,7 +596,7 @@ if ($action == "add" && checkuser()) {
             <?php
             $cq = $con->query("SELECT * FROM `forumcategories`");
 
-            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+            while ($cr = $cq->fetch()) {
 
                 echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
                 echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
@@ -618,7 +618,7 @@ if ($action == "add" && checkuser()) {
 
         if ($query->rowCount() != 0) {
 
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $query->fetch()) {
 
                 ?>
 
@@ -690,7 +690,7 @@ function getcatname($x) {
     $fq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :x");
     $fq->bindValue("x", $x, PDO::PARAM_INT);
     $fq->execute();
-    $fr = $fq->fetch(PDO::FETCH_ASSOC);
+    $fr = $fq->fetch();
 
     return $fr["name"];
 

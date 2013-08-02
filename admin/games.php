@@ -18,23 +18,29 @@ if (!checkadmin()) die("403");
 
 <?php
 
-$query = mysqli_query($con, "SELECT * FROM `games`");
+$query = $con->query("SELECT * FROM `games`");
 
 if (isset($_POST["update"])) {
 
-    while ($r = mysqli_fetch_assoc($query)) {
+    while ($r = $query->fetch()) {
 
         $id = $r["id"];
         $name = strip($_POST[$id."name"]);
-        $steam = strip($_POST[$id."steam"]);
+        $steamid = strip($_POST[$id."steamid"]);
 
-        if ($name == "" && $steam == "") {
+        if ($name == "" && $steamid == "") {
 
-            mysqli_query($con, "DELETE FROM `games` WHERE `id`=".$id);
+            $dq = $con->prepare("DELETE FROM `games` WHERE `games`.`id` = :id");
+            $dq->bindValue("id", $id, PDO::PARAM_INT);
+            $dq->execute();
 
         } else {
 
-            mysqli_query($con, "UPDATE `games` SET `name`='".$name."', `steam`='".$steam."' WHERE `id`=".$id);
+            $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
+            $uq->bindValue("name", $name, PDO::PARAM_STR);
+            $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+            $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+            $uq->execute();
 
         }
 
@@ -45,24 +51,27 @@ if (isset($_POST["update"])) {
 if (isset($_POST["addnew"])) {
 
     $name = strip($_POST["name"]);
-    $steam = strip($_POST["steam"]);
+    $steamid = strip($_POST["steamid"]);
 
-    mysqli_query($con, "INSERT INTO `games` VALUES('','".$name."','".$steam."')");
+    $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, :steamid, now())");
+    $iq->bindValue("name", $name, PDO::PARAM_STR);
+    $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+    $iq->execute();
 
 }
 
-$query = mysqli_query($con, "SELECT * FROM `games`");
+$query = $con->query("SELECT * FROM `games`");
 
 echo "<h1>manage games</h1>";
 
 echo "<form action='games.php' method='post'>";
 
 echo "<table border>";
-echo "<tr><th>id</th><th>name</th><th>steam store id</th></tr>";
+echo "<tr><th>id</th><th>name</th><th>steamid store id</th></tr>";
 
-while ($row = mysqli_fetch_assoc($query)) {
+while ($row = $query->fetch()) {
 
-    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["steam"]."' name='".$row["id"]."steam'></td></tr>";
+    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["steamid"]."' name='".$row["id"]."steamid'></td></tr>";
 
 }
 
@@ -72,7 +81,7 @@ echo "<input type='submit' value='update' name='update'>";
 echo "</form>";
 echo "<hr>";
 echo "<form action='games.php' method='post'>
-<input type='text' name='name'><input type='text' name='steam'><input type='submit' name='addnew' value='add new'>
+<input type='text' name='name'><input type='text' name='steamid'><input type='submit' name='addnew' value='add new'>
 </form>";
 
 ?>

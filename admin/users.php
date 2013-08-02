@@ -25,9 +25,9 @@ if (!checkadmin()) die("403");
 
 <?php
 
-$q = mysqli_query($con, "SELECT `id` FROM `users`");
+$q = $con->query("SELECT `users`.`id` FROM `users`");
 
-while ($r = mysqli_fetch_assoc($q)) {
+while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
     echo getname($r["id"])."<br>";
 

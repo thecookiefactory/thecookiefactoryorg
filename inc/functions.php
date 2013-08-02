@@ -6,13 +6,14 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/config.php";
 
 $con = new PDO("mysql:host=" . $config["db"]["host"] . ";dbname=" . $config["db"]["dbname"] . ";charset=utf8", $config["db"]["username"], $config["db"]["password"]);
 $con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 function strip($x) {
 
     global $con;
 
     $x = trim($x);
-    $x = htmlentities($x, ENT_QUOTES, "UTF-8");
+    $x = htmlspecialchars($x, ENT_QUOTES, "UTF-8");
     return $x;
 
 }
@@ -42,7 +43,7 @@ function ccookies() {
         $cq->bindValue("cv", $cv,  PDO::PARAM_STR);
         $cq->execute();
 
-        $cr = $cq->fetch(PDO::FETCH_ASSOC);
+        $cr = $cq->fetch();
 
         if ($cq->rowCount() == 1) {
 
@@ -72,7 +73,7 @@ function checkadmin() {
         $cq->bindValue("x", $x, PDO::PARAM_INT);
         $cq->execute();
 
-        $cr = $cq->fetch(PDO::FETCH_ASSOC);
+        $cr = $cq->fetch();
 
         if ($cr["admin"] == 1) {
 
@@ -100,7 +101,7 @@ function getname($id, $span = false) {
     $nq->bindValue("id", $id, PDO::PARAM_INT);
     $nq->execute();
 
-    $nr = $nq->fetch(PDO::FETCH_ASSOC);
+    $nr = $nq->fetch();
 
     if ($nr["admin"] == 0 || $span == false) {
 
@@ -160,11 +161,11 @@ function islive($x) {
 
     global $con;
 
-    $sq = $con->prepare("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`twitch` = :x");
+    $sq = $con->prepare("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`twitchname` = :x");
     $sq->bindValue("x", $x, PDO::PARAM_STR);
     $sq->execute();
 
-    $sr = $sq->fetch(PDO::FETCH_ASSOC);
+    $sr = $sq->fetch();
 
     if (vf($sr["title"])) {
 
@@ -293,7 +294,7 @@ function login() {
             if ($uq->rowCount() == 1) {
 
                 // yes
-                $ua = $uq->fetch(PDO::FETCH_ASSOC);
+                $ua = $uq->fetch();
 
                 $_SESSION["userid"] = $ua["id"];
                 setcookie("userid", $ua["cookieh"], time() + 2592000);

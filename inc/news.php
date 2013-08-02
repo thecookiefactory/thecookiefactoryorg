@@ -33,7 +33,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <?php
     } else {
 
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $query->fetch()) {
 
             // TITLE, AUTHOR & DATE
             ?>
@@ -50,7 +50,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
                 $ct->execute();
 
-                $tid = $ct->fetch(PDO::FETCH_ASSOC);
+                $tid = $ct->fetch();
 
                 $tid = $tid["id"];
 
@@ -145,7 +145,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     if ($query->rowCount() == 1) {
 
-        $row = $query->fetch(PDO::FETCH_ASSOC);
+        $row = $query->fetch();
 
         ?>
 
@@ -177,7 +177,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
             $ct->execute();
 
-            $tid = $ct->fetch(PDO::FETCH_ASSOC);
+            $tid = $ct->fetch();
 
             $tid = $tid["id"];
             require_once "forums.php";
