@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 def getArticleRows(sql):
-    sql.crs.execute('SELECT * FROM `news` WHERE `live` = 1 LIMIT 0, 10')
+    sql.crs.execute('SELECT * FROM `news` WHERE `live` = 1 LIMIT 0, 20')
     return [row for row in sql.crs]
 
 
