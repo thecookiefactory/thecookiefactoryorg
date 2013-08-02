@@ -39,12 +39,12 @@ if (isset($_POST["submit"])) {
         $dq = $con->prepare("DELETE FROM `streams` WHERE `streams`.`authorid` = :userid");
         $dq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
         $dq->execute();
-        
+
         echo "sttream deleted";
 
     }
 
-    
+
 
 } else {
 
@@ -55,11 +55,11 @@ if (isset($_POST["submit"])) {
     if ($sq->rowCount() == 0) {
 
         echo "Your stream page is being created now...<br>";
-        
+
         $cq = $con->prepare("INSERT INTO `streams` VALUES('', '', '', :userid, '')");
         $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
         $cq->execute();
-        
+
         echo "Done. Please fill out the fields below.<br>";
 
     }

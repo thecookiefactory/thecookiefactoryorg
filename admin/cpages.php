@@ -33,7 +33,7 @@ if (isset($_POST["cpage"])) {
     $q = $con->prepare("SELECT * FROM `custompages` WHERE `custompages`.`title` = :cpage");
     $q->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
     $q->execute();
-    
+
     $r = $q->fetch();
 
     echo "<form action='cpages.php' method='post'>";

@@ -209,7 +209,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $iq->bindValue("comments", $comments, PDO::PARAM_INT);
             $iq->bindValue("live", $live, PDO::PARAM_INT);
             $iq->execute();
-            
+
             $id = $con->lastInsertId();
 
             $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :author, now(), NULL, now(), 0, NULL, :id, 0)");
