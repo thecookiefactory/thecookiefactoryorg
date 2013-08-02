@@ -19,7 +19,7 @@ if ($q->rowCount() != 0) {
 
     while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
 
-        $gq = $con->prepare("SELECT * FROM `gallery` WHERE `gallery`.`mapid` = :id");
+        $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $r["id"], PDO::PARAM_INT);
         $gq->execute();
         ?>
