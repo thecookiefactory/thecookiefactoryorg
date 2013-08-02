@@ -3,16 +3,16 @@
 1. Install all dependencies listed below.
 2. Run the following commands:
 
-    git clone https://github.com/thecookiefactory/thecookiefactoryorg.git
-    cd thecookiefactoryorg
-    git submodule init
-    git submodule update
+        git clone https://github.com/thecookiefactory/thecookiefactoryorg.git
+        cd thecookiefactoryorg
+        git submodule init
+        git submodule update
 
 3. Edit your `php.ini` file as follows:
 
-    extension=php_openssl.dll
-    upload_max_filesize = 128M
-    post_max_size = 128M
+        extension=php_openssl.dll
+        upload_max_filesize = 128M
+        post_max_size = 128M
 
 4. Set up your database by running `mysql -u {DB_USER} -p < schema.sql`
 
