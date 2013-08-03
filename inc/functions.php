@@ -182,7 +182,6 @@ function islive($x) {
 
 function register($username) {
 
-    global $redirect;
     global $con;
 
     $username = strip($username);
@@ -227,15 +226,13 @@ function register($username) {
     $_SESSION["userid"] = $id;
     //setcookie("userid", $cookieh, time() + 2592000);
 
-    echo "Successfully registered! You will get redirected in 5 seconds. <a href='?p=news'>Click here if you don't want to wait.</a>";
-
     if (isset($_SESSION["lp"])) {
 
-        $redirect = $_SESSION["lp"];
+        header("Location: ?p=".$_SESSION["lp"]);
 
     } else {
 
-        $redirect = "news";
+        header("Location: ?p=news");
 
     }
 
@@ -243,7 +240,6 @@ function register($username) {
 
 function login() {
 
-    global $redirect;
     global $con;
     global $config;
 

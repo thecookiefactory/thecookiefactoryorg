@@ -122,20 +122,6 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 </div>
 </footer>
 
-<?php
-
-if (isset($redirect)) {
-
-    echo "<script type='text/javascript'>
-    <!--
-    setTimeout('window.location = \"?p=".$redirect."\"')
-    //-->
-    </script>";
-
-}
-
-?>
-
 </body>
 </html>
 
