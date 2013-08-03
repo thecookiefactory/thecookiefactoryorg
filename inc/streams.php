@@ -17,7 +17,7 @@ $q = $con->query("SELECT `streams`.`id`,`streams`.`authorid`,`streams`.`twitchna
 
 if ($q->rowCount() != 0) {
 
-    while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
+    while ($r = $q->fetch()) {
 
         ?>
 
@@ -32,7 +32,7 @@ if ($q->rowCount() != 0) {
 
             <?php
 
-            if (islive($r["twitch"])) {
+            if (islive($r["twitchname"])) {
 
                 ?>
 
@@ -52,7 +52,7 @@ if ($q->rowCount() != 0) {
 
             <?php
 
-            if (islive($r["twitch"])) {
+            if (islive($r["twitchname"])) {
 
                 ?>
 
@@ -90,19 +90,19 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     // DISPLAY A STREAM
     $id = strip($_GET["id"]);
 
-    $q = $con->prepare("SELECT `streams`.`twitch`,`streams`.`description` FROM `streams` WHERE `streams`.`id` = :id");
+    $q = $con->prepare("SELECT `streams`.`twitchname`,`streams`.`text` FROM `streams` WHERE `streams`.`id` = :id");
     $q->bindValue("id", $id, PDO::PARAM_INT);
     $q->execute();
 
     if ($q->rowCount() == 1) {
 
-        $r = $q->fetch(PDO::FETCH_ASSOC);
+        $r = $q->fetch();
 
-        if (islive($r["twitch"])) {
+        if (islive($r["twitchname"])) {
 
             ?>
 
-            <div class='stream-title'><h1><?php echo gettitle($r["twitch"]); ?></h1></div>
+            <div class='stream-title'><h1><?php echo $r["title"]; ?></h1></div>
 
             <?php
 
@@ -113,12 +113,12 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         <div class='stream-content'>
             <div class='stream-player'>
 
-                <?php echo streamo($r["twitch"]); ?>
+                <?php echo streamo($r["twitchname"]); ?>
 
             </div>
             <div class='stream-description'>
 
-                <?php echo Markdown($r["description"]); ?>
+                <?php echo Markdown($r["text"]); ?>
 
             </div>
         </div>
@@ -143,20 +143,5 @@ function streamo($x) {
     <param name='movie' value='http://www.twitch.tv/widgets/live_embed_player.swf' />
     <param name='flashvars' value='hostname=www.twitch.tv&channel=".$x."&auto_play=true&start_volume=25' />
     </object>";
-
-}
-
-function gettitle($x) {
-
-    $json_file = @file_get_contents("http://api.justin.tv/api/stream/list.json?channel=$x", 0, null, null);
-    $json_array = json_decode($json_file, true);
-
-    if (empty($json_array)) {
-
-        return "";
-
-    }
-
-    return $json_array[0]['channel']['status'];
 
 }

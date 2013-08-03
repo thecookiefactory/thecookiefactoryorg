@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -24,15 +24,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         // EDIT
 
         $id = strip($_GET["id"]);
-        $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=".$id);
+        $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+        $eq->bindValue("id", $id, PDO::PARAM_INT);
+        $eq->execute();
+
 
         if (isset($_POST["submit"])) {
 
-            $mr = mysqli_fetch_assoc($eq);
+            $mr = $eq->fetch();
 
             $name = strip($_POST["name"]);
             $game = strip($_POST["game"]);
-            $desc = strip($_POST["desc"]);
+            $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
 
             //image file
@@ -49,14 +52,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                     $location = "../img/maps/";
 
-                    unlink($location.$id.".".$mr["ext"]);
+                    unlink($location.$id.".".$mr["extension"]);
                     echo "Old image file deleted.<br>";
 
                     if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
 
                         echo "New image file uploaded...<br>";
 
-                        mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
+                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
+                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
+                        $uq->bindValue("id", $id, PDO::PARAM_INT);
+                        $uq->execute();
+
                         echo "File extension saved...<br>";
 
                     } else {
@@ -77,17 +84,24 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $editdt = time();
-
-            $uq = mysqli_query($con, "UPDATE maps SET `name`='".$name."', `gameid`='".$game."', `desc`='".$desc."', `dl`='".$download."', editdt='".$editdt."' WHERE `id`=".$id);
+            $uq = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download WHERE `maps`.`id` = :id");
+            $uq->bindValue("id", $id, PDO::PARAM_INT);
+            $uq->bindValue("name", $name, PDO::PARAM_STR);
+            $uq->bindValue("game", $game, PDO::PARAM_INT);
+            $uq->bindValue("text", $text, PDO::PARAM_STR);
+            $uq->bindValue("download", $download, PDO::PARAM_STR);
+            $uq->execute();
 
         }
 
-        if (mysqli_num_rows($eq) == 1) {
+        if ($eq->rowCount() == 1) {
 
             //fetching the current data
-            $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=$id");
-            $mr = mysqli_fetch_assoc($eq);
+            $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+            $eq->bindValue("id", $id, PDO::PARAM_INT);
+            $eq->execute();
+
+            $mr = $eq->fetch();
 
             echo "<form action='?action=edit&amp;id=".$id."' method='post' enctype='multipart/form-data'>
             Name<br>
@@ -95,9 +109,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             Associated game<br>
             <select name='game'>";
 
-            $gq = mysqli_query($con, "SELECT * FROM `games` ORDER BY `id` ASC");
+            $gq = $con->query("SELECT * FROM `games` ORDER BY `games`.`id` ASC");
 
-            while ($gr = mysqli_fetch_assoc($gq)) {
+            while ($gr = $gq->fetch()) {
 
                 echo "<option value='".$gr["id"]."'";
 
@@ -112,13 +126,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             }
 
             echo "</select><br>
-            Description<br>
-            <textarea name='desc' required>".$mr["desc"]."</textarea><br>
+            description<br>
+            <textarea name='text' required>".$mr["text"]."</textarea><br>
             download (empty for none, repo name for github, steam file id for workshop file):
             <input type='text' name='download' value='".$mr["dl"]."'>
             <br>
             main image<br>
-            <img style='width: 300px;' src='../img/maps/".$mr["id"].".".$mr["ext"]."' alt=''>
+            <img style='width: 300px;' src='../img/maps/".$mr["id"].".".$mr["extension"]."' alt=''>
             <br>
             <input type='file' name='image'><br>
             <input type='submit' name='submit'>
@@ -137,32 +151,42 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = mysqli_query($con, "SELECT * FROM `maps` WHERE `id`=".$id);
+            $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+            $eq->bindValue("id", $id, PDO::PARAM_INT);
+            $eq->execute();
 
-            if (mysqli_num_rows($eq) == 1) {
+            if ($eq->rowCount() == 1) {
 
-                $er = mysqli_fetch_assoc($eq);
+                $er = $eq->fetch();
 
                 if (isset($_POST["delete"])) {
 
                     //deleting the main image
-                    unlink("../img/maps/".$er["id"].".".$er["ext"]);
+                    unlink("../img/maps/".$er["id"].".".$er["extension"]);
 
                     //deleting images from the gallery
-                    $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$id);
+                    $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
+                    $gq->bindValue("id", $id, PDO::PARAM_INT);
+                    $gq->execute();
 
-                    while ($gr = mysqli_fetch_assoc($gq)) {
+                    while ($gr = $gq->fetch()) {
 
                         unlink("../img/maps/".$er["id"]."/".$gr["filename"]);
-                        mysqli_query($con, "DELETE FROM `gallery` WHERE `id`=".$gr["id"]);
+                        $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
+                        $dq->bindValue("id", $gr["id"], PDO::PARAM_INT);
+                        $dq->execute();
 
                     }
 
                     //deleting the forum thread
-                    mysqli_query($con, "DELETE FROM `forums` WHERE `mapid`=".$id);
+                    $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
                     // comments are not actually deleted at this point, but w/e
 
-                    $dq = mysqli_query($con, "DELETE FROM `maps` WHERE `id`=$id");
+                    $dq = $con->prepare("DELETE FROM `maps` WHERE `maps`.`id` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
 
                     rmdir("../img/maps/".$id);
 
@@ -202,12 +226,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $name = strip($_POST["name"]);
             $author = $_SESSION["userid"];
             $game = strip($_POST["game"]);
-            $desc = strip($_POST["desc"]);
+            $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
 
             if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
 
                 $comments = 1;
+                echo "the topic name is: ".$_POST["topicname"];
 
             } else {
 
@@ -215,11 +240,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $dt = time();
-
             //inserting the basic data and returning the map id
-            mysqli_query($con, "INSERT INTO `maps` VALUES('','$name','$author','$game','$desc','$download','0','','0','0','$comments','$dt','0')");
-            $id = mysqli_insert_id($con);
+            $iq = $con->prepare("INSERT INTO `maps` VALUES('', :name, :text, :author, now(), NULL, :download, '', :comments, :game, '')");
+            $iq->bindValue("name", $name, PDO::PARAM_STR);
+            $iq->bindValue("text", $text, PDO::PARAM_STR);
+            $iq->bindValue("author", $author, PDO::PARAM_INT);
+            $iq->bindValue("download", $download, PDO::PARAM_STR);
+            $iq->bindValue("comments", $comments, PDO::PARAM_INT);
+            $iq->bindValue("game", $game, PDO::PARAM_INT);
+            $iq->execute();
+
+            $id = $con->lastInsertId();
             echo "Basic values inserted...<br>";
             echo "The map id is ".$id."<br>";
 
@@ -244,7 +275,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
 
                         echo "Image file successfully uploaded...<br>";
-                        mysqli_query($con, "UPDATE `maps` SET `ext`='".$extension."' WHERE `id`=".$id);
+                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
+                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
+                        $uq->bindValue("id", $id, PDO::PARAM_INT);
+                        $uq->execute();
                         echo "File extension saved...<br>";
 
                     } else {
@@ -265,12 +299,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 // creating forum entry for comments
 
                 $authorid = $_SESSION["userid"];
-                $dt = time();
                 $title = strip($_POST["topicname"]);
                 $text = strip($_POST["topictext"]);
                 $cat = strip($_POST["topiccat"]);
 
-                mysqli_query($con, "INSERT INTO `forums` VALUES('','".$authorid."','".$dt."','0','".$title."','".$text."','".$cat."','0','".$dt."','".$id."','0')");
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, now(), 0, now(), :cat, :id, 0, 0)");
+                $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                $iq->bindValue("title", $title, PDO::PARAM_STR);
+                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                $iq->bindValue("cat", $cat, PDO::PARAM_INT);
+                $iq->bindValue("id", $id, PDO::PARAM_INT);
+                $iq->execute();
 
             }
 
@@ -286,9 +325,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             Associated game<br>
             <select name='game'>";
 
-            $gq = mysqli_query($con, "SELECT * FROM `games` ORDER BY `id` ASC");
+            $gq = $con->query("SELECT * FROM `games` ORDER BY `games`.`id` ASC");
 
-            while ($gr = mysqli_fetch_assoc($gq)) {
+            while ($gr = $gq->fetch()) {
 
                 echo "<option value='".$gr["id"]."'>".$gr["name"]."</option>";
 
@@ -296,8 +335,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             echo "
             </select><br>
-            Description<br>
-            <textarea name='desc' required></textarea><br>
+            description<br>
+            <textarea name='text' required></textarea><br>
             download (empty for none, repo name for github, steam file id for workshop file):
             <input type='text' name='download'>
             <br>
@@ -308,9 +347,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             select cateryogy
             <select name='topiccat'>";
 
-            $cq = mysqli_query($con, "SELECT * FROM `forumcat` ORDER BY `name` ASC");
+            $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            while ($cr = mysqli_fetch_assoc($cq)) {
+            while ($cr = $cq->fetch()) {
 
                 echo "<option value='".$cr["id"]."'>".$cr["name"]."</option>";
 
@@ -331,12 +370,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     echo "<h1>manage maps</h1>
     <p><a href='?action=write'>add new</a></p>";
 
-    $query = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
+    $query = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
 
     echo "<table style='border-spacing: 5px;'>";
     echo "<tr><th>maps</th><th>editing tools</th></tr>";
 
-    while ($row = mysqli_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
 
         echo "<tr>";
         echo "<td>";

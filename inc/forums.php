@@ -42,12 +42,8 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $date = time();
-
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, :date, 0, :datee, :cat, 0, 0, 0)");
+                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, now(), 0, now(), :cat, 0, 0, 0)");
                     $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iq->bindValue("date", $date, PDO::PARAM_INT);
-                    $iq->bindValue("datee", $date, PDO::PARAM_INT);
                     $iq->bindValue("title", $title, PDO::PARAM_STR);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
                     $iq->bindValue("cat", $cat, PDO::PARAM_INT);
@@ -72,7 +68,7 @@ if ($action == "add" && checkuser()) {
             <?php
             $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+            while ($cr = $cq->fetch()) {
                 ?>
 
                 <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
@@ -123,7 +119,7 @@ if ($action == "add" && checkuser()) {
 
         } else {
 
-            $er = $eq->fetch(PDO::FETCH_ASSOC);
+            $er = $eq->fetch();
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -137,7 +133,7 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid AND `forumposts`.`id` = :pid");
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
                         $dq->bindValue("pid", $pid, PDO::PARAM_INT);
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
@@ -156,10 +152,10 @@ if ($action == "add" && checkuser()) {
                             $editdate = time();
 
                             $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text, `forumposts`.`editdate` = :editdate WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
-                            $uq->bindvalue("text", $text, PDO::PARAM_STR);
-                            $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
-                            $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
-                            $uq->bindvalue("pid", $pid, PDO::PARAM_INT);
+                            $uq->bindValue("text", $text, PDO::PARAM_STR);
+                            $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
+                            $uq->bindValue("tid", $tid, PDO::PARAM_INT);
+                            $uq->bindValue("pid", $pid, PDO::PARAM_INT);
                             $uq->execute();
 
                             ?>
@@ -214,7 +210,7 @@ if ($action == "add" && checkuser()) {
 
         } else {
 
-            $er = $eq->fetch(PDO::FETCH_ASSOC);
+            $er = $eq->fetch();
 
             if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
 
@@ -228,7 +224,15 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid");
+                        if (vf($er["mapid"])) {
+
+                            $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                            $uq->bindValue("id", $er["mapid"], PDO::PARAM_INT);
+                            $uq->execute();
+
+                        }
+
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
 
@@ -270,11 +274,11 @@ if ($action == "add" && checkuser()) {
                                     $editdate = time();
 
                                     $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = :editdate WHERE `forumthreads`.`id` = :tid");
-                                    $uq->bindvalue("cat", $cat, PDO::PARAM_INT);
-                                    $uq->bindvalue("title", $title, PDO::PARAM_STR);
-                                    $uq->bindvalue("text", $text, PDO::PARAM_STR);
-                                    $uq->bindvalue("editdate", $editdate, PDO::PARAM_INT);
-                                    $uq->bindvalue("tid", $tid, PDO::PARAM_INT);
+                                    $uq->bindValue("cat", $cat, PDO::PARAM_INT);
+                                    $uq->bindValue("title", $title, PDO::PARAM_STR);
+                                    $uq->bindValue("text", $text, PDO::PARAM_STR);
+                                    $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
+                                    $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                                     $uq->execute();
 
                                     ?>
@@ -298,7 +302,7 @@ if ($action == "add" && checkuser()) {
                         <?php
                             $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                            while ($cr = $cq->fetch()) {
                                 ?>
 
                                 <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
@@ -357,10 +361,10 @@ if ($action == "add" && checkuser()) {
 
         if ($query->rowCount() == 1) {
 
-            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $row = $query->fetch();
 
             //comment processing
-            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"])) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["comments"] == 1) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
@@ -371,17 +375,13 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $date = time();
-
-                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, :date, 0, :id)");
+                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, now(), NULL, :id)");
                     $iq->bindValue("author", $author, PDO::PARAM_INT);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
-                    $iq->bindValue("date", $date, PDO::PARAM_INT);
                     $iq->bindValue("id", $id, PDO::PARAM_INT);
                     $iq->execute();
 
-                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = :date WHERE `forumthreads`.`id` = :id");
-                    $uq->bindValue("date", $date, PDO::PARAM_INT);
+                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
                     $uq->bindValue("id", $id, PDO::PARAM_INT);
                     $uq->execute();
 
@@ -457,7 +457,7 @@ if ($action == "add" && checkuser()) {
 
                 $cn = isset($tid) ? 1 : 2;
 
-                while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+                while ($cr = $cq->fetch()) {
 
                     ?>
 
@@ -596,7 +596,7 @@ if ($action == "add" && checkuser()) {
             <?php
             $cq = $con->query("SELECT * FROM `forumcategories`");
 
-            while ($cr = $cq->fetch(PDO::FETCH_ASSOC)) {
+            while ($cr = $cq->fetch()) {
 
                 echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
                 echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
@@ -618,7 +618,7 @@ if ($action == "add" && checkuser()) {
 
         if ($query->rowCount() != 0) {
 
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $query->fetch()) {
 
                 ?>
 
@@ -690,7 +690,7 @@ function getcatname($x) {
     $fq = $con->prepare("SELECT `forumcategories`.`name` FROM `forumcategories` WHERE `forumcategories`.`id` = :x");
     $fq->bindValue("x", $x, PDO::PARAM_INT);
     $fq->execute();
-    $fr = $fq->fetch(PDO::FETCH_ASSOC);
+    $fr = $fq->fetch();
 
     return $fr["name"];
 

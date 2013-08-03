@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -21,54 +21,65 @@ if (!checkadmin()) die("403");
 
 if (isset($_POST["submit"])) {
 
-    $twitch = strip($_POST["twitch"]);
+    $twitchname = strip($_POST["twitchname"]);
     $desc = strip($_POST["description"]);
 
     if (isset($_POST["active"]) && $_POST["active"] == "on") {
 
-        $active = 1;
+            $sq = $con->prepare("SELECT `streams`.`id` FROM `streams` WHERE `streams`.`authorid` = :userid");
+            $sq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+            $sq->execute();
+
+            if ($sq->rowCount() == 0) {
+
+                echo "Your stream page is being created now...<br>";
+
+                $cq = $con->prepare("INSERT INTO `streams` VALUES('', '', '', :userid, '')");
+                $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+                $cq->execute();
+
+                echo "Done. Please fill out the fields below.<br>";
+
+            }
+
+        $uq = $con->prepare("UPDATE `streams` SET `streams`.`twitchname` = :twitchname, `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
+        $uq->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
+        $uq->bindValue("text", $desc, PDO::PARAM_STR);
+        $uq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $uq->execute();
+
+        echo "Stream successfully updated.<br>";
 
     } else {
 
-        $active = 0;
+        $dq = $con->prepare("DELETE FROM `streams` WHERE `streams`.`authorid` = :userid");
+        $dq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $dq->execute();
+
+        echo "sttream deleted";
 
     }
 
-    $uq = mysqli_query($con, "UPDATE `streams` SET `twitch`='".$twitch."', `description`='".$desc."', `active`='".$active."' WHERE `authorid`=".$_SESSION["userid"]);
 
-    echo "Stream successfully updated.<br>";
 
-}
+} else {
 
-$sq = mysqli_query($con, "SELECT * FROM `streams` WHERE `authorid`=".$_SESSION["userid"]);
+    $sq = $con->prepare("SELECT * FROM `streams` WHERE `streams`.`authorid` = :userid");
+    $sq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+    $sq->execute();
 
-if (mysqli_num_rows($sq) == 0) {
+    $sr = $sq->fetch();
 
-    echo "Your stream page is being created now...<br>";
-    $cq = mysqli_query($con, "INSERT INTO `streams` VALUES('','".$_SESSION["userid"]."','','','0')");
-    echo "Done. Please fill out the fields below.<br>";
-
-}
-
-$sq = mysqli_query($con, "SELECT * FROM `streams` WHERE `authorid`=".$_SESSION["userid"]);
-$sr = mysqli_fetch_assoc($sq);
-
-echo "<form action='streams.php' method='post'>
-twitch.tv username<br>
-<input type='text' name='twitch' value='".$sr["twitch"]."' required><br>
-description<br>
-<textarea name='description' rows='7' cols='50' required>".$sr["description"]."</textarea><br>
-Active stream <input type='checkbox' name='active'";
-
-if ($sr["active"] == 1) {
-
-    echo " checked";
+    echo "<form action='streams.php' method='post'>
+    twitchname.tv username<br>
+    <input type='text' name='twitchname' value='".$sr["twitchname"]."' required><br>
+    description<br>
+    <textarea name='description' rows='7' cols='50' required>".$sr["text"]."</textarea><br>
+    Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) - watch out, if you uncheck this, all data regarding your stream will be lost<br>
+    <input type='submit' name='submit'>
+    </form>";
 
 }
-
-echo "> (there is a chance your stream will be live sometime soon)<br>
-<input type='submit' name='submit'>
-</form>";
 
 ?>
 

@@ -17,7 +17,7 @@ $q = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
 
 if ($q->rowCount() != 0) {
 
-    while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
+    while ($r = $q->fetch()) {
 
         $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $r["id"], PDO::PARAM_INT);
@@ -65,12 +65,12 @@ if ($q->rowCount() != 0) {
             ?>
 
             <div class='map-image'>
-              <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["ext"]; ?>'>
+              <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'>
             </div>
 
         <?php
         //display additional images
-        while ($gr = $gq->fetch(PDO::FETCH_ASSOC)) {
+        while ($gr = $gq->fetch()) {
             ?>
 
             <div class='map-image'>
@@ -91,12 +91,12 @@ if ($q->rowCount() != 0) {
                 $gq = $con->prepare("SELECT * FROM `games` WHERE `games`.`id` = :id");
                 $gq->bindValue("id", $r["gameid"], PDO::PARAM_INT);
                 $gq->execute();
-                $gr = $gq->fetch(PDO::FETCH_ASSOC);
+                $gr = $gq->fetch();
                 ?>
 
                 <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
             </span>
-            <span class='map-desc'><?php echo tformat($r["desc"]); ?></span>
+            <span class='map-desc'><?php echo tformat($r["text"]); ?></span>
           </div>
 
 
@@ -106,10 +106,10 @@ if ($q->rowCount() != 0) {
           <div class='comments'>
 
           <?php
-            $cq = $con->prepare("SELECT `forums`.`id` FROM `forums` WHERE `forums`.`mapid` = :id");
+            $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
             $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
             $cq->execute();
-            $ca = $cq->fetch(PDO::FETCH_ASSOC);
+            $ca = $cq->fetch();
             echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Link to the related forum topic if</a>";
           ?>
           </div>

@@ -25,6 +25,12 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     $query->bindValue("xo", $xo, PDO::PARAM_INT);
     $query->execute();
 
+    if (($query->rowCount() == 0) && ($con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
+
+        header("Location: ?p=news");
+
+    }
+
     if ($query->rowCount() == 0) {
         ?>
 
@@ -33,7 +39,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <?php
     } else {
 
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $query->fetch()) {
 
             // TITLE, AUTHOR & DATE
             ?>
@@ -50,7 +56,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
                 $ct->execute();
 
-                $tid = $ct->fetch(PDO::FETCH_ASSOC);
+                $tid = $ct->fetch();
 
                 $tid = $tid["id"];
 
@@ -109,7 +115,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     //page links
-    $nr = $query->rowCount();
+    $nr = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount();
 
     echo "<div class='news-pages'>";
 
@@ -145,7 +151,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     if ($query->rowCount() == 1) {
 
-        $row = $query->fetch(PDO::FETCH_ASSOC);
+        $row = $query->fetch();
 
         ?>
 
@@ -177,7 +183,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
             $ct->execute();
 
-            $tid = $ct->fetch(PDO::FETCH_ASSOC);
+            $tid = $ct->fetch();
 
             $tid = $tid["id"];
             require_once "forums.php";

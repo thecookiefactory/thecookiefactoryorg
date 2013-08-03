@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -24,15 +24,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $id = strip($_GET["id"]);
 
-        $query = mysqli_query($con, "SELECT * FROM `gallery` WHERE `id`=".$id);
+        $query = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`id` = :id");
+        $query->bindValue("id", $id, PDO::PARAM_INT);
+        $query->execute();
 
-        if (mysqli_num_rows($query) == 0) {
+        if ($query->rowCount() == 0) {
 
             die("Not a valid id.");
 
         }
 
-        $row = mysqli_fetch_assoc($query);
+        $row = $query->fetch();
 
         if (isset($_POST["submit"])) {
 
@@ -40,7 +42,10 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
 
-                    mysqli_query($con, "DELETE FROM `gallery` WHERE `id`=".$id);
+                    $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
+
                     echo "Image deleted successfully.<br>";
 
                 } else {
@@ -51,9 +56,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             } else {
 
-                $desc = strip($_POST["desc"]);
+                $text = strip($_POST["text"]);
 
-                $query = mysqli_query($con, "UPDATE `gallery` SET `desc`='".$desc."' WHERE `id`=".$id);
+                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text WHERE `pictures`.`id` = :id");
+                $query->bindValue("text", $text, PDO::PARAM_STR);
+                $query->bindValue("id", $id, PDO::PARAM_INT);
+                $query->execute();
                 echo "Image updated.<br>";
 
             }
@@ -62,7 +70,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             echo "<img style='width: 300px;' src='../img/maps/".$row["mapid"]."/".$row["filename"]."' alt=''>";
             echo "<form action='?action=edit&amp;id=".$id."' method='post'>";
-            echo "<input type='text' name='desc' maxlength='100' value='".$row["desc"]."' required><br>";
+            echo "<input type='text' name='text' maxlength='100' value='".$row["text"]."' required><br>";
             echo "<input type='checkbox' name='delete'> Delete permanently<br>";
             echo "<input type='submit' name='submit'>";
             echo "</form>";
@@ -73,21 +81,23 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $id = strip($_GET["id"]);
 
-        $mq = mysqli_query($con, "SELECT `name` FROM `maps` WHERE `id`=".$id);
+        $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+        $mq->bindValue("id", $id, PDO::PARAM_INT);
+        $mq->execute();
 
-        if (mysqli_num_rows($mq) == 0) {
+        if ($mq->rowCount() == 0) {
 
             die("Not a valid id.");
 
         }
 
-        $mr = mysqli_fetch_assoc($mq);
+        $mr = $mq->fetch();
 
         echo "<h1>Add an image to ".$mr["name"]."</h1>";
 
         if (isset($_POST["submit"])) {
 
-            $desc = strip($_POST["desc"]);
+            $text = strip($_POST["text"]);
 
             //image variables
             $filename = strtolower($_FILES["image"]["name"]);
@@ -104,8 +114,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                     if (move_uploaded_file($tmp_name, $location.$filename)) {
 
-                        $dt = time();
-                        mysqli_query($con, "INSERT INTO `gallery` VALUES('','".$id."','".$desc."','".$filename."','".$dt."')");
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES('', :text, now(), :filename, :mapid)");
+                        $iq->bindValue("text", $text, PDO::PARAM_STR);
+                        $iq->bindValue("filename", $filename, PDO::PARAM_STR);
+                        $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                        $iq->execute();
                         echo "Image successfully uploaded.<br>";
 
                     } else {
@@ -126,7 +139,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             echo "<form action='?action=add&amp;id=".$id."' method='post' enctype='multipart/form-data'>";
             echo "<input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique. jpg/png only<br>";
-            echo "description: <input type='text' name='desc' required><br>";
+            echo "textription: <input type='text' name='text' required><br>";
             echo "<input type='submit' name='submit'>";
             echo "</form>";
 
@@ -138,25 +151,27 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
     echo "<h1>manage galleries</h1>";
 
-    $query = mysqli_query($con, "SELECT * FROM `maps` ORDER BY `id` DESC");
+    $query = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
 
     echo "<ul>";
 
-    while ($row = mysqli_fetch_assoc($query)) {
+    while ($row = $query->fetch()) {
 
         echo "<li>";
         echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"])." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
 
-        $gq = mysqli_query($con, "SELECT * FROM `gallery` WHERE `mapid`=".$row["id"]);
+        $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
+        $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
+        $gq->execute();
 
-        if (mysqli_num_rows($gq) > 0) {
+        if ($gq->rowCount() > 0) {
 
             echo "<ul>";
 
-            while ($gr = mysqli_fetch_assoc($gq)) {
+            while ($gr = $gq->fetch()) {
 
                 echo "<li>";
-                echo "<a href='?action=edit&amp;id=".$gr["id"]."'>#".$gr["id"]." - ".$gr["desc"]."</a>";
+                echo "<a href='?action=edit&amp;id=".$gr["id"]."'>#".$gr["id"]." - ".$gr["text"]."</a>";
                 echo "</li>";
 
             }
