@@ -25,6 +25,12 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     $query->bindValue("xo", $xo, PDO::PARAM_INT);
     $query->execute();
 
+    if (($query->rowCount() == 0) && ($con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
+
+        header("Location: ?p=news");
+
+    }
+
     if ($query->rowCount() == 0) {
         ?>
 
@@ -109,7 +115,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     //page links
-    $nr = $query->rowCount();
+    $nr = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount();
 
     echo "<div class='news-pages'>";
 
