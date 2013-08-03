@@ -133,7 +133,7 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid AND `forumposts`.`id` = :pid");
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
                         $dq->bindValue("pid", $pid, PDO::PARAM_INT);
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
@@ -224,7 +224,15 @@ if ($action == "add" && checkuser()) {
 
                     if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid = :tid");
+                        if (vf($er["mapid"])) {
+
+                            $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                            $uq->bindValue("id", $er["mapid"], PDO::PARAM_INT);
+                            $uq->execute();
+
+                        }
+
+                        $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
 
@@ -356,7 +364,7 @@ if ($action == "add" && checkuser()) {
             $row = $query->fetch();
 
             //comment processing
-            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"])) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["comments"] == 1) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
