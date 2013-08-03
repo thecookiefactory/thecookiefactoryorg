@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -26,6 +26,22 @@ if (isset($_POST["submit"])) {
 
     if (isset($_POST["active"]) && $_POST["active"] == "on") {
 
+            $sq = $con->prepare("SELECT `streams`.`id` FROM `streams` WHERE `streams`.`authorid` = :userid");
+            $sq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+            $sq->execute();
+
+            if ($sq->rowCount() == 0) {
+
+                echo "Your stream page is being created now...<br>";
+
+                $cq = $con->prepare("INSERT INTO `streams` VALUES('', '', '', :userid, '')");
+                $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+                $cq->execute();
+
+                echo "Done. Please fill out the fields below.<br>";
+
+            }
+
         $uq = $con->prepare("UPDATE `streams` SET `streams`.`twitchname` = :twitchname, `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
         $uq->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
         $uq->bindValue("text", $desc, PDO::PARAM_STR);
@@ -47,22 +63,6 @@ if (isset($_POST["submit"])) {
 
 
 } else {
-
-    $sq = $con->prepare("SELECT `streams`.`id` FROM `streams` WHERE `streams`.`authorid` = :userid");
-    $sq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
-    $sq->execute();
-
-    if ($sq->rowCount() == 0) {
-
-        echo "Your stream page is being created now...<br>";
-
-        $cq = $con->prepare("INSERT INTO `streams` VALUES('', '', '', :userid, '')");
-        $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
-        $cq->execute();
-
-        echo "Done. Please fill out the fields below.<br>";
-
-    }
 
     $sq = $con->prepare("SELECT * FROM `streams` WHERE `streams`.`authorid` = :userid");
     $sq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);

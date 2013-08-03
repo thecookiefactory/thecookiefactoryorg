@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -27,7 +27,7 @@ if (!checkadmin()) die("403");
 
 $q = $con->query("SELECT `users`.`id` FROM `users`");
 
-while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
+while ($r = $q->fetch()) {
 
     echo getname($r["id"])."<br>";
 

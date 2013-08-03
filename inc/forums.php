@@ -42,12 +42,8 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $date = time();
-
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, :date, 0, :datee, :cat, 0, 0, 0)");
+                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, now(), 0, now(), :cat, 0, 0, 0)");
                     $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iq->bindValue("date", $date, PDO::PARAM_INT);
-                    $iq->bindValue("datee", $date, PDO::PARAM_INT);
                     $iq->bindValue("title", $title, PDO::PARAM_STR);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
                     $iq->bindValue("cat", $cat, PDO::PARAM_INT);
@@ -371,17 +367,13 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $date = time();
-
-                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, :date, 0, :id)");
+                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, now(), NULL, :id)");
                     $iq->bindValue("author", $author, PDO::PARAM_INT);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
-                    $iq->bindValue("date", $date, PDO::PARAM_INT);
                     $iq->bindValue("id", $id, PDO::PARAM_INT);
                     $iq->execute();
 
-                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = :date WHERE `forumthreads`.`id` = :id");
-                    $uq->bindValue("date", $date, PDO::PARAM_INT);
+                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
                     $uq->bindValue("id", $id, PDO::PARAM_INT);
                     $uq->execute();
 

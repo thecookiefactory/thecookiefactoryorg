@@ -117,6 +117,7 @@ function getname($id, $span = false) {
 
 function displaydate($x) {
 
+    $x = strtotime($x);
     return "<time datetime='".date(DATE_W3C, $x)."' title='".date("Y-m-d H:i \C\E\T", $x)."'>".longago($x)."</time>";
 
 }
@@ -213,15 +214,12 @@ function register($username) {
 
     }
 
-    $date = time();
-
     //$cookieh = cookieh();
 
     //registering the user and redirecting to the login form
-    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, '', :date)");
+    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, '', now())");
     $query->bindValue("username", $username, PDO::PARAM_STR);
     $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
-    $query->bindValue("date", $date, PDO::PARAM_INT);
     $query->execute();
 
     $id = $con->lastInsertId();

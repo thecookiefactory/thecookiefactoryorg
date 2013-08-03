@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = True;
+$r_c = true;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
@@ -28,6 +28,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $id = strip($_GET["id"]);
             $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
+            $eq->execute();
 
             if ($eq->rowCount() == 1) {
 
@@ -143,7 +144,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     $dq->execute();
                     echo "News post successfully deleted.<br>";
 
-                    $dq = $con->prepare("DELETE FROM `forums` WHERE `forums`.`newsid` = :id");
+                    $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
                     $dq->bindValue("id", $id, PDO::PARAM_INT);
                     $dq->execute();
                     // comments are not actually deleted at this point, but w/e
@@ -202,7 +203,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $iq = $con->prepare("INSERT INTO `news` VALUES('', :title, :text, :author, now(), NULL, NULL, :comments, :live)");
+            $iq = $con->prepare("INSERT INTO `news` VALUES('', :title, :text, :author, now(), 0, NULL, :comments, :live)");
             $iq->bindValue("title", $title, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -216,6 +217,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $iq->bindValue("title", $title, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
+            $iq->bindValue("id", $id, PDO::PARAM_INT);
             $iq->execute();
 
             echo "News post successfully submitted.<br>";

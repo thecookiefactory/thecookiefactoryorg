@@ -65,7 +65,7 @@ if ($q->rowCount() != 0) {
             ?>
 
             <div class='map-image'>
-              <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["ext"]; ?>'>
+              <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'>
             </div>
 
         <?php
@@ -96,7 +96,7 @@ if ($q->rowCount() != 0) {
 
                 <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
             </span>
-            <span class='map-desc'><?php echo tformat($r["desc"]); ?></span>
+            <span class='map-desc'><?php echo tformat($r["text"]); ?></span>
           </div>
 
 
@@ -106,7 +106,7 @@ if ($q->rowCount() != 0) {
           <div class='comments'>
 
           <?php
-            $cq = $con->prepare("SELECT `forums`.`id` FROM `forums` WHERE `forums`.`mapid` = :id");
+            $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
             $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
             $cq->execute();
             $ca = $cq->fetch();
