@@ -4,7 +4,7 @@ from sql import *
 API_ADDRESS = 'https://api.github.com/repos'
 
 
-def getRepoNames(sql):
+def getDlNames(sql):
     sql.crs.execute('SELECT `dl` FROM `maps`')
     return [dl[0] for dl in sql.crs]
 
@@ -18,9 +18,9 @@ def getFromAPI(repo, method, param=''):
 
 def insertAssetLink(sql, dl, link):
     if link:
-        sql.crs.execute("UPDATE `maps` SET `link`='{t}' WHERE `dl`='{s}'".format(t=link, s=repo))
+        sql.crs.execute("UPDATE `maps` SET `link`='{t}' WHERE `dl`='{s}'".format(t=link, s=dl))
     else:
-        sql.crs.execute("UPDATE `maps` SET `link`=NULL WHERE `dl`='{s}'".format(s=repo))
+        sql.crs.execute("UPDATE `maps` SET `link`=NULL WHERE `dl`='{s}'".format(s=dl))
 
 
 def main():
