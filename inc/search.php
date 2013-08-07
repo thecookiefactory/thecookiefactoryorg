@@ -11,7 +11,8 @@ include "markdown/markdown.php";
 
 if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
-    $term = strip($_POST["searchb"]);
+    $term = str_replace("%", "", $_POST["searchb"]);
+    $term = strip($term);
 
     if (strlen($term) > 50) {
         ?>
@@ -143,13 +144,13 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
         } else {
 
-            $squery1 = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE CONCAT('%', :term, '%') OR `forumthreads`.`title` LIKE CONCAT('%', :termm, '%')) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
-            $squery1->bindValue("term", $term, PDO::PARAM_STR);
-            $squery1->bindValue("termm", $term, PDO::PARAM_STR);
+            $squery1 = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
+            $squery1->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+            $squery1->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
             $squery1->execute();
 
-            $squery2 = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE CONCAT('%', :term, '%') ORDER BY `forumposts`.`id` DESC");
-            $squery2->bindValue("term", $term, PDO::PARAM_STR);
+            $squery2 = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE :term ORDER BY `forumposts`.`id` DESC");
+            $squery2->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
             $squery2->execute();
 
             $ra = array();
