@@ -76,7 +76,7 @@ if ($q->rowCount() != 0) {
                   $gq->execute();
                   $gr = $gq->fetch();
 
-                  if (!vf($gq["steamid"]) || $gq["steamid"] == 0) {
+                  if (!vf($gr["steamid"]) || $gr["steamid"] == 0) {
 
                       echo $gr["name"];
 
