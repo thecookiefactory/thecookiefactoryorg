@@ -29,7 +29,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         $eq->execute();
 
 
-        if (isset($_POST["submit"])) {
+        if (isset($_POST["submit"]) && vf($_POST["name"]) vf($_POST["game"]) vf($_POST["text"])) {
 
             $mr = $eq->fetch();
 
@@ -218,7 +218,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     } else {
         // WRITE
 
-        if (isset($_POST["submit"])) {
+        if (isset($_POST["submit"]) && vf($_POST["name"]) vf($_POST["game"]) vf($_POST["text"])) {
 
             echo "Map creating process initiating...<br>";
 
@@ -229,7 +229,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
 
-            if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
 
                 $comments = 1;
                 echo "the topic name is: ".$_POST["topicname"];
@@ -295,7 +295,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if (isset($_POST["topicname"]) && vf($_POST["topicname"])) {
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
                 // creating forum entry for comments
 
                 $authorid = $_SESSION["userid"];

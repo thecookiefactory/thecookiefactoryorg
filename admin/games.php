@@ -36,11 +36,22 @@ if (isset($_POST["update"])) {
 
         } else {
 
-            $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
-            $uq->bindValue("name", $name, PDO::PARAM_STR);
-            $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-            $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
-            $uq->execute();
+            if (!vf($steamid)) {
+
+                $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
+                $uq->bindValue("name", $name, PDO::PARAM_STR);
+                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->execute();
+
+            } else {
+
+                $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
+                $uq->bindValue("name", $name, PDO::PARAM_STR);
+                $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->execute();
+
+            }
 
         }
 
@@ -53,10 +64,20 @@ if (isset($_POST["addnew"])) {
     $name = strip($_POST["name"]);
     $steamid = strip($_POST["steamid"]);
 
-    $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, :steamid, now())");
-    $iq->bindValue("name", $name, PDO::PARAM_STR);
-    $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-    $iq->execute();
+    if (!vf($steamid)) {
+
+        $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, NULL, now())");
+        $iq->bindValue("name", $name, PDO::PARAM_STR);
+        $iq->execute();
+
+    } else {
+
+        $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, :steamid, now())");
+        $iq->bindValue("name", $name, PDO::PARAM_STR);
+        $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+        $iq->execute();
+
+    }
 
 }
 
