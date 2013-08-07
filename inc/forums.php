@@ -364,7 +364,7 @@ if ($action == "add" && checkuser()) {
             $row = $query->fetch();
 
             //comment processing
-            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["comments"] == 1) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["closed"] == 0) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
