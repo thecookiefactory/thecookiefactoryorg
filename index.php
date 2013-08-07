@@ -114,7 +114,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 <footer>
 2013 thecookiefactory.org<br>
 <div class='contact-us'>
-    <span class='contact-us-link'><a href='steam://url/GroupSteamIDPage/103582791433434721' target='_blank'>Steam</a></span>
+    <span class='contact-us-link'><a href='http://steamcommunity.com/groups/thecookiefactory' target='_blank'>Steam</a></span>
     <span class='contact-us-link'><a href='http://gplus.to/thecookiefactory' target='_blank'>Google+</a></span>
     <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
     <span class='contact-us-link'><a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a></span>
