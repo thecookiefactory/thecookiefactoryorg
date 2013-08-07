@@ -30,11 +30,11 @@ if ($q->rowCount() != 0) {
           <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
           <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
           <div class='map-actionbar' id='map-actionbar-<?php echo $r["id"]; ?>'>
-            <span class='map-actionbar-button' id='map-moreinfo-<?php echo $r["id"]; ?>'>More info</span>
+            <span class='map-actionbar-button' id='map-moreinfo-<?php echo $r["id"]; ?>' onclick='animateDataPanel(this.id)'>More info</span>
               <?php if (!vf($r["link"])) { ?>
                 <span class='map-actionbar-button-disabled'>Download</span>
               <?php } else { ?>
-                <a href='<?php echo $r["link"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
+                <a href='<?php echo $r["link"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
               <?php } ?>
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
@@ -102,7 +102,7 @@ if ($q->rowCount() != 0) {
               <?php echo tformat($r["text"]); ?>
             </div>
             <div class='map-data-actionbar'>
-              <span class='map-actionbar-button' id='map-lessinfo-<?php echo $r["id"]; ?>'>Less info</span>
+              <span class='map-actionbar-button' id='map-lessinfo-<?php echo $r["id"]; ?>' onclick='animateDataPanel(this.id)'>Less info</span>
                 <?php if (!vf($r["link"])) { ?>
                   <span class='map-actionbar-button-disabled'>Download</span>
                 <?php } else { ?>
