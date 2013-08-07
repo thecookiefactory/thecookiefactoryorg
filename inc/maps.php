@@ -29,31 +29,13 @@ if ($q->rowCount() != 0) {
         <div class='map-container'>
           <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
           <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
-          <div class="map-actionbar">
-            <span class="map-actionbar-button">More info</span>
-
-              <?php
-
-                if (!vf($r["link"])) {
-
-                    ?>
-
-                    <span class='map-actionbar-button-disabled'>Download</span>
-
-                    <?php
-
-                } else {
-
-                    ?>
-
-                    <a href='<?php echo $r["link"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
-
-                    <?php
-
-                }
-
-              ?>
-
+          <div class='map-actionbar' id='map-actionbar-<?php echo $r["id"]; ?>'>
+            <span class='map-actionbar-button' id='map-moreinfo-<?php echo $r["id"]; ?>'>More info</span>
+              <?php if (!vf($r["link"])) { ?>
+                <span class='map-actionbar-button-disabled'>Download</span>
+              <?php } else { ?>
+                <a href='<?php echo $r["link"]; ?>' target='_blank'><span class="map-actionbar-button">Download</span></a>
+              <?php } ?>
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
           <script type='text/javascript'> lendict["map-<?php echo $r["id"]; ?>"] = <?php echo ($gq->rowCount()+1); ?>; initialize("map-<?php echo $r["id"]; ?>");</script>
@@ -83,7 +65,7 @@ if ($q->rowCount() != 0) {
           ?>
 
           </div>
-          <div class='map-data map-data-showing'>
+          <div class='map-data' id='map-data-<?php echo $r["id"]; ?>'>
             <div class='map-data-properties'>
               <span class='map-data-prop map-data-author'><?php echo getname($r["authorid"]); ?></span><br>
               <span class='map-data-prop map-data-game'>
@@ -118,6 +100,14 @@ if ($q->rowCount() != 0) {
             </div>
             <div class='map-data-desc'>
               <?php echo tformat($r["text"]); ?>
+            </div>
+            <div class='map-data-actionbar'>
+              <span class='map-actionbar-button' id='map-lessinfo-<?php echo $r["id"]; ?>'>Less info</span>
+                <?php if (!vf($r["link"])) { ?>
+                  <span class='map-actionbar-button-disabled'>Download</span>
+                <?php } else { ?>
+                  <a href='<?php echo $r["link"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                <?php } ?>
             </div>
           </div>
         </div>

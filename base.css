@@ -582,7 +582,7 @@ img.map-image {
   transition: opacity 0.2s ease-in-out;
 }
 
-.map-actionbar-button:hover {2
+.map-actionbar-button:hover {
   background: linear-gradient(to bottom, #010101, #0A0A0A));
   opacity: 0.8;
 }
@@ -675,6 +675,16 @@ img.map-image {
   animation-name: map-hideinfo;
 }
 
+.map-actionbar-showing {
+  -webkit-animation-name: map-showinfobuttons;
+  animation-name: map-showinfobuttons;
+}
+
+.map-actionbar-hiding {
+  -webkit-animation-name: map-hideinfobuttons;
+  animation-name: map-hideinfobuttons;
+}
+
 .map-data-properties {
   float: left;
   width: 206px;
@@ -714,6 +724,29 @@ img.map-image {
 .map-data-game:before   { content: "A map for:\A"; }
 .map-data-date:before   { content: "Last update:\A"; }
 .map-data-topic:before  { content: "Forum topic:\A"; }
+
+.map-data-actionbar {
+  position: absolute;
+  top: 216px;
+  left: 204px;
+  z-index: 1;
+  display: table;
+  margin: auto;
+  width: 300px;
+  height: 36px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.map-data-actionbar > a {
+  color: white;
+}
 
 .search-separator {
   margin-bottom: 40px;
