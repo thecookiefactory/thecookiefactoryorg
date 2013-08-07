@@ -182,14 +182,17 @@ if ($action == "add" && checkuser()) {
                         </div>
                     </div>
 
+                    <?php
+                    if (checkadmin()) {
+
+                        echo "delete this reply <input type='checkbox' name='delete'>";
+
+                    }
+                    ?>
+
                     </form>
 
                     <?php
-                        if (checkadmin()) {
-
-                            echo "delete this reply <input type='checkbox' name='delete'>";
-
-                        }
 
                 }
 
@@ -326,8 +329,6 @@ if ($action == "add" && checkuser()) {
                             <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'><?php echo $er["text"]; ?></textarea>
                         </div>
                     </div>
-
-                    </form>
 
                     <?php
                         if (checkadmin()) {
