@@ -568,6 +568,12 @@ img.map-image {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
 }
 
 .map-actionbar-button {
@@ -616,73 +622,80 @@ img.map-image {
   background: black;
   font-family: 'Open Sans', serif;
   opacity: 0.8;
-  -webkit-transform: perspective(1500px) rotateX(-90deg);
-  transform: perspective(1500px) rotateX(-90deg);
+  -webkit-transform: perspective(1500px)
+                     rotateX(-90deg);
+  transform: perspective(1500px)
+             rotateX(-90deg);
   -webkit-transform-origin: bottom;
   transform-origin: bottom;
-
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-  animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
 @-webkit-keyframes map-showinfo {
-  from { opacity: 0; -webkit-transform: perspective(1500px) rotateX(-90deg);}
-  to { opacity: 0.9; -webkit-transform: perspective(1500px) rotateX(0deg);}
+  from { opacity: 0;   -webkit-transform: perspective(1500px) rotateX(-90deg); }
+  to   { opacity: 0.9; -webkit-transform: perspective(1500px) rotateX(  0deg); }
 }
 @keyframes map-showinfo {
-  from { opacity: 0; transform: perspective(1500px) rotateX(-90deg); }
-  to { opacity: 0.9; transform: perspective(1500px) rotateX(0deg); }
+  from { opacity: 0;   transform: perspective(1500px) rotateX(-90deg); }
+  to   { opacity: 0.9; transform: perspective(1500px) rotateX(  0deg); }
 }
 
 @-webkit-keyframes map-hideinfo {
-  from { opacity: 0.9; -webkit-transform: perspective(1500px) rotateX(0deg); }
-  to { opacity: 0; -webkit-transform: perspective(1500px) rotateX(-90deg); }
+  from { opacity: 0.9; -webkit-transform: perspective(1500px) rotateX(  0deg); }
+  to   { opacity: 0;   -webkit-transform: perspective(1500px) rotateX(-90deg); }
 }
 @keyframes map-hideinfo {
-  from { opacity: 0.9; transform: perspective(1500px) rotateX(0deg); }
-  to { opacity: 0; transform: perspective(1500px) rotateX(-90deg); }
+  from { opacity: 0.9; transform: perspective(1500px) rotateX(  0deg); }
+  to   { opacity: 0;   transform: perspective(1500px) rotateX(-90deg); }
 }
 
 @-webkit-keyframes map-hideinfobuttons {
-  from { -webkit-transform:translateY(0); }
-  to { -webkit-transform:translateY(300px); }
+  from { -webkit-transform: translateY(0px);   opacity: 0.6; }
+  to   { -webkit-transform: translateY(150px); opacity: 0; }
 }
 @keyframes map-hideinfobuttons {
-  from { transform:translateY(0); }
-  to { transform:translateY(300px); }
+  from { transform: translateY(0);     opacity: 0.6; }
+  to   { transform: translateY(150px); opacity: 0; }
 }
 
 @-webkit-keyframes map-showinfobuttons {
-  from { -webkit-transform:translateY(300px); }
-  to { -webkit-transform:translateY(0); }
+  from { -webkit-transform: translateY(150px); opacity: 0; }
+  to   { -webkit-transform: translateY(0);     opacity: 0.6; }
 }
 @keyframes map-showinfobuttons {
-  from { transform:translateY(300px); }
-  to { transform:translateY(0); }
+  from { transform: translateY(150px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 0.6; }
 }
 
-.map-data-showing {
+.map-data-more {
   -webkit-animation-name: map-showinfo;
   animation-name: map-showinfo;
 }
 
-.map-data-hiding {
+.map-data-less {
   -webkit-animation-name: map-hideinfo;
   animation-name: map-hideinfo;
 }
 
-.map-actionbar-showing {
-  -webkit-animation-name: map-showinfobuttons;
-  animation-name: map-showinfobuttons;
-}
-
-.map-actionbar-hiding {
+.map-actionbar-more {
   -webkit-animation-name: map-hideinfobuttons;
   animation-name: map-hideinfobuttons;
+}
+
+.map-actionbar-less {
+  -webkit-animation-name: map-showinfobuttons;
+  animation-name: map-showinfobuttons;
 }
 
 .map-data-properties {

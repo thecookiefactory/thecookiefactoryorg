@@ -133,3 +133,17 @@ function findKeyframesRule(rule) {
 
     return result;
 }
+
+function animateDataPanel(elemid) {
+    direction = elemid.slice(4, 8); // either "more" or "less"
+    idnumber = elemid.slice(13, elemid.length); // map-moreinfo and map-lessinfo
+                                                // are both 12 characters long
+
+    console.log(elemid);
+    console.log(direction);
+    console.log(idnumber);
+    document.getElementById("map-data-" + idnumber).className = "map-data map-data-" + direction;
+    document.getElementById("map-actionbar-" + idnumber).className = "map-actionbar map-actionbar-" + direction;
+
+    return;
+}

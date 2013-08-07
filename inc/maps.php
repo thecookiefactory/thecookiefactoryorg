@@ -90,7 +90,7 @@ if ($q->rowCount() != 0) {
                       $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
                       $cq->execute();
                       $ca = $cq->fetch();
-                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Here.</a>";
+                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'># replies</a>";
                     ?>
                   </span>
 
