@@ -75,9 +75,21 @@ if ($q->rowCount() != 0) {
                   $gq->bindValue("id", $r["gameid"], PDO::PARAM_INT);
                   $gq->execute();
                   $gr = $gq->fetch();
+
+                  if (!vf($gq["steamid"]) || $gq["steamid"] == 0) {
+
+                      echo $gr["name"];
+
+                  } else {
+
+                      ?>
+                      <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steamid"]; ?>'><?php echo $gr["name"]; ?></a>
+                      <?php
+
+                  }
                   ?>
 
-                  <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steamid"]; ?>'><?php echo $gr["name"]; ?></a>
+
               </span><br>
               <span class='map-data-prop map-data-date'><?php echo displaydate($r["editdate"]); ?></span>
               <?php
@@ -90,7 +102,12 @@ if ($q->rowCount() != 0) {
                       $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
                       $cq->execute();
                       $ca = $cq->fetch();
-                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'># replies</a>";
+                      
+                      $rq = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+                      $rq->bindValue("id", $ca["id"], PDO::PARAM_INT);
+                      $rq->execute();
+                      $nr = $rq->rowCount();
+                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'>".$nr." replies</a>";
                     ?>
                   </span>
 
