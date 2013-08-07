@@ -83,40 +83,43 @@ if ($q->rowCount() != 0) {
           ?>
 
           </div>
-          <div class='map-data'>
-            <span class='map-author'><?php echo getname($r["authorid"]); ?></span>
-            <span class='map-game'>
+          <div class='map-data map-data-showing'>
+            <div class='map-data-properties'>
+              <span class='map-data-prop map-data-author'><?php echo getname($r["authorid"]); ?></span><br>
+              <span class='map-data-prop map-data-game'>
 
-                <?php
-                $gq = $con->prepare("SELECT * FROM `games` WHERE `games`.`id` = :id");
-                $gq->bindValue("id", $r["gameid"], PDO::PARAM_INT);
-                $gq->execute();
-                $gr = $gq->fetch();
-                ?>
+                  <?php
+                  $gq = $con->prepare("SELECT * FROM `games` WHERE `games`.`id` = :id");
+                  $gq->bindValue("id", $r["gameid"], PDO::PARAM_INT);
+                  $gq->execute();
+                  $gr = $gq->fetch();
+                  ?>
 
-                <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steam"]; ?>'><?php echo $gr["name"]; ?></a>
-            </span>
-            <span class='map-desc'><?php echo tformat($r["text"]); ?></span>
+                  <a target='_blank' href='http://store.steampowered.com/app/<?php echo $gr["steamid"]; ?>'><?php echo $gr["name"]; ?></a>
+              </span><br>
+              <span class='map-data-prop map-data-date'><?php echo displaydate($r["editdate"]); ?></span>
+              <?php
+                if ($r["comments"] == 1) {
+              ?>
+
+                  <span class='map-data-prop map-data-topic'>
+                    <?php
+                      $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                      $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                      $cq->execute();
+                      $ca = $cq->fetch();
+                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Here.</a>";
+                    ?>
+                  </span>
+
+              <?php
+                }
+              ?>
+            </div>
+            <div class='map-data-desc'>
+              <?php echo tformat($r["text"]); ?>
+            </div>
           </div>
-
-
-          <?php
-          if ($r["comments"] == 1) {
-          ?>
-          <div class='comments'>
-
-          <?php
-            $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
-            $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
-            $cq->execute();
-            $ca = $cq->fetch();
-            echo "<a href='?p=forums&amp;id=".$ca["id"]."'>Link to the related forum topic if</a>";
-          ?>
-          </div>
-
-          <?php
-          }
-          ?>
         </div>
     <?php
     }
