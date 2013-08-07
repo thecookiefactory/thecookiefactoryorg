@@ -102,7 +102,7 @@ if ($q->rowCount() != 0) {
                       $cq->bindValue("id", $r["id"], PDO::PARAM_INT);
                       $cq->execute();
                       $ca = $cq->fetch();
-                      
+
                       $rq = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
                       $rq->bindValue("id", $ca["id"], PDO::PARAM_INT);
                       $rq->execute();
