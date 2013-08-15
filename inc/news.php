@@ -123,15 +123,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         if ($page == $i) {
 
-            ?>
-            <div class='news-page-number'><?php echo $i; ?></div>
-            <?php
+            echo "<div class='news-page-number'>" . $i . "</div>";
 
         } else {
 
-            ?>
-            <a class='news-page-number' href='?p=news&amp;page=<?php echo $i; ?>'><?php echo $i; ?></a>
-            <?php
+            echo "<a class='news-page-number' href='?p=news&amp;page=" . $i . "'>" . $i . "</a>";
 
         }
 
