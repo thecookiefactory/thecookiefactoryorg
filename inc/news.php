@@ -39,7 +39,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <?php
     } else {
 
+        $iii = 0;
+
         while ($row = $query->fetch()) {
+
+            $iii++;
 
             // TITLE, AUTHOR & DATE
             ?>
@@ -110,6 +114,17 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             <hr class='article-separator'>
 
             <?php
+
+            if ($iii == 1) {
+
+                ?>
+                <div class='ads'>
+                do sutff
+                </div>
+                <hr class='article-separator'>
+                <?php
+
+            }
 
         }
     }

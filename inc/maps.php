@@ -17,7 +17,11 @@ $q = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
 
 if ($q->rowCount() != 0) {
 
+    $iii = 0;
+
     while ($r = $q->fetch()) {
+
+        $iii++;
 
         $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $r["id"], PDO::PARAM_INT);
@@ -129,6 +133,15 @@ if ($q->rowCount() != 0) {
           </div>
         </div>
     <?php
+        if ($iii == 1) {
+
+        ?>
+        <div class='ads'>
+        do sutff
+        </div>
+        <?php
+
+    }
     }
 
 } else {
