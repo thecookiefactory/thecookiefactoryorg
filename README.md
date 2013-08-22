@@ -14,7 +14,7 @@
         upload_max_filesize = 128M
         post_max_size = 128M
 
-4. Set up your database by running `mysql -u {DB_USER} -p < schema.sql`
+4. Set up your database by running `mysql -u {DB_USER} -p {DB_NAME} < schema.sql`
 
 5. Rename the files `inc/config.php.template` and `srv/config.py.template` to
    `inc/config.php` and `srv/config.py`, respectively, and fill out all fields
