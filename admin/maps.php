@@ -2,7 +2,7 @@
 
 session_start();
 
-$r_c = true;
+$r_c = 1;
 require "../inc/functions.php";
 
 if (!checkadmin()) die("403");
