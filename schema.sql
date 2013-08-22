@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `data` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `data`;
+CREATE DATABASE IF NOT EXISTS `thecookiefactory` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `thecookiefactory`;
 
 CREATE TABLE IF NOT EXISTS `custompages` (
   `id` TINYINT NOT NULL AUTO_INCREMENT,
