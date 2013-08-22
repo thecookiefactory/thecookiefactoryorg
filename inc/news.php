@@ -39,7 +39,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         <?php
     } else {
 
+        $iii = 0;
+
         while ($row = $query->fetch()) {
+
+            $iii++;
 
             // TITLE, AUTHOR & DATE
             ?>
@@ -111,6 +115,17 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             <?php
 
+            if ($iii == 1) {
+
+                ?>
+                <div class='ads'>
+                do sutff
+                </div>
+                <hr class='article-separator'>
+                <?php
+
+            }
+
         }
     }
 
@@ -123,15 +138,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         if ($page == $i) {
 
-            ?>
-            <div class='news-page-number'><?php echo $i; ?></div>
-            <?php
+            echo "<div class='news-page-number'>" . $i . "</div>";
 
         } else {
 
-            ?>
-            <a class='news-page-number' href='?p=news&amp;page=<?php echo $i; ?>'><?php echo $i; ?></a>
-            <?php
+            echo "<a class='news-page-number' href='?p=news&amp;page=" . $i . "'>" . $i . "</a>";
 
         }
 

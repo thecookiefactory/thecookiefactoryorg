@@ -49,6 +49,13 @@ function ccookies() {
 
             $_SESSION["userid"] = $cr["id"];
 
+            $cookieh = cookieh();
+            $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+            $uq->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
+            $uq->bindValue("id", $cr["id"], PDO::PARAM_INT);
+            $uq->execute();
+            setcookie("userid", $cookieh, time() + 2592000);
+
         }
 
     }
@@ -180,6 +187,12 @@ function islive($x) {
 
 }
 
+function cookieh() {
+
+    return str_shuffle(hash('sha256', microtime()));
+
+}
+
 function register($username) {
 
     global $con;
@@ -213,18 +226,19 @@ function register($username) {
 
     }
 
-    //$cookieh = cookieh();
+    $cookieh = cookieh();
 
     //registering the user and redirecting to the login form
-    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, '', now())");
+    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, :cookieh, now())");
     $query->bindValue("username", $username, PDO::PARAM_STR);
     $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+    $query->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
     $query->execute();
 
     $id = $con->lastInsertId();
 
     $_SESSION["userid"] = $id;
-    //setcookie("userid", $cookieh, time() + 2592000);
+    setcookie("userid", $cookieh, time() + 2592000);
 
     if (isset($_SESSION["lp"])) {
 
@@ -291,7 +305,15 @@ function login() {
                 $ua = $uq->fetch();
 
                 $_SESSION["userid"] = $ua["id"];
-                setcookie("userid", $ua["cookieh"], time() + 2592000);
+
+                $cookieh = cookieh();
+
+                $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+                $uq->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
+                $uq->bindValue("id", $ua["id"], PDO::PARAM_INT);
+                $uq->execute();
+
+                setcookie("userid", $cookieh, time() + 2592000);
 
                 if (isset($_SESSION["lp"])) {
 
