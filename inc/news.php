@@ -149,7 +149,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     echo "</div>";
-    echo "<a class='news-rsslink' href='../rss.xml'>RSS</a>";
+    echo "<a class='news-rsslink' href='rss.xml'>RSS</a>";
 } else {
 
     // DISPLAY ONE PIECE OF NEWS
