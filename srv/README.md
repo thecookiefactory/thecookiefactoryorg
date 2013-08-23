@@ -32,7 +32,7 @@ If the stream is offline, `streams.title` is set to NULL.
 
 **Should be ran on demand upon changes to the `news` table.**
 
-Updates rss.xml in DocumentRoot to contain the latest 20 articles based on data
+Updates `/rss.xml` to contain the latest 20 articles based on data
 in the `news` table.
 
 ## webp.py
