@@ -125,11 +125,6 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
         <?php
 
-    } else {
-
-        //header("Location: ?p=streams");
-        // simply not echoing out anything should be fine
-
     }
 
 }
