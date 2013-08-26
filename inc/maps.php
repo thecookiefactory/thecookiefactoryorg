@@ -133,15 +133,6 @@ if ($q->rowCount() != 0) {
           </div>
         </div>
     <?php
-        if ($iii == 1) {
-
-        ?>
-        <div class='ads'>
-        do sutff
-        </div>
-        <?php
-
-    }
     }
 
 } else {
