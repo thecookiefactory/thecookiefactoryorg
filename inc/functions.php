@@ -76,13 +76,13 @@ function checkadmin() {
 
         $x = $_SESSION["userid"];
 
-        $cq = $con->prepare("SELECT `users`.`admin` FROM `users` WHERE `users`.`id` = :x");
+        $cq = $con->prepare("SELECT BIN(`users`.`admin`) FROM `users` WHERE `users`.`id` = :x");
         $cq->bindValue("x", $x, PDO::PARAM_INT);
         $cq->execute();
 
         $cr = $cq->fetch();
 
-        if ($cr["admin"] == 1) {
+        if ($cr["BIN(`users`.`admin`)"] == 1) {
 
             return true;
 
