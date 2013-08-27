@@ -8,9 +8,4 @@ order allow,deny
 allow from all
 </Files>
 
-AuthUserFile .htpasswd
-AuthName "Please Log In"
-AuthType Basic
-require valid-user
-
 ErrorDocument 404 /notfound.php
