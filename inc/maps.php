@@ -13,7 +13,9 @@ $_SESSION["lp"] = $p;
 
 <?php
 
-$q = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
+$q = $con->query("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`authorid`, `maps`.`date`, `maps`.`extension`, BIN(`maps`.`comments`), `maps`.`gameid`, `maps`.`link`
+                  FROM `maps`
+                  ORDER BY `maps`.`id` DESC");
 
 if ($q->rowCount() != 0) {
 
@@ -97,7 +99,7 @@ if ($q->rowCount() != 0) {
               </span><br>
               <span class='map-data-prop map-data-date'><?php echo displaydate($r["editdate"]); ?></span>
               <?php
-                if ($r["comments"] == 1) {
+                if ($r["BIN(`comments`)"] == 1) {
               ?>
 
                   <span class='map-data-prop map-data-topic'>

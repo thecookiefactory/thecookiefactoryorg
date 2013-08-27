@@ -21,11 +21,17 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = $con->prepare("SELECT * FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
+    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
+                            FROM `news`
+                            WHERE `news`.`live` = 1
+                            ORDER BY `news`.`id` DESC
+                            LIMIT :xo, 5");
     $query->bindValue("xo", $xo, PDO::PARAM_INT);
     $query->execute();
 
-    if (($query->rowCount() == 0) && ($con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
+    if (($query->rowCount() == 0) && ($con->query("SELECT `news`.`id`
+                                                   FROM `news`
+                                                   WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
         header("Location: ?p=news");
 
@@ -54,7 +60,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             <?php
 
-            if ($row["comments"] == 1) {
+            if ($row["BIN(`news`.`comments`)"] == 1) {
 
                 $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
                 $ct->bindValue("id", $row["id"], PDO::PARAM_INT);
@@ -119,7 +125,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     //page links
-    $nr = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 1")->rowCount();
+    $nr = $con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount();
 
     echo "<div class='news-pages'>";
 
@@ -145,7 +151,9 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     $id = strip($_GET["id"]);
 
-    $query = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
+                            FROM `news`
+                            WHERE `news`.`id` = :id");
     $query->bindValue("id", $id, PDO::PARAM_INT);
     $query->execute();
 
@@ -177,7 +185,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         <?php
 
-        if ($row["comments"] == 1) {
+        if ($row["BIN(`news`.`comments`)"] == 1) {
 
             $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
             $ct->bindValue("id", $row["id"], PDO::PARAM_INT);

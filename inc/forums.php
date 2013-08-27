@@ -356,7 +356,9 @@ if ($action == "add" && checkuser()) {
 
         // SHOW ONE THREAD
         $id = isset($tid) ? strip($tid) : strip($_GET["id"]);
-        $query = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`id` = :id");
+        $query = $con->prepare("SELECT `forumthreads`.`id`, `forumthreads`.`title`, `forumthreads`.`text`, `forumthreads`.`authorid`, `forumthreads`.`date`, `forumthreads`.`editdate`, `forumthreads`.`lastdate`, `forumthreads`.`mapid`, `forumthreads`.`newsid`, BIN(`forumthreads`.`closed`)
+                                FROM `forumthreads`
+                                WHERE `forumthreads`.`id` = :id");
         $query->bindValue("id", $id, PDO::PARAM_INT);
         $query->execute();
 
@@ -365,7 +367,7 @@ if ($action == "add" && checkuser()) {
             $row = $query->fetch();
 
             //comment processing
-            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["closed"] == 0) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["BIN(`forumthreads`.`closed`)"] == 0) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
@@ -401,7 +403,7 @@ if ($action == "add" && checkuser()) {
                 <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
             </h1>
 
-            <?php echo (($row["closed"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
+            <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
             <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
             <?php
             }
@@ -506,7 +508,7 @@ if ($action == "add" && checkuser()) {
 
             <?php
 
-            if ($row["closed"] == 0) {
+            if ($row["BIN(`forumthreads`.`closed`)"] == 0) {
                 //writing a comment
                 if (checkuser()) {
 
@@ -574,7 +576,11 @@ if ($action == "add" && checkuser()) {
 
             $cat = strip($_GET["cat"]);
 
-            $query = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`forumcategory` = :cat AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
+            $query = $con->prepare("SELECT `forumthreads`.`id`, `forumthreads`.`title, `forumthreads`.`authorid`, `forumthreads`.`date`, `forumthreads`.`lastdate`, `forumthreads`.`forumcategory`, BIN(`forumthreads`.`closed`)
+                                    FROM `forumthreads`
+                                    WHERE `forumthreads`.`forumcategory` = :cat
+                                    AND `forumthreads`.`forumcategory` <> 0
+                                    ORDER BY `forumthreads`.`lastdate` DESC");
             $query->bindValue("cat", $cat, PDO::PARAM_INT);
             $query->execute();
 
@@ -631,7 +637,7 @@ if ($action == "add" && checkuser()) {
 
                         </a>
                     </td>
-                    <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
+                    <td class='forums-entry-main <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "forums-entry-closed" : ""); ?>'>
                         <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
 
                             <?php echo $row["title"]; ?>

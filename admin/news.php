@@ -26,7 +26,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+            $eq = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`), BIN(`news`.`live`)
+                                 FROM `news`
+                                 WHERE `news`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 
@@ -90,7 +92,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     <textarea name='text' rows='10' cols='90' required>".$er["text"]."</textarea><br>
                     Disable comments <input type='checkbox' name='comments'";
 
-                    if ($er["comments"] == 0) {
+                    if ($er["BIN(`news`.`comments`"] == 0) {
 
                         echo "checked";
 
@@ -99,7 +101,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     echo "><br>
                     Publish? <input type='checkbox' name='live'";
 
-                    if ($er["live"] == 1) {
+                    if ($er["BIN(`news`.`live`)"] == 1) {
 
                         echo "checked";
 
