@@ -92,7 +92,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     <textarea name='text' rows='10' cols='90' required>".$er["text"]."</textarea><br>
                     Disable comments <input type='checkbox' name='comments'";
 
-                    if ($er["BIN(`news`.`comments`"] == 0) {
+                    if ($er["BIN(`news`.`comments`)"] == 0) {
 
                         echo "checked";
 
