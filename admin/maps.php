@@ -29,7 +29,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         $eq->execute();
 
 
-        if (isset($_POST["submit"]) && vf($_POST["name"]) vf($_POST["game"]) vf($_POST["text"])) {
+        if (isset($_POST["submit"]) && vf($_POST["name"]) && vf($_POST["game"]) && vf($_POST["text"])) {
 
             $mr = $eq->fetch();
 
@@ -218,7 +218,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     } else {
         // WRITE
 
-        if (isset($_POST["submit"]) && vf($_POST["name"]) vf($_POST["game"]) vf($_POST["text"])) {
+        if (isset($_POST["submit"]) && vf($_POST["name"]) && vf($_POST["game"]) && vf($_POST["text"])) {
 
             echo "Map creating process initiating...<br>";
 
