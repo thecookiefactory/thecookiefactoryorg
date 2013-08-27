@@ -56,7 +56,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                         $live = 1;
 
-                        if ($er["live"] == 0) {
+                        if ($er["BIN(`news`.`live`)"] == 0) {
 
                             $uq = $con->prepare("UPDATE `news` SET `news`.`date` = now() WHERE `news`.`id` = :id");
                             $uq->bindValue("id", $id, PDO::PARAM_INT);
