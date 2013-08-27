@@ -20,7 +20,6 @@ function strip($x) {
 
 function tformat($x) {
 
-    //return preg_replace('/(<br[^>]*>\s*){3,}/', '<br><br>', nl2br($x, false));
     return nl2br($x, false);
 
 }
@@ -288,11 +287,6 @@ function login() {
 
             $_SESSION["steamauth"] = $OpenID->validate() ? $OpenID->identity : null;
             $_SESSION["steamid"] = str_replace("http://steamcommunity.com/openid/id/", "", $_SESSION["steamauth"]);
-
-            //$profile = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$config["apikey"]."&steamids=".$_SESSION["steamid"]."&format=json");
-            //$buffer = fopen("cache/{$_SESSION["steamid"]}.json", "w");
-            //fwrite($buffer, $profile);
-            //fclose($buffer);
 
             // checking if the user has an account
             $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
