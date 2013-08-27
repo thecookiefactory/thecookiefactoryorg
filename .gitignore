@@ -3,6 +3,8 @@ inc/config.php
 img/maps/*
 cache/*
 rss.xml
+.sublime-project
+.floo*
 
 # mici
 _OTHERS
