@@ -39,7 +39,7 @@ function ccookies() {
         $cv = $_COOKIE["userid"];
 
         $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
-        $cq->bindValue("cv", $cv,  PDO::PARAM_STR);
+        $cq->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
         $cq->execute();
 
         $cr = $cq->fetch();
@@ -50,7 +50,7 @@ function ccookies() {
 
             $cookieh = cookieh();
             $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-            $uq->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
+            $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
             $uq->bindValue("id", $cr["id"], PDO::PARAM_INT);
             $uq->execute();
             setcookie("userid", $cookieh, time() + 2592000);
@@ -188,7 +188,7 @@ function islive($x) {
 
 function cookieh() {
 
-    return str_shuffle(hash('sha256', microtime()));
+    return str_shuffle(hash("sha256", microtime()));
 
 }
 
@@ -231,7 +231,7 @@ function register($username) {
     $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, :cookieh, now())");
     $query->bindValue("username", $username, PDO::PARAM_STR);
     $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
-    $query->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
+    $query->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
     $query->execute();
 
     $id = $con->lastInsertId();
@@ -303,7 +303,7 @@ function login() {
                 $cookieh = cookieh();
 
                 $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-                $uq->bindValue("cookieh", $cookieh, PDO::PARAM_STR);
+                $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
                 $uq->bindValue("id", $ua["id"], PDO::PARAM_INT);
                 $uq->execute();
 
