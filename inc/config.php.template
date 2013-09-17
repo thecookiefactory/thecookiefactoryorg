@@ -14,4 +14,8 @@ $config["apikey"] = "steamapikey";
 
 $config["domain"] = "domainname";
 
+$config["python"] = array(
+    "rsscommand" => "execute the python script"
+);
+
 ?>
