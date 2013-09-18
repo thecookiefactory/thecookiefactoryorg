@@ -15,7 +15,8 @@ $config["apikey"] = "steamapikey";
 $config["domain"] = "domainname";
 
 $config["python"] = array(
-    "rsscommand" => "execute the python script"
+    "rss" => "execute the python rss script",
+    "webp" => "execute the webp python script"
 );
 
 ?>

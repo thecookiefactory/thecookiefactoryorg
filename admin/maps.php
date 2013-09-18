@@ -44,39 +44,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
+            $location = "../img/maps/";
+
             $extension = substr($image_name, strpos($image_name, ".") + 1);
 
             if (!empty($image_name) && $image_size > 0) {
 
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
-
-                    $location = "../img/maps/";
-
-                    unlink($location.$id.".".$mr["extension"]);
-                    echo "Old image file deleted.<br>";
-
-                    if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
-
-                        echo "New image file uploaded...<br>";
-
-                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
-                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
-                        $uq->bindValue("id", $id, PDO::PARAM_INT);
-                        $uq->execute();
-
-                        echo "File extension saved...<br>";
-
-                    } else {
-
-                        echo "There was an error uploading your image.<br>";
-
-                    }
-
-                } else {
-
-                    echo "File must be jpeg/png.<br>";
-
-                }
+                // call the python uploader script
+                exec($config["python"]["webp"]);
 
             } else {
 
@@ -264,34 +239,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
-            $extension = substr($image_name, strpos($image_name, ".") + 1);
+            $location = "../img/maps/";
 
-            if (!empty($image_name)) {
+            if (!empty($image_name) && $image_size > 0) {
 
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
-
-                    $location = "../img/maps/";
-
-                    if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
-
-                        echo "Image file successfully uploaded...<br>";
-                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
-                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
-                        $uq->bindValue("id", $id, PDO::PARAM_INT);
-                        $uq->execute();
-                        echo "File extension saved...<br>";
-
-                    } else {
-
-                        echo "There was an error uploading your image.<br>";
-
-                    }
-
-                } else {
-
-                    echo "File must be jpeg/png.<br>";
-
-                }
+                // call the python uploader script
+                exec($config["python"]["webp"]);
 
             }
 

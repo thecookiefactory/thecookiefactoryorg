@@ -241,9 +241,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         }
 
     }
-    
+
     // update the rss feed
-    exec($config["python"]["rsscommand"]);
+    exec($config["python"]["rss"]);
 
 } else {
     // ALL
