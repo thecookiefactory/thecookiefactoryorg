@@ -40,7 +40,7 @@ if ($q->rowCount() != 0) {
               <?php if (!vf($r["link"])) { ?>
                 <span class='map-actionbar-button-disabled'>Download</span>
               <?php } else { ?>
-                <a href='<?php echo $r["link"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                <a href='click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
               <?php } ?>
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
@@ -129,7 +129,7 @@ if ($q->rowCount() != 0) {
                 <?php if (!vf($r["link"])) { ?>
                   <span class='map-actionbar-button-disabled'>Download</span>
                 <?php } else { ?>
-                  <a href='<?php echo $r["link"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                  <a href='click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
                 <?php } ?>
             </div>
           </div>

@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `maps` (
   `comments` BIT NOT NULL,
   `gameid` TINYINT NOT NULL,
   `link` VARCHAR(256) DEFAULT NULL,
+  `downloadcount` INT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
