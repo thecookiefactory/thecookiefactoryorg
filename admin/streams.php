@@ -13,6 +13,7 @@ if (!checkadmin()) die("403");
 <html>
 <head>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+    <title>thecookiefactory.org admin</title>
 </head>
 <body>
 <h1>manage your stream</h1>
