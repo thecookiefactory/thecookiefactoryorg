@@ -13,7 +13,7 @@ def getFromAPI(repo, method, param=''):
     link = API_ADDRESS + '/' + repo + '/' + method
     if param:
         link += '/' + param
-    return requests.get(link, headers={'X-GitHub-Media-Type': 'application/vnd.github.manifold-preview'}).json()
+    return requests.get(link, headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
 
 
 def insertAssetLink(sql, dl, link):
