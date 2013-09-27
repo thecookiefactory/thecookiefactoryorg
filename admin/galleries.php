@@ -112,7 +112,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
             if (!empty($filename)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location . " " . $extension);
+                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location . "/" . $filename . " " . $extension);
 
             }
 
