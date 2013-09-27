@@ -9,7 +9,7 @@ def saveImage(img, suffix):
     if isinstance(suffix, str):
         suffix = [suffix]
     for s in suffix:
-        img.save(sys.argv[2] + re.match('.+[\\\/](.*)\.\w+$', sys.argv[1]).group(1) + s)
+        img.save(sys.argv[2] + re.match('.+[\\\/](\w*)', sys.argv[1]).group(1) + s)
 
 
 def main():
