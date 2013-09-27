@@ -105,14 +105,34 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
             $filetype = $_FILES["image"]["type"];
             $tmp_name = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(getcwd()) . "/img/maps/" . $id . "/";
-            
             $extension = substr($filename, strpos($filename, ".") + 1);
 
             if (!empty($filename)) {
 
-                // call the python uploader script
-                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location . $filename . " " . $extension);
+                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
+
+                    $location = "../img/maps/".$id."/";
+
+                    if (move_uploaded_file($tmp_name, $location.$filename)) {
+
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES('', :text, now(), :filename, :mapid)");
+                        $iq->bindValue("text", $text, PDO::PARAM_STR);
+                        $iq->bindValue("filename", $filename, PDO::PARAM_STR);
+                        $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                        $iq->execute();
+                        echo "Image successfully uploaded.<br>";
+
+                    } else {
+
+                        echo "There was an error uploading your image.<br>";
+
+                    }
+
+                } else {
+
+                    echo "File must be jpeg/png.<br>";
+
+                }
 
             }
 
