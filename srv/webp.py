@@ -25,14 +25,14 @@ def main():
     except FileExistsError:
         pass
     try:
-        saveImage(img, ['.full.jpg', '.full.webp'])
+        saveImage(img, ['.full.png', '.full.webp'])
 
         if TARGET_WIDTH < img.size[0]:
             wpercent = (TARGET_WIDTH / float(img.size[0]))
             hsize = int((float(img.size[1]) * float(wpercent)))
             img = img.resize((TARGET_WIDTH, hsize), Image.ANTIALIAS)
 
-        saveImage(img, ['.jpg', '.webp'])
+        saveImage(img, ['.png', '.webp'])
     except PermissionError:
         sys.exit('No sufficient permissions to save output file.')
 
