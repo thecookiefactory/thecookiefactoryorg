@@ -45,12 +45,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(getcwd()) . "\\img\\maps\\";
+            $location = dirname(getcwd()) . "/img/maps/";
 
-            if (!empty($filename)) {
+            if (!empty($image_name)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location);
+                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location);
 
             } else {
 
@@ -238,12 +238,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(getcwd()) . "\\img\\maps\\";
+            $location = dirname(getcwd()) . "/img/maps/";
 
-            if (!empty($filename)) {
+            if (!empty($image_name)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location);
+                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location);
 
             }
 
