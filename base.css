@@ -590,15 +590,10 @@ article {
 .map-rightarrow:hover {
   background-color: #999;
   background-color: rgba(0, 0, 0, 0.5);
-  cursor: pointer;
 }
 
 .map-arrow-disabled {
   opacity: 0;
-}
-
-.map-arrow-disabled:hover {
-  cursor: default !important;
 }
 
 .map-imageroll {
