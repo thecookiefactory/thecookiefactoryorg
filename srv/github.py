@@ -35,7 +35,7 @@ def main():
         else:
             repojson = getFromAPI(name, 'releases')
             if repojson:
-                assetjson = requests.get(repojson[0]['assets_url']).json()
+                assetjson = requests.get(repojson[0]['assets_url'], headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
                 dldata[name] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=name, releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
     for repo in dldata:
         insertAssetLink(sql, repo, dldata[repo])
