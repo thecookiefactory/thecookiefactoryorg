@@ -44,7 +44,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(dirname(getcwd())) . "\\img\\maps\\";
+            $location = dirname(getcwd()) . "\\img\\maps\\";
 
             if (!empty($filename)) {
 
@@ -237,7 +237,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_type = $_FILES["image"]["type"];
             $image_tmp = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(dirname(getcwd())) . "\\img\\maps\\";
+            $location = dirname(getcwd()) . "\\img\\maps\\";
 
             if (!empty($filename)) {
 

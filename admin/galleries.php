@@ -104,7 +104,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
             $filetype = $_FILES["image"]["type"];
             $tmp_name = $_FILES["image"]["tmp_name"];
 
-            $location = dirname(dirname(getcwd())) . "\\img\\maps\\" . $id . "\\";
+            $location = dirname(getcwd()) . "\\img\\maps\\" . $id . "\\";
 
             if (!empty($filename)) {
 
