@@ -50,27 +50,13 @@ if ($q->rowCount() != 0) {
 
         //display the main image
 
-            ?>
-
-            <div class='map-image'>
-              <img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'>
-            </div>
-
-        <?php
+            ?><div class='map-image'><img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'></div><?php
         //display additional images
         while ($gr = $gq->fetch()) {
-            ?>
-
-            <div class='map-image'>
-              <img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["desc"]; ?>' title='<?php echo $gr["desc"]; ?>'>
-            </div>
-
-            <?php
+            ?><div class='map-image'><img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["desc"]; ?>' title='<?php echo $gr["desc"]; ?>'></div><?php
         }
 
-          ?>
-
-          </div>
+          ?></div>
           <div class='map-data' id='map-data-<?php echo $r["id"]; ?>'>
             <div class='map-data-properties'>
               <span class='map-data-prop map-data-author'><?php echo getname($r["authorid"]); ?></span><br>
