@@ -115,7 +115,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                     if (move_uploaded_file($tmp_name, $location.$filename)) {
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES('', :text, now(), :filename, :mapid)");
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(NULL, :text, now(), :filename, :mapid)");
                         $iq->bindValue("text", $text, PDO::PARAM_STR);
                         $iq->bindValue("filename", $filename, PDO::PARAM_STR);
                         $iq->bindValue("mapid", $id, PDO::PARAM_INT);
