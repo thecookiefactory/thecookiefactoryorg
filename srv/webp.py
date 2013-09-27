@@ -13,9 +13,11 @@ def saveImage(img, suffix):
 
 
 def main():
+    ext = sys.argv[3]
+    os.rename(sys.argv[1], sys.argv[1] + '.' + ext)
     sys.argv[2] = sys.argv[2].replace('"', '')
     try:
-        img = Image.open(sys.argv[1])
+        img = Image.open(sys.argv[1] + '.' + ext)
     except IndexError:
         sys.exit('No input file specified.')
     except OSError:
