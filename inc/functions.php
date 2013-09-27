@@ -228,7 +228,7 @@ function register($username) {
     $cookieh = cookieh();
 
     //registering the user and redirecting to the login form
-    $query = $con->prepare("INSERT INTO `users` VALUES('', :username, :steamid, 0, :cookieh, now())");
+    $query = $con->prepare("INSERT INTO `users` VALUES(NULL, :username, :steamid, 0, :cookieh, now())");
     $query->bindValue("username", $username, PDO::PARAM_STR);
     $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
     $query->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);

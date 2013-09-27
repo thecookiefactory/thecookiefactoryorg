@@ -214,7 +214,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             }
 
             //inserting the basic data and returning the map id
-            $iq = $con->prepare("INSERT INTO `maps` VALUES('', :name, :text, :author, now(), NULL, :download, '', :comments, :game, '')");
+            $iq = $con->prepare("INSERT INTO `maps` VALUES(NULL, :name, :text, :author, now(), NULL, :download, '', :comments, :game, '')");
             $iq->bindValue("name", $name, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -254,7 +254,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 $text = strip($_POST["topictext"]);
                 $cat = strip($_POST["topiccat"]);
 
-                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, now(), 0, now(), :cat, :id, 0, 0)");
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(NULL, :title, :text, :authorid, now(), 0, now(), :cat, :id, 0, 0)");
                 $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
                 $iq->bindValue("title", $title, PDO::PARAM_STR);
                 $iq->bindValue("text", $text, PDO::PARAM_STR);

@@ -66,13 +66,13 @@ if (isset($_POST["addnew"])) {
 
     if (!vf($steamid)) {
 
-        $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, NULL, now())");
+        $iq = $con->prepare("INSERT INTO `games` VALUES(NULL, :name, NULL, now())");
         $iq->bindValue("name", $name, PDO::PARAM_STR);
         $iq->execute();
 
     } else {
 
-        $iq = $con->prepare("INSERT INTO `games` VALUES('', :name, :steamid, now())");
+        $iq = $con->prepare("INSERT INTO `games` VALUES(NULL, :name, :steamid, now())");
         $iq->bindValue("name", $name, PDO::PARAM_STR);
         $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
         $iq->execute();

@@ -34,7 +34,7 @@ if (isset($_POST["submit"])) {
 
                 echo "Your stream page is being created now...<br>";
 
-                $cq = $con->prepare("INSERT INTO `streams` VALUES('', '', '', :userid, '')");
+                $cq = $con->prepare("INSERT INTO `streams` VALUES(NULL, '', '', :userid, '')");
                 $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
                 $cq->execute();
 

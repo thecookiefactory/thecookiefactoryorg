@@ -42,7 +42,7 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES('', :title, :text, :authorid, now(), 0, now(), :cat, 0, 0, 0)");
+                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(NULL, :title, :text, :authorid, now(), 0, now(), :cat, 0, 0, 0)");
                     $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
                     $iq->bindValue("title", $title, PDO::PARAM_STR);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
@@ -378,7 +378,7 @@ if ($action == "add" && checkuser()) {
 
                 } else {
 
-                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES('', :text, :author, now(), NULL, :id)");
+                    $iq = $con->prepare("INSERT INTO `forumposts` VALUES(NULL, :text, :author, now(), NULL, :id)");
                     $iq->bindValue("author", $author, PDO::PARAM_INT);
                     $iq->bindValue("text", $text, PDO::PARAM_STR);
                     $iq->bindValue("id", $id, PDO::PARAM_INT);
