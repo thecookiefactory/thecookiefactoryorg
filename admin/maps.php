@@ -52,7 +52,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             if (!empty($image_name)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location . "/" . $id . " " . $extension);
+                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location . $id . " " . $extension);
 
             } else {
 
@@ -247,7 +247,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             if (!empty($image_name)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location . "/" . $id . " " . $extension);
+                exec($config["python"]["webp"] . " " . $image_tmp . " " . $location . $id . " " . $extension);
 
             }
 
