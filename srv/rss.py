@@ -15,7 +15,7 @@ def parseArticleRow(row):
                    'comments': 'http://thecookiefactory.org/?p=news&id={articleid}#comments'.format(articleid=row[0]),
                    'pubDate': datetime.fromtimestamp(row[3]),
                    'guid': PyRSS2Gen.Guid('http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]))
-                   }
+                  }
 
     return PyRSS2Gen.RSSItem(**articledata)
 
@@ -33,7 +33,7 @@ def main():
                'items': [parseArticleRow(row) for row in getArticleRows(sql)]
                }
 
-    PyRSS2Gen.RSS2(**rssdata).write_xml(open("../rss.xml", "w"))
+    PyRSS2Gen.RSS2(**rssdata).write_xml(open(docroot + "rss.xml", "w"))
 
     sql.close()
 
