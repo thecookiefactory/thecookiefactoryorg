@@ -13,7 +13,7 @@ ccookies();
 <!doctype html>
 <html>
 <head>
-    <title>thecookiefactory.org</title>
+    <title>thecookiefactory</title>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
     <link rel='stylesheet' type='text/css' href='base.css'>
     <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600|Roboto+Slab'>

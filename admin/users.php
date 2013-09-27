@@ -13,6 +13,7 @@ if (!checkadmin()) die("403");
 <html>
 <head>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+    <title>thecookiefactory.org admin</title>
     <style type='text/css'>
         .admin-name {
             color: #ff11dd;
