@@ -46,7 +46,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_tmp = $_FILES["image"]["tmp_name"];
 
             $location = dirname(getcwd()) . "/img/maps/";
-            
+
             $extension = substr($image_name, strpos($image_name, ".") + 1);
 
             if (!empty($image_name)) {
@@ -241,7 +241,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $image_tmp = $_FILES["image"]["tmp_name"];
 
             $location = dirname(getcwd()) . "/img/maps/";
-            
+
             $extension = substr($image_name, strpos($image_name, ".") + 1);
 
             if (!empty($image_name)) {
