@@ -60,7 +60,7 @@ if (isset($_POST["addnew"])) {
     $hexcode = strip($_POST["hexcode"]);
     $hoverhexcode = strip($_POST["hoverhexcode"]);
 
-    $iq = $con->prepare("INSERT INTO `forumcategories` VALUES(:name, :longname, :hexcode, :hoverhexcode, now())");
+    $iq = $con->prepare("INSERT INTO `forumcategories` VALUES(NULL, :name, :longname, :hexcode, :hoverhexcode, now())");
     $iq->bindValue("name", $name, PDO::PARAM_STR);
     $iq->bindValue("longname", $longname, PDO::PARAM_STR);
     $iq->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
