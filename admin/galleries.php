@@ -104,12 +104,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
             $filetype = $_FILES["image"]["type"];
             $tmp_name = $_FILES["image"]["tmp_name"];
 
-            $location = "../img/maps/".$id."/";
+            $location = dirname(dirname(getcwd())) . "\\img\\maps\\" . $id . "\\";
 
             if (!empty($filename)) {
 
                 // call the python uploader script
-                exec($config["python"]["webp"]);
+                exec($config["python"]["webp"] . " " . $tmp_name . " " . $location);
 
             }
 
