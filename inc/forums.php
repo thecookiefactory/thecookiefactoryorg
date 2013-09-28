@@ -597,7 +597,7 @@ if ($action == "add" && checkuser()) {
 
             $cat = strip($_GET["cat"]);
 
-            $query = $con->prepare("SELECT `forumthreads`.`id`, `forumthreads`.`title, `forumthreads`.`authorid`, `forumthreads`.`date`, `forumthreads`.`lastdate`, `forumthreads`.`forumcategory`, BIN(`forumthreads`.`closed`)
+            $query = $con->prepare("SELECT `forumthreads`.`id`, `forumthreads`.`title`, `forumthreads`.`authorid`, `forumthreads`.`date`, `forumthreads`.`lastdate`, `forumthreads`.`forumcategory`, BIN(`forumthreads`.`closed`)
                                     FROM `forumthreads`
                                     WHERE `forumthreads`.`forumcategory` = :cat
                                     AND `forumthreads`.`forumcategory` <> 0
