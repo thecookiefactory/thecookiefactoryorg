@@ -1,6 +1,9 @@
 srv/config.py
 inc/config.php
-img/maps/*
+img/maps/*/*
+img/maps/*.jpg
+img/maps/*.jpeg
+img/maps/*.png
 cache/*
 rss.xml
 .sublime-project
