@@ -1111,7 +1111,7 @@ img.map-image {
   opacity: 0;
   -webkit-filter: blur(1px) saturate(0);
   -webkit-transition: -webkit-transform 0.5s ease-out 0.1s, -webkit-filter 0.4s ease-out, opacity 0.5s ease-in-out 0.1s;
-  transition: -webkit-transform 0.5s ease-out 0.1s, -webkit-filter 0.4s ease-out, opacity 0.5s ease-in-out 0.1s;
+  transition: transform 0.5s ease-out 0.1s, opacity 0.5s ease-in-out 0.1s;
   -webkit-transform: translateY(-30px);
   -ms-transform: translateY(-30px);
   transform: translateY(-30px);
