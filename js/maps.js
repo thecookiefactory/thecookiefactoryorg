@@ -19,6 +19,11 @@ function initialize(mapid) {
     // sets a default position for each imageroll
     posdict[mapid] = 0;
 
+    elem = document.getElementById(mapid);
+    elem.style.transform = "translateX(0)";
+    console.log(elem.style.transform);
+    elem.style.webkitTransform = "translateX(0)";
+
     // makes the appropriate arrows visible
     if (lendict[mapid] > 1) arrowFade(mapid, "in", "right");
 
@@ -78,64 +83,25 @@ function startImagerollScrolling(arrowid, direction) {
     if (posdict[mapid] < lendict[mapid] - 1) arrowFade(mapid, "out", "right");
     if (posdict[mapid] > 0)                  arrowFade(mapid, "out", "left");
 
-    // get array of keyframe rules with the name "scrolling"
-    var keyframes = findKeyframesRule("scrolling");
-
-    // set keyframe rules based on scroll direction
-    for (var i = 0; i < keyframes.length; ++i) {
-        if (keyframes[i].deleteRule) {
-            keyframes[i].deleteRule(1);
-        } else {
-            keyframes[i].removeRule("to");
-        }
-        keyframes[i].insertRule("to { transform: translateX("+direction*-900+"px); -webkit-transform: translateX("+direction*-900+"px); -moz-transform: translateX("+direction*-900+"px); -o-transform: translateX("+direction*-900+"px); }");
-    }
-
-    // start animating the imageroll
-    elem = document.getElementById(mapid);
-    elem.className = "map-imageroll map-scrolling";
-
     posdict[mapid] += direction;
+
+    // set transform values based on scroll direction
+    elem = document.getElementById(mapid);
+    if (elem.style.transform) {elem.style.transform = "translateX(" + (parseInt(elem.style.transform.slice(11), 10)+direction*-900).toString() + "px)";}
+    if (elem.style.webkitTransform) {elem.style.webkitTransform = "translateX(" + (parseInt(elem.style.webkitTransform.slice(11), 10)+direction*-900).toString() + "px)";}
 
     // fade in the appropriate arrows
     if (posdict[mapid] < lendict[mapid] - 1) setTimeout(function() {arrowFade(mapid, "in", "right");}, scrolltime+100-fadetime);
     if (posdict[mapid] > 0)                  setTimeout(function() {arrowFade(mapid, "in", "left");},  scrolltime+100-fadetime);
 
-    // reposition the imageroll after it has been animated
-    setTimeout(function() {endImagerollScrolling(mapid, direction);}, scrolltime+100);
+    // set the new imagelocks
+    setTimeout(function() {setLocks(mapid);}, scrolltime+100);
 
     return;
-}
-
-function endImagerollScrolling(mapid, direction) {
-    // function repositions imageroll after it's animated
-    // mapid: string (ex. "map-1")
-    // direction: integer (-1 for moving left; 1 for moving right)
-
-    document.getElementById(mapid).className = "map-imageroll";
-    document.getElementById(mapid).style.left = (0 - (posdict[mapid] * imagewidth))+"px";
-    setLocks(mapid);
-
-    return;
-}
-
-function findKeyframesRule(rule) {
-    // function returns all css rule objects with the name specified
-    // rule: string (ex. "scrolling")
-    // returns an array (ex. [WebKitCSSKeyframesRule, WebKitCSSKeyframesRule])
-
-    var ss = document.styleSheets;
-    var result = [];
-
-    for (var j = 0; j < ss[0].cssRules.length; ++j) {
-        if (ss[0].cssRules[j].name == rule) result.push(ss[0].cssRules[j]);
-    }
-
-    return result;
 }
 
 function animateDataPanel(elemid) {
-    // function starts the animation on the data panels on the maps list 
+    // function starts the animation on the data panels on the maps list
     // elemid: string (ex. "maps-moreinfo-1")
 
     direction = elemid.slice(4, 8);             // either "more" or "less"
