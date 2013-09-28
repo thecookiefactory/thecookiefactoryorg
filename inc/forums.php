@@ -329,7 +329,7 @@ if ($action == "add" && checkuser()) {
                             while ($cr = $cq->fetch()) {
                                 ?>
 
-                                <option value='<?php echo $cr["id"]; ?>'><?php echo $cr["longname"]; ?></option>
+                                <option value='<?php echo $cr["id"]; ?>'<?php if ($cr["id"] == $er["forumcategory"]) echo " selected" ?>><?php echo $cr["longname"]; ?></option>
 
                                 <?php
                             }
