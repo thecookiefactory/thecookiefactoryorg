@@ -289,8 +289,8 @@ article {
   width: 800px;
   height: 1px;
   border-width: 0;
-  background-image: linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
-  background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
+  background-image: linear-gradient(90deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
+  background-image: -webkit-linear-gradient(90deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
 }
 
 .news-pages {
@@ -562,12 +562,10 @@ article {
   position: relative;
   border-radius: 15px;
   white-space: nowrap;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-  animation-timing-function: ease-in-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
+  transform: translateX(0);
+  -webkit-transform: translateX(0);
+  transition: transform 1s ease-in-out;
+  -webkit-transition: -webkit-transform 1s ease-in-out;
 }
 
 div.map-image {
@@ -618,12 +616,12 @@ img.map-image {
 }
 
 .map-actionbar-button {
-  display: inline-block;
+  display: block;
+  float: left;
   width: 146px;
   border: 1px outset #333;
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
-  vertical-align: middle;
   line-height: 36px;
   opacity: 0.6;
   cursor: pointer;
