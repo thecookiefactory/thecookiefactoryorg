@@ -149,18 +149,32 @@ if ($action == "add" && checkuser()) {
 
                         } else {
 
-                            $editdate = time();
-
-                            $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text, `forumposts`.`editdate` = :editdate WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
+                            $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
                             $uq->bindValue("text", $text, PDO::PARAM_STR);
-                            $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
                             $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                             $uq->bindValue("pid", $pid, PDO::PARAM_INT);
                             $uq->execute();
 
-                            ?>
-                            updated
-                            <?php
+                            // redirect
+                            if ($uq->rowCount() == 1) {
+
+                                $eq = $con->prepare("SELECT `forumthreads`.`newsid` FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                                $eq->bindValue("tid", $tid, PDO::PARAM_INT);
+                                $eq->execute();
+
+                                $er = $eq->fetch();
+
+                                if ($er["newsid"] == 0 || is_null($er["newsid"])) {
+
+                                    header("Location: ?p=forums&id=" . $tid);
+
+                                } else {
+
+                                    header("Location: ?p=news&id=" . $er["newsid"]);
+
+                                }
+
+                            }
                         }
 
                     }
@@ -242,7 +256,13 @@ if ($action == "add" && checkuser()) {
                         $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
-                        echo "deleted";
+
+                        // redirect
+                        if ($uq->rowCount() == 1) {
+
+                            header("Location: ?p=forums");
+
+                        }
 
                     } else {
 
@@ -274,19 +294,20 @@ if ($action == "add" && checkuser()) {
 
                                 } else {
 
-                                    $editdate = time();
-
-                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = :editdate WHERE `forumthreads`.`id` = :tid");
+                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text WHERE `forumthreads`.`id` = :tid");
                                     $uq->bindValue("cat", $cat, PDO::PARAM_INT);
                                     $uq->bindValue("title", $title, PDO::PARAM_STR);
                                     $uq->bindValue("text", $text, PDO::PARAM_STR);
-                                    $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
                                     $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                                     $uq->execute();
 
-                                    ?>
-                                    updated
-                                    <?php
+                                    // redirect
+                                    if ($uq->rowCount() == 1) {
+
+                                        header("Location: ?p=forums&id=" . $tid);
+
+                                    }
+
                                 }
 
                             }
