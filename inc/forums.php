@@ -155,9 +155,26 @@ if ($action == "add" && checkuser()) {
                             $uq->bindValue("pid", $pid, PDO::PARAM_INT);
                             $uq->execute();
 
-                            ?>
-                            updated
-                            <?php
+                            // redirect
+                            if ($uq->rowCount() == 1) {
+
+                                $eq = $con->prepare("SELECT `forumthreads`.`newsid` FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                                $eq->bindValue("tid", $tid, PDO::PARAM_INT);
+                                $eq->execute();
+
+                                $er = $eq->fetch();
+
+                                if ($er["newsid"] == 0 || is_null($er["newsid"])) {
+
+                                    header("Location: ?p=forums&id=" . $tid);
+
+                                } else {
+
+                                    header("Location: ?p=news&id=" . $er["newsid"]);
+
+                                }
+
+                            }
                         }
 
                     }
@@ -239,7 +256,13 @@ if ($action == "add" && checkuser()) {
                         $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
                         $dq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $dq->execute();
-                        echo "deleted";
+
+                        // redirect
+                        if ($uq->rowCount() == 1) {
+
+                            header("Location: ?p=forums");
+
+                        }
 
                     } else {
 
@@ -278,9 +301,13 @@ if ($action == "add" && checkuser()) {
                                     $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                                     $uq->execute();
 
-                                    ?>
-                                    updated
-                                    <?php
+                                    // redirect
+                                    if ($uq->rowCount() == 1) {
+
+                                        header("Location: ?p=forums&id=" . $tid);
+
+                                    }
+
                                 }
 
                             }
