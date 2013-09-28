@@ -52,7 +52,6 @@ nav {
 .searchbox::-webkit-input-placeholder {
   color: white;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -60,7 +59,6 @@ nav {
   color: white;
   opacity: 1;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -115,7 +113,6 @@ a:visited {
   color: #FFF;
   text-decoration: none;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -128,7 +125,6 @@ a:active {
 .faux-link {
   color: #FFF;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -170,7 +166,6 @@ input {
   border: 1px solid white;
   color: white;
   -webkit-transition: border-color 0.3s ease-in-out;
-  -o-transition: border-color 0.3s ease-in-out;
   transition: border-color 0.3s ease-in-out;
 }
 
@@ -294,7 +289,6 @@ article {
   width: 800px;
   height: 1px;
   border-width: 0;
-  background-image: -o-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
   background-image: -webkit-linear-gradient(left, #141414 0%, #333 50%, #333 50%, #141414 100%);
 }
@@ -422,7 +416,6 @@ article {
   font-size: 14px;
   font-family: 'Roboto Slab', serif;
   -webkit-transition: border-color 0.3s ease-in-out;
-  -o-transition: border-color 0.3s ease-in-out;
   transition: border-color 0.3s ease-in-out;
 }
 
@@ -443,7 +436,6 @@ article {
   color: #DDD;
   font-size: 28px;
   -webkit-transition: border-color 0.3s, color 0.1s;
-  -o-transition: border-color 0.3s, color 0.1s;
   transition: border-color 0.3s, color 0.1s;
 }
 
@@ -475,16 +467,6 @@ article {
   }
 }
 
-@-o-keyframes fadeout {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
 @-webkit-keyframes fadein {
   from {
     opacity: 0;
@@ -505,40 +487,24 @@ article {
   }
 }
 
-@-o-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 @-webkit-keyframes scrolling {
 }
 
 @keyframes scrolling {
 }
 
-@-o-keyframes scrolling {
-}
-
 .map-scrolling {
   -webkit-animation-name: scrolling;
-  -o-animation-name: scrolling;
   animation-name: scrolling;
 }
 
 .map-fadeout {
   -webkit-animation-name: fadeout;
-  -o-animation-name: fadeout;
   animation-name: fadeout;
 }
 
 .map-fadein {
   -webkit-animation-name: fadein;
-  -o-animation-name: fadein;
   animation-name: fadein;
 }
 
@@ -562,16 +528,12 @@ article {
   background-repeat: no-repeat;
   opacity: 0;
   -webkit-transition: background-color 0.2s ease-in-out;
-  -o-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
   -webkit-animation-duration: 0.2s;
-  -o-animation-duration: 0.2s;
   animation-duration: 0.2s;
   -webkit-animation-timing-function: ease-in-out;
-  -o-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
   -webkit-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -601,13 +563,10 @@ article {
   border-radius: 15px;
   white-space: nowrap;
   -webkit-animation-duration: 1s;
-  -o-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-timing-function: ease-in-out;
-  -o-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
   -webkit-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -651,13 +610,10 @@ img.map-image {
   -ms-user-select: none;
   user-select: none;
   -webkit-animation-duration: 1s;
-  -o-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-timing-function: ease-out;
-  -o-animation-timing-function: ease-out;
   animation-timing-function: ease-out;
   -webkit-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -666,20 +622,17 @@ img.map-image {
   width: 146px;
   border: 1px outset #333;
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
-  background: -o-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
   vertical-align: middle;
   line-height: 36px;
   opacity: 0.6;
   cursor: pointer;
   -webkit-transition: opacity 0.2s ease-in-out;
-  -o-transition: opacity 0.2s ease-in-out;
   transition: opacity 0.2s ease-in-out;
 }
 
 .map-actionbar-button:hover {
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
-  background: -o-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
   opacity: 0.8;
 }
@@ -697,7 +650,6 @@ img.map-image {
   width: 146px;
   border: 1px outset #333;
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
-  background: -o-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
   vertical-align: middle;
   line-height: 36px;
@@ -719,24 +671,18 @@ img.map-image {
                      rotateX(-90deg);
   -ms-transform: perspective(1500px)
              rotateX(-90deg);
-  -o-transform: perspective(1500px)
-             rotateX(-90deg);
   transform: perspective(1500px)
              rotateX(-90deg);
   -webkit-transform-origin: bottom;
   -ms-transform-origin: bottom;
-  -o-transform-origin: bottom;
   transform-origin: bottom;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   -webkit-animation-duration: 1s;
-  -o-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-timing-function: ease;
-  -o-animation-timing-function: ease;
   animation-timing-function: ease;
   -webkit-animation-fill-mode: forwards;
-  -o-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
 
@@ -757,7 +703,6 @@ img.map-image {
     opacity: 0;
     -webkit-transform: perspective(1500px) rotateX(-90deg);
     -ms-transform: perspective(1500px) rotateX(-90deg);
-    -o-transform: perspective(1500px) rotateX(-90deg);
     transform: perspective(1500px) rotateX(-90deg);
   }
 
@@ -765,21 +710,6 @@ img.map-image {
     opacity: 0.9;
     -webkit-transform: perspective(1500px) rotateX(  0deg);
     -ms-transform: perspective(1500px) rotateX(  0deg);
-    -o-transform: perspective(1500px) rotateX(  0deg);
-    transform: perspective(1500px) rotateX(  0deg);
-  }
-}
-
-@-o-keyframes map-showinfo {
-  from {
-    opacity: 0;
-    -o-transform: perspective(1500px) rotateX(-90deg);
-    transform: perspective(1500px) rotateX(-90deg);
-  }
-
-  to {
-    opacity: 0.9;
-    -o-transform: perspective(1500px) rotateX(  0deg);
     transform: perspective(1500px) rotateX(  0deg);
   }
 }
@@ -801,7 +731,6 @@ img.map-image {
     opacity: 0.9;
     -webkit-transform: perspective(1500px) rotateX(  0deg);
     -ms-transform: perspective(1500px) rotateX(  0deg);
-    -o-transform: perspective(1500px) rotateX(  0deg);
     transform: perspective(1500px) rotateX(  0deg);
   }
 
@@ -809,21 +738,6 @@ img.map-image {
     opacity: 0;
     -webkit-transform: perspective(1500px) rotateX(-90deg);
     -ms-transform: perspective(1500px) rotateX(-90deg);
-    -o-transform: perspective(1500px) rotateX(-90deg);
-    transform: perspective(1500px) rotateX(-90deg);
-  }
-}
-
-@-o-keyframes map-hideinfo {
-  from {
-    opacity: 0.9;
-    -o-transform: perspective(1500px) rotateX(  0deg);
-    transform: perspective(1500px) rotateX(  0deg);
-  }
-
-  to {
-    opacity: 0;
-    -o-transform: perspective(1500px) rotateX(-90deg);
     transform: perspective(1500px) rotateX(-90deg);
   }
 }
@@ -844,7 +758,6 @@ img.map-image {
   from {
     -webkit-transform: translateY(0);
     -ms-transform: translateY(0);
-    -o-transform: translateY(0);
     transform: translateY(0);
     opacity: 0.6;
   }
@@ -852,21 +765,6 @@ img.map-image {
   to {
     -webkit-transform: translateY(150px);
     -ms-transform: translateY(150px);
-    -o-transform: translateY(150px);
-    transform: translateY(150px);
-    opacity: 0;
-  }
-}
-
-@-o-keyframes map-hideinfobuttons {
-  from {
-    -o-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-
-  to {
-    -o-transform: translateY(150px);
     transform: translateY(150px);
     opacity: 0;
   }
@@ -888,7 +786,6 @@ img.map-image {
   from {
     -webkit-transform: translateY(150px);
     -ms-transform: translateY(150px);
-    -o-transform: translateY(150px);
     transform: translateY(150px);
     opacity: 0;
   }
@@ -896,21 +793,6 @@ img.map-image {
   to {
     -webkit-transform: translateY(0);
     -ms-transform: translateY(0);
-    -o-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-}
-
-@-o-keyframes map-showinfobuttons {
-  from {
-    -o-transform: translateY(150px);
-    transform: translateY(150px);
-    opacity: 0;
-  }
-
-  to {
-    -o-transform: translateY(0);
     transform: translateY(0);
     opacity: 0.6;
   }
@@ -918,25 +800,21 @@ img.map-image {
 
 .map-data-more {
   -webkit-animation-name: map-showinfo;
-  -o-animation-name: map-showinfo;
   animation-name: map-showinfo;
 }
 
 .map-data-less {
   -webkit-animation-name: map-hideinfo;
-  -o-animation-name: map-hideinfo;
   animation-name: map-hideinfo;
 }
 
 .map-actionbar-more {
   -webkit-animation-name: map-hideinfobuttons;
-  -o-animation-name: map-hideinfobuttons;
   animation-name: map-hideinfobuttons;
 }
 
 .map-actionbar-less {
   -webkit-animation-name: map-showinfobuttons;
-  -o-animation-name: map-showinfobuttons;
   animation-name: map-showinfobuttons;
 }
 
@@ -1073,7 +951,6 @@ img.map-image {
   font-family: inherit;
   line-height: 25px;
   -webkit-transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  -o-transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
   transition: border-bottom-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
@@ -1147,20 +1024,9 @@ img.map-image {
   }
 }
 
-@-o-keyframes blink {
-  from {
-    border-bottom-color: #888;
-  }
-
-  to {
-    border-bottom-color: #333;
-  }
-}
-
 .account-input:focus {
   outline: 0;
   -webkit-animation: blink 1.4s ease-in-out infinite alternate;
-  -o-animation: blink 1.4s ease-in-out infinite alternate;
   animation: blink 1.4s ease-in-out infinite alternate;
 }
 
@@ -1197,7 +1063,6 @@ img.map-image {
   font-weight: 700;
   cursor: pointer;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -1218,7 +1083,6 @@ img.map-image {
   color: #333;
   cursor: pointer;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -1252,7 +1116,6 @@ img.map-image {
   transition: -webkit-transform 0.5s ease-out 0.1s, -webkit-filter 0.4s ease-out, opacity 0.5s ease-in-out 0.1s;
   -webkit-transform: translateY(-30px);
   -ms-transform: translateY(-30px);
-  -o-transform: translateY(-30px);
   transform: translateY(-30px);
 }
 
@@ -1261,7 +1124,6 @@ img.map-image {
   -webkit-filter: blur(0) saturate(1);
   -webkit-transform: translateY(0);
   -ms-transform: translateY(0);
-  -o-transform: translateY(0);
   transform: translateY(0);
 }
 
@@ -1270,7 +1132,6 @@ img.map-image {
   -webkit-filter: blur(0) saturate(1);
   -webkit-transform: translateY(0);
   -ms-transform: translateY(0);
-  -o-transform: translateY(0);
   transform: translateY(0);
 }
 
@@ -1335,7 +1196,6 @@ img.map-image {
 .forums-entry-category {
   cursor: pointer;
   -webkit-transition: background-color 0.2s ease-in-out;
-  -o-transition: background-color 0.2s ease-in-out;
   transition: background-color 0.2s ease-in-out;
 }
 
@@ -1349,11 +1209,9 @@ img.map-image {
   font-size: 10px;
   -webkit-transform: rotate(-90deg) translateY(-0.4px);
   -ms-transform: rotate(-90deg) translateY(-0.4px);
-  -o-transform: rotate(-90deg) translateY(-0.4px);
   transform: rotate(-90deg) translateY(-0.4px);
   -webkit-transform-origin: center;
   -ms-transform-origin: center;
-  -o-transform-origin: center;
   transform-origin: center;
 }
 
@@ -1499,7 +1357,6 @@ img.map-image {
   font-size: 20px;
   cursor: pointer;
   -webkit-transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
 
@@ -1519,7 +1376,6 @@ img.map-image {
   box-shadow: inset 0 0 4px 0 rgba(8, 8, 8, .4);
   font: inherit;
   -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
@@ -1545,7 +1401,6 @@ img.map-image {
   font-family: "Roboto Slab", serif;
   resize: vertical;
   -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 
