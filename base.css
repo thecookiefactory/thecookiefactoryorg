@@ -289,8 +289,8 @@ article {
   width: 800px;
   height: 1px;
   border-width: 0;
-  background-image: linear-gradient(90deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
-  background-image: -webkit-linear-gradient(90deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
+  background-image: linear-gradient(0deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
+  background-image: -webkit-linear-gradient(0deg, #141414 0%, #333 40%, #333 60%, #141414 100%);
 }
 
 .news-pages {
