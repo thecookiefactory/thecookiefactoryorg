@@ -13,7 +13,7 @@ def parseArticleRow(row):
                    'description': row[2],
                    'link': 'http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]),
                    'comments': 'http://thecookiefactory.org/?p=news&id={articleid}#comments'.format(articleid=row[0]),
-                   'pubDate': datetime.fromtimestamp(row[4]),
+                   'pubDate': row[4],
                    'guid': PyRSS2Gen.Guid('http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]))
                   }
 
