@@ -149,11 +149,8 @@ if ($action == "add" && checkuser()) {
 
                         } else {
 
-                            $editdate = time();
-
-                            $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text, `forumposts`.`editdate` = :editdate WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
+                            $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
                             $uq->bindValue("text", $text, PDO::PARAM_STR);
-                            $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
                             $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                             $uq->bindValue("pid", $pid, PDO::PARAM_INT);
                             $uq->execute();
@@ -274,13 +271,10 @@ if ($action == "add" && checkuser()) {
 
                                 } else {
 
-                                    $editdate = time();
-
-                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = :editdate WHERE `forumthreads`.`id` = :tid");
+                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text WHERE `forumthreads`.`id` = :tid");
                                     $uq->bindValue("cat", $cat, PDO::PARAM_INT);
                                     $uq->bindValue("title", $title, PDO::PARAM_STR);
                                     $uq->bindValue("text", $text, PDO::PARAM_STR);
-                                    $uq->bindValue("editdate", $editdate, PDO::PARAM_INT);
                                     $uq->bindValue("tid", $tid, PDO::PARAM_INT);
                                     $uq->execute();
 
