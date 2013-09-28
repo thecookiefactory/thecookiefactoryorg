@@ -10,7 +10,7 @@ def getArticleRows(sql):
 
 def parseArticleRow(row):
     articledata = {'title': row[1],
-                   'description': row[4],
+                   'description': row[2],
                    'link': 'http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]),
                    'comments': 'http://thecookiefactory.org/?p=news&id={articleid}#comments'.format(articleid=row[0]),
                    'pubDate': datetime.fromtimestamp(row[3]),
