@@ -53,7 +53,7 @@ if ($q->rowCount() != 0) {
             ?><div class='map-image'><img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'></div><?php
         //display additional images
         while ($gr = $gq->fetch()) {
-            ?><div class='map-image'><img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["desc"]; ?>' title='<?php echo $gr["desc"]; ?>'></div><?php
+            ?><div class='map-image'><img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["text"]; ?>' title='<?php echo $gr["text"]; ?>'></div><?php
         }
 
           ?></div>
