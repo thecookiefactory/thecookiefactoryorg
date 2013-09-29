@@ -156,6 +156,10 @@ function longago($x) {
 
         return ((int)($diff/(60*60)))." hours ago";
 
+    } else if ($diff < 2*60*60*24) {
+
+        return "a day ago";
+
     } else {
 
         return ((int)($diff/(60*60*24)))." days ago";
