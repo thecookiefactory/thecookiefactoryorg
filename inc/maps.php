@@ -120,15 +120,7 @@ if ($q->rowCount() != 0) {
             </div>
           </div>
         </div>
-        <?php
-        if ($iii == 1) {
-
-            ?>
-            <div class='ads'>
-            </div>
-            <?php
-
-        }
+    <?php
     }
 
 } else {
