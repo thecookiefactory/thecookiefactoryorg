@@ -39,7 +39,7 @@ def main():
                 dldata[name] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=name, releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
     for repo in dldata:
         if dldata[repo] is not link:
-         insertAssetLink(sql, repo, dldata[repo])
+            insertAssetLink(sql, repo, dldata[repo])
 
     sql.close()
 
