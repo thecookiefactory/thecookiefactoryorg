@@ -121,6 +121,16 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
             <?php
 
+            if ($iii == 1) {
+
+                ?>
+                <div class='ads'>
+                </div>
+                <hr class='article-separator'>
+                <?php
+
+            }
+
         }
     }
 
