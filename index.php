@@ -37,7 +37,7 @@ ccookies();
 <?php
 
 // fetching the custom pages' names
-$pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages`");
+$pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
 
 $pages = Array();
 
