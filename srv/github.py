@@ -5,8 +5,8 @@ API_ADDRESS = 'https://api.github.com/repos'
 
 
 def getDlNames(sql):
-    sql.crs.execute('SELECT `dl` FROM `maps`')
-    return [dl[0] for dl in sql.crs]
+    sql.crs.execute('SELECT `dl`, `link` FROM `maps`')
+    return [(dl[0],dl[1]) for dl in sql.crs]
 
 
 def getFromAPI(repo, method, param=''):
@@ -28,7 +28,7 @@ def main():
     dlnames = getDlNames(sql)
     dldata = {}
 
-    for name in dlnames:
+    for name, link in dlnames:
         dldata[name] = False
         if name.isdigit():
             dldata[name] = 'http://steamcommunity.com/sharedfiles/filedetails/?id={workshopid}'.format(workshopid=name)
@@ -38,7 +38,8 @@ def main():
                 assetjson = requests.get(repojson[0]['assets_url'], headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
                 dldata[name] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=name, releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
     for repo in dldata:
-        insertAssetLink(sql, repo, dldata[repo])
+        if dldata[repo] is not link:
+            insertAssetLink(sql, repo, dldata[repo])
 
     sql.close()
 
