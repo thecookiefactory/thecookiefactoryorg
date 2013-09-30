@@ -26,7 +26,8 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
             $nsearch = true;
 
-            $squery = $con->prepare("SELECT * FROM `news` WHERE `news`.`text` LIKE :term or `news`.`title` LIKE :term ORDER BY `news`.`id` DESC");
+            $squery = $con->prepare("SELECT * FROM `news` WHERE `news`.`text` LIKE :termm or `news`.`title` LIKE :term ORDER BY `news`.`id` DESC");
+            $squery->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
             $squery->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
             $squery->execute();
 
@@ -92,7 +93,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
 
                         $tid = $tid["id"];
 
-                        $cq = $con->prepare("SELECT `forumsposts`.`id` FROM `forumposts` WHERE `forumposts`.`tid` = :tid");
+                        $cq = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
                         $cq->bindValue("tid", $tid, PDO::PARAM_INT);
                         $cq->execute();
 
