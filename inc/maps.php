@@ -99,7 +99,7 @@ if ($q->rowCount() != 0) {
                       $rq->bindValue("id", $ca["id"], PDO::PARAM_INT);
                       $rq->execute();
                       $nr = $rq->rowCount();
-                      echo "<a href='?p=forums&amp;id=".$ca["id"]."'>".$nr." replies</a>";
+                      echo "<a href='/forums/".$ca["id"]."'>".$nr." replies</a>";
                     ?>
                   </span>
 

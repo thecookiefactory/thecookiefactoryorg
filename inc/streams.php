@@ -21,7 +21,7 @@ if ($q->rowCount() != 0) {
 
         ?>
 
-        <a href='?p=streams&amp;id=<?php echo $r["id"]; ?>'>
+        <a href='/streams/<?php echo $r["id"]; ?>'>
 
         <?php
 
