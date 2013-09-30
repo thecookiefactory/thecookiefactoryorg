@@ -9,7 +9,7 @@ $_SESSION["lp"] = $p;
 
 ?>
 
-<script src='js/maps.js'></script>
+<script src='/js/maps.js'></script>
 
 <?php
 
@@ -40,7 +40,7 @@ if ($q->rowCount() != 0) {
               <?php if (!vf($r["link"])) { ?>
                 <span class='map-actionbar-button-disabled'>Download</span>
               <?php } else { ?>
-                <a href='click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                <a href='/click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
               <?php } ?>
           </div>
           <div class='map-imageroll' id='map-<?php echo $r["id"]; ?>' onload='initialize(this.id);'>
@@ -50,10 +50,10 @@ if ($q->rowCount() != 0) {
 
         //display the main image
 
-            ?><div class='map-image'><img class='map-image' alt='<?php echo $r["name"]; ?>' src='img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'></div><?php
+            ?><div class='map-image'><img class='map-image' alt='<?php echo $r["name"]; ?>' src='/img/maps/<?php echo $r["id"]; ?>.<?php echo $r["extension"]; ?>'></div><?php
         //display additional images
         while ($gr = $gq->fetch()) {
-            ?><div class='map-image'><img class='map-image' src='img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["text"]; ?>' title='<?php echo $gr["text"]; ?>'></div><?php
+            ?><div class='map-image'><img class='map-image' src='/img/maps/<?php echo $r["id"]; ?>/<?php echo $gr["filename"]; ?>' alt='<?php echo $gr["text"]; ?>' title='<?php echo $gr["text"]; ?>'></div><?php
         }
 
           ?></div>
@@ -115,7 +115,7 @@ if ($q->rowCount() != 0) {
                 <?php if (!vf($r["link"])) { ?>
                   <span class='map-actionbar-button-disabled'>Download</span>
                 <?php } else { ?>
-                  <a href='click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                  <a href='/click.php?id=<?php echo $r["id"]; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
                 <?php } ?>
             </div>
           </div>
