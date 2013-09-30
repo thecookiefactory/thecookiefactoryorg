@@ -166,11 +166,11 @@ if ($action == "add" && checkuser()) {
 
                                 if ($er["newsid"] == 0 || is_null($er["newsid"])) {
 
-                                    header("Location: ?p=forums&id=" . $tid);
+                                    header("Location: /forums/" . $tid);
 
                                 } else {
 
-                                    header("Location: ?p=news&id=" . $er["newsid"]);
+                                    header("Location: /news/" . $er["newsid"]);
 
                                 }
 
@@ -304,7 +304,7 @@ if ($action == "add" && checkuser()) {
                                     // redirect
                                     if ($uq->rowCount() == 1) {
 
-                                        header("Location: ?p=forums&id=" . $tid);
+                                        header("Location: /forums/" . $tid);
 
                                     }
 
@@ -421,11 +421,11 @@ if ($action == "add" && checkuser()) {
 
             ?>
             <h1>
-                <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
+                <a href='/forums/<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
             </h1>
 
             <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
-            <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
+            <?php echo (($row["mapid"] != 0) ? "<a href='/maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
             <?php
             }
             ?>
@@ -539,11 +539,11 @@ if ($action == "add" && checkuser()) {
                         <?php
                         if (isset($tid)) {
 
-                            echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>";
+                            echo "<form action='/news/".strip($_GET["id"])."' method='post'>";
 
                         } else {
 
-                            echo "<form action='?p=forums&amp;id=".$id."' method='post'>";
+                            echo "<form action='/forums/".$id."' method='post'>";
 
                         }
                         ?>
@@ -572,7 +572,7 @@ if ($action == "add" && checkuser()) {
         } else {
 
             // redirecting to the main page instead of giving an error message
-            header("Location: ?p=forums");
+            header("Location: /forums");
 
         }
 
@@ -607,7 +607,7 @@ if ($action == "add" && checkuser()) {
 
             ?>
 
-            <a class='forums-clearfilter' href='?p=forums'>&#x21A9; clear category filter</a>
+            <a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
 
             <?php
 
@@ -659,7 +659,7 @@ if ($action == "add" && checkuser()) {
                         </a>
                     </td>
                     <td class='forums-entry-main <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "forums-entry-closed" : ""); ?>'>
-                        <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                        <a class='forums-entry-title' href='/forums/<?php echo $row["id"]; ?>'>
 
                             <?php echo $row["title"]; ?>
 
