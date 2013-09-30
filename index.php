@@ -15,10 +15,10 @@ ccookies();
 <head>
     <title>thecookiefactory</title>
     <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <link rel='stylesheet' type='text/css' href='base.css'>
+    <link rel='stylesheet' type='text/css' href='/base.css'>
     <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600|Roboto+Slab'>
     <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
-    <script src='js/main.js'></script>
+    <script src='/js/main.js'></script>
 </head>
 <body>
 
@@ -32,7 +32,7 @@ ccookies();
 
 <nav>
 <span class='nav-menubar'>
-<a class='menu-item' href='?p=news'>news</a><a class='menu-item' href='?p=maps'>maps</a><a class='menu-item' href='?p=streams'>streams</a><a class='menu-item' href='?p=forums'>forums</a>
+<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams</a><a class='menu-item' href='/forums'>forums</a>
 
 <?php
 
@@ -46,7 +46,7 @@ while ($pagesrow = $pagesquery->fetch()){
     // and storing them in an array
     $pages[] = $pagesrow["title"];
     ?>
-    <a class='menu-item' href='?p=<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
+    <a class='menu-item' href='/<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
     <?php
 
 }
@@ -63,8 +63,8 @@ if (IsAnyoneLive()) {
 </span>
 
 <div class='nav-actionbar'>
-<form class='menu-item' action='?p=search' method='post'>
-<input type='text' name='searchb' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
+<form class='menu-item' action='/search' method='get'>
+<input type='text' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
 </form>
 <?php
 
@@ -95,7 +95,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     } else if ($p != "login" && $p != "logout") {
 
-        header("Location: notfound.php");
+        header("Location: /notfound.php");
 
     }
 
