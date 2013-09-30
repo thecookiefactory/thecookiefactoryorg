@@ -33,7 +33,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                                                    FROM `news`
                                                    WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 
@@ -55,7 +55,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             ?>
 
             <div class='article-header'>
-            <div class='article-title'><h1><a href='?p=news&amp;id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
+            <div class='article-title'><h1><a href='/news/<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
             <div class='article-metadata'>
 
             <?php
@@ -80,11 +80,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 <?php
                 if ($commnum != 1) {
                     ?>
-                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
                     <?php
                 } else {
                     ?>
-                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comment'><?php echo $commnum; ?> comment</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comment</a></span>
                     <?php
                 }
 
@@ -144,7 +144,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     echo "</div>";
-    echo "<a class='news-rsslink' href='rss.xml'>RSS</a>";
+    echo "<a class='news-rsslink' href='/rss.xml'>RSS</a>";
 } else {
 
     // DISPLAY ONE PIECE OF NEWS
@@ -207,7 +207,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     } else {
 
         // redirecting to the main page instead of giving an error message
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 
