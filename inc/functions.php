@@ -245,11 +245,11 @@ function register($username) {
 
     if (isset($_SESSION["lp"])) {
 
-        header("Location: ?p=".$_SESSION["lp"]);
+        header("Location: /".$_SESSION["lp"]);
 
     } else {
 
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 
@@ -277,7 +277,7 @@ function login() {
 
         if (!isset($_SESSION["userid"])) {
 
-            echo "<a class='menu-item' href='?p=login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
+            echo "<a class='menu-item' href='/login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
 
         }
 
@@ -315,18 +315,18 @@ function login() {
 
                 if (isset($_SESSION["lp"])) {
 
-                    header("Location: ?p=".$_SESSION["lp"]);
+                    header("Location: /".$_SESSION["lp"]);
 
                 } else {
 
-                    header("Location: ?p=news");
+                    header("Location: /news");
 
                 }
 
             } else {
 
                 // no
-                header("Location: ?p=register");
+                header("Location: /register");
 
             }
 
@@ -344,7 +344,7 @@ function login() {
 
         }
 
-        echo "<span class='menu-item'><a href='?p=logout'>log out</a></span>";
+        echo "<span class='menu-item'><a href='/logout'>log out</a></span>";
 
     }
 
@@ -357,11 +357,11 @@ function login() {
 
         if (isset($_SESSION["lp"])) {
 
-            header("Location: ?p=".$_SESSION["lp"]);
+            header("Location: /".$_SESSION["lp"]);
 
         } else {
 
-            header("Location: ?p=news");
+            header("Location: /news");
 
         }
 
