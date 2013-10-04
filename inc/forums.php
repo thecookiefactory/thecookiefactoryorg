@@ -61,7 +61,7 @@ if ($action == "add" && checkuser()) {
     } else {
 
         ?>
-        <form action='?p=forums&amp;action=add' method='post'>
+        <form action='/forums/add' method='post'>
             <label class='forums-newpost-select-label' for="cat">Category:
             <select class='forums-newpost-select' name='cat'>
 
@@ -182,7 +182,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>&amp;pid=<?php echo $pid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>/<?php echo $pid; ?>' method='post'>
 
                     <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
                     <div class='forums-post'>
@@ -260,7 +260,7 @@ if ($action == "add" && checkuser()) {
                         // redirect
                         if ($uq->rowCount() == 1) {
 
-                            header("Location: ?p=forums");
+                            header("Location: /forums");
 
                         }
 
@@ -319,7 +319,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>' method='post'>
                         <label class='forums-newpost-select-label' for="cat">Category:
                         <select class='forums-newpost-select' name='cat'>
 
@@ -443,7 +443,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                         <div class='forums-post-metadata'>
 
-                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."'>edit</a>"; ?>
+                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
                             <?php if ($row["editdate"] != 0) echo "last edited ".displaydate($row["editdate"]); ?>
 
                             <span class='forums-post-metadata-item'>
@@ -494,7 +494,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                             <div class='forums-post-metadata'>
 
-                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."&amp;pid=".$cr["id"]."'>edit</a>"; ?>
+                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
                                 <?php if ($cr["editdate"] != 0) echo "last edited ".displaydate($cr["editdate"]); ?>
 
                                 <span class='forums-post-metadata-item'>
@@ -584,7 +584,7 @@ if ($action == "add" && checkuser()) {
 
             ?>
 
-            <a class='forums-createthread' href='?p=forums&amp;action=add'>
+            <a class='forums-createthread' href='/forums/add'>
                 <span class='forums-createthread-sign'>+</span>
                 <span class='forums-createthread-text'>create a new thread</span>
             </a>
@@ -652,7 +652,7 @@ if ($action == "add" && checkuser()) {
 
                 <tr class='forums-entry'>
                     <td class='forums-entry-category forums-category-<?php echo getcatname($row["forumcategory"]); ?>'>
-                        <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["forumcategory"]; ?>'>
+                        <a class='forums-entry-category-text' href='/forums/category/<?php echo $row["forumcategory"]; ?>'>
 
                                 <?php echo getcatname($row["forumcategory"]); ?>
 
