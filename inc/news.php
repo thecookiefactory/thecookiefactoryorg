@@ -137,7 +137,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         } else {
 
-            echo "<a class='news-page-number' href='?p=news&amp;page=" . $i . "'>" . $i . "</a>";
+            echo "<a class='news-page-number' href='/news/page/" . $i . "'>" . $i . "</a>";
 
         }
 
