@@ -24,9 +24,11 @@ ccookies();
 
 <?php include_once("inc/analyticstracking.php") ?>
 
+<a href='/'>
 <header>
 
 </header>
+</a>
 
 <div class='wrapper'>
 
@@ -47,14 +49,6 @@ while ($pagesrow = $pagesquery->fetch()){
     $pages[] = $pagesrow["title"];
     ?>
     <a class='menu-item' href='?p=<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
-    <?php
-
-}
-
-if (IsAnyoneLive()) {
-
-    ?>
-    Someone is streaming!!
     <?php
 
 }
