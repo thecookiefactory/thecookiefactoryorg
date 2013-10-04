@@ -24,9 +24,11 @@ ccookies();
 
 <?php include_once("inc/analyticstracking.php") ?>
 
+<a href='/'>
 <header>
 
 </header>
+</a>
 
 <div class='wrapper'>
 
