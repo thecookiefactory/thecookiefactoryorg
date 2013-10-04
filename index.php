@@ -51,14 +51,6 @@ while ($pagesrow = $pagesquery->fetch()){
 
 }
 
-if (IsAnyoneLive()) {
-
-    ?>
-    Someone is streaming!!
-    <?php
-
-}
-
 ?>
 </span>
 
