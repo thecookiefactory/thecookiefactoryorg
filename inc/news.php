@@ -7,7 +7,7 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = "news";
 
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 // DISPLAY ALL THE NEWS
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
@@ -21,7 +21,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
+    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`), `news`.`stringid`
                             FROM `news`
                             WHERE `news`.`live` = 1
                             ORDER BY `news`.`id` DESC
@@ -55,7 +55,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             ?>
 
             <div class='article-header'>
-            <div class='article-title'><h1><a href='/news/<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
+            <div class='article-title'><h1><a href='/news/<?php echo $row["stringid"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
             <div class='article-metadata'>
 
             <?php
@@ -80,11 +80,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 <?php
                 if ($commnum != 1) {
                     ?>
-                    <span class='article-metadata-item'><a href='/news/<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["stringid"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
                     <?php
                 } else {
                     ?>
-                    <span class='article-metadata-item'><a href='/news/<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comment</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["stringid"]; ?>#comments'><?php echo $commnum; ?> comment</a></span>
                     <?php
                 }
 
@@ -153,8 +153,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
                             FROM `news`
-                            WHERE `news`.`id` = :id");
-    $query->bindValue("id", $id, PDO::PARAM_INT);
+                            WHERE `news`.`stringid` = :id");
+    $query->bindValue("id", $id, PDO::PARAM_STR);
     $query->execute();
 
     if ($query->rowCount() == 1) {

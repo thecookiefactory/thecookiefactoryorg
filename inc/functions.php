@@ -190,6 +190,39 @@ function islive($x) {
 
 }
 
+function generateid($x) {
+
+    global $con;
+
+    $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
+    $gq->bindValue("id", $x, PDO::PARAM_INT);
+    $gq->execute();
+
+    $gr = $gq->fetch();
+
+    $stringid = preg_replace("/[^A-Za-z0-9 ]/", "", $gr["title"]);
+
+    $stringid = str_replace(" ", "_", $stringid);
+
+    $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
+    $cq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $cq->execute();
+
+    if ($cq->rowCount() != 0) {
+
+        $stringid .= "-".$x;
+
+    }
+
+    $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
+    $uq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $uq->bindValue("id", $x, PDO::PARAM_INT);
+    $uq->execute();
+
+    return 0;
+
+}
+
 function cookieh() {
 
     return str_shuffle(hash("sha256", microtime()));
