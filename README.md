@@ -31,3 +31,4 @@
   - [MySQL Connector/Python](http://dev.mysql.com/downloads/connector/python/)
   - [Requests](http://docs.python-requests.org/en/latest/)
   - [Pillow](https://pypi.python.org/pypi/Pillow/)
+  - [PyRSS2Gen](http://www.dalkescientific.com/Python/PyRSS2Gen.html)
