@@ -9,9 +9,9 @@ include "markdown/markdown.php";
 
 <?php
 
-if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
+if (isset($_GET["term"]) && vf($_GET["term"])) {
 
-    $term = str_replace("%", "", $_POST["searchb"]);
+    $term = str_replace("%", "", $_GET["term"]);
     $term = strip($term);
 
     if (strlen($term) > 50) {

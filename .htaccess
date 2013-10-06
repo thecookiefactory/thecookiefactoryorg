@@ -38,8 +38,8 @@ RewriteRule ^forums\/edit\/([^\/\.]+)\/?$ \/index.php?p=forums&action=edit&tid=$
 # forums/edit/5/2 -> /?p=forums&action=edit&tid=5&pid=2
 RewriteRule ^forums\/edit\/([^\/\.]+)\/([^\/\.]+)\/?$ \/index.php?p=forums&action=edit&tid=$1&pid=$2 [L]
 
-# search/XY -> /?p=search&term=xy
-RewriteRule ^search\/([^\/\.]+)\/?$ \/index.php?p=search&term=$2 [L]
+# search/xy -> /?p=search&term=xy
+RewriteRule ^search\/([^\/\.]+)\/?$ \/index.php?p=search&term=$1 [L]
 
 # /xy -> /?p=xy
 RewriteRule ^([^\/\.]+)\/?$ \/index.php?p=$1 [L]
