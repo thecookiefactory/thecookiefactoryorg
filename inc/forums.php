@@ -61,7 +61,7 @@ if ($action == "add" && checkuser()) {
     } else {
 
         ?>
-        <form action='/forums/add' method='post'>
+        <form action='/forums/add/' method='post'>
             <label class='forums-newpost-select-label' for="cat">Category:
             <select class='forums-newpost-select' name='cat'>
 
@@ -170,7 +170,12 @@ if ($action == "add" && checkuser()) {
 
                                 } else {
 
-                                    header("Location: /news/" . $er["newsid"]);
+                                    $gq = $con->prepare("SELECT `news`.`stringid` FROM `news` WHERE `news`.`id` = :id");
+                                    $gq->bindValue("id", $er["newsid"], PDO::PARAM_INT);
+                                    $gq->execute();
+                                    
+                                    $gr = $gq->fetch();
+                                    header("Location: /news/" . $gr["stringid"]);
 
                                 }
 
@@ -182,7 +187,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='/forums/edit/<?php echo $tid; ?>/<?php echo $pid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>/<?php echo $pid; ?>/' method='post'>
 
                     <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
                     <div class='forums-post'>
@@ -319,7 +324,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='/forums/edit/<?php echo $tid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>/' method='post'>
                         <label class='forums-newpost-select-label' for="cat">Category:
                         <select class='forums-newpost-select' name='cat'>
 
@@ -539,11 +544,11 @@ if ($action == "add" && checkuser()) {
                         <?php
                         if (isset($tid)) {
 
-                            echo "<form action='/news/".strip($_GET["id"])."' method='post'>";
+                            echo "<form action='/news/".strip($_GET["id"])."/' method='post'>";
 
                         } else {
 
-                            echo "<form action='/forums/".$id."' method='post'>";
+                            echo "<form action='/forums/".$id."/' method='post'>";
 
                         }
                         ?>
