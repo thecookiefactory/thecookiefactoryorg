@@ -441,7 +441,7 @@ if ($action == "add" && checkuser()) {
 
                 $sr = $sq->fetch();
 
-                echo "<a href='/maps/".$sr["name"]."/'>&#x21AA; related map</a>";
+                echo "<a href='/maps/#".$sr["name"]."'>&#x21AA; related map</a>";
 
             }
 
