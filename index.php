@@ -63,7 +63,7 @@ if (IsAnyoneLive()) {
 </span>
 
 <div class='nav-actionbar'>
-<form class='menu-item' action='/search/' method='get' onsubmit='searchRedirect();'>
+<form class='menu-item' onsubmit='searchRedirect();'>
 <input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
 </form>
 <?php
