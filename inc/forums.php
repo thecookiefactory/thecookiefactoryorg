@@ -173,7 +173,7 @@ if ($action == "add" && checkuser()) {
                                     $gq = $con->prepare("SELECT `news`.`stringid` FROM `news` WHERE `news`.`id` = :id");
                                     $gq->bindValue("id", $er["newsid"], PDO::PARAM_INT);
                                     $gq->execute();
-                                    
+
                                     $gr = $gq->fetch();
                                     header("Location: /news/" . $gr["stringid"]);
 
@@ -430,7 +430,23 @@ if ($action == "add" && checkuser()) {
             </h1>
 
             <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
-            <?php echo (($row["mapid"] != 0) ? "<a href='/maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
+
+            <?php
+
+            if ($row["mapid"] != 0) {
+
+                $sq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+                $sq->bindValue("id", $row["mapid"], PDO::PARAM_INT);
+                $sq->execute();
+
+                $sr = $sq->fetch();
+
+                echo "<a href='/maps/".$sr["name"]."/'>&#x21AA; related map</a>";
+
+            }
+
+            ?>
+
             <?php
             }
             ?>
