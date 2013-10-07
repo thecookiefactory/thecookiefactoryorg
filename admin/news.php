@@ -63,6 +63,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                             $uq->bindValue("id", $id, PDO::PARAM_INT);
                             $uq->execute();
 
+                            generateid($id);
+
                         }
 
                     } else {
@@ -206,7 +208,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $iq = $con->prepare("INSERT INTO `news` VALUES(NULL, :title, :text, :author, now(), 0, NULL, :comments, :live)");
+            $iq = $con->prepare("INSERT INTO `news` VALUES(NULL, :title, :text, :author, now(), 0, NULL, :comments, :live, '')");
             $iq->bindValue("title", $title, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -222,6 +224,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $iq->bindValue("author", $author, PDO::PARAM_INT);
             $iq->bindValue("id", $id, PDO::PARAM_INT);
             $iq->execute();
+
+            generateid($id);
 
             echo "News post successfully submitted.<br>";
             echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
@@ -291,6 +295,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
         echo "</td>";
         echo "</tr>";
+
+        if (!vf($row["stringid"])) {
+
+            generateid($row["id"]);
+
+        }
 
     }
 

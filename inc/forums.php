@@ -61,7 +61,7 @@ if ($action == "add" && checkuser()) {
     } else {
 
         ?>
-        <form action='?p=forums&amp;action=add' method='post'>
+        <form action='/forums/add/' method='post'>
             <label class='forums-newpost-select-label' for="cat">Category:
             <select class='forums-newpost-select' name='cat'>
 
@@ -166,11 +166,16 @@ if ($action == "add" && checkuser()) {
 
                                 if ($er["newsid"] == 0 || is_null($er["newsid"])) {
 
-                                    header("Location: ?p=forums&id=" . $tid);
+                                    header("Location: /forums/" . $tid);
 
                                 } else {
 
-                                    header("Location: ?p=news&id=" . $er["newsid"]);
+                                    $gq = $con->prepare("SELECT `news`.`stringid` FROM `news` WHERE `news`.`id` = :id");
+                                    $gq->bindValue("id", $er["newsid"], PDO::PARAM_INT);
+                                    $gq->execute();
+
+                                    $gr = $gq->fetch();
+                                    header("Location: /news/" . $gr["stringid"]);
 
                                 }
 
@@ -182,7 +187,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>&amp;pid=<?php echo $pid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>/<?php echo $pid; ?>/' method='post'>
 
                     <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
                     <div class='forums-post'>
@@ -260,7 +265,7 @@ if ($action == "add" && checkuser()) {
                         // redirect
                         if ($uq->rowCount() == 1) {
 
-                            header("Location: ?p=forums");
+                            header("Location: /forums");
 
                         }
 
@@ -304,7 +309,7 @@ if ($action == "add" && checkuser()) {
                                     // redirect
                                     if ($uq->rowCount() == 1) {
 
-                                        header("Location: ?p=forums&id=" . $tid);
+                                        header("Location: /forums/" . $tid);
 
                                     }
 
@@ -319,7 +324,7 @@ if ($action == "add" && checkuser()) {
                 } else {
 
                     ?>
-                    <form action='?p=forums&amp;action=edit&amp;tid=<?php echo $tid; ?>' method='post'>
+                    <form action='/forums/edit/<?php echo $tid; ?>/' method='post'>
                         <label class='forums-newpost-select-label' for="cat">Category:
                         <select class='forums-newpost-select' name='cat'>
 
@@ -421,11 +426,27 @@ if ($action == "add" && checkuser()) {
 
             ?>
             <h1>
-                <a href='?p=forums&id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
+                <a href='/forums/<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a>
             </h1>
 
             <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
-            <?php echo (($row["mapid"] != 0) ? "<a href='?p=maps#".$row["mapid"]."'>&#x21AA; related map</a>" : ""); ?>
+
+            <?php
+
+            if ($row["mapid"] != 0) {
+
+                $sq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+                $sq->bindValue("id", $row["mapid"], PDO::PARAM_INT);
+                $sq->execute();
+
+                $sr = $sq->fetch();
+
+                echo "<a href='/maps/#".$sr["name"]."'>&#x21AA; related map</a>";
+
+            }
+
+            ?>
+
             <?php
             }
             ?>
@@ -443,7 +464,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                         <div class='forums-post-metadata'>
 
-                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."'>edit</a>"; ?>
+                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
                             <?php if ($row["editdate"] != 0) echo "last edited ".displaydate($row["editdate"]); ?>
 
                             <span class='forums-post-metadata-item'>
@@ -494,7 +515,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                             <div class='forums-post-metadata'>
 
-                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='?p=forums&amp;action=edit&tid=".$row["id"]."&amp;pid=".$cr["id"]."'>edit</a>"; ?>
+                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
                                 <?php if ($cr["editdate"] != 0) echo "last edited ".displaydate($cr["editdate"]); ?>
 
                                 <span class='forums-post-metadata-item'>
@@ -539,11 +560,11 @@ if ($action == "add" && checkuser()) {
                         <?php
                         if (isset($tid)) {
 
-                            echo "<form action='?p=news&amp;id=".strip($_GET["id"])."' method='post'>";
+                            echo "<form action='/news/".strip($_GET["id"])."/' method='post'>";
 
                         } else {
 
-                            echo "<form action='?p=forums&amp;id=".$id."' method='post'>";
+                            echo "<form action='/forums/".$id."/' method='post'>";
 
                         }
                         ?>
@@ -572,7 +593,7 @@ if ($action == "add" && checkuser()) {
         } else {
 
             // redirecting to the main page instead of giving an error message
-            header("Location: ?p=forums");
+            header("Location: /forums");
 
         }
 
@@ -584,7 +605,7 @@ if ($action == "add" && checkuser()) {
 
             ?>
 
-            <a class='forums-createthread' href='?p=forums&amp;action=add'>
+            <a class='forums-createthread' href='/forums/add'>
                 <span class='forums-createthread-sign'>+</span>
                 <span class='forums-createthread-text'>create a new thread</span>
             </a>
@@ -607,7 +628,7 @@ if ($action == "add" && checkuser()) {
 
             ?>
 
-            <a class='forums-clearfilter' href='?p=forums'>&#x21A9; clear category filter</a>
+            <a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
 
             <?php
 
@@ -652,14 +673,14 @@ if ($action == "add" && checkuser()) {
 
                 <tr class='forums-entry'>
                     <td class='forums-entry-category forums-category-<?php echo getcatname($row["forumcategory"]); ?>'>
-                        <a class='forums-entry-category-text' href='?p=forums&cat=<?php echo $row["forumcategory"]; ?>'>
+                        <a class='forums-entry-category-text' href='/forums/category/<?php echo $row["forumcategory"]; ?>'>
 
                                 <?php echo getcatname($row["forumcategory"]); ?>
 
                         </a>
                     </td>
                     <td class='forums-entry-main <?php echo (($row["BIN(`forumthreads`.`closed`)"] == 1) ? "forums-entry-closed" : ""); ?>'>
-                        <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                        <a class='forums-entry-title' href='/forums/<?php echo $row["id"]; ?>'>
 
                             <?php echo $row["title"]; ?>
 
