@@ -9,9 +9,9 @@ include "markdown/markdown.php";
 
 <?php
 
-if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
+if (isset($_GET["term"]) && vf($_GET["term"])) {
 
-    $term = str_replace("%", "", $_POST["searchb"]);
+    $term = str_replace("%", "", $_GET["term"]);
     $term = strip($term);
 
     if (strlen($term) > 50) {
@@ -78,7 +78,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                     ?>
 
                     <div class='article-header'>
-                    <div class='article-title'><h1><a href='?p=news&amp;id=<?php echo $srow["id"]; ?>'><?php echo $srow["title"]; ?></a></h1></div>
+                    <div class='article-title'><h1><a href='/news/<?php echo $srow["id"]; ?>'><?php echo $srow["title"]; ?></a></h1></div>
                     <div class='article-metadata'>
 
                     <?php
@@ -100,7 +100,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                         $commnum = $cq->rowCount();
                         ?>
 
-                        <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $srow["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+                        <span class='article-metadata-item'><a href='/news/<?php echo $srow["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
 
                         <?php
 
@@ -255,7 +255,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                     ?>
                     <tr class='forums-entry'>
                         <td class='forums-entry-category forums-category-<?php echo getcatname($row["forumcategory"]); ?>'>
-                            <a href='?p=forums&cat=<?php echo $row["forumcategory"]; ?>'>
+                            <a href='/forums/category/<?php echo $row["forumcategory"]; ?>'>
                                 <div class='forums-entry-category-text'>
 
                                     <?php echo getcatname($row["forumcategory"]); ?>
@@ -264,7 +264,7 @@ if (isset($_POST["searchb"]) && vf($_POST["searchb"])) {
                             </a>
                         </td>
                         <td class='forums-entry-main <?php echo (($row["closed"] == 1) ? "forums-entry-closed" : ""); ?>'>
-                            <a class='forums-entry-title' href='?p=forums&id=<?php echo $row["id"]; ?>'>
+                            <a class='forums-entry-title' href='/forums/<?php echo $row["id"]; ?>'>
 
                                 <?php echo $row["title"]; ?>
 
@@ -342,7 +342,7 @@ function resultbutton() {
 
     $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
     $prettyname = ($name == "inf") ? "article" : "forum post";
-    return "<form method='post' action='?p=search'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
+    return "<form method='post' action='/search/".$term."/'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
 
 }
 
