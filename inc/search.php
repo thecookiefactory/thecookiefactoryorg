@@ -342,7 +342,7 @@ function resultbutton() {
 
     $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
     $prettyname = ($name == "inf") ? "article" : "forum post";
-    return "<form method='post' action='/search'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
+    return "<form method='post' action='/search/".$term."/'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
 
 }
 
