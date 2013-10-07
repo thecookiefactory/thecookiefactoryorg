@@ -30,8 +30,7 @@ if ($q->rowCount() != 0) {
         $gq->execute();
         ?>
 
-        <div class='map-name'>
-        <a name='<?php echo $r["id"]; ?>'></a><!-- #hashtag --><?php echo $r["name"]; ?></div>
+        <div class='map-name' id='<?php echo $r["name"]; ?>'><!-- #hashtag --><?php echo $r["name"]; ?></div>
         <div class='map-container'>
           <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
           <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $r["id"]; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
