@@ -12,8 +12,8 @@ class forumpost {
      * @var $id int
      * @var $text string
      * @var $author object
-     * @var $date string
-     * @var $editdate string
+     * @var $date object
+     * @var $editdate object
      * @var $thread object
      */
     protected $id;

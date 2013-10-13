@@ -14,7 +14,7 @@ class forumcategory {
      * @var $longname string
      * @var $hexcode string
      * @var $hoverhexcode string
-     * @var $date string
+     * @var $date object
      */
     protected $id;
     protected $name;

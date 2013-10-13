@@ -13,9 +13,9 @@ class forumthread {
      * @var $title string
      * @var $text string
      * @var $author object
-     * @var $date string
-     * @var $editdate string
-     * @var $lastdate string
+     * @var $date object
+     * @var $editdate object
+     * @var $lastdate object
      * @var $forumcategory object
      * @var $map object
      * @var $news object

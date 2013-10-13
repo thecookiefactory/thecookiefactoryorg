@@ -13,8 +13,8 @@ class map {
      * @var $name string
      * @var $text string
      * @var $author object
-     * @var $date string
-     * @var $editdate string
+     * @var $date object
+     * @var $editdate object
      * @var $dl string
      * @var $extension string
      * @var $comments int

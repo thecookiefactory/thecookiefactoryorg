@@ -11,7 +11,7 @@ class picture {
      *
      * @var $id int
      * @var $text string
-     * @var $date string
+     * @var $date object
      * @var $filename string
      * @var $map object
      */

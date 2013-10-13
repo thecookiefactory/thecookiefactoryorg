@@ -14,7 +14,7 @@ class user {
      * @var $steamid string
      * @var $admin int
      * @var $cookieh string
-     * @var $date string
+     * @var $date object
      */
     protected $id;
     protected $name;

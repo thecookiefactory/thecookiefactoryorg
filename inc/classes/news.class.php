@@ -13,9 +13,9 @@ class news {
      * @var $title string
      * @var $text string
      * @var $author object
-     * @var $date string
+     * @var $date object
      * @var $editor object
-     * @var $editdate string
+     * @var $editdate object
      * @var $comments int
      * @var $live int
      * @var $stringid string

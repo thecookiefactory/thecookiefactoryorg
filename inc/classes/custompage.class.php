@@ -12,8 +12,8 @@ class custompage {
      * @var $id int
      * @var $title string
      * @var $text string
-     * @var $date string
-     * @var $editdate string
+     * @var $date object
+     * @var $editdate object
      * @var $live int
      */
     protected $id;
