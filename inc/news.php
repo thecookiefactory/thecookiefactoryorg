@@ -125,6 +125,15 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
                 ?>
                 <div class='ads'>
+                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- News Articles Inline -->
+                    <ins class="adsbygoogle"
+                         style="display:inline-block;width:970px;height:90px"
+                         data-ad-client="ca-pub-8578399795841431"
+                         data-ad-slot="9134975871"></ins>
+                    <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
                 <hr class='article-separator'>
                 <?php
