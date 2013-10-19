@@ -40,6 +40,15 @@ if (isset($_POST["text"])) {
 
 }
 
+if (isset($_POST["create"])) {
+
+    $title = strip($_POST["title"]);
+    $iq = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, 0)");
+    $iq->bindValue("title", $title, PDO::PARAM_STR);
+    $iq->execute();
+
+}
+
 if (isset($_POST["cpage"])) {
 
     $q = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`title` = :cpage");
@@ -71,6 +80,12 @@ if (isset($_POST["cpage"])) {
 
     echo "</select>";
     echo "<input type='submit' value=''>";
+    echo "</form>";
+
+    echo "create new:";
+    echo "<form action='cpages.php' method='post'>";
+    echo "<input type='text' name='title'>";
+    echo "<input type='submit' name='create'>";
     echo "</form>";
 
 }
