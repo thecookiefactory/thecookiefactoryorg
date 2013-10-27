@@ -19,7 +19,6 @@ class stream {
     protected $title;
     protected $text;
     protected $author;
-    protected $twitchname;
 
     public function __construct($id = null) {
 

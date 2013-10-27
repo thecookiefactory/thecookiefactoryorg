@@ -18,10 +18,11 @@ class user {
      */
     protected $id;
     protected $name;
-    protected $steamId;
+    protected $steamid;
     protected $admin;
     protected $cookieh;
     protected $date;
+    protected $twitchname;
 
     public function __construct($id = null) {
 
