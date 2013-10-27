@@ -15,6 +15,7 @@ class user {
      * @var $admin int
      * @var $cookieh string
      * @var $date object
+     * @var $twitchname string
      */
     protected $id;
     protected $name;

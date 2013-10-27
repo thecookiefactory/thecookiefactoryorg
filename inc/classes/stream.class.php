@@ -13,7 +13,6 @@ class stream {
      * @var $title string
      * @var $text string
      * @var $author object
-     * @var $twitchname string
      */
     protected $id;
     protected $title;
