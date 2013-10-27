@@ -7,7 +7,7 @@
 class dtime extends DateTime {
 
     public function longago() {
-    
+
         $diff = time() - $this->getTimestamp();
 
         if ($diff < 10) {
@@ -43,13 +43,13 @@ class dtime extends DateTime {
             return ((int)($diff/(60*60*24)))." days ago";
 
         }
-    
+
     }
-    
+
     public function display() {
-    
+
         return "<time datetime='".date(DATE_W3C, $this->getTimestamp())."' title='".date("Y-m-d H:i \C\E\T", $this->getTimestamp())."'>".$this->longago()."</time>";
-    
+
     }
 
 }
