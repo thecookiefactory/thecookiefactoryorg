@@ -299,7 +299,7 @@ if ($action == "add" && checkuser()) {
 
                                 } else {
 
-                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text WHERE `forumthreads`.`id` = :tid");
+                                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
                                     $uq->bindValue("cat", $cat, PDO::PARAM_INT);
                                     $uq->bindValue("title", $title, PDO::PARAM_STR);
                                     $uq->bindValue("text", $text, PDO::PARAM_STR);
