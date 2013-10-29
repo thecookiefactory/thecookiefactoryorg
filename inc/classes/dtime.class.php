@@ -6,7 +6,7 @@
  */
 class dtime extends DateTime {
 
-    public function longago() {
+    protected function longago() {
 
         $diff = time() - $this->getTimestamp();
 
