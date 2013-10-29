@@ -87,25 +87,13 @@ class user {
 
     public function isAdmin() {
 
-        if ($this->admin != 0) {
-
-            return true;
-
-        }
-
-        return false;
+        return ($this->admin != 0);
 
     }
 
     public function isLoggedIn() {
 
-        if ($this->id != null) {
-
-            return true;
-
-        }
-
-        return false;
+        return ($this->id != null);
 
     }
 
