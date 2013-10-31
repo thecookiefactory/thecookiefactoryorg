@@ -13,13 +13,11 @@ class picture {
      * @var $text string
      * @var $date object
      * @var $filename string
-     * @var $map object
      */
     protected $id;
     protected $text;
     protected $date;
     protected $filename;
-    protected $map;
 
     public function __construct($id = null) {
 
