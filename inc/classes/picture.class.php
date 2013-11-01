@@ -48,7 +48,7 @@ class picture {
 
             } else {
 
-                echo "Could not find a game with the given id.";
+                echo "Could not find a picture with the given id.";
 
             }
 
