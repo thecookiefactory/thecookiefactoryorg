@@ -373,7 +373,7 @@ function login() {
 
         if (checkadmin()) {
 
-            echo "<span class='menu-item'><a href='/admin' target='_blank'>admin menu</a></span>";
+            echo "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
 
         }
 
