@@ -199,7 +199,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
             } else {
                 ?>
 
-                <h1 class='comments-title'>Commenting disabled</h1></div>
+                <h1 class='comments-title'>Commenting disabled</h1>
 
                 <?php
             }
