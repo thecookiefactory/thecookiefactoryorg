@@ -319,6 +319,11 @@ article {
   font-size: 10px;
 }
 
+.news-ad {
+  width: 728px;
+  margin: auto;
+}
+
 .nav-menubar {
   z-index: 1;
   float: left;

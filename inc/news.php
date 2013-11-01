@@ -122,15 +122,14 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
             <?php
 
             if ($iii == 1) {
-
                 ?>
-                <div class='ads'>
-                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <div class='news-ad'>
+                    <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
                     <!-- News Articles Inline -->
-                    <ins class="adsbygoogle"
-                         style="display:inline-block;width:970px;height:90px"
-                         data-ad-client="ca-pub-8578399795841431"
-                         data-ad-slot="9134975871"></ins>
+                    <ins class='adsbygoogle'
+                         style='display:inline-block;width:970px;height:90px'
+                         data-ad-client='ca-pub-8578399795841431'
+                         data-ad-slot='5270925477'></ins>
                     <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
