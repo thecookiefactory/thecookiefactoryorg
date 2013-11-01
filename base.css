@@ -319,6 +319,11 @@ article {
   font-size: 10px;
 }
 
+.news-ad {
+  width: 728px;
+  margin: auto;
+}
+
 .nav-menubar {
   z-index: 1;
   float: left;
@@ -580,7 +585,7 @@ img.map-image {
 
 .map-name {
   z-index: 1;
-  margin-top: 10px;
+  margin-top: 40px;
   margin-bottom: 10px;
   width: 100%;
   color: white;
@@ -888,6 +893,11 @@ img.map-image {
 
 .map-data-actionbar > a {
   color: white;
+}
+
+.map-ad {
+  width: 728px;
+  margin: 40px auto 0;
 }
 
 .search-separator {
