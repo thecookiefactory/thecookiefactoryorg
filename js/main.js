@@ -52,3 +52,8 @@ function filterInput(elem) {
 
     elem.setCustomValidity(error);
 }
+
+function searchRedirect() {
+    event.preventDefault();
+    window.location = "/search/" + document.getElementById("searchbox").value + "/";
+}

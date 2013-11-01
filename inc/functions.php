@@ -190,6 +190,39 @@ function islive($x) {
 
 }
 
+function generateid($x) {
+
+    global $con;
+
+    $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
+    $gq->bindValue("id", $x, PDO::PARAM_INT);
+    $gq->execute();
+
+    $gr = $gq->fetch();
+
+    $stringid = preg_replace("/[^A-Za-z0-9 ]/", "", $gr["title"]);
+
+    $stringid = str_replace(" ", "_", $stringid);
+
+    $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
+    $cq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $cq->execute();
+
+    if ($cq->rowCount() != 0) {
+
+        $stringid .= "-".$x;
+
+    }
+
+    $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
+    $uq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $uq->bindValue("id", $x, PDO::PARAM_INT);
+    $uq->execute();
+
+    return 0;
+
+}
+
 function cookieh() {
 
     return str_shuffle(hash("sha256", microtime()));
@@ -245,11 +278,11 @@ function register($username) {
 
     if (isset($_SESSION["lp"])) {
 
-        header("Location: ?p=".$_SESSION["lp"]);
+        header("Location: /".$_SESSION["lp"]);
 
     } else {
 
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 
@@ -277,7 +310,7 @@ function login() {
 
         if (!isset($_SESSION["userid"])) {
 
-            echo "<a class='menu-item' href='?p=login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
+            echo "<a class='menu-item' href='/login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
 
         }
 
@@ -315,18 +348,18 @@ function login() {
 
                 if (isset($_SESSION["lp"])) {
 
-                    header("Location: ?p=".$_SESSION["lp"]);
+                    header("Location: /".$_SESSION["lp"]);
 
                 } else {
 
-                    header("Location: ?p=news");
+                    header("Location: /news");
 
                 }
 
             } else {
 
                 // no
-                header("Location: ?p=register");
+                header("Location: /register");
 
             }
 
@@ -340,11 +373,11 @@ function login() {
 
         if (checkadmin()) {
 
-            echo "<span class='menu-item'><a href='admin' target='_blank'>admin menu</a></span>";
+            echo "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
 
         }
 
-        echo "<span class='menu-item'><a href='?p=logout'>log out</a></span>";
+        echo "<span class='menu-item'><a href='/logout'>log out</a></span>";
 
     }
 
@@ -357,11 +390,11 @@ function login() {
 
         if (isset($_SESSION["lp"])) {
 
-            header("Location: ?p=".$_SESSION["lp"]);
+            header("Location: /".$_SESSION["lp"]);
 
         } else {
 
-            header("Location: ?p=news");
+            header("Location: /news");
 
         }
 

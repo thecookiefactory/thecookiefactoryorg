@@ -8,7 +8,7 @@ if (checkuser()) {
 
     ?>
 
-    <p>You are already logged in! <a href='?p=logout'>Log out</a>?</p>
+    <p>You are already logged in! <a href='/logout'>Log out</a>?</p>
 
     <?php
 
@@ -26,7 +26,7 @@ if (checkuser()) {
 
         ?>
 
-        <div class='account-form'><form action='?p=register' method='post'>
+        <div class='account-form'><form action='/register' method='post'>
         <span class='account-text'><span class='account-title'>Hey there!</span><br>My name is </span>
         <input class='account-input' pattern='\w{2,10}' type='text' placeholder='username' name='username' required='required' autocomplete='off' oninput='checkInputBox(this);' autofocus>
         <input class='account-input account-button' type='submit' value='and I am ready to roll!' name='submit'>

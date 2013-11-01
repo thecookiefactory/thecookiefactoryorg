@@ -1,3 +1,3 @@
 <?php
-header("Location: /?p=404");
+header("Location: /404");
 ?>
