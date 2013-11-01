@@ -45,7 +45,7 @@ RewriteRule ^search\/([^\/\.]+)\/?$ \/index.php?p=search&term=$1 [L]
 RewriteRule ^maps\/([^\/\.]+)\/?$ \/index.php?p=maps#$1 [L]
 
 # /admin -> /admin
-RewriteRule ^admin(\/.*)$ \/admin$1 [L,QSA]
+RewriteRule ^\/admin(\/.*)$ \/admin$1 [L,QSA]
 
 # /xy -> /?p=xy
 RewriteRule ^([^\/\.]+)\/?$ \/index.php?p=$1 [L,QSA]
