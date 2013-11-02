@@ -46,7 +46,7 @@ class forumpost {
 
                 $this->id       = $srow["id"];
                 $this->text     = $srow["text"];
-                $this->author   = $srow["author"];
+                $this->author   = new user($srow["authorid"]);
                 $this->date     = new dtime($srow["date"]);
                 $this->editdate = new dtime($srow["editdate"]);
 
