@@ -29,21 +29,39 @@ class user {
     protected $date         = null;
     protected $twitchname   = null;
 
-    public function __construct($id = null) {
+    public function __construct($id = null, $field = null) {
 
         global $con;
 
         if ($id != null) {
 
-            try {
+            if ($field == "name") {
 
-                $squery = $con->prepare("SELECT * FROM `users` WHERE `users`.`id` = :id");
-                $squery->bindValue("id", $id, PDO::PARAM_INT);
-                $squery->execute();
+                try {
 
-            } catch (PDOException $e) {
+                    $squery = $con->prepare("SELECT * FROM `users` WHERE `users`.`name` = :id");
+                    $squery->bindValue("id", $id, PDO::PARAM_STR);
+                    $squery->execute();
 
-                echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+                } catch (PDOException $e) {
+
+                    echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+
+                }
+
+            } else {
+
+                try {
+
+                    $squery = $con->prepare("SELECT * FROM `users` WHERE `users`.`id` = :id");
+                    $squery->bindValue("id", $id, PDO::PARAM_INT);
+                    $squery->execute();
+
+                } catch (PDOException $e) {
+
+                    echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+
+                }
 
             }
 
@@ -66,6 +84,12 @@ class user {
             }
 
         }
+
+    }
+
+    public function getId() {
+
+        return $this->id;
 
     }
 
