@@ -62,38 +62,6 @@ function ccookies() {
 
 }
 
-function checkadmin() {
-
-    global $con;
-
-    if (isset($_SESSION["userid"])) {
-
-        $x = $_SESSION["userid"];
-
-        $cq = $con->prepare("SELECT BIN(`users`.`admin`) FROM `users` WHERE `users`.`id` = :x");
-        $cq->bindValue("x", $x, PDO::PARAM_INT);
-        $cq->execute();
-
-        $cr = $cq->fetch();
-
-        if ($cr["BIN(`users`.`admin`)"] == 1) {
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
-
-    } else {
-
-        return false;
-
-    }
-
-}
-
 function getname($id, $span = false) {
 
     global $con;
@@ -287,6 +255,7 @@ function login() {
 
     global $con;
     global $config;
+    global $user;
 
     if (!isset($OpenID)) {
 
@@ -366,7 +335,7 @@ function login() {
 
         echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> ".getname($_SESSION["userid"])."</span></span>";
 
-        if (checkadmin()) {
+        if ($user->isAdmin()) {
 
             echo "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
 

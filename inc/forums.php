@@ -121,7 +121,7 @@ if ($action == "add" && $user->isLoggedIn()) {
 
             $er = $eq->fetch();
 
-            if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
+            if (($er["authorid"] != $_SESSION["userid"]) && !$user->isAdmin()) {
 
                 echo "You dont have the right!!";
 
@@ -131,7 +131,7 @@ if ($action == "add" && $user->isLoggedIn()) {
 
                 if (isset($_POST["edit"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
-                    if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+                    if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
                         $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid AND `forumposts`.`id` = :pid");
                         $dq->bindValue("pid", $pid, PDO::PARAM_INT);
@@ -202,7 +202,7 @@ if ($action == "add" && $user->isLoggedIn()) {
                     </div>
 
                     <?php
-                    if (checkadmin()) {
+                    if ($user->isAdmin()) {
 
                         echo "delete this reply <input type='checkbox' name='delete'>";
 
@@ -234,7 +234,7 @@ if ($action == "add" && $user->isLoggedIn()) {
 
             $er = $eq->fetch();
 
-            if (($er["authorid"] != $_SESSION["userid"]) && !checkadmin()) {
+            if (($er["authorid"] != $_SESSION["userid"]) && !$user->isAdmin()) {
 
                 echo "You dont have the right!!";
 
@@ -244,7 +244,7 @@ if ($action == "add" && $user->isLoggedIn()) {
 
                 if (isset($_POST["edit"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
-                    if (checkadmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+                    if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
                         if (vf($er["mapid"])) {
 
@@ -357,7 +357,7 @@ if ($action == "add" && $user->isLoggedIn()) {
                     </div>
 
                     <?php
-                        if (checkadmin()) {
+                        if ($user->isAdmin()) {
 
                             echo "delete this whole thread <input type='checkbox' name='delete'>";
 
@@ -464,7 +464,7 @@ if ($action == "add" && $user->isLoggedIn()) {
                         </div>
                         <div class='forums-post-metadata'>
 
-                            <?php if (($user->isLoggedIn() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
+                            <?php if (($user->isLoggedIn() && $row["authorid"] == $_SESSION["userid"]) || $user->isAdmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
                             <?php if ($row["editdate"] != 0) echo "last edited ".displaydate($row["editdate"]); ?>
 
                             <span class='forums-post-metadata-item'>
@@ -515,7 +515,7 @@ if ($action == "add" && $user->isLoggedIn()) {
                             </div>
                             <div class='forums-post-metadata'>
 
-                                <?php if (($user->isLoggedIn() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
+                                <?php if (($user->isLoggedIn() && $cr["authorid"] == $_SESSION["userid"]) || $user->isAdmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
                                 <?php if ($cr["editdate"] != 0) echo "last edited ".displaydate($cr["editdate"]); ?>
 
                                 <span class='forums-post-metadata-item'>
