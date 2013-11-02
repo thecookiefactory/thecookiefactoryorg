@@ -1,5 +1,9 @@
 <?php
 
+require_once "inc/classes/dtime.class.php";
+require_once "inc/classes/game.class.php";
+require_once "inc/classes/user.class.php";
+
 /**
  * map class
  *

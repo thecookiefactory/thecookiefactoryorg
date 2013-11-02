@@ -1,5 +1,7 @@
 <?php
 
+require_once "inc/classes/dtime.class.php";
+
 /**
  * picture class
  *
@@ -43,7 +45,7 @@ class picture {
 
                 $this->id       = $srow["id"];
                 $this->text     = $srow["text"];
-                $this->date     = $srow["date"];
+                $this->date     = new dtime($srow["date"]);
                 $this->filename = $srow["filename"];
 
             } else {

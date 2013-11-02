@@ -1,5 +1,7 @@
 <?php
 
+require_once "inc/classes/user.class.php";
+
 /**
  * stream class
  *

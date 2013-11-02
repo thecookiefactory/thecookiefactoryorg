@@ -1,5 +1,8 @@
 <?php
 
+require_once "inc/classes/dtime.class.php";
+require_once "inc/classes/user.class.php";
+
 /**
  * forum post class
  *

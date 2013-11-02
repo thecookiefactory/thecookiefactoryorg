@@ -1,5 +1,7 @@
 <?php
 
+require_once "inc/classes/dtime.class.php";
+
 /**
  * custom page class
  *
