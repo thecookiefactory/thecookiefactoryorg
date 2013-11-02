@@ -44,7 +44,7 @@ class stream {
                 $this->id       = $srow["id"];
                 $this->title    = $srow["title"];
                 $this->text     = $srow["text"];
-                $this->author   = $srow["author"];
+                $this->author   = new user($srow["authorid"]);
 
             } else {
 
