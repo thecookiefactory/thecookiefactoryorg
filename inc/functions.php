@@ -62,12 +62,6 @@ function ccookies() {
 
 }
 
-function checkuser() {
-
-    if (isset($_SESSION["userid"])) return true; else return false;
-
-}
-
 function checkadmin() {
 
     global $con;

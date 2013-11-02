@@ -8,7 +8,7 @@ $_SESSION["lp"] = $p;
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 
-if ($action == "add" && checkuser()) {
+if ($action == "add" && $user->isLoggedIn()) {
 
     if (isset($_POST["addnew"]) && (isset($_POST["cat"]) && vf($_POST["cat"])) && (isset($_POST["title"]) && vf($_POST["title"])) && (isset($_POST["text"]) && vf($_POST["text"]))) {
 
@@ -99,7 +99,7 @@ if ($action == "add" && checkuser()) {
 
     }
 
-} else if ($action == "edit" && checkuser() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
+} else if ($action == "edit" && $user->isLoggedIn() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
 
     $tid = strip($_GET["tid"]);
 
@@ -393,7 +393,7 @@ if ($action == "add" && checkuser()) {
             $row = $query->fetch();
 
             //comment processing
-            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && checkuser() && $row["BIN(`forumthreads`.`closed`)"] == 0) {
+            if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && $user->isLoggedIn() && $row["BIN(`forumthreads`.`closed`)"] == 0) {
 
                 $author = $_SESSION["userid"];
                 $text = strip($_POST["text"]);
@@ -464,7 +464,7 @@ if ($action == "add" && checkuser()) {
                         </div>
                         <div class='forums-post-metadata'>
 
-                            <?php if ((checkuser() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
+                            <?php if (($user->isLoggedIn() && $row["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."'>edit</a>"; ?>
                             <?php if ($row["editdate"] != 0) echo "last edited ".displaydate($row["editdate"]); ?>
 
                             <span class='forums-post-metadata-item'>
@@ -515,7 +515,7 @@ if ($action == "add" && checkuser()) {
                             </div>
                             <div class='forums-post-metadata'>
 
-                                <?php if ((checkuser() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
+                                <?php if (($user->isLoggedIn() && $cr["authorid"] == $_SESSION["userid"]) || checkadmin()) echo "<a href='/forums/edit/".$row["id"]."/".$cr["id"]."'>edit</a>"; ?>
                                 <?php if ($cr["editdate"] != 0) echo "last edited ".displaydate($cr["editdate"]); ?>
 
                                 <span class='forums-post-metadata-item'>
@@ -552,7 +552,7 @@ if ($action == "add" && checkuser()) {
 
             if ($row["BIN(`forumthreads`.`closed`)"] == 0) {
                 //writing a comment
-                if (checkuser()) {
+                if ($user->isLoggedIn()) {
 
                      ?>
                     <hr><h1 class='comments-title'>Reply to this thread</h1>
@@ -601,7 +601,7 @@ if ($action == "add" && checkuser()) {
 
         // SHOW ALL THREADS
 
-        if (checkuser()) {
+        if ($user->isLoggedIn()) {
 
             ?>
 
