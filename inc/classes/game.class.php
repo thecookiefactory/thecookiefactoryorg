@@ -15,7 +15,7 @@ class game {
      */
     protected $id       = null;
     protected $name     = null;
-    protected $steamid    = null;
+    protected $steamid  = null;
 
     public function __construct($id = null) {
 
