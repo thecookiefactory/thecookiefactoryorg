@@ -1,8 +1,10 @@
 <?php
 
-require_once "inc/classes/dtime.class.php";
-require_once "inc/classes/forumcategory.class.php";
-require_once "inc/classes/user.class.php";
+if (!isset($r_c)) header("Location: /notfound.php");
+
+require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/forumcategory.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 
 /**
  * forum thread class

@@ -1,5 +1,7 @@
 <?php
 
+if (!isset($r_c)) header("Location: /notfound.php");
+
 /**
  * game class
  *
