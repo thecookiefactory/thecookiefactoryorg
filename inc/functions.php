@@ -1,8 +1,8 @@
 <?php
 
-if (!isset($r_c)) header("Location: notfound.php");
+if (!isset($r_c)) header("Location: /notfound.php");
 
-require str_repeat("../", $r_c) . "inc/config.php";
+require_once str_repeat("../", $r_c) . "inc/config.php";
 
 $con = new PDO("mysql:host=" . $config["db"]["host"] . ";dbname=" . $config["db"]["dbname"] . ";charset=utf8", $config["db"]["username"], $config["db"]["password"]);
 $con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);

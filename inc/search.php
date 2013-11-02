@@ -1,9 +1,9 @@
 <?php
 
-if (!isset($r_c)) header("Location: notfound.php");
+if (!isset($r_c)) header("Location: /notfound.php");
 
-include "analyticstracking.php";
-include "markdown/markdown.php";
+include_once "analyticstracking.php";
+require_once "markdown/markdown.php";
 
 ?>
 

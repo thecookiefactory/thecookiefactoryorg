@@ -1,4 +1,4 @@
-<?php if (!isset($r_c)) header("Location: notfound.php"); ?>
+<?php if (!isset($r_c)) header("Location: /notfound.php"); ?>
 <?php $msgs=array("Houston, we have a four-oh-four.",
                   "If you're happy and you know it, four-oh-four!",
                   "You get a 404, you get a 404, everybody gets a 404!",

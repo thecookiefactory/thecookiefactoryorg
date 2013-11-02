@@ -1,8 +1,8 @@
 <?php
 
-if (!isset($r_c)) header("Location: notfound.php");
+if (!isset($r_c)) header("Location: /notfound.php");
 
-include "analyticstracking.php";
+include_once "analyticstracking.php";
 
 if (checkuser()) {
 

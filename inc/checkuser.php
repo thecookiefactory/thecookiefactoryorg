@@ -2,7 +2,7 @@
 
 $r_c = 1;
 
-require "functions.php";
+require_once "functions.php";
 
 if (vf($_GET["name"])) {
 

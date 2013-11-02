@@ -3,8 +3,8 @@
 session_start();
 
 $r_c = 0;
-require "inc/functions.php";
-include "inc/lightopenid/openid.php";
+require_once "inc/functions.php";
+require_once "inc/lightopenid/openid.php";
 
 ccookies();
 
@@ -60,12 +60,11 @@ while ($pagesrow = $pagesquery->fetch()){
 <form class='menu-item' onsubmit='searchRedirect();'>
 <input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
 </form>
+
 <?php
-
-// see description in functions.php
 login();
-
 ?>
+
 </div>
 
 </nav>
@@ -81,11 +80,11 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     if (file_exists("inc/".$p.".php") && $p != "functions" && $p != "config") {
 
-        require "inc/".$p.".php";
+        require_once "inc/".$p.".php";
 
     } else if (in_array($p, $pages)) {
 
-        require "inc/custom.php";
+        require_once "inc/custom.php";
 
     } else if ($p != "login" && $p != "logout") {
 
@@ -95,7 +94,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 } else {
 
-    require "inc/news.php";
+    require_once "inc/news.php";
 
 }
 
