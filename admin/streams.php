@@ -36,19 +36,19 @@ if (isset($_POST["submit"])) {
 
             if ($sq->rowCount() == 0) {
 
-                echo "Your stream page is being created now...<br>";
-
-                $cq = $con->prepare("INSERT INTO `streams` VALUES(NULL, '', '', :userid, '')");
+                $cq = $con->prepare("INSERT INTO `streams` VALUES(DEFAULT, '', '', :userid)");
                 $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
                 $cq->execute();
 
-                echo "Done. Please fill out the fields below.<br>";
-
             }
 
-        $uq = $con->prepare("UPDATE `streams` SET `streams`.`twitchname` = :twitchname, `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
-        $uq->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
+        $uq = $con->prepare("UPDATE `streams` SET `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
         $uq->bindValue("text", $desc, PDO::PARAM_STR);
+        $uq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $uq->execute();
+
+        $uq = $con->prepare("UPDATE `users` SET `users`.`twitchname` = :twitchname WHERE `users`.`id` = :userid");
+        $uq->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
         $uq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
         $uq->execute();
 
@@ -74,9 +74,15 @@ if (isset($_POST["submit"])) {
 
     $sr = $sq->fetch();
 
+    $uq = $con->prepare("SELECT * FROM `users` WHERE `users`.`id` = :userid");
+    $uq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+    $uq->execute();
+
+    $ur = $uq->fetch();
+
     echo "<form action='streams.php' method='post'>
     twitchname.tv username<br>
-    <input type='text' name='twitchname' value='".$sr["twitchname"]."' required><br>
+    <input type='text' name='twitchname' value='".$ur["twitchname"]."' required><br>
     description<br>
     <textarea name='description' rows='7' cols='50' required>".$sr["text"]."</textarea><br>
     Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) - watch out, if you uncheck this, all data regarding your stream will be lost<br>
