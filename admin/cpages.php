@@ -34,10 +34,11 @@ if (isset($_POST["text"])) {
 
     }
 
-    $query = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live WHERE `custompages`.`id` = :id");
+    $query = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live, `custompages`.`stringid` = :stringid WHERE `custompages`.`id` = :id");
     $query->bindValue("text", strip($_POST["text"]), PDO::PARAM_STR);
     $query->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
     $query->bindValue("live", $live, PDO::PARAM_INT);
+    $query->bindValue("stringid", strip($_POST["stringid"]), PDO::PARAM_STR);
     $query->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
     $query->execute();
 
@@ -46,7 +47,7 @@ if (isset($_POST["text"])) {
 if (isset($_POST["create"])) {
 
     $title = strip($_POST["title"]);
-    $iq = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, 0)");
+    $iq = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, 0, '')");
     $iq->bindValue("title", $title, PDO::PARAM_STR);
     $iq->execute();
 
@@ -64,6 +65,7 @@ if (isset($_POST["cpage"])) {
     echo "<input type='hidden' name='id' value='".$r["id"]."'>";
     echo "<input type='text' name='name' value='".$r["title"]."'>";
     echo "<textarea name='text' rows='30' cols='100'>".$r["text"]."</textarea>";
+    echo "stringid (url): <input type='text' name='stringid' value='".$r["stringid"]."'>";
     echo "<input type='checkbox' name='live'" . (($r["BIN(`custompages`.`live`)"] == 1) ? " checked" : "") . ">";
     echo "<input type='submit' value=''>";
     echo "</form>";

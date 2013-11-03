@@ -42,16 +42,16 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 <?php
 
 // fetching the custom pages' names
-$pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
+$pagesquery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
 
 $pages = Array();
 
 while ($pagesrow = $pagesquery->fetch()){
 
     // and storing them in an array
-    $pages[] = $pagesrow["title"];
+    $pages[] = $pagesrow["stringid"];
     ?>
-    <a class='menu-item' href='/<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
+    <a class='menu-item' href='/<?php echo $pagesrow["stringid"]; ?>'><?php echo $pagesrow["title"]; ?></a>
     <?php
 
 }
