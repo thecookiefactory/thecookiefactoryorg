@@ -22,7 +22,7 @@ if ($q->rowCount() != 0) {
 
         $stream = new stream($r["id"]);
 
-        echo $stream->button();
+        $stream->button();
 
     }
 
@@ -51,7 +51,7 @@ if (isset($_GET["id"])) {
 
         if ($stream->exists()) {
 
-            echo $stream->display();
+            $stream->display();
 
         }
 
