@@ -131,61 +131,6 @@ function longago($x) {
 
 }
 
-function islive($x) {
-
-    global $con;
-
-    $sq = $con->prepare("SELECT `streams`.`title` FROM `streams` WHERE `streams`.`twitchname` = :x");
-    $sq->bindValue("x", $x, PDO::PARAM_STR);
-    $sq->execute();
-
-    $sr = $sq->fetch();
-
-    if (vf($sr["title"])) {
-
-        return true;
-
-    } else {
-
-        return false;
-
-    }
-
-}
-
-function generateid($x) {
-
-    global $con;
-
-    $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
-    $gq->bindValue("id", $x, PDO::PARAM_INT);
-    $gq->execute();
-
-    $gr = $gq->fetch();
-
-    $stringid = preg_replace("/[^A-Za-z0-9 ]/", "", $gr["title"]);
-
-    $stringid = str_replace(" ", "_", $stringid);
-
-    $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
-    $cq->bindValue("si", $stringid, PDO::PARAM_STR);
-    $cq->execute();
-
-    if ($cq->rowCount() != 0) {
-
-        $stringid .= "-".$x;
-
-    }
-
-    $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
-    $uq->bindValue("si", $stringid, PDO::PARAM_STR);
-    $uq->bindValue("id", $x, PDO::PARAM_INT);
-    $uq->execute();
-
-    return 0;
-
-}
-
 function cookieh() {
 
     return str_shuffle(hash("sha256", microtime()));
