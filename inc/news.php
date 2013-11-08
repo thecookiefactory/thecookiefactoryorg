@@ -128,7 +128,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                     <!-- News Articles Inline -->
                     <ins class="adsbygoogle"
-                         style="display:inline-block;width:970px;height:90px"
+                         style="display:inline-block;width:728px;height:90px"
                          data-ad-client="ca-pub-8578399795841431"
                          data-ad-slot="9134975871"></ins>
                     <script>
