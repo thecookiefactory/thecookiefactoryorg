@@ -9,3 +9,43 @@ allow from all
 </Files>
 
 ErrorDocument 404 /notfound.php
+
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^www\.
+RewriteRule ^(.*)$ http:\/\/%{HTTP_HOST}\/$1 [R=301,L]
+
+RewriteRule \.(css|jpe?g|gif|png)$ - [L]
+
+RewriteCond %{REQUEST_URI} ^\/[^\.]+[^\/]$
+RewriteRule ^(.*)$ http:\/\/%{HTTP_HOST}\/$1\/ [R=301,L]
+
+# news/page/1 -> /?p=news&page=xy
+RewriteRule ^news\/page\/(\d+)\/?$ \/index.php?p=news&page=$1 [L]
+
+# forums/add -> /?p=forums&action=add
+RewriteRule ^forums\/add\/?$ \/index.php?p=forums&action=add [L]
+
+# forums/edit -> /?p=forums&action=edit
+RewriteRule ^forums\/edit\/?$ \/index.php?p=forums&action=edit [L]
+
+# forums/category/1 -> /?p=forums&cat=xy
+RewriteRule ^forums\/category\/([^\/\.]+)\/?$ \/index.php?p=forums&cat=$1 [L]
+
+# forums/edit/5 -> /?p=forums&action=edit&tid=5
+RewriteRule ^forums\/edit\/([^\/\.]+)\/?$ \/index.php?p=forums&action=edit&tid=$1 [L]
+
+# forums/edit/5/2 -> /?p=forums&action=edit&tid=5&pid=2
+RewriteRule ^forums\/edit\/([^\/\.]+)\/([^\/\.]+)\/?$ \/index.php?p=forums&action=edit&tid=$1&pid=$2 [L]
+
+# search/xy -> /?p=search&term=xy
+RewriteRule ^search\/([^\/\.]+)\/?$ \/index.php?p=search&term=$1 [L]
+
+# maps/cp_xy -> /?p=maps#cp_xy
+RewriteRule ^maps\/([^\/\.]+)\/?$ \/index.php?p=maps#$1 [L]
+
+# /xy -> /?p=xy
+RewriteRule ^([^\/\.]+)\/?$ \/index.php?p=$1 [L,QSA]
+
+# /xy/4 -> /?p=xy&id=4
+RewriteRule ^([^\/\.]+)\/([^\/\.]+)\/?$ \/index.php?p=$1&id=$2 [L,QSA]

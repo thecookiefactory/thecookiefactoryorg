@@ -7,7 +7,7 @@ include "markdown/markdown.php";
 
 $_SESSION["lp"] = "news";
 
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 // DISPLAY ALL THE NEWS
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
@@ -21,7 +21,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
+    $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`), `news`.`stringid`
                             FROM `news`
                             WHERE `news`.`live` = 1
                             ORDER BY `news`.`id` DESC
@@ -33,7 +33,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                                                    FROM `news`
                                                    WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 
@@ -55,7 +55,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             ?>
 
             <div class='article-header'>
-            <div class='article-title'><h1><a href='?p=news&amp;id=<?php echo $row["id"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
+            <div class='article-title'><h1><a href='/news/<?php echo $row["stringid"]; ?>'><?php echo $row["title"]; ?></a></h1></div>
             <div class='article-metadata'>
 
             <?php
@@ -80,11 +80,11 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
                 <?php
                 if ($commnum != 1) {
                     ?>
-                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["stringid"]; ?>#comments'><?php echo $commnum; ?> comments</a></span>
                     <?php
                 } else {
                     ?>
-                    <span class='article-metadata-item'><a href='?p=news&amp;id=<?php echo $row["id"]; ?>#comment'><?php echo $commnum; ?> comment</a></span>
+                    <span class='article-metadata-item'><a href='/news/<?php echo $row["stringid"]; ?>#comments'><?php echo $commnum; ?> comment</a></span>
                     <?php
                 }
 
@@ -122,15 +122,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             <?php
 
             if ($iii == 1) {
-
                 ?>
-                <div class='ads'>
-                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <div class='news-ad'>
+                    <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
                     <!-- News Articles Inline -->
-                    <ins class="adsbygoogle"
-                         style="display:inline-block;width:728px;height:90px"
-                         data-ad-client="ca-pub-8578399795841431"
-                         data-ad-slot="9134975871"></ins>
+                    <ins class='adsbygoogle'
+                         style='display:inline-block;width:728px;height:90px'
+                         data-ad-client='ca-pub-8578399795841431'
+                         data-ad-slot='5270925477'></ins>
                     <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
@@ -156,14 +155,14 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
         } else {
 
-            echo "<a class='news-page-number' href='?p=news&amp;page=" . $i . "'>" . $i . "</a>";
+            echo "<a class='news-page-number' href='/news/page/" . $i . "'>" . $i . "</a>";
 
         }
 
     }
 
     echo "</div>";
-    echo "<a class='news-rsslink' href='rss.xml'>RSS</a>";
+    echo "<a class='news-rsslink' href='/rss.xml'>RSS</a>";
 } else {
 
     // DISPLAY ONE PIECE OF NEWS
@@ -172,8 +171,8 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
 
     $query = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`)
                             FROM `news`
-                            WHERE `news`.`id` = :id");
-    $query->bindValue("id", $id, PDO::PARAM_INT);
+                            WHERE `news`.`stringid` = :id");
+    $query->bindValue("id", $id, PDO::PARAM_STR);
     $query->execute();
 
     if ($query->rowCount() == 1) {
@@ -218,7 +217,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
             } else {
                 ?>
 
-                <h1 class='comments-title'>Commenting disabled</h1></div>
+                <h1 class='comments-title'>Commenting disabled</h1>
 
                 <?php
             }
@@ -226,7 +225,7 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     } else {
 
         // redirecting to the main page instead of giving an error message
-        header("Location: ?p=news");
+        header("Location: /news");
 
     }
 

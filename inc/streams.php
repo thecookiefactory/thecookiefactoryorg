@@ -21,11 +21,11 @@ if ($q->rowCount() != 0) {
 
         ?>
 
-        <a href='?p=streams&amp;id=<?php echo $r["id"]; ?>'>
+        <a href='/streams/<?php echo getname($r["authorid"]); ?>'>
 
         <?php
 
-        if (isset($_GET["id"]) && $r["id"] == $_GET["id"]) {
+        if (isset($_GET["id"]) && getname($r["authorid"]) == $_GET["id"]) {
 
         ?>
             <li class='stream-button stream-button-selected
@@ -85,12 +85,24 @@ if ($q->rowCount() != 0) {
 
 <?php
 
-if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+if (isset($_GET["id"])) {
 
     // DISPLAY A STREAM
     $id = strip($_GET["id"]);
 
-    $q = $con->prepare("SELECT `streams`.`twitchname`,`streams`.`text` FROM `streams` WHERE `streams`.`id` = :id");
+    $sq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :name");
+    $sq->bindValue("name", $id, PDO::PARAM_STR);
+    $sq->execute();
+
+    if ($sq->rowCount() == 1) {
+
+        $sr = $sq->fetch();
+
+        $id = $sr["id"];
+
+    }
+
+    $q = $con->prepare("SELECT `streams`.`twitchname`,`streams`.`text` FROM `streams` WHERE `streams`.`authorid` = :id");
     $q->bindValue("id", $id, PDO::PARAM_INT);
     $q->execute();
 
