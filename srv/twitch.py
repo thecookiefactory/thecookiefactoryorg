@@ -16,9 +16,9 @@ def getFromAPI(method, param=''):
 
 def insertStreamTitle(sql, userid, title):
     if title:
-        sql.crs.execute("UPDATE `streams` SET `title`='{t}' WHERE `userid`='{s}'".format(t=title, s=userid))
+        sql.crs.execute("UPDATE `streams` SET `title`='{t}' WHERE `authorid`='{s}'".format(t=title, s=userid))
     else:
-        sql.crs.execute("UPDATE `streams` SET `title`=NULL WHERE `userid`='{s}'".format(s=userid))
+        sql.crs.execute("UPDATE `streams` SET `title`=NULL WHERE `authorid`='{s}'".format(s=userid))
 
 
 def main():
