@@ -97,9 +97,9 @@ class map {
           <div class='map-actionbar' id='map-actionbar-<?php echo $this->id; ?>'>
             <span class='map-actionbar-button' id='map-moreinfo-<?php echo $this->id; ?>' onclick='animateDataPanel(this.id)'>More info</span>
               <?php if ($this->link != null) { ?>
-                <span class='map-actionbar-button-disabled'>Download</span>
+                <a href='<?php echo $this->link; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
               <?php } else { ?>
-                <a href='/click.php?id=<?php echo $this->id; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                <span class='map-actionbar-button-disabled'>Download</span>
               <?php } ?>
           </div>
           <?php $pictures = $this->getPictures(); ?>
@@ -162,9 +162,9 @@ class map {
             <div class='map-data-actionbar'>
               <span class='map-actionbar-button' id='map-lessinfo-<?php echo $this->id; ?>' onclick='animateDataPanel(this.id)'>Less info</span>
                 <?php if ($this->link != null) { ?>
-                  <span class='map-actionbar-button-disabled'>Download</span>
+                  <a href='<?php echo $this->link; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
                 <?php } else { ?>
-                  <a href='/click.php?id=<?php echo $this->id; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                  <span class='map-actionbar-button-disabled'>Download</span>
                 <?php } ?>
             </div>
           </div>
