@@ -33,7 +33,7 @@ def main():
             stream['title'] = streamjson['stream']['channel']['status']
 
     for stream in streamdata:
-        insertStreamTitle(sql, streamdata['userid'], streamdata['title'])
+        insertStreamTitle(sql, stream['userid'], stream['title'])
 
     sql.close()
 
