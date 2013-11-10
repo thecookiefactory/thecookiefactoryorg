@@ -118,7 +118,7 @@ class map {
           </div>
           <div class='map-data' id='map-data-<?php echo $this->id; ?>'>
             <div class='map-data-properties'>
-              <span class='map-data-prop map-data-author'><?php echo $this->author->getName(); ?></span><br>
+              <span class='map-data-prop map-data-author'><?php echo $this->author->getName(); ?></span>
               <span class='map-data-prop map-data-game'>
                   <?php
                   if ($this->game->isSteamGame()) {
@@ -131,7 +131,8 @@ class map {
 
                   }
                   ?>
-              </span><br>
+              </span>
+              <span class='map-data-prop map-data-dlcount'><?php echo $this->downloadcount . " times"; ?></span>
               <span class='map-data-prop map-data-date'><?php echo $this->editdate->display(); ?></span>
               <?php
                 if ($this->comments == 1) {
