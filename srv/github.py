@@ -18,7 +18,7 @@ def getFromAPI(repo, method, param=''):
 
 
 def insertAssetLink(sql, map):
-    sql.crs.execute("UPDATE `maps` SET `link`='{l}', `downloadcount`='{d}', 'editdate'={e} WHERE `id`='{i}'".format(l=map['newlink'], i=map['mapid'], d=map['dlcount'], e=map['date']))
+    sql.crs.execute("UPDATE `maps` SET `link`='{l}', `downloadcount`='{d}', `editdate`='{e}' WHERE `id`='{i}'".format(l=map['newlink'], i=map['mapid'], d=map['dlcount'], e=map['date']))
 
 
 def main():
@@ -36,8 +36,7 @@ def main():
                 map['newlink'] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=map['dl'], releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
                 map['date'] = repojson[0]['published_at'][:-1]
     for map in dldata:
-        if map['oldlink'] != map['newlink']:
-            insertAssetLink(sql, map)
+        insertAssetLink(sql, map)
 
     sql.close()
 
