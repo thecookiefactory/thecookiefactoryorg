@@ -54,7 +54,7 @@ function ccookies() {
             $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
             $uq->bindValue("id", $cr["id"], PDO::PARAM_INT);
             $uq->execute();
-            setcookie("userid", $cookieh, time() + 2592000);
+            setcookie("userid", $cookieh, time() + 2592000, "/");
 
         }
 
@@ -173,7 +173,7 @@ function register($username) {
     $cookieh = cookieh();
 
     //registering the user and redirecting to the login form
-    $query = $con->prepare("INSERT INTO `users` VALUES(NULL, :username, :steamid, 0, :cookieh, now())");
+    $query = $con->prepare("INSERT INTO `users` VALUES(DEFAULT, :username, :steamid, 0, :cookieh, now(), '')");
     $query->bindValue("username", $username, PDO::PARAM_STR);
     $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
     $query->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
@@ -182,7 +182,7 @@ function register($username) {
     $id = $con->lastInsertId();
 
     $_SESSION["userid"] = $id;
-    setcookie("userid", $cookieh, time() + 2592000);
+    setcookie("userid", $cookieh, time() + 2592000, "/");
 
     if (isset($_SESSION["lp"])) {
 
@@ -253,7 +253,7 @@ function login() {
                 $uq->bindValue("id", $ua["id"], PDO::PARAM_INT);
                 $uq->execute();
 
-                setcookie("userid", $cookieh, time() + 2592000);
+                setcookie("userid", $cookieh, time() + 2592000, "/");
 
                 if (isset($_SESSION["lp"])) {
 
@@ -292,7 +292,7 @@ function login() {
 
     if (isset($_GET["p"]) && $_GET["p"] == "logout") {
 
-        setcookie("userid", "", time() - 100000);
+        setcookie("userid", "", time() - 100000, "/");
         unset($_SESSION["steamauth"]);
         unset($_SESSION["steamid"]);
         unset($_SESSION["userid"]);

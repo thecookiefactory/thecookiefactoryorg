@@ -26,7 +26,7 @@ if ($user->isLoggedIn()) {
 
         ?>
 
-        <div class='account-form'><form action='/register' method='post'>
+        <div class='account-form'><form action='/register/' method='post'>
         <span class='account-text'><span class='account-title'>Hey there!</span><br>My name is </span>
         <input class='account-input' pattern='\w{2,10}' type='text' placeholder='username' name='username' required='required' autocomplete='off' oninput='checkInputBox(this);' autofocus>
         <input class='account-input account-button' type='submit' value='and I am ready to roll!' name='submit'>
