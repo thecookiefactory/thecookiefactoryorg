@@ -236,7 +236,7 @@ function login() {
 
             // checking if the user has an account
             $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
-            $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+            $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
             $uq->execute();
 
             if ($uq->rowCount() == 1) {
