@@ -28,7 +28,7 @@ def main():
         if map['dl'].isdigit():
             map['newlink'] = 'http://steamcommunity.com/sharedfiles/filedetails/?id={workshopid}'.format(workshopid=map['dl'])
         else:
-            repojson = getFromAPI(name, 'releases')
+            repojson = getFromAPI(map['dl'], 'releases')
             if repojson:
                 assetjson = requests.get(repojson[0]['assets_url'], headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
                 map['newlink'] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=map['dl'], releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
