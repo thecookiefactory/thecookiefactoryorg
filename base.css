@@ -359,6 +359,13 @@ article {
   color: #4188D2;
 }
 
+.menu-live-indicator {
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #F93;
+  font-size: 12px;
+}
+
 .actionbar-logindata {
   color: white;
 }

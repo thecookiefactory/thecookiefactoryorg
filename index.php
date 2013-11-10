@@ -37,7 +37,7 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 <nav>
 <span class='nav-menubar'>
-<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams</a><a class='menu-item' href='/forums'>forums</a>
+<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams<?php echo ((isAnyoneLive()) ? "<sup class='menu-live-indicator'>live</sup>" : "") ?></a><a class='menu-item' href='/forums'>forums</a>
 
 <?php
 
@@ -123,7 +123,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 <?php
 
-function IsAnyoneLive() {
+function isAnyoneLive() {
 
     global $con;
 
