@@ -32,7 +32,7 @@ def main():
             repojson = getFromAPI(map['dl'], 'releases')
             if repojson:
                 assetjson = requests.get(repojson[0]['assets_url'], headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
-                map['dlcount'] = sum([release['assets'][0]['download_count'] for release in repojson])
+                map['dlcount'] = sum([release['assets'][0]['download_count'] for release in repojson if len(release['assets'])])
                 map['newlink'] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=map['dl'], releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
                 map['date'] = repojson[0]['published_at'][:-1]
     for map in dldata:
