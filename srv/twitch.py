@@ -5,7 +5,7 @@ API_ADDRESS = 'https://api.twitch.tv/kraken/'
 
 
 def getStreamNames(sql):
-    sql.crs.execute('SELECT `twitchname`, `id` FROM `users`')
+    sql.crs.execute('SELECT `twitchname`, `id` FROM `users` WHERE `twitchname` IS NOT NULL')
     streamdata = [{'name': twitch[0], 'userid': twitch[1]} for twitch in sql.crs]
     return streamdata
 
