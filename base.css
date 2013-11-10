@@ -623,7 +623,7 @@ img.map-image {
 .map-actionbar-button {
   display: block;
   float: left;
-  width: 146px;
+  width: 148px;
   border: 1px outset #333;
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
@@ -650,7 +650,7 @@ img.map-image {
 
 .map-actionbar-button-disabled {
   display: inline-block;
-  width: 146px;
+  width: 148px;
   border: 1px outset #333;
   background: -webkit-linear-gradient(top, #010101, #0A0A0A);
   background: linear-gradient(to bottom, #010101, #0A0A0A);
