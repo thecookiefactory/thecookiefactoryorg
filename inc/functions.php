@@ -327,7 +327,7 @@ function login() {
 
             // checking if the user has an account
             $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
-            $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+            $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
             $uq->execute();
 
             if ($uq->rowCount() == 1) {
@@ -383,10 +383,10 @@ function login() {
 
     if (isset($_GET["p"]) && $_GET["p"] == "logout") {
 
+        setcookie("userid", "", time() - 100000, "/");
         unset($_SESSION["steamauth"]);
         unset($_SESSION["steamid"]);
         unset($_SESSION["userid"]);
-        setcookie("userid", $ua["id"], time() - 100000, "/");
 
         if (isset($_SESSION["lp"])) {
 
