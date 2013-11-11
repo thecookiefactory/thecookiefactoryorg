@@ -292,7 +292,7 @@ function login() {
 
     if (isset($_GET["p"]) && $_GET["p"] == "logout") {
 
-        setcookie("userid", "", time() - 100000, "/");
+        setcookie("userid", "", time() - 100000);
         unset($_SESSION["steamauth"]);
         unset($_SESSION["steamid"]);
         unset($_SESSION["userid"]);
