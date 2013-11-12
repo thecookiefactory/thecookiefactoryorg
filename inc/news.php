@@ -54,7 +54,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
             $news = new news($row["id"]);
             $news->display("front");
-            
+
             ?>
             <hr class='article-separator'>
 

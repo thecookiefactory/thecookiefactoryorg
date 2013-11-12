@@ -52,9 +52,9 @@ class forumcategory {
                 $this->id           = $srow["id"];
                 $this->name         = $srow["name"];
                 $this->longname     = $srow["longname"];
-                $this->hexcode      = new dtime($srow["hexcode"]);
-                $this->hoverhexcode = new dtime($srow["hoverhexcode"]);
-                $this->date         = $srow["date"];
+                $this->hexcode      = $srow["hexcode"];
+                $this->hoverhexcode = $srow["hoverhexcode"];
+                $this->date         = new dtime($srow["date"]);
 
             } else {
 
@@ -63,6 +63,26 @@ class forumcategory {
             }
 
         }
+
+    }
+
+    public function tableBox() {
+
+        ?>
+        <td class='forums-entry-category forums-category-<?php echo $this->getName(); ?>'>
+            <a class='forums-entry-category-text' href='/forums/category/<?php echo $this->getId(); ?>'>
+
+                <?php echo $this->getName(); ?>
+
+            </a>
+        </td>
+        <?php
+
+    }
+
+    public function getId() {
+
+        return $this->id;
 
     }
 

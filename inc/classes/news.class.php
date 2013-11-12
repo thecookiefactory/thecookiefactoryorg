@@ -193,7 +193,7 @@ class news {
 
                 $tid = $tid["id"];
 
-                require "inc/forums.php";
+                require_once "inc/forums.php";
 
             } else {
 
