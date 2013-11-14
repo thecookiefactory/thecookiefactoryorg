@@ -162,7 +162,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
     while ($row = $query->fetch()) {
 
         echo "<li>";
-        echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"])." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
+        echo "#".$row["id"]." - ".$row["name"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
 
         $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $row["id"], PDO::PARAM_INT);

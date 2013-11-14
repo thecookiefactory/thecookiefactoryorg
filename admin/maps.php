@@ -324,7 +324,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         } else {
 
-            echo "<h1>post a map - by ".getname($_SESSION["userid"])."</h1>
+            echo "<h1>post a map</h1>
             <form action='?action=write' method='post' enctype='multipart/form-data'>
             Name<br>
             <input type='text' name='name' required><br>
@@ -385,7 +385,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         echo "<tr>";
         echo "<td>";
-        echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"]);
+        echo "#".$row["id"]." - ".$row["name"];
         echo "</td>";
         echo "<td>";
         echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";

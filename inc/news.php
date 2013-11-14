@@ -4,7 +4,7 @@ if (!isset($r_c)) header("Location: /notfound.php");
 
 include_once "analyticstracking.php";
 require_once "inc/classes/news.class.php";
-require_once "markdown/markdown.php";
+require_once "inc/markdown/markdown.php";
 
 $_SESSION["lp"] = "news";
 
@@ -22,17 +22,11 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = $con->prepare("SELECT `news`.`id`
-                            FROM `news`
-                            WHERE `news`.`live` = 1
-                            ORDER BY `news`.`id` DESC
-                            LIMIT :xo, 5");
+    $query = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
     $query->bindValue("xo", $xo, PDO::PARAM_INT);
     $query->execute();
 
-    if (($query->rowCount() == 0) && ($con->query("SELECT `news`.`id`
-                                                   FROM `news`
-                                                   WHERE `news`.`live` = 1")->rowCount() != 0)) {
+    if (($query->rowCount() == 0) && ($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
         header("Location: /news");
 
@@ -54,10 +48,6 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
             $news = new news($row["id"]);
             $news->display("front");
-
-            ?>
-
-            <?php
 
             if ($iii == 1) {
                 ?>
@@ -101,6 +91,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
     echo "</div>";
     echo "<a class='news-rsslink' href='/rss.xml'>RSS</a>";
+
 } else {
 
     // DISPLAY ONE PIECE OF NEWS

@@ -145,11 +145,8 @@ class map {
                       $cq->execute();
                       $ca = $cq->fetch();
 
-                      $rq = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
-                      $rq->bindValue("id", $ca["id"], PDO::PARAM_INT);
-                      $rq->execute();
-                      $nr = $rq->rowCount();
-                      echo "<a href='/forums/" . $ca["id"] . "'>" . $nr . " replies</a>";
+                      $thread = new forumthread($ca["id"]);
+                      echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount() . " replies</a>";
                     ?>
                   </span>
 

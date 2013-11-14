@@ -33,7 +33,8 @@ $q = $con->query("SELECT `users`.`id` FROM `users`");
 
 while ($r = $q->fetch()) {
 
-    echo getname($r["id"])."<br>";
+    $u = new user($r["id"]);
+    echo $u->getName() . "<br>";
 
 }
 

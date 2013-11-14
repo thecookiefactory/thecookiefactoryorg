@@ -174,6 +174,7 @@ class forumpost {
                     }
 
                 }
+
             }
 
         }
