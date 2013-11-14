@@ -127,7 +127,7 @@ class news {
 
         <?php
 
-        if ($loc == "front" && $this->comments == 1) {
+        if ($loc != "main" && $this->comments == 1) {
 
             $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
             $ct->bindValue("id", $this->id, PDO::PARAM_INT);
@@ -204,6 +204,10 @@ class news {
                 <?php
 
             }
+
+        } else {
+
+            echo "<hr class='article-separator'>";
 
         }
 

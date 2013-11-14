@@ -56,7 +56,6 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
             $news->display("front");
 
             ?>
-            <hr class='article-separator'>
 
             <?php
 
