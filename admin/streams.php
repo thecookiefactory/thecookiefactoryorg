@@ -31,25 +31,25 @@ if (isset($_POST["submit"])) {
     if (isset($_POST["active"]) && $_POST["active"] == "on") {
 
             $sq = $con->prepare("SELECT `streams`.`id` FROM `streams` WHERE `streams`.`authorid` = :userid");
-            $sq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+            $sq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
             $sq->execute();
 
             if ($sq->rowCount() == 0) {
 
                 $cq = $con->prepare("INSERT INTO `streams` VALUES(DEFAULT, '', '', :userid)");
-                $cq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+                $cq ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
                 $cq->execute();
 
             }
 
         $uq = $con->prepare("UPDATE `streams` SET `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
         $uq->bindValue("text", $desc, PDO::PARAM_STR);
-        $uq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $uq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
         $uq->execute();
 
         $uq = $con->prepare("UPDATE `users` SET `users`.`twitchname` = :twitchname WHERE `users`.`id` = :userid");
         $uq->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
-        $uq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $uq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
         $uq->execute();
 
         echo "Stream successfully updated.<br>";
@@ -57,7 +57,7 @@ if (isset($_POST["submit"])) {
     } else {
 
         $dq = $con->prepare("DELETE FROM `streams` WHERE `streams`.`authorid` = :userid");
-        $dq->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+        $dq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
         $dq->execute();
 
         echo "sttream deleted";
@@ -69,13 +69,13 @@ if (isset($_POST["submit"])) {
 } else {
 
     $sq = $con->prepare("SELECT * FROM `streams` WHERE `streams`.`authorid` = :userid");
-    $sq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+    $sq ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
     $sq->execute();
 
     $sr = $sq->fetch();
 
     $uq = $con->prepare("SELECT * FROM `users` WHERE `users`.`id` = :userid");
-    $uq ->bindValue("userid", $_SESSION["userid"], PDO::PARAM_INT);
+    $uq ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
     $uq->execute();
 
     $ur = $uq->fetch();

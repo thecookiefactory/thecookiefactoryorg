@@ -81,7 +81,7 @@ class forumpost {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $_SESSION["userid"]) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -112,7 +112,7 @@ class forumpost {
 
     public function edit() {
 
-        if (($this->author->getId() != $_SESSION["userid"]) && !$user->isAdmin()) {
+        if (($this->author->getId() != $user->getId()) && !$user->isAdmin()) {
 
             echo "You dont have the right!!";
 

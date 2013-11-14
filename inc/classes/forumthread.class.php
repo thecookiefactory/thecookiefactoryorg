@@ -216,7 +216,7 @@ class forumthread {
 
         if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && $user->isLoggedIn() && !$this->isClosed()) {
 
-            $author = $_SESSION["userid"];
+            $author = $user->getId();
             $text = strip($_POST["text"]);
 
             if (strlen($text) > 20000) {
@@ -254,7 +254,7 @@ class forumthread {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $_SESSION["userid"]) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -327,7 +327,7 @@ class forumthread {
 
         global $con;
 
-        $authorid = $_SESSION["userid"];
+        $authorid = $user->getId();
         $cat = new forumcategory(strip($_POST["cat"]));
 
         if (!$cat->isReal()) {
@@ -417,7 +417,7 @@ class forumthread {
         global $con;
         global $user;
 
-        if (($this->author->getId() != $_SESSION["userid"]) && !$user->isAdmin()) {
+        if (($this->author->getId() != $user->getId()) && !$user->isAdmin()) {
 
             echo "You dont have the right!!";
 

@@ -230,7 +230,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             //basic values
             $name = strip($_POST["name"]);
-            $author = $_SESSION["userid"];
+            $author = $user->getId();
             $game = strip($_POST["game"]);
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
@@ -304,7 +304,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
                 // creating forum entry for comments
 
-                $authorid = $_SESSION["userid"];
+                $authorid = $user->getId();
                 $title = strip($_POST["topicname"]);
                 $text = strip($_POST["topictext"]);
                 $cat = strip($_POST["topiccat"]);
