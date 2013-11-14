@@ -103,8 +103,8 @@ if ($action == "add" && $user->isLoggedIn()) {
 
             while ($cr = $cq->fetch()) {
 
-                echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
-                echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
+                echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
+                echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"]. "; }\n";
 
             }
             ?>

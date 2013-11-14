@@ -81,9 +81,9 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     $p = strip($_GET["p"]);
 
-    if (file_exists("inc/".$p.".php") && $p != "functions" && $p != "config") {
+    if (file_exists("inc/" . $p . ".php") && $p != "functions" && $p != "config") {
 
-        require_once "inc/".$p.".php";
+        require_once "inc/" . $p . ".php";
 
     } else if (in_array($p, $pages)) {
 

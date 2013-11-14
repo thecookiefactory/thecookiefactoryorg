@@ -78,7 +78,7 @@ function getname($id, $span = false) {
 
     } else if (isset($span) && $span == true) {
 
-        return "<span class='admin-name'>".$nr["name"]."</span>";
+        return "<span class='admin-name'>" . $nr["name"] . "</span>";
 
     }
 
@@ -87,7 +87,7 @@ function getname($id, $span = false) {
 function displaydate($x) {
 
     $x = strtotime($x);
-    return "<time datetime='".date(DATE_W3C, $x)."' title='".date("Y-m-d H:i \C\E\T", $x)."'>".longago($x)."</time>";
+    return "<time datetime='" . date(DATE_W3C, $x) . "' title='" . date("Y-m-d H:i \C\E\T", $x) . "'>" . longago($x) . "</time>";
 
 }
 
@@ -101,7 +101,7 @@ function longago($x) {
 
     } else if ($diff < 60) {
 
-        return $diff." seconds ago";
+        return $diff . " seconds ago";
 
     } else if ($diff < 120) {
 
@@ -109,7 +109,7 @@ function longago($x) {
 
     } else if ($diff < 60*60) {
 
-        return ((int)($diff/60))." minutes ago";
+        return ((int)($diff/60)) . " minutes ago";
 
     } else if ($diff < 60*60*2) {
 
@@ -117,7 +117,7 @@ function longago($x) {
 
     } else if ($diff < 60*60*24) {
 
-        return ((int)($diff/(60*60)))." hours ago";
+        return ((int)($diff/(60*60))) . " hours ago";
 
     } else if ($diff < 2*60*60*24) {
 
@@ -125,7 +125,7 @@ function longago($x) {
 
     } else {
 
-        return ((int)($diff/(60*60*24)))." days ago";
+        return ((int)($diff/(60*60*24))) . " days ago";
 
     }
 
@@ -186,7 +186,7 @@ function register($username) {
 
     if (isset($_SESSION["lp"])) {
 
-        header("Location: /".$_SESSION["lp"]);
+        header("Location: /" . $_SESSION["lp"]);
 
     } else {
 
@@ -257,7 +257,7 @@ function login() {
 
                 if (isset($_SESSION["lp"])) {
 
-                    header("Location: /".$_SESSION["lp"]);
+                    header("Location: /" . $_SESSION["lp"]);
 
                 } else {
 
@@ -278,7 +278,7 @@ function login() {
 
     if (isset($_SESSION["userid"])) {
 
-        echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> ".getname($_SESSION["userid"])."</span></span>";
+        echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . getname($_SESSION["userid"]) . "</span></span>";
 
         if ($user->isAdmin()) {
 
@@ -299,7 +299,7 @@ function login() {
 
         if (isset($_SESSION["lp"])) {
 
-            header("Location: /".$_SESSION["lp"]);
+            header("Location: /" . $_SESSION["lp"]);
 
         } else {
 

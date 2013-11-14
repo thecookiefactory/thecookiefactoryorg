@@ -23,11 +23,11 @@ if ($q->rowCount() != 0) {
     while ($r = $q->fetch()) {
 
         $iii++;
-        
+
         $map = new map($r["id"]);
-        
+
         echo $map->display();
-        
+
         if ($iii == 1) {
 
             ?>

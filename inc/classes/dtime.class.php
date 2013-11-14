@@ -18,7 +18,7 @@ class dtime extends DateTime {
 
         } else if ($diff < 60) {
 
-            return $diff." seconds ago";
+            return $diff . " seconds ago";
 
         } else if ($diff < 120) {
 
@@ -26,7 +26,7 @@ class dtime extends DateTime {
 
         } else if ($diff < 60*60) {
 
-            return ((int)($diff/60))." minutes ago";
+            return ((int)($diff/60)) . " minutes ago";
 
         } else if ($diff < 60*60*2) {
 
@@ -34,7 +34,7 @@ class dtime extends DateTime {
 
         } else if ($diff < 60*60*24) {
 
-            return ((int)($diff/(60*60)))." hours ago";
+            return ((int)($diff/(60*60))) . " hours ago";
 
         } else if ($diff < 2*60*60*24) {
 
@@ -42,7 +42,7 @@ class dtime extends DateTime {
 
         } else {
 
-            return ((int)($diff/(60*60*24)))." days ago";
+            return ((int)($diff/(60*60*24))) . " days ago";
 
         }
 
@@ -50,7 +50,7 @@ class dtime extends DateTime {
 
     public function display() {
 
-        return "<time datetime='".date(DATE_W3C, $this->getTimestamp())."' title='".date("Y-m-d H:i \C\E\T", $this->getTimestamp())."'>".$this->longago()."</time>";
+        return "<time datetime='" . date(DATE_W3C, $this->getTimestamp()) . "' title='" . date("Y-m-d H:i \C\E\T", $this->getTimestamp()) . "'>" . $this->longago() . "</time>";
 
     }
 

@@ -211,13 +211,13 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
                 if (strlen($term) > 21) {
                     ?>
 
-                    <div class='search-title'><?php echo $nr." ".resultbutton().$sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
+                    <div class='search-title'><?php echo $nr . " " . resultbutton() . $sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
 
                     <?php
                 } else {
                     ?>
 
-                    <div class='search-title'><?php echo $nr." ".resultbutton().$sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
+                    <div class='search-title'><?php echo $nr . " " . resultbutton() . $sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
 
                     <?php
                 }
@@ -232,8 +232,8 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                     while ($cr = $cq->fetch()) {
 
-                        echo ".forums-category-".$cr["name"]."         {background-color: #".$cr["hexcode"]."; }\n";
-                        echo ".forums-category-".$cr["name"].":hover   {background-color: #".$cr["hoverhexcode"]."; }\n";
+                        echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
+                        echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"] . "; }\n";
 
                     }
                     ?>
@@ -272,7 +272,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
                             <br>
                             <span class='forums-entry-metadata'>
 
-                                created by <?php echo getname($row["authorid"])." ".displaydate($row["date"]); ?>
+                                created by <?php echo getname($row["authorid"]) . " " . displaydate($row["date"]); ?>
 
                             </span>
                         </td>
@@ -342,7 +342,7 @@ function resultbutton() {
 
     $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
     $prettyname = ($name == "inf") ? "article" : "forum post";
-    return "<form method='post' action='/search/".$term."/'><input type='hidden' value='".$term."' name='searchb'><input class='search-type' value='".$prettyname."' type='submit' name='".$name."'></form>";
+    return "<form method='post' action='/search/" . $term . "/'><input type='hidden' value='" . $term . "' name='searchb'><input class='search-type' value='" . $prettyname . "' type='submit' name='" . $name . "'></form>";
 
 }
 
