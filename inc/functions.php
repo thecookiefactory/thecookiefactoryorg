@@ -209,7 +209,7 @@ function login() {
 
     if (isset($_SESSION["userid"])) {
 
-        echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . getname($_SESSION["userid"]) . "</span></span>";
+        echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . $user->getName() . "</span></span>";
 
         if ($user->isAdmin()) {
 
