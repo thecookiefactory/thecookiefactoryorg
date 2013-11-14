@@ -28,7 +28,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             $nsearch = true;
 
-            $squery = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`text` LIKE :termm or `news`.`title` LIKE :term ORDER BY `news`.`id` DESC");
+            $squery = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
             $squery->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
             $squery->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
             $squery->execute();
