@@ -49,7 +49,7 @@ class forumthread {
 
             try {
 
-                $squery = $con->prepare("SELECT * FROM `forumthreads` WHERE `forumthreads`.`id` = :id");
+                $squery = $con->prepare("SELECT *, BIN(`forumthreads`.`closed`) FROM `forumthreads` WHERE `forumthreads`.`id` = :id");
                 $squery->bindValue("id", $id, PDO::PARAM_INT);
                 $squery->execute();
 
@@ -73,7 +73,7 @@ class forumthread {
                 $this->forumcategory    = new forumcategory($srow["forumcategory"]);
                 $this->map              = ($srow["mapid"] != 0) ? new map($srow["mapid"]) : null;
                 $this->news             = ($srow["newsid"] != 0) ? new news($srow["newsid"]) : null;
-                $this->closed           = $srow["closed"];
+                $this->closed           = (int) $srow["BIN(`forumthreads`.`closed`)"];
 
             } else {
 

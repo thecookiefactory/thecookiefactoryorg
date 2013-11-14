@@ -47,7 +47,7 @@ class news {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `news` WHERE `news`.`stringid` = :id");
+                    $squery = $con->prepare("SELECT *, BIN(`news`.`live`) FROM `news` WHERE `news`.`stringid` = :id");
                     $squery->bindValue("id", $id, PDO::PARAM_STR);
                     $squery->execute();
 
@@ -61,7 +61,7 @@ class news {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+                    $squery = $con->prepare("SELECT *, BIN(`news`.`live`) FROM `news` WHERE `news`.`id` = :id");
                     $squery->bindValue("id", $id, PDO::PARAM_INT);
                     $squery->execute();
 
@@ -85,7 +85,7 @@ class news {
                 $this->editor   = new user($srow["editorid"]);
                 $this->editdate = new dtime($srow["editdate"]);
                 $this->comments = $srow["comments"];
-                $this->live     = $srow["live"];
+                $this->live     = (int) $srow["BIN(`news`.`live`)"];
                 $this->stringid = $srow["stringid"];
 
             }

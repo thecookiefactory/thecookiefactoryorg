@@ -39,7 +39,7 @@ class user {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `users` WHERE `users`.`name` = :id");
+                    $squery = $con->prepare("SELECT *, BIN(`users`.`admin`) FROM `users` WHERE `users`.`name` = :id");
                     $squery->bindValue("id", $id, PDO::PARAM_STR);
                     $squery->execute();
 
@@ -53,7 +53,7 @@ class user {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `users` WHERE `users`.`id` = :id");
+                    $squery = $con->prepare("SELECT *, BIN(`users`.`admin`) FROM `users` WHERE `users`.`id` = :id");
                     $squery->bindValue("id", $id, PDO::PARAM_INT);
                     $squery->execute();
 
@@ -72,7 +72,7 @@ class user {
                 $this->id           = $srow["id"];
                 $this->name         = $srow["name"];
                 $this->steamid      = $srow["steamid"];
-                $this->admin        = $srow["admin"];
+                $this->admin        = (int) $srow["BIN(`users`.`admin`)"];
                 $this->cookieh      = $srow["cookieh"];
                 $this->date         = new dtime($srow["date"]);
                 $this->twitchname   = $srow["twitchname"];

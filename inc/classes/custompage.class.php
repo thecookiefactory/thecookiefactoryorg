@@ -37,7 +37,7 @@ class custompage {
 
             try {
 
-                $squery = $con->prepare("SELECT * FROM `custompages` WHERE `custompages`.`stringid` = :stringid");
+                $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`stringid` = :stringid");
                 $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
                 $squery->execute();
 
@@ -56,7 +56,7 @@ class custompage {
                 $this->text     = $srow["text"];
                 $this->date     = new dtime($srow["date"]);
                 $this->editdate = new dtime($srow["editdate"]);
-                $this->live     = $srow["live"];
+                $this->live     = (int) $srow["BIN(`custompages`.`live`)"];
                 $this->stringid = $srow["stringid"];
 
             } else {

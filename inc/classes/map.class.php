@@ -50,7 +50,7 @@ class map {
 
             try {
 
-                $squery = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+                $squery = $con->prepare("SELECT *, BIN(`maps`.`comments`) FROM `maps` WHERE `maps`.`id` = :id");
                 $squery->bindValue("id", $id, PDO::PARAM_INT);
                 $squery->execute();
 
@@ -72,7 +72,7 @@ class map {
                 $this->editdate         = new dtime($srow["editdate"]);
                 $this->dl               = $srow["dl"];
                 $this->extension        = $srow["extension"];
-                $this->comments         = $srow["comments"];
+                $this->comments         = (int) $srow["BIN(`maps`.`comments`)"];
                 $this->game             = new game($srow["gameid"]);
                 $this->link             = $srow["link"];
                 $this->downloadcount    = $srow["downloadcount"];
