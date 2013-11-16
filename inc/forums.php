@@ -45,7 +45,6 @@ if ($action == "add" && $user->isLoggedIn()) {
 
     if ((isset($_GET["id"]) && is_numeric($_GET["id"])) || (isset($tid) && is_numeric($tid))) {
 
-        // SHOW ONE THREAD
         $thread = new forumthread(isset($tid) ? strip($tid) : strip($_GET["id"]));
 
         if (($thread->isReal() && !$thread->isNewsThread()) || ($thread->isNewsThread() && isset($tid))) {
@@ -78,12 +77,20 @@ if ($action == "add" && $user->isLoggedIn()) {
 
         if ($cat->isReal()) {
 
-            $query = $con->prepare("SELECT `forumthreads`.`id`
-                                    FROM `forumthreads`
-                                    WHERE `forumthreads`.`forumcategory` = :cat AND `forumthreads`.`forumcategory` <> 0
-                                    ORDER BY `forumthreads`.`lastdate` DESC");
-            $query->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-            $query->execute();
+            try {
+
+                $squery = $con->prepare("SELECT `forumthreads`.`id`
+                                        FROM `forumthreads`
+                                        WHERE `forumthreads`.`forumcategory` = :cat AND `forumthreads`.`forumcategory` <> 0
+                                        ORDER BY `forumthreads`.`lastdate` DESC");
+                $squery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                $squery->execute();
+
+            } catch (PDOException $e) {
+
+                die("An error occurred while trying to fetch the threads.");
+
+            }
 
             ?>
             <a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
@@ -91,7 +98,15 @@ if ($action == "add" && $user->isLoggedIn()) {
 
         } else {
 
-            $query = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
+            try {
+
+                $squery = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
+
+            } catch (PDOException $e) {
+
+                die("An error occurred while trying to fetch the threads.");
+
+            }
 
         }
 
@@ -100,14 +115,24 @@ if ($action == "add" && $user->isLoggedIn()) {
         <style type='text/css' scoped>
 
             <?php
-            $cq = $con->query("SELECT * FROM `forumcategories`");
 
-            while ($cr = $cq->fetch()) {
+            try {
 
-                echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
-                echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"]. "; }\n";
+                $cq = $con->query("SELECT * FROM `forumcategories`");
+
+                while ($cr = $cq->fetch()) {
+
+                    echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
+                    echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"]. "; }\n";
+
+                }
+
+            } catch (PDOException $e) {
+
+                die("An error occurred while trying to fetch the forum categories.");
 
             }
+
             ?>
 
         </style>
@@ -122,11 +147,11 @@ if ($action == "add" && $user->isLoggedIn()) {
 
         <?php
 
-        if ($query->rowCount() != 0) {
+        if ($squery->rowCount() != 0) {
 
-            while ($row = $query->fetch()) {
+            while ($srow = $squery->fetch()) {
 
-                $thread = new forumthread($row["id"]);
+                $thread = new forumthread($srow["id"]);
                 $thread->displayRow();
 
             }

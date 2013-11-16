@@ -41,18 +41,22 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 <?php
 
-// fetching the custom pages' names
-$pagesquery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
+try {
 
-$pages = Array();
+    $squery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
 
-while ($pagesrow = $pagesquery->fetch()){
+    $pages = Array();
 
-    // and storing them in an array
-    $pages[] = $pagesrow["stringid"];
-    ?>
-    <a class='menu-item' href='/<?php echo $pagesrow["stringid"]; ?>'><?php echo $pagesrow["title"]; ?></a>
-    <?php
+    while ($srow = $squery->fetch()){
+
+        $pages[] = $srow["stringid"];
+        echo "<a class='menu-item' href='/" . $srow["stringid"] . "'>" . $srow["title"] . "</a>";
+
+    }
+
+} catch (PDOException $e) {
+
+    echo "An error occurred while trying to fetch the custom pages.";
 
 }
 
@@ -65,7 +69,9 @@ while ($pagesrow = $pagesquery->fetch()){
 </form>
 
 <?php
+
 login();
+
 ?>
 
 </div>
@@ -127,14 +133,24 @@ function isAnyoneLive() {
 
     global $con;
 
-    $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams`");
+    try {
 
-    while ($streamsrow = $streamsquery->fetch()) {
-        if (vf($streamsrow["title"])) {
+        $squery = $con->query("SELECT `streams`.`title` FROM `streams`");
 
-            return true;
+        while ($srow = $squery->fetch()) {
+
+            if (vf($srow["title"])) {
+
+                return true;
+
+            }
 
         }
+
+    } catch (PDOException $e) {
+
+        echo "An error occurred while trying to fetch the streams.";
+
     }
 
     return false;

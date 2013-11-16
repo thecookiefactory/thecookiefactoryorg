@@ -10,7 +10,7 @@ if (vf($_GET["name"])) {
     $q->bindValue("name", strip($_GET["name"]), PDO::PARAM_STR);
     $q->execute();
 
-    if ($q->rowCount() === 0) {
+    if ($q->rowCount() == 0) {
 
         echo "0";
 
@@ -25,5 +25,3 @@ if (vf($_GET["name"])) {
     header("Location: /notfound.php");
 
 }
-
-?>

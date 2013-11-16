@@ -55,5 +55,3 @@ class dtime extends DateTime {
     }
 
 }
-
-?>
