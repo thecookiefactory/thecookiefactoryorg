@@ -5,6 +5,7 @@ if (!isset($r_c)) header("Location: /notfound.php");
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/forumcategory.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/forumpost.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/map.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/news.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 
