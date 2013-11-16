@@ -375,7 +375,7 @@ class forumthread {
 
         ?>
         <form action='/forums/add/' method='post'>
-            <label class='forums-newpost-select-label' for="cat">Category:
+            <label class='forums-newpost-select-label' for='cat'>Category:
             <select class='forums-newpost-select' name='cat'>
 
             <?php
@@ -524,7 +524,7 @@ class forumthread {
 
         ?>
         <form action='/forums/edit/<?php echo $this->id; ?>/' method='post'>
-            <label class='forums-newpost-select-label' for="cat">Category:
+            <label class='forums-newpost-select-label' for='cat'>Category:
             <select class='forums-newpost-select' name='cat'>
 
             <?php

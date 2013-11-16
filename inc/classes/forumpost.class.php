@@ -161,19 +161,15 @@ class forumpost {
                 $uq->bindValue("pid", $this->id, PDO::PARAM_INT);
                 $uq->execute();
 
-                if ($uq->rowCount() == 1) {
+                $thread = new forumthread($this->threadid);
 
-                    $thread = new forumthread($this->threadid);
+                if (!$thread->isNewsThread()) {
 
-                    if (!$thread->isNewsThread()) {
+                    header("Location: /forums/" . $this->threadid);
 
-                        header("Location: /forums/" . $this->threadid);
+                } else {
 
-                    } else {
-
-                        header("Location: /news/" . $thread->getNewsStringId());
-
-                    }
+                    header("Location: /news/" . $thread->getNewsStringId());
 
                 }
 
@@ -198,7 +194,7 @@ class forumpost {
                 </div>
             </div>
             <div>
-                <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'><?php echo $this->text; ?></textarea>
+                <textarea class='forums-newpost-text' name='text' autofocus required placeholder='Type your post here...' maxlength='20000'><?php echo $this->text; ?></textarea>
             </div>
         </div>
 
