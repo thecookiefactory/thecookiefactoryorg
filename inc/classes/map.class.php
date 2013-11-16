@@ -150,7 +150,8 @@ class map {
                       $ca = $cq->fetch();
 
                       $thread = new forumthread($ca["id"]);
-                      echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount() . " replies</a>";
+                      echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount();
+                      echo ($thread->replyCount() == 1) ? " reply</a>" : " replies</a>";
 
                   } catch (PDOException $e) {
 
