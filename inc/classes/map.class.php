@@ -69,7 +69,7 @@ class map {
                 $this->text             = $srow["text"];
                 $this->author           = new user($srow["authorid"]);
                 $this->date             = new dtime($srow["date"]);
-                $this->editdate         = new dtime($srow["editdate"]);
+                $this->editdate         = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
                 $this->dl               = $srow["dl"];
                 $this->extension        = $srow["extension"];
                 $this->comments         = (int) $srow["BIN(`maps`.`comments`)"];

@@ -70,7 +70,7 @@ class forumthread {
                 $this->date             = new dtime($srow["date"]);
                 $this->editdate         = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
                 $this->lastdate         = new dtime($srow["lastdate"]);
-                $this->forumcategory    = new forumcategory($srow["forumcategory"]);
+                $this->forumcategory    = ($srow["forumcategory"] != 0) ? new forumcategory($srow["forumcategory"]) : null;
                 $this->map              = ($srow["mapid"] != 0) ? new map($srow["mapid"]) : null;
                 $this->news             = ($srow["newsid"] != 0) ? new news($srow["newsid"]) : null;
                 $this->closed           = (int) $srow["BIN(`forumthreads`.`closed`)"];
@@ -326,6 +326,7 @@ class forumthread {
     protected function addProcess() {
 
         global $con;
+        global $user;
 
         $authorid = $user->getId();
         $cat = new forumcategory(strip($_POST["cat"]));

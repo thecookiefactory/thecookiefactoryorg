@@ -112,6 +112,8 @@ class forumpost {
 
     public function edit() {
 
+        global $user;
+
         if (($this->author->getId() != $user->getId()) && !$user->isAdmin()) {
 
             echo "You dont have the right!!";

@@ -82,8 +82,8 @@ class news {
                 $this->text     = $srow["text"];
                 $this->author   = new user($srow["authorid"]);
                 $this->date     = new dtime($srow["date"]);
-                $this->editor   = new user($srow["editorid"]);
-                $this->editdate = new dtime($srow["editdate"]);
+                $this->editor   = ($srow["editorid"] != null) ? new user($srow["editorid"]) : null;
+                $this->editdate = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
                 $this->comments = (int) $srow["BIN(`news`.`comments`)"];
                 $this->live     = (int) $srow["BIN(`news`.`live`)"];
                 $this->stringid = $srow["stringid"];

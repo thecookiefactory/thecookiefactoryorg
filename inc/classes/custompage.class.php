@@ -55,7 +55,7 @@ class custompage {
                 $this->title    = $srow["title"];
                 $this->text     = $srow["text"];
                 $this->date     = new dtime($srow["date"]);
-                $this->editdate = new dtime($srow["editdate"]);
+                $this->editdate = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
                 $this->live     = (int) $srow["BIN(`custompages`.`live`)"];
                 $this->stringid = $srow["stringid"];
 
