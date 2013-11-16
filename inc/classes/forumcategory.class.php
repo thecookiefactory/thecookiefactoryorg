@@ -27,21 +27,39 @@ class forumcategory {
     protected $hoverhexcode = null;
     protected $date         = null;
 
-    public function __construct($id = null) {
+    public function __construct($id = null, $field = null) {
 
         global $con;
 
         if ($id != null) {
 
-            try {
+            if ($field == "name") {
 
-                $squery = $con->prepare("SELECT * FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
-                $squery->bindValue("id", $id, PDO::PARAM_INT);
-                $squery->execute();
+                try {
 
-            } catch (PDOException $e) {
+                    $squery = $con->prepare("SELECT * FROM `forumcategories` WHERE `forumcategories`.`name` = :id");
+                    $squery->bindValue("id", $id, PDO::PARAM_STR);
+                    $squery->execute();
 
-                echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+                } catch (PDOException $e) {
+
+                    echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+
+                }
+
+            } else {
+
+                try {
+
+                    $squery = $con->prepare("SELECT * FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
+                    $squery->bindValue("id", $id, PDO::PARAM_INT);
+                    $squery->execute();
+
+                } catch (PDOException $e) {
+
+                    echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+
+                }
 
             }
 
@@ -70,7 +88,7 @@ class forumcategory {
 
         ?>
         <td class='forums-entry-category forums-category-<?php echo $this->getName(); ?>'>
-            <a class='forums-entry-category-text' href='/forums/category/<?php echo $this->getId(); ?>'>
+            <a class='forums-entry-category-text' href='/forums/category/<?php echo $this->getName(); ?>'>
 
                 <?php echo $this->getName(); ?>
 

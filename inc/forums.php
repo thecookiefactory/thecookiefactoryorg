@@ -73,7 +73,8 @@ if ($action == "add" && $user->isLoggedIn()) {
 
         }
 
-        $cat = new forumcategory(isset($_GET["cat"]) ? strip($_GET["cat"]) : null);
+        $get = isset($_GET["cat"]) ? strip($_GET["cat"]) : null;
+        $cat = new forumcategory($get, "name");
 
         if ($cat->isReal()) {
 
