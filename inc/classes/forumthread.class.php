@@ -582,6 +582,12 @@ class forumthread {
 
     }
 
+    public function getId() {
+
+        return $this->id;
+
+    }
+
     public function getNewsStringId() {
 
         return $this->news->getStringId();
