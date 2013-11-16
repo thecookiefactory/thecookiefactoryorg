@@ -71,6 +71,8 @@ class forumpost {
 
         global $user;
 
+        $thread = new forumthread($this->threadid);
+
         ?>
         <div class='forums-post'>
             <div class='forums-post-header'>
@@ -81,7 +83,7 @@ class forumpost {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -114,7 +116,9 @@ class forumpost {
 
         global $user;
 
-        if (($this->author->getId() != $user->getId()) && !$user->isAdmin()) {
+        $thread = new forumthread($this->threadid);
+
+        if (($this->author->getId() != $user->getId() || $thread->isClosed()) && !$user->isAdmin()) {
 
             echo "You dont have the right!!";
 

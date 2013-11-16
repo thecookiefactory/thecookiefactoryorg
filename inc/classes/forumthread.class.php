@@ -255,7 +255,7 @@ class forumthread {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId() && !$this->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -419,7 +419,7 @@ class forumthread {
         global $con;
         global $user;
 
-        if (($this->author->getId() != $user->getId()) && !$user->isAdmin()) {
+        if ((($this->author->getId() != $user->getId()) || $this->isClosed()) && !$user->isAdmin()) {
 
             echo "You dont have the right!!";
 
