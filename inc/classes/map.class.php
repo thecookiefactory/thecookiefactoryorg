@@ -139,10 +139,11 @@ class map {
               <span class='map-data-prop map-data-date'><?php echo $this->editdate->display(); ?></span>
               <?php
                 if ($this->comments == 1) {
-              ?>
 
-                  <span class='map-data-prop map-data-topic'>
-                    <?php
+                  echo "<span class='map-data-prop map-data-topic'>";
+
+                  try {
+
                       $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
                       $cq->bindValue("id", $this->id, PDO::PARAM_INT);
                       $cq->execute();
@@ -150,10 +151,15 @@ class map {
 
                       $thread = new forumthread($ca["id"]);
                       echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount() . " replies</a>";
-                    ?>
-                  </span>
 
-              <?php
+                  } catch (PDOException $e) {
+
+                      echo $e->getMessage();
+
+                  }
+
+                  echo "</span>";
+
                 }
               ?>
             </div>
