@@ -89,6 +89,8 @@ class map {
 
     public function display() {
 
+        global $con;
+
         ?>
         <div class='map-name' id='<?php echo $this->name; ?>'><?php echo $this->name; ?></div>
         <div class='map-container'>
