@@ -444,75 +444,91 @@ class forumthread {
         global $con;
         global $user;
 
-        if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+        $cat = new forumcategory(strip($_POST["cat"]));
 
-            if ($this->map != null) {
+        if (!$cat->isReal()) {
 
-                $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
-                $uq->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
-                $uq->execute();
-
-            }
-
-            $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
-            $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
-            $dq->execute();
-
-            $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
-            $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
-            $dq->execute();
-
-            if ($dq->rowCount() == 1) {
-
-                header("Location: /forums");
-
-            }
+            echo "That does not seem like a real forum category. Sorry, kiddo.";
 
         } else {
 
-            $cat = new forumcategory(strip($_POST["cat"]));
+            $title = strip($_POST["title"]);
 
-            if (!$cat->isReal()) {
+            if (strlen($title) > 37) {
 
-                echo "that does not seem like a real forum categorny+";
+                echo "Please enter a title shorter than 38 characters.";
 
             } else {
 
-                $title = strip($_POST["title"]);
+                $text = strip($_POST["text"]);
 
-                if (strlen($title) > 37) {
+                if (strlen($text) > 20000) {
 
-                    echo "please enter a title shorter than 38 characters";
+                    echo "Your comment must be less than 20,000 characters long.";
 
                 } else {
 
-                    $text = strip($_POST["text"]);
-
-                    if (strlen($text) > 20000) {
-
-                        echo "Your comment must be less than 20 000 characters long.";
-
-                    } else {
-
-                        $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
-                        $uq->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                        $uq->bindValue("title", $title, PDO::PARAM_STR);
-                        $uq->bindValue("text", $text, PDO::PARAM_STR);
-                        $uq->bindValue("tid", $this->id, PDO::PARAM_INT);
-                        $uq->execute();
-
-                        // redirect
-                        if ($uq->rowCount() == 1) {
-
-                            header("Location: /forums/" . $this->id);
-
-                        }
-
-                    }
+                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
+                    $uq->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                    $uq->bindValue("title", $title, PDO::PARAM_STR);
+                    $uq->bindValue("text", $text, PDO::PARAM_STR);
+                    $uq->bindValue("tid", $this->id, PDO::PARAM_INT);
+                    $uq->execute();
 
                 }
 
             }
+
+        }
+
+        if ($user->isAdmin()) {
+
+            if (isset($_POST["closed"]) && $_POST["closed"] == "on" && !$this->isClosed()) {
+
+                $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
+                $uq->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $uq->execute();
+
+            } else if (!isset($_POST["closed"]) && $this->isClosed()) {
+
+                $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
+                $uq->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $uq->execute();
+
+            }
+
+            if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
+
+                if ($this->map != null) {
+
+                    $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                    $uq->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
+                    $uq->execute();
+
+                }
+
+                $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+                $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $dq->execute();
+
+                $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $dq->execute();
+
+                if ($dq->rowCount() == 1) {
+
+                    header("Location: /forums");
+
+                }
+
+            }
+
+        }
+
+        // redirect
+        if ($uq->rowCount() == 1) {
+
+            header("Location: /forums/" . $this->id);
 
         }
 
@@ -561,6 +577,7 @@ class forumthread {
             if ($user->isAdmin()) {
 
                 echo "delete this whole thread <input type='checkbox' name='delete'>";
+                echo "closed thread?"; echo ($this->isClosed()) ? " <input type='checkbox' name='closed' checked>" : " <input type='checkbox' name='closed'>";
 
             }
         ?>
