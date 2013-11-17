@@ -3,6 +3,7 @@
 if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
 
 /**
  * user class
@@ -80,6 +81,122 @@ class user extends master {
             } else {
 
                 echo "Could not find a user with the given id.";
+
+            }
+
+        }
+
+    }
+
+    public function login() {
+
+        global $con;
+        global $config;
+
+        if ($this->isReal()) {
+
+            echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . $this->getName() . "</span></span>";
+
+            if ($this->isAdmin()) {
+
+                echo "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
+
+            }
+
+            echo "<span class='menu-item'><a href='/logout'>log out</a></span>";
+
+            if (isset($_GET["p"]) && $_GET["p"] == "logout") {
+
+                setcookie("userid", "", time() - 100000, "/");
+                unset($_SESSION["steamauth"]);
+                unset($_SESSION["steamid"]);
+                unset($_SESSION["userid"]);
+
+                if (isset($_SESSION["lp"])) {
+
+                    header("Location: /" . $_SESSION["lp"]);
+
+                } else {
+
+                    header("Location: /news");
+
+                }
+
+            }
+
+        } else {
+
+            if (!isset($OpenID)) {
+
+                $OpenID = new LightOpenID($config["domain"]);
+
+            }
+
+            if (!$OpenID->mode) {
+
+                if (isset($_GET["p"]) && $_GET["p"] == "login") {
+
+                    $OpenID->identity = "http://steamcommunity.com/openid";
+                    header("Location: {$OpenID->authUrl()}");
+
+                }
+
+                if (!isset($_SESSION["userid"])) {
+
+                    echo "<a class='menu-item' href='/login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
+
+                }
+
+            } elseif ($OpenID->mode == "cancel") {
+
+                echo "user canceled auth";
+
+            } else {
+
+                if (!isset($_SESSION["userid"])) {
+
+                    $_SESSION["steamauth"] = $OpenID->validate() ? $OpenID->identity : null;
+                    $_SESSION["steamid"] = str_replace("http://steamcommunity.com/openid/id/", "", $_SESSION["steamauth"]);
+
+                    // checking if the user has an account
+                    $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
+                    $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
+                    $uq->execute();
+
+                    if ($uq->rowCount() == 1) {
+
+                        // yes
+                        $ua = $uq->fetch();
+
+                        $_SESSION["userid"] = $ua["id"];
+
+                        $cookieh = cookieh();
+
+                        $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+                        $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+                        $uq->bindValue("id", $ua["id"], PDO::PARAM_INT);
+                        $uq->execute();
+
+                        setcookie("userid", $cookieh, time() + 2592000, "/");
+
+                        if (isset($_SESSION["lp"])) {
+
+                            header("Location: /" . $_SESSION["lp"]);
+
+                        } else {
+
+                            header("Location: /news");
+
+                        }
+
+                    } else {
+
+                        // no
+                        header("Location: /register");
+
+                    }
+
+                }
 
             }
 

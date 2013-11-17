@@ -71,7 +71,7 @@ try {
 
 <?php
 
-login();
+$user->login();
 
 ?>
 
