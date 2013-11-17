@@ -27,38 +27,7 @@ function tformat($x) {
 
 function vf($x) {
 
-    return (strip($x) != "" && strip($x) != null) ? true : false;
-
-}
-
-function ccookies() {
-
-    global $con;
-
-    if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"])) {
-
-        $cv = $_COOKIE["userid"];
-
-        $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
-        $cq->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
-        $cq->execute();
-
-        $cr = $cq->fetch();
-
-        if ($cq->rowCount() == 1) {
-
-            $_SESSION["userid"] = $cr["id"];
-
-            $cookieh = cookieh();
-            $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-            $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-            $uq->bindValue("id", $cr["id"], PDO::PARAM_INT);
-            $uq->execute();
-            setcookie("userid", $cookieh, time() + 2592000, "/");
-
-        }
-
-    }
+    return (strip($x) != "" && strip($x) != null);
 
 }
 
