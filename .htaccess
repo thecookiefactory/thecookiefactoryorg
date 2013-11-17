@@ -12,13 +12,7 @@ ErrorDocument 404 /notfound.php
 
 RewriteEngine on
 
-RewriteCond %{HTTP_HOST} ^www\.
-RewriteRule ^(.*)$ http:\/\/%{HTTP_HOST}\/$1 [R=301,L]
-
 RewriteRule \.(css|jpe?g|gif|png)$ - [L]
-
-RewriteCond %{REQUEST_URI} ^\/[^\.]+[^\/]$
-RewriteRule ^(.*)$ http:\/\/%{HTTP_HOST}\/$1\/ [R=301,L]
 
 # news/page/1 -> /?p=news&page=xy
 RewriteRule ^news\/page\/(\d+)\/?$ \/index.php?p=news&page=$1 [L]
