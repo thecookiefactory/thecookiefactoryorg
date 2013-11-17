@@ -20,7 +20,7 @@ if ($user->isReal()) {
 
             $username = $_POST["username"];
 
-            register($username);
+            $user->register($username);
 
         }
 
