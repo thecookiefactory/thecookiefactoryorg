@@ -6,7 +6,7 @@ if (!isset($r_c)) header("Location: /notfound.php");
  * game class
  *
  */
-class game {
+class game extends master {
 
     /**
      * variables

@@ -9,7 +9,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * forum post class
  *
  */
-class forumpost {
+class forumpost extends master {
 
     /**
      * variables
@@ -83,7 +83,7 @@ class forumpost {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -213,12 +213,6 @@ class forumpost {
         </form>
 
         <?php
-
-    }
-
-    public function isReal() {
-
-        return ($this->id != null);
 
     }
 

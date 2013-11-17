@@ -9,7 +9,6 @@ require_once "inc/markdown/markdown.php";
 $_SESSION["lp"] = "news";
 
 if (!isset($_GET["id"]) || !vf($_GET["id"])) {
-// DISPLAY ALL THE NEWS
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
 

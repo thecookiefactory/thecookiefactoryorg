@@ -8,7 +8,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  * custom page class
  *
  */
-class custompage {
+class custompage extends master {
 
     /**
      * variables

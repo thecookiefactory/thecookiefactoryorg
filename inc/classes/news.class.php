@@ -10,7 +10,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * news class
  *
  */
-class news {
+class news extends master {
 
     /**
      * variables
@@ -216,12 +216,6 @@ class news {
     public function getStringId() {
 
         return $this->stringid;
-
-    }
-
-    public function isReal() {
-
-        return ($this->id != null);
 
     }
 

@@ -8,7 +8,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  * user class
  *
  */
-class user {
+class user extends master {
 
     /**
      * variables
@@ -87,12 +87,6 @@ class user {
 
     }
 
-    public function getId() {
-
-        return $this->id;
-
-    }
-
     public function getName($span = false) {
 
         if (!$this->isAdmin() || $span !== true) {
@@ -116,12 +110,6 @@ class user {
     public function isAdmin() {
 
         return ($this->admin != 0);
-
-    }
-
-    public function isLoggedIn() {
-
-        return ($this->id != null);
 
     }
 

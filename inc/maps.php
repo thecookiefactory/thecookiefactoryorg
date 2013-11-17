@@ -14,41 +14,50 @@ $_SESSION["lp"] = $p;
 
 <?php
 
-$q = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
+try {
 
-if ($q->rowCount() != 0) {
+    $squery = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    $iii = 0;
+    if ($squery->rowCount() != 0) {
 
-    while ($r = $q->fetch()) {
+        $iii = 0;
 
-        $iii++;
+        while ($srow = $squery->fetch()) {
 
-        $map = new map($r["id"]);
+            $iii++;
 
-        echo $map->display();
+            $map = new map($srow["id"]);
 
-        if ($iii == 1) {
+            echo $map->display();
 
-            ?>
-            <div class='map-ad'>
-                  <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-                  <!-- Maps Inline -->
-                  <ins class='adsbygoogle'
-                       style='display:inline-block;width:728px;height:90px'
-                       data-ad-client='ca-pub-8578399795841431'
-                       data-ad-slot='8918199475'></ins>
-                  <script>
-                  (adsbygoogle = window.adsbygoogle || []).push({});
-                  </script>
-            </div>
-            <?php
+            if ($iii == 1) {
+
+                ?>
+                <div class='map-ad'>
+                      <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
+                      <!-- Maps Inline -->
+                      <ins class='adsbygoogle'
+                           style='display:inline-block;width:728px;height:90px'
+                           data-ad-client='ca-pub-8578399795841431'
+                           data-ad-slot='8918199475'></ins>
+                      <script>
+                      (adsbygoogle = window.adsbygoogle || []).push({});
+                      </script>
+                </div>
+                <?php
+
+            }
 
         }
+
+    } else {
+
+        echo "The are no maps.";
+
     }
 
-} else {
+} catch (PDOException $e) {
 
-    echo "The are no maps.";
+    echo "An error occurred while trying to fetch the maps.";
 
 }

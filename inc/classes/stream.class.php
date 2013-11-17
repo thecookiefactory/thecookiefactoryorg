@@ -8,7 +8,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * stream class
  *
  */
-class stream {
+class stream extends master {
 
     /**
      * variables
@@ -139,12 +139,6 @@ class stream {
         </a>
 
         <?php
-
-    }
-
-    public function exists() {
-
-        return ($this->id != null);
 
     }
 

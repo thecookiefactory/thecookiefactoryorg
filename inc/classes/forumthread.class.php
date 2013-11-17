@@ -13,7 +13,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * forum thread class
  *
  */
-class forumthread {
+class forumthread extends master {
 
     /**
      * variables
@@ -146,7 +146,7 @@ class forumthread {
 
         if (!$this->isClosed()) {
 
-            if ($user->isLoggedIn()) {
+            if ($user->isReal()) {
 
                 ?>
                 <hr><h1 class='comments-title'>Reply to this thread</h1>
@@ -215,7 +215,7 @@ class forumthread {
         global $con;
         global $user;
 
-        if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && $user->isLoggedIn() && !$this->isClosed()) {
+        if (isset($_POST["cp"]) && isset($_POST["text"]) && vf($_POST["text"]) && $user->isReal() && !$this->isClosed()) {
 
             $author = $user->getId();
             $text = strip($_POST["text"]);
@@ -255,7 +255,7 @@ class forumthread {
                 </div>
                 <div class='forums-post-metadata'>
 
-                    <?php if (($user->isLoggedIn() && $this->author->getId() == $user->getId() && !$this->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
+                    <?php if (($user->isReal() && $this->author->getId() == $user->getId() && !$this->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
                     <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
 
                     <span class='forums-post-metadata-item'>
@@ -600,12 +600,6 @@ class forumthread {
 
     }
 
-    public function getId() {
-
-        return $this->id;
-
-    }
-
     public function getNewsStringId() {
 
         return $this->news->getStringId();
@@ -621,12 +615,6 @@ class forumthread {
     public function isClosed() {
 
         return ($this->closed != null);
-
-    }
-
-    public function isReal() {
-
-        return ($this->id != null);
 
     }
 

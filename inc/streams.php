@@ -45,11 +45,11 @@ if (isset($_GET["id"])) {
 
     $streamer = new user($id, "name");
 
-    if ($streamer->isLoggedIn()) {
+    if ($streamer->isReal()) {
 
         $stream = new stream($streamer->getId(), "author");
 
-        if ($stream->exists()) {
+        if ($stream->isReal()) {
 
             $stream->display();
 

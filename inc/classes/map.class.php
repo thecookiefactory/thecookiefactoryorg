@@ -12,7 +12,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * map class
  *
  */
-class map {
+class map extends master {
 
     /**
      * variables
@@ -210,12 +210,6 @@ class map {
         }
 
         return $pictures;
-
-    }
-
-    public function getId() {
-
-        return $this->id;
 
     }
 

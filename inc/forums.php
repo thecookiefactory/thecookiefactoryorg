@@ -9,12 +9,12 @@ $_SESSION["lp"] = $p;
 
 $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 
-if ($action == "add" && $user->isLoggedIn()) {
+if ($action == "add" && $user->isReal()) {
 
     $thread = new forumthread();
     $thread->addnew();
 
-} else if ($action == "edit" && $user->isLoggedIn() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
+} else if ($action == "edit" && $user->isReal() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
 
     $tid = strip($_GET["tid"]);
 
@@ -59,7 +59,7 @@ if ($action == "add" && $user->isLoggedIn()) {
 
     } else {
 
-        if ($user->isLoggedIn()) {
+        if ($user->isReal()) {
 
             ?>
 

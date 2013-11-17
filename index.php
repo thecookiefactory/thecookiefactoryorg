@@ -4,6 +4,7 @@ session_start();
 
 $r_c = 0;
 require_once "inc/functions.php";
+require_once "inc/classes/master.class.php";
 require_once "inc/classes/user.class.php";
 require_once "inc/lightopenid/openid.php";
 

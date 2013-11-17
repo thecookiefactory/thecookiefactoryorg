@@ -4,7 +4,7 @@ if (!isset($r_c)) header("Location: /notfound.php");
 
 include_once "analyticstracking.php";
 
-if ($user->isLoggedIn()) {
+if ($user->isReal()) {
 
     ?>
 

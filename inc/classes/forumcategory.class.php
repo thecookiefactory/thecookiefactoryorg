@@ -8,7 +8,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  * forum category class
  *
  */
-class forumcategory {
+class forumcategory extends master {
 
     /**
      * variables
@@ -98,12 +98,6 @@ class forumcategory {
 
     }
 
-    public function getId() {
-
-        return $this->id;
-
-    }
-
     public function getName() {
 
         return $this->name;
@@ -113,12 +107,6 @@ class forumcategory {
     public function getLongName() {
 
         return $this->longname;
-
-    }
-
-    public function isReal() {
-
-        return ($this->id != null);
 
     }
 
