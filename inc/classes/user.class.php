@@ -8,6 +8,23 @@ require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
 /**
  * user class
  *
+ * function __construct
+ * (line 50)
+ *
+ * function login
+ * (line 108)
+ *
+ * function register
+ * (line 224)
+ *
+ * function getName
+ * (line 283)
+ *
+ * function getTwitchName
+ * (line 297)
+ *
+ * function isAdmin
+ * (line 303)
  */
 class user extends master {
 

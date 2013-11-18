@@ -5,6 +5,11 @@ if (!isset($r_c)) header("Location: /notfound.php");
 /**
  * date & time class
  *
+ * function longago
+ * (line 16)
+ *
+ * function display
+ * (line 56)
  */
 class dtime extends DateTime {
 

@@ -9,6 +9,14 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 /**
  * news class
  *
+ * function __construct
+ * (line 48)
+ *
+ * function display
+ * (line 105)
+ *
+ * function getStringId
+ * (line 224)
  */
 class news extends master {
 

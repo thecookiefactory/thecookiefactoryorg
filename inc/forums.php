@@ -12,7 +12,7 @@ $action = isset($_GET["action"]) ? strip($_GET["action"]) : "";
 if ($action == "add" && $user->isReal()) {
 
     $thread = new forumthread();
-    $thread->addnew();
+    $thread->addNew();
 
 } else if ($action == "edit" && $user->isReal() && isset($_GET["tid"]) && is_numeric($_GET["tid"])) {
 

@@ -11,6 +11,17 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 /**
  * map class
  *
+ * function __construct
+ * (line 57)
+ *
+ * function display
+ * (line 102)
+ *
+ * function getPictures
+ * (line 195)
+ *
+ * function getName
+ * (line 227)
  */
 class map extends master {
 
