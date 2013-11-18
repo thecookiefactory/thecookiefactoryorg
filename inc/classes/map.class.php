@@ -155,12 +155,12 @@ class map extends master {
 
                   try {
 
-                      $cq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
-                      $cq->bindValue("id", $this->id, PDO::PARAM_INT);
-                      $cq->execute();
-                      $ca = $cq->fetch();
+                      $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                      $squery->bindValue("id", $this->id, PDO::PARAM_INT);
+                      $squery->execute();
+                      $srow = $squery->fetch();
 
-                      $thread = new forumthread($ca["id"]);
+                      $thread = new forumthread($srow["id"]);
                       echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount();
                       echo ($thread->replyCount() == 1) ? " reply</a>" : " replies</a>";
 

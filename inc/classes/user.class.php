@@ -176,23 +176,23 @@ class user extends master {
                     $_SESSION["steamid"] = str_replace("http://steamcommunity.com/openid/id/", "", $_SESSION["steamauth"]);
 
                     // checking if the user has an account
-                    $uq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
-                    $uq->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
-                    $uq->execute();
+                    $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
+                    $squery->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
+                    $squery->execute();
 
-                    if ($uq->rowCount() == 1) {
+                    if ($squery->rowCount() == 1) {
 
                         // yes
-                        $ua = $uq->fetch();
+                        $srow = $squery->fetch();
 
-                        $_SESSION["userid"] = $ua["id"];
+                        $_SESSION["userid"] = $srow["id"];
 
                         $cookieh = cookieh();
 
-                        $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-                        $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-                        $uq->bindValue("id", $ua["id"], PDO::PARAM_INT);
-                        $uq->execute();
+                        $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+                        $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+                        $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
+                        $uquery->execute();
 
                         setcookie("userid", $cookieh, time() + 2592000, "/");
 
@@ -243,11 +243,11 @@ class user extends master {
         }
 
         //checking if that user already exists
-        $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :username");
-        $cq->bindValue("username", $username, PDO::PARAM_STR);
-        $cq->execute();
+        $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :username");
+        $squery->bindValue("username", $username, PDO::PARAM_STR);
+        $squery->execute();
 
-        if ($cq->rowCount() != 0) {
+        if ($squery->rowCount() != 0) {
 
             echo "We're sorry, that user already exists!";
             return;
@@ -257,11 +257,11 @@ class user extends master {
         $cookieh = cookieh();
 
         //registering the user and redirecting to the login form
-        $query = $con->prepare("INSERT INTO `users` VALUES(DEFAULT, :username, :steamid, 0, :cookieh, now(), '')");
-        $query->bindValue("username", $username, PDO::PARAM_STR);
-        $query->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
-        $query->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-        $query->execute();
+        $iquery = $con->prepare("INSERT INTO `users` VALUES(DEFAULT, :username, :steamid, DEFAULT, :cookieh, DEFAULT, DEFAULT)");
+        $iquery->bindValue("username", $username, PDO::PARAM_STR);
+        $iquery->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+        $iquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+        $iquery->execute();
 
         $id = $con->lastInsertId();
 

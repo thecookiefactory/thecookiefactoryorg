@@ -273,15 +273,15 @@ class forumthread extends master {
 
             } else {
 
-                $iq = $con->prepare("INSERT INTO `forumposts` VALUES(NULL, :text, :author, now(), NULL, :id)");
-                $iq->bindValue("author", $author, PDO::PARAM_INT);
-                $iq->bindValue("text", $text, PDO::PARAM_STR);
-                $iq->bindValue("id", $this->id, PDO::PARAM_INT);
-                $iq->execute();
+                $iquery = $con->prepare("INSERT INTO `forumposts` VALUES(DEFAULT, :text, :author, DEFAULT, DEFAULT, :id)");
+                $iquery->bindValue("author", $author, PDO::PARAM_INT);
+                $iquery->bindValue("text", $text, PDO::PARAM_STR);
+                $iquery->bindValue("id", $this->id, PDO::PARAM_INT);
+                $iquery->execute();
 
-                $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
-                $uq->bindValue("id", $this->id, PDO::PARAM_INT);
-                $uq->execute();
+                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
+                $uquery->bindValue("id", $this->id, PDO::PARAM_INT);
+                $uquery->execute();
 
             }
 
@@ -401,12 +401,12 @@ class forumthread extends master {
 
                 } else {
 
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
-                    $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iq->bindValue("title", $title, PDO::PARAM_STR);
-                    $iq->bindValue("text", $text, PDO::PARAM_STR);
-                    $iq->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $iq->execute();
+                    $iquery = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
+                    $iquery->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                    $iquery->bindValue("title", $title, PDO::PARAM_STR);
+                    $iquery->bindValue("text", $text, PDO::PARAM_STR);
+                    $iquery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                    $iquery->execute();
 
                     header("Location: /forums/" . $con->lastInsertId());
                 }
@@ -515,12 +515,12 @@ class forumthread extends master {
 
                 } else {
 
-                    $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
-                    $uq->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $uq->bindValue("title", $title, PDO::PARAM_STR);
-                    $uq->bindValue("text", $text, PDO::PARAM_STR);
-                    $uq->bindValue("tid", $this->id, PDO::PARAM_INT);
-                    $uq->execute();
+                    $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
+                    $uquery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                    $uquery->bindValue("title", $title, PDO::PARAM_STR);
+                    $uquery->bindValue("text", $text, PDO::PARAM_STR);
+                    $uquery->bindValue("tid", $this->id, PDO::PARAM_INT);
+                    $uquery->execute();
 
                 }
 
@@ -532,15 +532,15 @@ class forumthread extends master {
 
             if (isset($_POST["closed"]) && $_POST["closed"] == "on" && !$this->isClosed()) {
 
-                $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
-                $uq->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $uq->execute();
+                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
+                $uquery->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $uquery->execute();
 
             } else if (!isset($_POST["closed"]) && $this->isClosed()) {
 
-                $uq = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
-                $uq->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $uq->execute();
+                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
+                $uquery->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $uquery->execute();
 
             }
 
@@ -548,21 +548,21 @@ class forumthread extends master {
 
                 if ($this->map != null) {
 
-                    $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
-                    $uq->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
-                    $uq->execute();
+                    $uquery = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                    $uquery->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
+                    $uquery->execute();
 
                 }
 
-                $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
-                $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $dq->execute();
+                $dquery = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+                $dquery->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $dquery->execute();
 
-                $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
-                $dq->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $dq->execute();
+                $dquery = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                $dquery->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $dquery->execute();
 
-                if ($dq->rowCount() == 1) {
+                if ($dquery->rowCount() == 1) {
 
                     header("Location: /forums");
 
@@ -573,7 +573,7 @@ class forumthread extends master {
         }
 
         // redirect
-        if ($uq->rowCount() == 1) {
+        if ($uquery->rowCount() == 1) {
 
             header("Location: /forums/" . $this->id);
 
@@ -592,10 +592,10 @@ class forumthread extends master {
             <select class='forums-newpost-select' name='cat'>
 
             <?php
-                $cq = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+                $squery = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                while ($cr = $cq->fetch()) {
-                    $cat = new forumcategory($cr["id"]);
+                while ($srow = $squery->fetch()) {
+                    $cat = new forumcategory($srow["id"]);
                     ?>
 
                     <option value='<?php echo $cat->getId(); ?>'<?php if ($cat->getId() == $this->forumcategory->getId()) echo " selected" ?>><?php echo $cat->getLongName(); ?></option>

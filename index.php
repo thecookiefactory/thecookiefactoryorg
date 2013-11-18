@@ -138,21 +138,21 @@ function cookieCheck() {
 
         $cv = $_COOKIE["userid"];
 
-        $cq = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
-        $cq->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
-        $cq->execute();
+        $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
+        $squery->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
+        $squery->execute();
 
-        $cr = $cq->fetch();
+        if ($squery->rowCount() == 1) {
 
-        if ($cq->rowCount() == 1) {
+            $srow = $squery->fetch();
 
-            $_SESSION["userid"] = $cr["id"];
+            $_SESSION["userid"] = $srow["id"];
 
             $cookieh = cookieh();
-            $uq = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-            $uq->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-            $uq->bindValue("id", $cr["id"], PDO::PARAM_INT);
-            $uq->execute();
+            $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+            $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+            $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
+            $uquery->execute();
             setcookie("userid", $cookieh, time() + 2592000, "/");
 
         }

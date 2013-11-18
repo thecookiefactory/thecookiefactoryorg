@@ -137,13 +137,13 @@ class news extends master {
 
         if ($loc != "main" && $this->comments == 1) {
 
-            $ct = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-            $ct->bindValue("id", $this->id, PDO::PARAM_INT);
-            $ct->execute();
+            $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+            $squery->bindValue("id", $this->id, PDO::PARAM_INT);
+            $squery->execute();
 
-            $tid = $ct->fetch();
+            $srow = $squery->fetch();
 
-            $thread = new forumthread($tid["id"]);
+            $thread = new forumthread($srow["id"]);
             $commnum = $thread->replyCount();
             ?>
 
@@ -193,13 +193,13 @@ class news extends master {
 
             if ($this->comments == 1) {
 
-                $sq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-                $sq->bindValue("id", $this->id, PDO::PARAM_INT);
-                $sq->execute();
+                $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                $squery->bindValue("id", $this->id, PDO::PARAM_INT);
+                $squery->execute();
 
-                $tid = $sq->fetch();
+                $srow = $squery->fetch();
 
-                $tid = $tid["id"];
+                $tid = $srow["id"];
 
                 require_once "inc/forums.php";
 

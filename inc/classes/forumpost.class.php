@@ -159,10 +159,19 @@ class forumpost extends master {
 
         if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-            $dq = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`id` = :pid");
-            $dq->bindValue("pid", $this->id, PDO::PARAM_INT);
-            $dq->execute();
-            echo "deleted";
+            $dquery = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`id` = :pid");
+            $dquery->bindValue("pid", $this->id, PDO::PARAM_INT);
+            $dquery->execute();
+
+            if (isset($_SESSION["lp"])) {
+
+                header("Location: /" . $_SESSION["lp"]);
+
+            } else {
+
+                header("Location: /news");
+
+            }
 
         } else {
 
@@ -174,10 +183,10 @@ class forumpost extends master {
 
             } else {
 
-                $uq = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`id` = :pid");
-                $uq->bindValue("text", $text, PDO::PARAM_STR);
-                $uq->bindValue("pid", $this->id, PDO::PARAM_INT);
-                $uq->execute();
+                $uquery = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`id` = :pid");
+                $uquery->bindValue("text", $text, PDO::PARAM_STR);
+                $uquery->bindValue("pid", $this->id, PDO::PARAM_INT);
+                $uquery->execute();
 
                 $thread = new forumthread($this->threadid);
 

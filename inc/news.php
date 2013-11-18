@@ -21,17 +21,17 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $query = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
-    $query->bindValue("xo", $xo, PDO::PARAM_INT);
-    $query->execute();
+    $squery = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
+    $squery->bindValue("xo", $xo, PDO::PARAM_INT);
+    $squery->execute();
 
-    if (($query->rowCount() == 0) && ($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
+    if (($squery->rowCount() == 0) && ($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
         header("Location: /news");
 
     }
 
-    if ($query->rowCount() == 0) {
+    if ($squery->rowCount() == 0) {
         ?>
 
         There are no news posts.
@@ -41,11 +41,11 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
         $iii = 0;
 
-        while ($row = $query->fetch()) {
+        while ($srow = $squery->fetch()) {
 
             $iii++;
 
-            $news = new news($row["id"]);
+            $news = new news($srow["id"]);
             $news->display("front");
 
             if ($iii == 1) {

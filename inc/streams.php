@@ -8,7 +8,7 @@ require_once "inc/markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-$q = $con->query("SELECT `streams`.`id` FROM `streams`");
+$squery = $con->query("SELECT `streams`.`id` FROM `streams`");
 
 ?>
 
@@ -16,11 +16,11 @@ $q = $con->query("SELECT `streams`.`id` FROM `streams`");
 
 <?php
 
-if ($q->rowCount() != 0) {
+if ($squery->rowCount() != 0) {
 
-    while ($r = $q->fetch()) {
+    while ($srow = $squery->fetch()) {
 
-        $stream = new stream($r["id"]);
+        $stream = new stream($srow["id"]);
 
         $stream->button();
 

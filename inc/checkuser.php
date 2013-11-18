@@ -6,11 +6,11 @@ require_once "functions.php";
 
 if (vf($_GET["name"])) {
 
-    $q = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :name");
-    $q->bindValue("name", strip($_GET["name"]), PDO::PARAM_STR);
-    $q->execute();
+    $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :name");
+    $squery->bindValue("name", strip($_GET["name"]), PDO::PARAM_STR);
+    $squery->execute();
 
-    if ($q->rowCount() == 0) {
+    if ($squery->rowCount() == 0) {
 
         echo "0";
 

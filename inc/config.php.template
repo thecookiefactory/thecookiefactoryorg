@@ -18,5 +18,3 @@ $config["python"] = array(
     "rss" => "execute the python rss script",
     "webp" => "execute the webp python script"
 );
-
-?>

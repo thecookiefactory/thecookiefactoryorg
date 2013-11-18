@@ -36,7 +36,7 @@ if (isset($_POST["submit"])) {
 
             if ($sq->rowCount() == 0) {
 
-                $cq = $con->prepare("INSERT INTO `streams` VALUES(DEFAULT, '', '', :userid)");
+                $cq = $con->prepare("INSERT INTO `streams` VALUES(DEFAULT, DEFAULT, '', :userid)");
                 $cq ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
                 $cq->execute();
 
