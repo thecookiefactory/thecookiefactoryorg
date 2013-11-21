@@ -137,13 +137,13 @@ class news extends master {
 
         if ($loc != "main" && $this->comments == 1) {
 
-            $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-            $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-            $squery->execute();
+            $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+            $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
+            $selectThreadId->execute();
 
-            $srow = $squery->fetch();
+            $threadData = $selectThreadId->fetch();
 
-            $thread = new forumthread($srow["id"]);
+            $thread = new forumthread($threadData["id"]);
             $commnum = $thread->replyCount();
             ?>
 
@@ -193,13 +193,13 @@ class news extends master {
 
             if ($this->comments == 1) {
 
-                $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-                $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-                $squery->execute();
+                $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
+                $selectThreadId->execute();
 
-                $srow = $squery->fetch();
+                $threadData = $selectThreadId->fetch();
 
-                $tid = $srow["id"];
+                $tid = $threadData["id"];
 
                 require_once "inc/forums.php";
 

@@ -155,12 +155,12 @@ class map extends master {
 
                   try {
 
-                      $squery = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
-                      $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-                      $squery->execute();
-                      $srow = $squery->fetch();
+                      $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                      $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
+                      $selectThreadId->execute();
+                      $threadData = $selectThreadId->fetch();
 
-                      $thread = new forumthread($srow["id"]);
+                      $thread = new forumthread($threadData["id"]);
                       echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount();
                       echo ($thread->replyCount() == 1) ? " reply</a>" : " replies</a>";
 
@@ -200,9 +200,9 @@ class map extends master {
 
         try {
 
-            $squery = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
-            $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-            $squery->execute();
+            $selectPictures = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+            $selectPictures->bindValue("id", $this->id, PDO::PARAM_INT);
+            $selectPictures->execute();
 
         } catch (PDOException $e) {
 
@@ -210,11 +210,11 @@ class map extends master {
 
         }
 
-        if ($squery->rowCount() != 0) {
+        if ($selectPictures->rowCount() != 0) {
 
-            while ($srow = $squery->fetch()) {
+            while ($foundPicture = $selectPictures->fetch()) {
 
-                $pictures[] = new picture($srow["id"]);
+                $pictures[] = new picture($foundPicture["id"]);
 
             }
 

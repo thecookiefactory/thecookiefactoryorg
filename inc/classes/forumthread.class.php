@@ -170,16 +170,15 @@ class forumthread extends master {
 
             }
 
-            //fetching comments
-            $squery = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
-            $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-            $squery->execute();
+            $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+            $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
+            $selectPosts->execute();
 
             $cn = $this->isNewsThread() ? 1 : 2;
 
-            while ($srow = $squery->fetch()) {
+            while ($foundPost = $selectPosts->fetch()) {
 
-                $post = new forumpost($srow["id"]);
+                $post = new forumpost($foundPost["id"]);
                 $post->display($cn);
                 $cn++;
 
@@ -273,15 +272,15 @@ class forumthread extends master {
 
             } else {
 
-                $iquery = $con->prepare("INSERT INTO `forumposts` VALUES(DEFAULT, :text, :author, DEFAULT, DEFAULT, :id)");
-                $iquery->bindValue("author", $author, PDO::PARAM_INT);
-                $iquery->bindValue("text", $text, PDO::PARAM_STR);
-                $iquery->bindValue("id", $this->id, PDO::PARAM_INT);
-                $iquery->execute();
+                $insertComment = $con->prepare("INSERT INTO `forumposts` VALUES(DEFAULT, :text, :author, DEFAULT, DEFAULT, :id)");
+                $insertComment->bindValue("author", $author, PDO::PARAM_INT);
+                $insertComment->bindValue("text", $text, PDO::PARAM_STR);
+                $insertComment->bindValue("id", $this->id, PDO::PARAM_INT);
+                $insertComment->execute();
 
-                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
-                $uquery->bindValue("id", $this->id, PDO::PARAM_INT);
-                $uquery->execute();
+                $updateLastDate = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
+                $updateLastDate->bindValue("id", $this->id, PDO::PARAM_INT);
+                $updateLastDate->execute();
 
             }
 
@@ -401,12 +400,12 @@ class forumthread extends master {
 
                 } else {
 
-                    $iquery = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
-                    $iquery->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iquery->bindValue("title", $title, PDO::PARAM_STR);
-                    $iquery->bindValue("text", $text, PDO::PARAM_STR);
-                    $iquery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $iquery->execute();
+                    $insertThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
+                    $insertThread->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                    $insertThread->bindValue("title", $title, PDO::PARAM_STR);
+                    $insertThread->bindValue("text", $text, PDO::PARAM_STR);
+                    $insertThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                    $insertThread->execute();
 
                     header("Location: /forums/" . $con->lastInsertId());
                 }
@@ -427,10 +426,10 @@ class forumthread extends master {
             <select class='forums-newpost-select' name='cat'>
 
             <?php
-            $squery = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+            $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            while ($srow = $squery->fetch()) {
-                $cat = new forumcategory($srow["id"]);
+            while ($foundCategory = $selectCategories->fetch()) {
+                $cat = new forumcategory($foundCategory["id"]);
                 ?>
 
                 <option value='<?php echo $cat->getId(); ?>'><?php echo $cat->getLongName(); ?></option>
@@ -515,12 +514,12 @@ class forumthread extends master {
 
                 } else {
 
-                    $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
-                    $uquery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $uquery->bindValue("title", $title, PDO::PARAM_STR);
-                    $uquery->bindValue("text", $text, PDO::PARAM_STR);
-                    $uquery->bindValue("tid", $this->id, PDO::PARAM_INT);
-                    $uquery->execute();
+                    $updateThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
+                    $updateThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                    $updateThread->bindValue("title", $title, PDO::PARAM_STR);
+                    $updateThread->bindValue("text", $text, PDO::PARAM_STR);
+                    $updateThread->bindValue("tid", $this->id, PDO::PARAM_INT);
+                    $updateThread->execute();
 
                 }
 
@@ -532,15 +531,15 @@ class forumthread extends master {
 
             if (isset($_POST["closed"]) && $_POST["closed"] == "on" && !$this->isClosed()) {
 
-                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
-                $uquery->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $uquery->execute();
+                $closeThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
+                $closeThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $closeThread->execute();
 
             } else if (!isset($_POST["closed"]) && $this->isClosed()) {
 
-                $uquery = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
-                $uquery->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $uquery->execute();
+                $openThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
+                $openThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                $openThread->execute();
 
             }
 
@@ -548,21 +547,21 @@ class forumthread extends master {
 
                 if ($this->map != null) {
 
-                    $uquery = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
-                    $uquery->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
-                    $uquery->execute();
+                    $updateMapComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                    $updateMapComments->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
+                    $updateMapComments->execute();
 
                 }
 
-                $dquery = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
-                $dquery->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $dquery->execute();
+                $deletePosts = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+                $deletePosts->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $deletePosts->execute();
 
-                $dquery = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
-                $dquery->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $dquery->execute();
+                $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                $deleteThread->bindValue("tid", $this->id, PDO::PARAM_INT);
+                $deleteThread->execute();
 
-                if ($dquery->rowCount() == 1) {
+                if ($deleteThread->rowCount() == 1) {
 
                     header("Location: /forums");
 
@@ -573,7 +572,7 @@ class forumthread extends master {
         }
 
         // redirect
-        if ($uquery->rowCount() == 1) {
+        if ($updateThread->rowCount() == 1) {
 
             header("Location: /forums/" . $this->id);
 
@@ -592,10 +591,10 @@ class forumthread extends master {
             <select class='forums-newpost-select' name='cat'>
 
             <?php
-                $squery = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+                $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                while ($srow = $squery->fetch()) {
-                    $cat = new forumcategory($srow["id"]);
+                while ($foundCategory = $selectCategories->fetch()) {
+                    $cat = new forumcategory($foundCategory["id"]);
                     ?>
 
                     <option value='<?php echo $cat->getId(); ?>'<?php if ($cat->getId() == $this->forumcategory->getId()) echo " selected" ?>><?php echo $cat->getLongName(); ?></option>
@@ -639,11 +638,11 @@ class forumthread extends master {
 
         global $con;
 
-        $squery = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
-        $squery->bindValue("id", $this->id, PDO::PARAM_INT);
-        $squery->execute();
+        $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+        $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
+        $selectPosts->execute();
 
-        return $squery->rowCount();
+        return $selectPosts->rowCount();
 
     }
 
