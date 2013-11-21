@@ -28,12 +28,12 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             $nsearch = true;
 
-            $squery = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
-            $squery->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
-            $squery->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $squery->execute();
+            $newsSearch = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
+            $newsSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
+            $newsSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+            $newsSearch->execute();
 
-            $nr = $squery->rowCount();
+            $nr = $newsSearch->rowCount();
 
             $sss = ($nr == 1) ? "" : "s";
 
@@ -75,9 +75,9 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 <?php
 
-                while ($srow = $squery->fetch()) {
+                while ($foundNews = $newsSearch->fetch()) {
 
-                    $news = new news($srow["id"]);
+                    $news = new news($foundNews["id"]);
 
                     $news->display("search");
 
@@ -92,32 +92,32 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
         } else {
 
-            $squery1 = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
-            $squery1->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $squery1->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
-            $squery1->execute();
+            $threadSearch = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
+            $threadSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+            $threadSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
+            $threadSearch->execute();
 
-            $squery2 = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE :term ORDER BY `forumposts`.`id` DESC");
-            $squery2->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $squery2->execute();
+            $postSearch = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE :term ORDER BY `forumposts`.`id` DESC");
+            $postSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+            $postSearch->execute();
 
             $ra = array();
 
-            while ($row = $squery1->fetch()) {
+            while ($foundThread = $threadSearch->fetch()) {
 
-                if (!in_array($row["id"], $ra)) {
+                if (!in_array($foundThread["id"], $ra)) {
 
-                    array_push($ra, $row["id"]);
+                    array_push($ra, $foundThread["id"]);
 
                 }
 
             }
 
-            while ($row = $squery2->fetch()) {
+            while ($foundPost = $postSearch->fetch()) {
 
-                if (!in_array($row["threadid"], $ra)) {
+                if (!in_array($foundPost["threadid"], $ra)) {
 
-                    array_push($ra, $row["threadid"]);
+                    array_push($ra, $foundPost["threadid"]);
 
                 }
 
@@ -125,9 +125,9 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             if (!empty($ra)) {
 
-                $squery = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 AND `forumthreads`.`id` IN (" . implode(',', array_map('intval', $ra)) . ") ORDER BY `forumthreads`.`id` DESC");
+                $selectThreads = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 AND `forumthreads`.`id` IN (" . implode(',', array_map('intval', $ra)) . ") ORDER BY `forumthreads`.`id` DESC");
 
-                $nr = $squery->rowCount();
+                $nr = $selectThreads->rowCount();
 
             } else {
 
@@ -174,16 +174,26 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 <style type='text/css' scoped>
 
-                    <?php
-                    $cq = $con->query("SELECT * FROM `forumcategories`");
+                <?php
 
-                    while ($cr = $cq->fetch()) {
+                try {
 
-                        echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
-                        echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"] . "; }\n";
+                    $selectCategories = $con->query("SELECT * FROM `forumcategories`");
+
+                    while ($foundCategory = $selectCategories->fetch()) {
+
+                        echo ".forums-category-" . $foundCategory["name"] . "         {background-color: #" . $foundCategory["hexcode"] . "; }\n";
+                        echo ".forums-category-" . $foundCategory["name"] . ":hover   {background-color: #" . $foundCategory["hoverhexcode"]. "; }\n";
 
                     }
-                    ?>
+
+                } catch (PDOException $e) {
+
+                    die("An error occurred while trying to fetch the forum categories.");
+
+                }
+
+                ?>
 
                 </style>
                 <table class='forums-table'>
@@ -197,9 +207,9 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 <?php
 
-                while ($row = $squery->fetch()) {
+                while ($foundThreads = $selectThreads->fetch()) {
 
-                    $thread = new forumthread($row["id"]);
+                    $thread = new forumthread($foundThreads["id"]);
                     $thread->displayRow();
 
                 }

@@ -16,17 +16,17 @@ $_SESSION["lp"] = $p;
 
 try {
 
-    $squery = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
+    $selectMaps = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    if ($squery->rowCount() != 0) {
+    if ($selectMaps->rowCount() != 0) {
 
         $iii = 0;
 
-        while ($srow = $squery->fetch()) {
+        while ($foundMap = $selectMaps->fetch()) {
 
             $iii++;
 
-            $map = new map($srow["id"]);
+            $map = new map($foundMap["id"]);
 
             echo $map->display();
 

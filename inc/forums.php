@@ -79,12 +79,12 @@ if ($action == "add" && $user->isReal()) {
 
             try {
 
-                $squery = $con->prepare("SELECT `forumthreads`.`id`
+                $selectThreads = $con->prepare("SELECT `forumthreads`.`id`
                                         FROM `forumthreads`
                                         WHERE `forumthreads`.`forumcategory` = :cat AND `forumthreads`.`forumcategory` <> 0
                                         ORDER BY `forumthreads`.`lastdate` DESC");
-                $squery->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                $squery->execute();
+                $selectThreads->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                $selectThreads->execute();
 
             } catch (PDOException $e) {
 
@@ -100,7 +100,7 @@ if ($action == "add" && $user->isReal()) {
 
             try {
 
-                $squery = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
+                $selectThreads = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
 
             } catch (PDOException $e) {
 
@@ -118,12 +118,12 @@ if ($action == "add" && $user->isReal()) {
 
             try {
 
-                $cq = $con->query("SELECT * FROM `forumcategories`");
+                $selectCategories = $con->query("SELECT * FROM `forumcategories`");
 
-                while ($cr = $cq->fetch()) {
+                while ($foundCategory = $selectCategories->fetch()) {
 
-                    echo ".forums-category-" . $cr["name"] . "         {background-color: #" . $cr["hexcode"] . "; }\n";
-                    echo ".forums-category-" . $cr["name"] . ":hover   {background-color: #" . $cr["hoverhexcode"]. "; }\n";
+                    echo ".forums-category-" . $foundCategory["name"] . "         {background-color: #" . $foundCategory["hexcode"] . "; }\n";
+                    echo ".forums-category-" . $foundCategory["name"] . ":hover   {background-color: #" . $foundCategory["hoverhexcode"]. "; }\n";
 
                 }
 
@@ -147,11 +147,11 @@ if ($action == "add" && $user->isReal()) {
 
         <?php
 
-        if ($squery->rowCount() != 0) {
+        if ($selectThreads->rowCount() != 0) {
 
-            while ($srow = $squery->fetch()) {
+            while ($foundThread = $selectThreads->fetch()) {
 
-                $thread = new forumthread($srow["id"]);
+                $thread = new forumthread($foundThread["id"]);
                 $thread->displayRow();
 
             }
