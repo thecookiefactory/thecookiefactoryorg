@@ -11,10 +11,10 @@ def getArticleRows(sql):
 def parseArticleRow(row):
     articledata = {'title': row[1],
                    'description': row[2],
-                   'link': 'http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]),
-                   'comments': 'http://thecookiefactory.org/?p=news&id={articleid}#comments'.format(articleid=row[0]),
+                   'link': 'http://thecookiefactory.org/news/{stringid}'.format(stringid=row[9]),
+                   'comments': 'http://thecookiefactory.org/news/{stringid}#comments'.format(stringid=row[9]),
                    'pubDate': row[4],
-                   'guid': PyRSS2Gen.Guid('http://thecookiefactory.org/?p=news&id={articleid}'.format(articleid=row[0]))
+                   'guid': PyRSS2Gen.Guid('http://thecookiefactory.org/news/{stringid}'.format(stringid=row[9]))
                   }
 
     return PyRSS2Gen.RSSItem(**articledata)
