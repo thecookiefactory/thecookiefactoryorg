@@ -21,7 +21,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $selectNewsByPage = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC LIMIT :xo, 5");
+    $selectNewsByPage = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`date` DESC LIMIT :xo, 5");
     $selectNewsByPage->bindValue("xo", $xo, PDO::PARAM_INT);
     $selectNewsByPage->execute();
 
