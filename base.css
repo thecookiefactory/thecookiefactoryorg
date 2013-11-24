@@ -992,14 +992,6 @@ img.map-image {
   border-left: 2px solid #4188D2;
 }
 
-.search-results .article-header .article-metadata {
-  margin-top: -39px;
-}
-
-.search-results .article-edit-metadata {
-  top: -20px;
-}
-
 .account-title {
   font-size: 32px;
   line-height: 2em;
