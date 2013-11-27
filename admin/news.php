@@ -251,11 +251,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     }
 
     // update the rss feed
-    if (exec($config["python"]["rss"]))
+    exec($config["python"]["rss"], $output, $return);
+
+    if (!$return)
         echo "RSS feed updated!";
     else
         echo "RSS feed update failed!";
-    
 
 } else {
     // ALL
