@@ -66,7 +66,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                             $uq->bindValue("id", $id, PDO::PARAM_INT);
                             $uq->execute();
 
-                            generateid($id);
+                            if (!vf($er["stringid"]))
+                                generateid($id);
 
                         }
 
