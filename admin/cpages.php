@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 
@@ -31,50 +34,52 @@ if (isset($_POST["text"])) {
 
     }
 
-    $query = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live WHERE `custompages`.`id` = :id");
-    $query->bindValue("text", strip($_POST["text"]), PDO::PARAM_STR);
-    $query->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
-    $query->bindValue("live", $live, PDO::PARAM_INT);
-    $query->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
-    $query->execute();
+    $uquery = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live, `custompages`.`stringid` = :stringid WHERE `custompages`.`id` = :id");
+    $uquery->bindValue("text", strip($_POST["text"]), PDO::PARAM_STR);
+    $uquery->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
+    $uquery->bindValue("live", $live, PDO::PARAM_INT);
+    $uquery->bindValue("stringid", strip($_POST["stringid"]), PDO::PARAM_STR);
+    $uquery->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
+    $uquery->execute();
 
 }
 
 if (isset($_POST["create"])) {
 
     $title = strip($_POST["title"]);
-    $iq = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, 0)");
-    $iq->bindValue("title", $title, PDO::PARAM_STR);
-    $iq->execute();
+    $iquery = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, DEFAULT, '')");
+    $iquery->bindValue("title", $title, PDO::PARAM_STR);
+    $iquery->execute();
 
 }
 
 if (isset($_POST["cpage"])) {
 
-    $q = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`title` = :cpage");
-    $q->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
-    $q->execute();
+    $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`title` = :cpage");
+    $squery->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
+    $squery->execute();
 
-    $r = $q->fetch();
+    $srow = $squery->fetch();
 
     echo "<form action='cpages.php' method='post'>";
-    echo "<input type='hidden' name='id' value='".$r["id"]."'>";
-    echo "<input type='text' name='name' value='".$r["title"]."'>";
-    echo "<textarea name='text' rows='30' cols='100'>".$r["text"]."</textarea>";
-    echo "<input type='checkbox' name='live'" . (($r["BIN(`custompages`.`live`)"] == 1) ? " checked" : "") . ">";
+    echo "<input type='hidden' name='id' value='".$srow["id"]."'>";
+    echo "<input type='text' name='name' value='".$srow["title"]."'>";
+    echo "<textarea name='text' rows='30' cols='100'>".$srow["text"]."</textarea>";
+    echo "stringid (url): <input type='text' name='stringid' value='".$srow["stringid"]."'>";
+    echo "<input type='checkbox' name='live'" . (($srow["BIN(`custompages`.`live`)"] == 1) ? " checked" : "") . ">";
     echo "<input type='submit' value=''>";
     echo "</form>";
 
 } else {
 
-    $q = $con->query("SELECT * FROM `custompages` ORDER BY `custompages`.`title` ASC");
+    $squery = $con->query("SELECT * FROM `custompages` ORDER BY `custompages`.`title` ASC");
 
     echo "<form action='cpages.php' method='post'>";
     echo "<select name='cpage'>";
 
-    while ($r = $q->fetch()) {
+    while ($srow = $squery->fetch()) {
 
-        echo "<option value='".$r["title"]."'>".$r["title"]."</option>";
+        echo "<option value='".$srow["title"]."'>".$srow["title"]."</option>";
 
     }
 

@@ -3,10 +3,14 @@
 session_start();
 
 $r_c = 0;
-require "inc/functions.php";
-include "inc/lightopenid/openid.php";
+require_once "inc/functions.php";
+require_once "inc/classes/master.class.php";
+require_once "inc/classes/user.class.php";
+require_once "inc/lightopenid/openid.php";
 
-ccookies();
+cookieCheck();
+
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 ?>
 
@@ -34,22 +38,26 @@ ccookies();
 
 <nav>
 <span class='nav-menubar'>
-<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams</a><a class='menu-item' href='/forums'>forums</a>
+<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams<?php echo ((isAnyoneLive()) ? "<sup class='menu-live-indicator'>live</sup>" : "") ?></a><a class='menu-item' href='/forums'>forums</a>
 
 <?php
 
-// fetching the custom pages' names
-$pagesquery = $con->query("SELECT `custompages`.`title` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
+try {
 
-$pages = Array();
+    $squery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
 
-while ($pagesrow = $pagesquery->fetch()){
+    $pages = Array();
 
-    // and storing them in an array
-    $pages[] = $pagesrow["title"];
-    ?>
-    <a class='menu-item' href='/<?php echo $pagesrow["title"]; ?>'><?php echo $pagesrow["title"]; ?></a>
-    <?php
+    while ($srow = $squery->fetch()){
+
+        $pages[] = $srow["stringid"];
+        echo "<a class='menu-item' href='/" . $srow["stringid"] . "'>" . $srow["title"] . "</a>";
+
+    }
+
+} catch (PDOException $e) {
+
+    echo "An error occurred while trying to fetch the custom pages.";
 
 }
 
@@ -60,12 +68,13 @@ while ($pagesrow = $pagesquery->fetch()){
 <form class='menu-item' onsubmit='searchRedirect();'>
 <input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
 </form>
+
 <?php
 
-// see description in functions.php
-login();
+$user->login();
 
 ?>
+
 </div>
 
 </nav>
@@ -79,13 +88,13 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     $p = strip($_GET["p"]);
 
-    if (file_exists("inc/".$p.".php") && $p != "functions" && $p != "config") {
+    if (file_exists("inc/" . $p . ".php") && $p != "functions" && $p != "config") {
 
-        require "inc/".$p.".php";
+        require_once "inc/" . $p . ".php";
 
     } else if (in_array($p, $pages)) {
 
-        require "inc/custom.php";
+        require_once "inc/custom.php";
 
     } else if ($p != "login" && $p != "logout") {
 
@@ -95,7 +104,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 } else {
 
-    require "inc/news.php";
+    require_once "inc/news.php";
 
 }
 
@@ -121,18 +130,59 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 <?php
 
-function IsAnyoneLive() {
+function cookieCheck() {
 
     global $con;
 
-    $streamsquery = $con->query("SELECT `streams`.`title` FROM `streams`");
+    if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"])) {
 
-    while ($streamsrow = $streamsquery->fetch()) {
-        if (vf($streamsrow["title"])) {
+        $cv = $_COOKIE["userid"];
 
-            return true;
+        $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
+        $squery->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
+        $squery->execute();
+
+        if ($squery->rowCount() == 1) {
+
+            $srow = $squery->fetch();
+
+            $_SESSION["userid"] = $srow["id"];
+
+            $cookieh = cookieh();
+            $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+            $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+            $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
+            $uquery->execute();
+            setcookie("userid", $cookieh, time() + 2592000, "/");
 
         }
+
+    }
+
+}
+
+function isAnyoneLive() {
+
+    global $con;
+
+    try {
+
+        $squery = $con->query("SELECT `streams`.`title` FROM `streams`");
+
+        while ($srow = $squery->fetch()) {
+
+            if (vf($srow["title"])) {
+
+                return true;
+
+            }
+
+        }
+
+    } catch (PDOException $e) {
+
+        echo "An error occurred while trying to fetch the streams.";
+
     }
 
     return false;

@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 

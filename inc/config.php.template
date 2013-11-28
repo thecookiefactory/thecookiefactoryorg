@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($r_c)) header("Location: notfound.php");
+if (!isset($r_c)) header("Location: /notfound.php");
 
 $config["db"] = array(
     "host" => "hostname",
@@ -18,5 +18,3 @@ $config["python"] = array(
     "rss" => "execute the python rss script",
     "webp" => "execute the webp python script"
 );
-
-?>

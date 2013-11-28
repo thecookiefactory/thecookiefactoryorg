@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 
@@ -19,13 +22,13 @@ if (!checkadmin()) die("403");
 
 <?php
 
-$query = $con->query("SELECT * FROM `forumcategories`");
+$squery = $con->query("SELECT * FROM `forumcategories`");
 
 if (isset($_POST["update"])) {
 
-    while ($r = $query->fetch()) {
+    while ($srow = $squery->fetch()) {
 
-        $id = $r["id"];
+        $id = $srow["id"];
         $name = strip($_POST[$id."name"]);
         $longname = strip($_POST[$id."longname"]);
         $hexcode = strip($_POST[$id."hexcode"]);
@@ -33,19 +36,19 @@ if (isset($_POST["update"])) {
 
         if (!vf($name)) {
 
-            $dq = $con->prepare("DELETE FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
-            $dq->bindValue("id", $id, PDO::PARAM_INT);
-            $dq->execute();
+            $dquery = $con->prepare("DELETE FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
+            $dquery->bindValue("id", $id, PDO::PARAM_INT);
+            $dquery->execute();
 
         } else {
 
-            $uq = $con->prepare("UPDATE `forumcategories` SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode WHERE `forumcategories`.`id` = :id");
-            $uq->bindValue("name", $name, PDO::PARAM_STR);
-            $uq->bindValue("longname", $longname, PDO::PARAM_STR);
-            $uq->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
-            $uq->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
-            $uq->bindValue("id", $id, PDO::PARAM_INT);
-            $uq->execute();
+            $uquery = $con->prepare("UPDATE `forumcategories` SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode WHERE `forumcategories`.`id` = :id");
+            $uquery->bindValue("name", $name, PDO::PARAM_STR);
+            $uquery->bindValue("longname", $longname, PDO::PARAM_STR);
+            $uquery->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
+            $uquery->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
+            $uquery->bindValue("id", $id, PDO::PARAM_INT);
+            $uquery->execute();
 
         }
 
@@ -60,16 +63,16 @@ if (isset($_POST["addnew"])) {
     $hexcode = strip($_POST["hexcode"]);
     $hoverhexcode = strip($_POST["hoverhexcode"]);
 
-    $iq = $con->prepare("INSERT INTO `forumcategories` VALUES(NULL, :name, :longname, :hexcode, :hoverhexcode, now())");
-    $iq->bindValue("name", $name, PDO::PARAM_STR);
-    $iq->bindValue("longname", $longname, PDO::PARAM_STR);
-    $iq->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
-    $iq->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
-    $iq->execute();
+    $iquery = $con->prepare("INSERT INTO `forumcategories` VALUES(DEFAULT, :name, :longname, :hexcode, :hoverhexcode, DEFAULT)");
+    $iquery->bindValue("name", $name, PDO::PARAM_STR);
+    $iquery->bindValue("longname", $longname, PDO::PARAM_STR);
+    $iquery->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
+    $iquery->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
+    $iquery->execute();
 
 }
 
-$query = $con->query("SELECT * FROM `forumcategories`");
+$squery = $con->query("SELECT * FROM `forumcategories`");
 
 echo "<h1>manage forum categories</h1>";
 
@@ -78,9 +81,9 @@ echo "<form action='forumtopics.php' method='post'>";
 echo "<table border>";
 echo "<tr><th>id</th><th>name</th><th>pretyname</th><th>background-color</th><th>hover background-color</th></tr>";
 
-while ($row = $query->fetch()) {
+while ($srow = $squery->fetch()) {
 
-    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["longname"]."' name='".$row["id"]."longname'></td><td><input type='text' value='".$row["hexcode"]."' name='".$row["id"]."hexcode'></td><td><input type='text' value='".$row["hoverhexcode"]."' name='".$row["id"]."hoverhexcode'></td></tr>";
+    echo "<tr><td>".$srow["id"]."</td><td><input type='text' value='".$srow["name"]."' name='".$srow["id"]."name'></td><td><input type='text' value='".$srow["longname"]."' name='".$srow["id"]."longname'></td><td><input type='text' value='".$srow["hexcode"]."' name='".$srow["id"]."hexcode'></td><td><input type='text' value='".$srow["hoverhexcode"]."' name='".$srow["id"]."hoverhexcode'></td></tr>";
 
 }
 

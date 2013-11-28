@@ -1,16 +1,13 @@
 <?php
 
-if (!isset($r_c)) header("Location: notfound.php");
+if (!isset($r_c)) header("Location: /notfound.php");
 
-include "analyticstracking.php";
-include "markdown/markdown.php";
+include_once "analyticstracking.php";
+require_once "inc/classes/custompage.class.php";
+require_once "inc/markdown/markdown.php";
 
 $_SESSION["lp"] = $p;
 
-$q = $con->prepare("SELECT `custompages`.`text` FROM `custompages` WHERE `custompages`.`title` = :p");
-$q->bindValue("p", $p, PDO::PARAM_STR);
-$q->execute();
+$page = new custompage(strip($_GET["p"]));
 
-$r = $q->fetch();
-
-echo Markdown($r["text"]);
+echo $page->display();

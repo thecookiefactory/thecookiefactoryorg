@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 
@@ -40,7 +43,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 if (isset($_POST["submit"])) {
 
                     $title = strip($_POST["title"]);
-                    $editorid = $_SESSION["userid"];
+                    $editorid = $user->getId();
                     $text = strip($_POST["text"]);
 
                     if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
@@ -63,7 +66,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                             $uq->bindValue("id", $id, PDO::PARAM_INT);
                             $uq->execute();
 
-                            generateid($id);
+                            if (!vf($er["stringid"]))
+                                generateid($id);
 
                         }
 
@@ -185,7 +189,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_POST["submit"])) {
 
             $title = strip($_POST["title"]);
-            $author = $_SESSION["userid"];
+            $author = $user->getId();
             $text = strip($_POST["text"]);
 
             if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
@@ -208,7 +212,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $iq = $con->prepare("INSERT INTO `news` VALUES(NULL, :title, :text, :author, now(), 0, NULL, :comments, :live, '')");
+            $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, :comments, :live, '')");
             $iq->bindValue("title", $title, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -218,7 +222,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $id = $con->lastInsertId();
 
-            $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(NULL, :title, :text, :author, now(), NULL, now(), 0, NULL, :id, 0)");
+            $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
             $iq->bindValue("title", $title, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -248,7 +252,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     }
 
     // update the rss feed
-    exec($config["python"]["rss"]);
+    exec($config["python"]["rss"], $output, $return);
+
+    if (!$return)
+        echo "RSS feed updated!";
+    else
+        echo "RSS feed update failed!";
 
 } else {
     // ALL
@@ -305,6 +314,39 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
     }
 
     echo "</table>";
+
+}
+
+function generateid($x) {
+
+    global $con;
+
+    $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
+    $gq->bindValue("id", $x, PDO::PARAM_INT);
+    $gq->execute();
+
+    $gr = $gq->fetch();
+
+    $stringid = preg_replace("/[^A-Za-z0-9 ]/", "", $gr["title"]);
+
+    $stringid = str_replace(" ", "_", $stringid);
+
+    $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
+    $cq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $cq->execute();
+
+    if ($cq->rowCount() != 0) {
+
+        $stringid .= "-".$x;
+
+    }
+
+    $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
+    $uq->bindValue("si", $stringid, PDO::PARAM_STR);
+    $uq->bindValue("id", $x, PDO::PARAM_INT);
+    $uq->execute();
+
+    return 0;
 
 }
 

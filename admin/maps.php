@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 
@@ -227,7 +230,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             //basic values
             $name = strip($_POST["name"]);
-            $author = $_SESSION["userid"];
+            $author = $user->getId();
             $game = strip($_POST["game"]);
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
@@ -244,7 +247,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             }
 
             //inserting the basic data and returning the map id
-            $iq = $con->prepare("INSERT INTO `maps` VALUES(NULL, :name, :text, :author, now(), NULL, :download, '', :comments, :game, '')");
+            $iq = $con->prepare("INSERT INTO `maps` VALUES(DEFAULT, :name, :text, :author, DEFAULT, DEFAULT, :download, '', :comments, :game, '', 0)");
             $iq->bindValue("name", $name, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -301,12 +304,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
                 // creating forum entry for comments
 
-                $authorid = $_SESSION["userid"];
+                $authorid = $user->getId();
                 $title = strip($_POST["topicname"]);
                 $text = strip($_POST["topictext"]);
                 $cat = strip($_POST["topiccat"]);
 
-                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(NULL, :title, :text, :authorid, now(), 0, now(), :cat, :id, 0, 0)");
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
                 $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
                 $iq->bindValue("title", $title, PDO::PARAM_STR);
                 $iq->bindValue("text", $text, PDO::PARAM_STR);
@@ -321,7 +324,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         } else {
 
-            echo "<h1>post a map - by ".getname($_SESSION["userid"])."</h1>
+            echo "<h1>post a map</h1>
             <form action='?action=write' method='post' enctype='multipart/form-data'>
             Name<br>
             <input type='text' name='name' required><br>
@@ -382,7 +385,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         echo "<tr>";
         echo "<td>";
-        echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"]);
+        echo "#".$row["id"]." - ".$row["name"];
         echo "</td>";
         echo "<td>";
         echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";

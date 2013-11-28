@@ -1,12 +1,13 @@
 import requests
+from datetime import datetime
 from sql import *
 
 API_ADDRESS = 'https://api.github.com/repos'
 
 
 def getDlNames(sql):
-    sql.crs.execute('SELECT `dl`, `link` FROM `maps`')
-    return [(dl[0],dl[1]) for dl in sql.crs]
+    sql.crs.execute('SELECT `dl`, `link`, `id` FROM `maps` WHERE `dl` IS NOT NULL')
+    return [{'dl': map[0], 'oldlink': map[1], 'mapid': map[2]} for map in sql.crs]
 
 
 def getFromAPI(repo, method, param=''):
@@ -16,30 +17,26 @@ def getFromAPI(repo, method, param=''):
     return requests.get(link, headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
 
 
-def insertAssetLink(sql, dl, link):
-    if link:
-        sql.crs.execute("UPDATE `maps` SET `link`='{t}' WHERE `dl`='{s}'".format(t=link, s=dl))
-    else:
-        sql.crs.execute("UPDATE `maps` SET `link`=NULL WHERE `dl`='{s}'".format(s=dl))
+def insertAssetLink(sql, map):
+    sql.crs.execute("UPDATE `maps` SET `link`='{l}', `downloadcount`='{d}', `editdate`='{e}' WHERE `id`='{i}'".format(l=map['newlink'], i=map['mapid'], d=map['dlcount'], e=map['date']))
 
 
 def main():
     sql = SQLConnection()
-    dlnames = getDlNames(sql)
-    dldata = {}
+    dldata = getDlNames(sql)
 
-    for name, link in dlnames:
-        dldata[name] = False
-        if name.isdigit():
-            dldata[name] = 'http://steamcommunity.com/sharedfiles/filedetails/?id={workshopid}'.format(workshopid=name)
+    for map in dldata:
+        if map['dl'].isdigit():
+            map['newlink'] = 'http://steamcommunity.com/sharedfiles/filedetails/?id={workshopid}'.format(workshopid=map['dl'])
         else:
-            repojson = getFromAPI(name, 'releases')
+            repojson = getFromAPI(map['dl'], 'releases')
             if repojson:
                 assetjson = requests.get(repojson[0]['assets_url'], headers={'Accept': 'application/vnd.github.manifold-preview'}).json()
-                dldata[name] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=name, releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
-    for repo in dldata:
-        if dldata[repo] is not link:
-            insertAssetLink(sql, repo, dldata[repo])
+                map['dlcount'] = sum([release['assets'][0]['download_count'] for release in repojson if len(release['assets'])])
+                map['newlink'] = 'https://github.com/{repo}/releases/download/{releasename}/{assetname}'.format(repo=map['dl'], releasename=repojson[0]['name'], assetname=assetjson[0]['name'])
+                map['date'] = repojson[0]['published_at'][:-1]
+    for map in dldata:
+        insertAssetLink(sql, map)
 
     sql.close()
 

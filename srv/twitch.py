@@ -5,35 +5,35 @@ API_ADDRESS = 'https://api.twitch.tv/kraken/'
 
 
 def getStreamNames(sql):
-    sql.crs.execute('SELECT `twitch` FROM `streams`')
-    return [twitch[0] for twitch in sql.crs]
+    sql.crs.execute('SELECT `twitchname`, `id` FROM `users` WHERE `twitchname` IS NOT NULL')
+    streamdata = [{'name': twitch[0], 'userid': twitch[1]} for twitch in sql.crs]
+    return streamdata
 
 
 def getFromAPI(method, param=''):
     return requests.get(API_ADDRESS + '/' + method + '/' + param).json()
 
 
-def insertStreamTitle(sql, stream, title):
+def insertStreamTitle(sql, userid, title):
     if title:
-        sql.crs.execute("UPDATE `streams` SET `title`='{t}' WHERE `twitch`='{s}'".format(t=title, s=stream))
+        sql.crs.execute("UPDATE `streams` SET `title`='{t}' WHERE `authorid`='{s}'".format(t=title, s=userid))
     else:
-        sql.crs.execute("UPDATE `streams` SET `title`=NULL WHERE `twitch`='{s}'".format(s=stream))
+        sql.crs.execute("UPDATE `streams` SET `title`=NULL WHERE `authorid`='{s}'".format(s=userid))
 
 
 def main():
     sql = SQLConnection()
-    streamnames = getStreamNames(sql)
-    streamdata = {}
-
-    for name in streamnames:
-        streamdata[name] = False
-        streamjson = getFromAPI('streams', name)
-
-        if streamjson['stream']:
-            streamdata[name] = streamjson['stream']['channel']['status']
+    streamdata = getStreamNames(sql)
 
     for stream in streamdata:
-        insertStreamTitle(sql, stream, streamdata[stream])
+        stream['title'] = False
+        streamjson = getFromAPI('streams', stream['name'])
+
+        if streamjson['stream']:
+            stream['title'] = streamjson['stream']['channel']['status']
+
+    for stream in streamdata:
+        insertStreamTitle(sql, stream['userid'], stream['title'])
 
     sql.close()
 

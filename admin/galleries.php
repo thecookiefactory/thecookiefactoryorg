@@ -3,9 +3,12 @@
 session_start();
 
 $r_c = 1;
-require "../inc/functions.php";
+require_once "../inc/functions.php";
+require_once "../inc/classes/user.class.php";
 
-if (!checkadmin()) die("403");
+$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+
+if (!$user->isAdmin()) die("403");
 
 ?>
 
@@ -115,7 +118,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                     if (move_uploaded_file($tmp_name, $location.$filename)) {
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(NULL, :text, now(), :filename, :mapid)");
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid)");
                         $iq->bindValue("text", $text, PDO::PARAM_STR);
                         $iq->bindValue("filename", $filename, PDO::PARAM_STR);
                         $iq->bindValue("mapid", $id, PDO::PARAM_INT);
@@ -159,7 +162,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
     while ($row = $query->fetch()) {
 
         echo "<li>";
-        echo "#".$row["id"]." - ".$row["name"]." - ".getname($row["authorid"])." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
+        echo "#".$row["id"]." - ".$row["name"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
 
         $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
