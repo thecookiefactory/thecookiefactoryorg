@@ -4,3 +4,6 @@
 [submodule "inc/lightopenid"]
 	path = inc/lightopenid
 	url = git://gitorious.org/lightopenid/lightopenid.git
+[submodule "inc/h2o"]
+	path = inc/h2o
+	url = https://github.com/speedmax/h2o-php.git
