@@ -8,19 +8,14 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * stream class
  *
  * function __construct
- * (line 40)
  *
  * function display
- * (line 95)
  *
  * function button
- * (line 126)
  *
  * function isLive
- * (line 159)
  *
  * function getEmbedCode
- * (line 165)
  */
 class stream extends master {
 

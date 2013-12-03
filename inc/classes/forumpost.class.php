@@ -9,19 +9,14 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * forum post class
  *
  * function __construct
- * (line 45)
  *
  * function display
- * (line 84)
  *
  * function edit
- * (line 129)
  *
  * function editProcess
- * (line 155)
  *
  * function editForm
- * (line 200)
  */
 class forumpost extends master {
 

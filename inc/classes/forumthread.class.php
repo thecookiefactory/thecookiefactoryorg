@@ -13,52 +13,36 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * forum thread class
  *
  * function __construct
- * (line 92)
  *
  * function display
- * (line 136)
  *
  * function displayRow
- * (line 221)
  *
  * function commentProcess
- * (line 260)
  *
  * function firstPost
- * (line 292)
  *
  * function commentForm
- * (line 335)
  *
  * function addNew
- * (line 358)
  *
  * function addProcess
- * (line 374)
  *
  * function addForm
- * (line 420)
  *
  * function edit
- * (line 464)
  *
  * function editProcess
- * (line 489)
  *
  * function editForm
- * (line 584)
  *
  * function replyCount
- * (line 638)
  *
  * function isNewsThread
- * (line 650)
  *
  * function getNewsStringId
- * (line 656)
  *
  * function isClosed
- * (line 662)
  */
 class forumthread extends master {
 
