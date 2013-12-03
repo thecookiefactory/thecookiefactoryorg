@@ -21,7 +21,7 @@
   </div>
   <div class='map-data' id='map-data-{{ map.id }}'>
     <div class='map-data-properties'>
-      <span class='map-data-prop map-data-author'>{{ map.author.name }}</span>
+      <span class='map-data-prop map-data-author'>{{ map.author }}</span>
       <span class='map-data-prop map-data-game'>
       {% if map.game.steamid %}
       <a target='_blank' href='http://store.steampowered.com/app/{{ map.game.steamid }}'>{{ map.game.name }}</a>

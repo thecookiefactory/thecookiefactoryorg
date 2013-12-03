@@ -5,6 +5,11 @@ if (!isset($r_c)) header("Location: /notfound.php");
 include_once "analyticstracking.php";
 require_once "inc/classes/map.class.php";
 require_once "inc/markdown/markdown.php";
+require_once "h2o/h2o.php";
+
+$h2o = new h2o("inc/templates/maps.html");
+
+$maps = array();
 
 $_SESSION["lp"] = $p;
 
@@ -20,35 +25,15 @@ try {
 
     if ($selectMaps->rowCount() != 0) {
 
-        $iii = 0;
-
         while ($foundMap = $selectMaps->fetch()) {
-
-            $iii++;
 
             $map = new map($foundMap["id"]);
 
-            echo $map->display();
-
-            if ($iii == 1) {
-
-                ?>
-                <div class='map-ad'>
-                      <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-                      <!-- Maps Inline -->
-                      <ins class='adsbygoogle'
-                           style='display:inline-block;width:728px;height:90px'
-                           data-ad-client='ca-pub-8578399795841431'
-                           data-ad-slot='8918199475'></ins>
-                      <script>
-                      (adsbygoogle = window.adsbygoogle || []).push({});
-                      </script>
-                </div>
-                <?php
-
-            }
+            array_push($maps, $map->returnArray());
 
         }
+
+        echo $h2o->render(compact('maps'));
 
     } else {
 
