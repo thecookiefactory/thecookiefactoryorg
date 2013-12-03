@@ -95,53 +95,96 @@ class map extends master {
 
     }
 
-    public function returnArray() {
+    public function display() {
 
         global $con;
 
-        $a = Array(
-                    "id" => $this->id,
-                    "name" => $this->name,
-                    "text" => $this->text,
-                    "author" => $this->author->getName(),
-                    "editdate" => $this->editdate->display(),
-                    "extension" => $this->extension,
-                    "comments" => $this->comments,
-                    "game" => Array("name" => $this->game->getName(), "steamid" => $this->game->getSteamId()),
-                    "link" => $this->link,
-                    "downloadcount" => $this->downloadcount,
-                    "picturecount" => count($this->getPictures()),
-                    "pictures" => Array()
-                    );
-
-        if ($this->comments) {
-
-            try {
-
-                $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
-                $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
-                $selectThreadId->execute();
-                $threadData = $selectThreadId->fetch();
-
-                $thread = new forumthread($threadData["id"]);
-
-                $a["thread"] = Array("id" => $thread->getId(), "replycount" => $thread->replyCount());
-
-            } catch (PDOException $e) {
-
-                echo $e->getMessage();
-
+        ?>
+        <div class='map-name' id='<?php echo $this->name; ?>'><?php echo $this->name; ?></div>
+        <div class='map-container'>
+          <div class='map-leftarrow map-arrow-disabled' id='map-<?php echo $this->id; ?>-left' onclick='startImagerollScrolling(this.id, -1);'></div>
+          <div class='map-rightarrow map-arrow-disabled' id='map-<?php echo $this->id; ?>-right' onclick='startImagerollScrolling(this.id, 1);'></div>
+          <div class='map-actionbar' id='map-actionbar-<?php echo $this->id; ?>'>
+            <span class='map-actionbar-button' id='map-moreinfo-<?php echo $this->id; ?>' onclick='animateDataPanel(this.id)'>More info</span>
+              <?php if ($this->link != null) { ?>
+                <a href='<?php echo $this->link; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+              <?php } else { ?>
+                <span class='map-actionbar-button-disabled'>Download</span>
+              <?php } ?>
+          </div>
+          <?php $pictures = $this->getPictures(); ?>
+          <div class='map-imageroll' id='map-<?php echo $this->id; ?>' onload='initialize(this.id);'>
+            <script type='text/javascript'> lendict["map-<?php echo $this->id; ?>"] = <?php echo (count($pictures) + 1); ?>; initialize("map-<?php echo $this->id; ?>");</script>
+            <div class='map-image'><img class='map-image' alt='<?php echo $this->name; ?>' src='/img/maps/<?php echo $this->id; ?>.<?php echo $this->extension; ?>'></div>
+            <?php
+            //display additional images
+            foreach ($pictures as $picture) {
+                ?>
+                <div class='map-image'><img class='map-image' src='/img/maps/<?php echo $this->id; ?>/<?php echo $picture->getFilename(); ?>' alt='<?php echo $picture->getText(); ?>' title='<?php echo $picture->getText(); ?>'></div>
+                <?php
             }
 
-        }
+            ?>
+          </div>
+          <div class='map-data' id='map-data-<?php echo $this->id; ?>'>
+            <div class='map-data-properties'>
+              <span class='map-data-prop map-data-author'><?php echo $this->author->getName(); ?></span>
+              <span class='map-data-prop map-data-game'>
+                  <?php
+                  if ($this->game->isSteamGame()) {
 
-        foreach ($this->getPictures() as $picture) {
+                      echo "<a target='_blank' href='http://store.steampowered.com/app/" . $this->game->getSteamId() . "'>" . $this->game->getName() . "</a>";
 
-            array_push($a["pictures"], Array("filename" => $picture->getFileName(), "text" => $picture->getText()));
+                  } else {
 
-        }
+                      echo $this->game->getName();
 
-        return $a;
+                  }
+                  ?>
+              </span>
+              <span class='map-data-prop map-data-dlcount'><?php echo $this->downloadcount . " times"; ?></span>
+              <span class='map-data-prop map-data-date'><?php echo $this->editdate->display(); ?></span>
+              <?php
+                if ($this->comments == 1) {
+
+                  echo "<span class='map-data-prop map-data-topic'>";
+
+                  try {
+
+                      $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                      $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
+                      $selectThreadId->execute();
+                      $threadData = $selectThreadId->fetch();
+
+                      $thread = new forumthread($threadData["id"]);
+                      echo "<a href='/forums/" . $thread->getId() . "'>" . $thread->replyCount();
+                      echo ($thread->replyCount() == 1) ? " reply</a>" : " replies</a>";
+
+                  } catch (PDOException $e) {
+
+                      echo $e->getMessage();
+
+                  }
+
+                  echo "</span>";
+
+                }
+              ?>
+            </div>
+            <div class='map-data-desc'>
+              <?php echo tformat($this->text); ?>
+            </div>
+            <div class='map-data-actionbar'>
+              <span class='map-actionbar-button' id='map-lessinfo-<?php echo $this->id; ?>' onclick='animateDataPanel(this.id)'>Less info</span>
+                <?php if ($this->link != null) { ?>
+                  <a href='<?php echo $this->link; ?>' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+                <?php } else { ?>
+                  <span class='map-actionbar-button-disabled'>Download</span>
+                <?php } ?>
+            </div>
+          </div>
+        </div>
+        <?php
 
     }
 
