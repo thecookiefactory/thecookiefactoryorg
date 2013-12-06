@@ -5,9 +5,6 @@ if (!isset($r_c)) header("Location: /notfound.php");
 include_once "analyticstracking.php";
 require_once "inc/classes/map.class.php";
 require_once "inc/markdown/markdown.php";
-require_once "h2o/h2o.php";
-
-$h2o = new h2o("inc/templates/maps.html");
 
 $maps = array();
 
@@ -33,7 +30,7 @@ try {
 
         }
 
-        echo $h2o->render(compact('maps'));
+        echo $twig->render('maps.html', array('maps' => $maps));
 
     } else {
 

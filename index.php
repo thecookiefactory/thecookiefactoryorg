@@ -7,6 +7,12 @@ require_once "inc/functions.php";
 require_once "inc/classes/master.class.php";
 require_once "inc/classes/user.class.php";
 require_once "inc/lightopenid/openid.php";
+require_once 'inc/twig/lib/Twig/Autoloader.php';
+
+Twig_Autoloader::register();
+
+$loader = new Twig_Loader_Filesystem('inc/templates');
+$twig = new Twig_Environment($loader);
 
 cookieCheck();
 
