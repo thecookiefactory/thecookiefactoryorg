@@ -30,7 +30,7 @@ try {
 
         }
 
-        echo $twig->render('maps.html', array('maps' => $maps));
+        echo $twig->render("maps.html", array("maps" => $maps));
 
     } else {
 

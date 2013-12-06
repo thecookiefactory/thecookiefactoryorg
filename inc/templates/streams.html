@@ -1,39 +1,39 @@
 <ul class='stream-menu'>
 {% for stream in streams %}
-<a href='/streams/{{ stream.author }}'>
+    <a href='/streams/{{ stream.author }}'>
 
-{% if stream.id == selectedid %}
-    <li class='stream-button stream-button-selected
-{% else %}
-    <li class='stream-button
-{% endif %}
+    {% if stream.id == selectedid %}
+        <li class='stream-button stream-button-selected
+    {% else %}
+        <li class='stream-button
+    {% endif %}
 
-{% if stream.live %}
-    stream-live
-{% endif %}
+    {% if stream.live %}
+        stream-live
+    {% endif %}
 
-'>{{ stream.author }}</li>
-</a>
+    '>{{ stream.author }}</li>
+    </a>
 {% endfor %}
 </ul>
 {% if selectedid %}
 
-{% set stream = attribute(streams, selectedid) %}
+    {% set stream = attribute(streams, selectedid) %}
 
-{% if stream.live %}
-<div class='stream-title'><h1>{{ stream.title }}</h1></div>
-{% endif %}
+    {% if stream.live %}
+        <div class='stream-title'><h1>{{ stream.title }}</h1></div>
+    {% endif %}
 
-<div class='stream-content'>
-<div class='stream-player'>
+    <div class='stream-content'>
+    <div class='stream-player'>
 
-    {% autoescape false %}{{ stream.embedcode }}{% endautoescape %}
+        {% autoescape false %}{{ stream.embedcode }}{% endautoescape %}
 
-</div>
-<div class='stream-description'>
+    </div>
+    <div class='stream-description'>
 
-    {{ stream.text }}
+        {{ stream.text }}
 
-</div>
-</div>
+    </div>
+    </div>
 {% endif %}
