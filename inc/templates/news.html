@@ -14,23 +14,29 @@
         </div>
         <hr class='article-separator'>
     {% endif %}
-{% endfor %}
 
-<div class='news-pages'>
+    {% if loop.last %}
+        <div class='news-pages'>
 
-{% for i in 1..pagecount %}
+        {% for i in 1..pagecount %}
 
-    {% if i == page %}
+            {% if i == page %}
 
-        <div class='news-page-number'>{{ i }}</div>
+                <div class='news-page-number'>{{ i }}</div>
 
-    {% else %}
+            {% else %}
 
-        <a class='news-page-number' href='/news/page/{{ i }}'>{{ i }}</a>
+                <a class='news-page-number' href='/news/page/{{ i }}'>{{ i }}</a>
 
+            {% endif %}
+
+        {% endfor %}
+
+        </div>
     {% endif %}
 
+{% else %}
+    There are no news posts.
 {% endfor %}
 
-</div>
 <a class='news-rsslink' href='/rss.xml'>RSS</a>

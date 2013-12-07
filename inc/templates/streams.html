@@ -14,6 +14,8 @@
 
     '>{{ stream.author }}</li>
     </a>
+{% else %}
+    There are no active streams.
 {% endfor %}
 </ul>
 {% if selectedid %}

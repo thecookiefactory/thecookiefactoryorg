@@ -12,19 +12,11 @@ $_SESSION["lp"] = $p;
 
 $selectStreams = $con->query("SELECT `streams`.`id` FROM `streams`");
 
-if ($selectStreams->rowCount() != 0) {
+while ($foundStream = $selectStreams->fetch()) {
 
-    while ($foundStream = $selectStreams->fetch()) {
+    $stream = new stream($foundStream["id"]);
 
-        $stream = new stream($foundStream["id"]);
-
-        $streams[$foundStream["id"]] = $stream->returnArray();
-
-    }
-
-} else {
-
-    echo "There are no active streams.";
+    $streams[$foundStream["id"]] = $stream->returnArray();
 
 }
 

@@ -4,11 +4,11 @@
 
 {% if main %}
 
-    <a href='/news/{{ new.stringid }}'>{{ new.title }}</a>
+    {{ new.title }}
 
 {% else %}
 
-    {{ new.title }}
+    <a href='/news/{{ new.stringid }}'>{{ new.title }}</a>
 
 {% endif %}
 
@@ -17,7 +17,7 @@
 
 <div class='article-metadata'>
 
-{% if main and new.comments %}
+{% if not main and new.comments %}
 
     {% if new.commentcount != 1 %}
         <span class='article-metadata-item'><a href='/news/{{ new.stringid }}#comments'>{{ new.commentcount }} comments</a></span>
@@ -45,7 +45,7 @@
 <span class='article-text'>{% autoescape false %}{{ new.text }}{% endautoescape %}</span>
 </article>
 
-{% if main %}
+{% if not main %}
 
     <hr class='article-separator'>
 

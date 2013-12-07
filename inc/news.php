@@ -33,26 +33,16 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
     }
 
-    if ($selectNewsByPage->rowCount() == 0) {
-        ?>
+    $pageCount = ceil($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() / 5);
 
-        There are no news posts.
+    while ($foundNews = $selectNewsByPage->fetch()) {
 
-        <?php
-    } else {
-
-        $pageCount = ceil($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() / 5);
-
-        while ($foundNews = $selectNewsByPage->fetch()) {
-
-            $news = new news($foundNews["id"]);
-            $newsArray[$foundNews["id"]] = $news->returnArray();
-
-        }
-
-        echo $twig->render("news.html", array("news" => $newsArray, "pagecount" => $pageCount, "page" => $page, "main" => 1));
+        $news = new news($foundNews["id"]);
+        $newsArray[$foundNews["id"]] = $news->returnArray();
 
     }
+
+    echo $twig->render("news.html", array("news" => $newsArray, "pagecount" => $pageCount, "page" => $page, "main" => 0));
 
 } else {
 
@@ -62,7 +52,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
         $new = $news->returnArray();
 
-        echo $twig->render("news-box.html", array("new" => $new, "main" => 0));
+        echo $twig->render("news-box.html", array("new" => $new, "main" => 1));
 
         if ($new["comments"] == 1) {
 

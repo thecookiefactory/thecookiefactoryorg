@@ -20,23 +20,15 @@ try {
 
     $selectMaps = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    if ($selectMaps->rowCount() != 0) {
+    while ($foundMap = $selectMaps->fetch()) {
 
-        while ($foundMap = $selectMaps->fetch()) {
+        $map = new map($foundMap["id"]);
 
-            $map = new map($foundMap["id"]);
-
-            array_push($maps, $map->returnArray());
-
-        }
-
-        echo $twig->render("maps.html", array("maps" => $maps));
-
-    } else {
-
-        echo "The are no maps.";
+        array_push($maps, $map->returnArray());
 
     }
+
+    echo $twig->render("maps.html", array("maps" => $maps));
 
 } catch (PDOException $e) {
 
