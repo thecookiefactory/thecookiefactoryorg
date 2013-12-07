@@ -20,20 +20,6 @@
 
     {% set stream = attribute(streams, selectedid) %}
 
-    {% if stream.live %}
-        <div class='stream-title'><h1>{{ stream.title }}</h1></div>
-    {% endif %}
+    {% include 'stream-main.html' %}
 
-    <div class='stream-content'>
-    <div class='stream-player'>
-
-        {% autoescape false %}{{ stream.embedcode }}{% endautoescape %}
-
-    </div>
-    <div class='stream-description'>
-
-        {{ stream.text }}
-
-    </div>
-    </div>
 {% endif %}

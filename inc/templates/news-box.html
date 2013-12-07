@@ -1,0 +1,66 @@
+<div class='article-header'>
+<div class='article-title'>
+<h1>
+
+{% if main %}
+
+    <a href='/news/{{ new.stringid }}'>{{ new.title }}</a>
+
+{% else %}
+
+    {{ new.title }}
+
+{% endif %}
+
+</h1>
+</div>
+
+<div class='article-metadata'>
+
+{% if main and new.comments %}
+
+    {% if new.commentcount != 1 %}
+        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}#comments'>{{ new.commentcount }} comments</a></span>
+    {% else %}
+        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}#comments'>{{ new.commentcount }} comment</a></span>
+    {% endif %}
+
+{% endif %}
+
+<span class='article-metadata-item'><span class='article-author'>{{ new.author }}</span></span>
+<span class='article-metadata-item'><span class='article-date'>{% autoescape false %}{{ new.date }}{% endautoescape %}</span></span>
+</div>
+
+{% if new.editor %}
+
+    <div class='article-edit-metadata'>
+    <span class='article-metadata-item'><span class='article-author'>{{ new.editor }}</span></span>
+    <span class='article-metadata-item'><span class='article-date'>{% autoescape false %}{{ new.editdate }}{% endautoescape %}</span></span>
+    </div>
+
+{% endif %}
+
+</div>
+<article>
+<span class='article-text'>{{ new.text }}</span>
+</article>
+
+{% if main %}
+
+    <hr class='article-separator'>
+
+{% else %}
+
+    <hr id='comments'>
+
+    {% if not new.comments %}
+
+        <h1 class='comments-title'>Commenting disabled</h1>
+
+    {% else %}
+
+        <!-- require the related forum thread -->
+
+    {% endif %}
+
+{% endif %}
