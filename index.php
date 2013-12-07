@@ -18,35 +18,11 @@ cookieCheck();
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
-?>
+echo $twig->render("index-top.html");
 
-<!doctype html>
-<html>
-<head>
-    <title>thecookiefactory</title>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <link rel='stylesheet' type='text/css' href='/base.css'>
-    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600|Roboto+Slab'>
-    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'>
-    <script src='/js/main.js'></script>
-</head>
-<body>
+include_once("inc/analyticstracking.php");
 
-<?php include_once("inc/analyticstracking.php") ?>
-
-<a href='/'>
-<header>
-
-</header>
-</a>
-
-<div class='wrapper'>
-
-<nav>
-<span class='nav-menubar'>
-<a class='menu-item' href='/news'>news</a><a class='menu-item' href='/maps'>maps</a><a class='menu-item' href='/streams'>streams<?php echo ((isAnyoneLive()) ? "<sup class='menu-live-indicator'>live</sup>" : "") ?></a><a class='menu-item' href='/forums'>forums</a>
-
-<?php
+$someoneIsLive = isAnyoneLive();
 
 try {
 
@@ -56,8 +32,7 @@ try {
 
     while ($srow = $squery->fetch()){
 
-        $pages[] = $srow["stringid"];
-        echo "<a class='menu-item' href='/" . $srow["stringid"] . "'>" . $srow["title"] . "</a>";
+        $pages[] = array("title" => $srow["title"], "stringid" => $srow["stringid"]);
 
     }
 
@@ -67,28 +42,9 @@ try {
 
 }
 
-?>
-</span>
+$loginReturn = $user->login();
 
-<div class='nav-actionbar'>
-<form class='menu-item' onsubmit='searchRedirect();'>
-<input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
-</form>
-
-<?php
-
-$user->login();
-
-?>
-
-</div>
-
-</nav>
-<hr>
-
-<section class='include-section'>
-
-<?php
+echo $twig->render("index-nav.html", array("pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn));
 
 if (isset($_GET["p"]) && vf($_GET["p"])) {
 
@@ -98,7 +54,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
         require_once "inc/" . $p . ".php";
 
-    } else if (in_array($p, $pages)) {
+    } else if (in_array($p, array_column($pages, "stringid"))) {
 
         require_once "inc/custom.php";
 
@@ -114,27 +70,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 }
 
-?>
-
-</section>
-
-</div>
-
-<footer>
-2013 thecookiefactory.org<br>
-<div class='contact-us'>
-    <span class='contact-us-link'><a href='http://steamcommunity.com/groups/thecookiefactory' target='_blank'>Steam</a></span>
-    <span class='contact-us-link'><a href='http://gplus.to/thecookiefactory' target='_blank'>Google+</a></span>
-    <span class='contact-us-link'><a href='http://facebook.com/thecookiefactoryorg' target='_blank'>Facebook</a></span>
-    <span class='contact-us-link'><a href='http://youtube.com/thecookiefactoryorg' target='_blank'>YouTube</a></span>
-    <span class='contact-us-link'><a href='http://github.com/thecookiefactory' target='_blank'>GitHub</a></span>
-</div>
-</footer>
-
-</body>
-</html>
-
-<?php
+echo $twig->render("index-bottom.html");
 
 function cookieCheck() {
 
