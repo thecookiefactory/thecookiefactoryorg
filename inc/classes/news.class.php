@@ -106,7 +106,7 @@ class news extends master {
         $a = Array(
                     "id" => $this->id,
                     "title" => $this->title,
-                    "text" => $this->text,
+                    "text" => Markdown($this->text),
                     "author" => $this->author->getName(),
                     "date" => $this->date->display(),
                     "editor" => 0,

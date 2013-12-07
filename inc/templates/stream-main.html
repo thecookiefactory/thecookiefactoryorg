@@ -10,7 +10,7 @@
 </div>
 <div class='stream-description'>
 
-    {{ stream.text }}
+    {% autoescape false %}{{ stream.text }}{% endautoescape %}
 
 </div>
 </div>
