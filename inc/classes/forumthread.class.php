@@ -282,44 +282,20 @@ class forumthread extends master {
     protected function addForm() {
 
         global $con;
+        global $twig;
 
-        ?>
-        <form action='/forums/add/' method='post'>
-            <label class='forums-newpost-select-label' for='cat'>Category:
-            <select class='forums-newpost-select' name='cat'>
+        $categories = array();
 
-            <?php
-            $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+        $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            while ($foundCategory = $selectCategories->fetch()) {
-                $cat = new forumcategory($foundCategory["id"]);
-                ?>
+        while ($foundCategory = $selectCategories->fetch()) {
 
-                <option value='<?php echo $cat->getId(); ?>'><?php echo $cat->getLongName(); ?></option>
+            $cat = new forumcategory($foundCategory["id"]);
+            $categories[] = $cat->returnArray();
 
-                <?php
-            }
-            ?>
+        }
 
-        </select></label>
-        <input class='forums-newpost-submit' type='submit' name='addnew' value='Submit &#x27A8;'>
-            <h1>
-                <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37'>
-            </h1>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
-                    #1
-                </div>
-            </div>
-            <div>
-                <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'></textarea>
-            </div>
-        </div>
-
-        </form>
-
-        <?php
+        echo $twig->render("forum-add.html", array("categories" => $categories));
 
     }
 

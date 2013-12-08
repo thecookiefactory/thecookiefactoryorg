@@ -38,7 +38,6 @@ if ($action == "add" && $user->isReal()) {
 
         }
 
-
     }
 
 } else {
