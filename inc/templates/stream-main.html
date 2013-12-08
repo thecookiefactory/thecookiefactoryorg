@@ -1,0 +1,16 @@
+{% if stream.live %}
+    <div class='stream-title'><h1>{{ stream.title }}</h1></div>
+{% endif %}
+
+<div class='stream-content'>
+<div class='stream-player'>
+
+    {% autoescape false %}{{ stream.embedcode }}{% endautoescape %}
+
+</div>
+<div class='stream-description'>
+
+    {% autoescape false %}{{ stream.text }}{% endautoescape %}
+
+</div>
+</div>

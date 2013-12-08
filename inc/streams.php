@@ -6,41 +6,24 @@ include_once "analyticstracking.php";
 require_once "classes/stream.class.php";
 require_once "inc/markdown/markdown.php";
 
+$streams = array();
+
 $_SESSION["lp"] = $p;
 
 $selectStreams = $con->query("SELECT `streams`.`id` FROM `streams`");
 
-?>
+while ($foundStream = $selectStreams->fetch()) {
 
-<ul class='stream-menu'>
+    $stream = new stream($foundStream["id"]);
 
-<?php
-
-if ($selectStreams->rowCount() != 0) {
-
-    while ($foundStream = $selectStreams->fetch()) {
-
-        $stream = new stream($foundStream["id"]);
-
-        $stream->button();
-
-    }
-
-} else {
-
-    echo "There are no active streams.";
+    $streams[$foundStream["id"]] = $stream->returnArray();
 
 }
 
-?>
-
-</ul>
-
-<?php
+$selectedId = 0;
 
 if (isset($_GET["id"])) {
 
-    // DISPLAY A STREAM
     $id = strip($_GET["id"]);
 
     $streamer = new user($id, "name");
@@ -51,10 +34,12 @@ if (isset($_GET["id"])) {
 
         if ($stream->isReal()) {
 
-            $stream->display();
+            $selectedId = $stream->getId();
 
         }
 
     }
 
 }
+
+echo $twig->render("streams.html", array("streams" => $streams, "selectedid" => $selectedId));

@@ -9,7 +9,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  *
  * function __construct
  *
- * function tableBox
+ * function returnArray
  *
  * function getName
  *
@@ -91,17 +91,17 @@ class forumcategory extends master {
 
     }
 
-    public function tableBox() {
+    public function returnArray() {
 
-        ?>
-        <td class='forums-entry-category forums-category-<?php echo $this->getName(); ?>'>
-            <a class='forums-entry-category-text' href='/forums/category/<?php echo $this->getName(); ?>'>
+        $a = array(
+                    "id" => $this->id,
+                    "name" => $this->name,
+                    "longname" => $this->longname,
+                    "hexcode" => $this->hexcode,
+                    "hoverhexcode" => $this->hoverhexcode
+                    );
 
-                <?php echo $this->getName(); ?>
-
-            </a>
-        </td>
-        <?php
+        return $a;
 
     }
 

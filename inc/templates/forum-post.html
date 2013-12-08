@@ -1,0 +1,38 @@
+<div class='forums-post'>
+    <div class='forums-post-header'>
+        <div class='forums-post-number'>
+
+            #{{ cn }}
+
+        </div>
+        <div class='forums-post-metadata'>
+
+            {% if post.userhasrights %}
+                <a href='/forums/edit/{{ thread.id }}/{{ post.id }}'>edit</a>
+            {% endif %}
+            {% if post.editdate %}
+                last edited {% autoescape false %}{{ post.editdate }}{% endautoescape %}
+            {% endif %}
+
+            <span class='forums-post-metadata-item'>
+                <span class='forums-post-author'>
+
+                    {{ post.author }}
+
+                </span>
+            </span>
+            <span class='forums-post-metadata-item'>
+                <span class='forums-post-date'>
+
+                    {% autoescape false %}{{ post.date }}{% endautoescape %}
+
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class='forums-post-text'>
+
+            <p>{% autoescape false %}{{ post.text }}{% endautoescape %}</p>
+
+    </div>
+</div>

@@ -10,7 +10,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  *
  * function __construct
  *
- * function display
+ * function returnArray
  *
  * function edit
  *
@@ -76,48 +76,31 @@ class forumpost extends master {
 
     }
 
-    public function display($cn = 0) {
+    public function returnArray($loc = null) {
 
         global $user;
 
         $thread = new forumthread($this->threadid);
 
-        ?>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
+        $a = array(
+                    "id" => $this->id,
+                    "text" => $this->text,
+                    "author" => $this->author->getName(),
+                    "date" => $this->date->display(),
+                    "editdate" => 0,
+                    "userhasrights" => 0
+                    );
 
-                    <?php echo "#" . $cn; ?>
+        if ($loc == "main")
+            $a["text"] = tformat($this->text);
 
-                </div>
-                <div class='forums-post-metadata'>
+        if ($this->editdate != null)
+            $a["editdate"] = $this->editdate->display();
 
-                    <?php if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
-                    <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
+        if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin())
+            $a["userhasrights"] = 1;
 
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-author'>
-
-                            <?php echo $this->author->getName(); ?>
-
-                        </span>
-                    </span>
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-date'>
-
-                            <?php echo $this->date->display(); ?>
-
-                        </span>
-                    </span>
-                </div>
-            </div>
-            <div class='forums-post-text'>
-
-                    <p><?php echo tformat($this->text); ?></p>
-
-            </div>
-        </div>
-        <?php
+        return $a;
 
     }
 
@@ -158,13 +141,15 @@ class forumpost extends master {
             $deletePost->bindValue("pid", $this->id, PDO::PARAM_INT);
             $deletePost->execute();
 
-            if (isset($_SESSION["lp"])) {
+            $thread = new forumthread($this->threadid);
 
-                header("Location: /" . $_SESSION["lp"]);
+            if (!$thread->isNewsThread()) {
+
+                header("Location: /forums/" . $this->threadid);
 
             } else {
 
-                header("Location: /news");
+                header("Location: /news/" . $thread->getNewsStringId());
 
             }
 
@@ -203,34 +188,10 @@ class forumpost extends master {
 
     protected function editForm() {
 
+        global $twig;
         global $user;
 
-        ?>
-        <form action='/forums/edit/<?php echo $this->threadid; ?>/<?php echo $this->id; ?>/' method='post'>
-
-        <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
-                    #N
-                </div>
-            </div>
-            <div>
-                <textarea class='forums-newpost-text' name='text' autofocus required placeholder='Type your post here...' maxlength='20000'><?php echo $this->text; ?></textarea>
-            </div>
-        </div>
-
-        <?php
-        if ($user->isAdmin()) {
-
-            echo "delete this reply <input type='checkbox' name='delete'>";
-
-        }
-        ?>
-
-        </form>
-
-        <?php
+        echo $twig->render("forum-edit.html", array("ispost" => true, "userisadmin" => $user->isAdmin(), "post" => $this->returnArray(), "thread" => array("id" => $this->threadid)));
 
     }
 
