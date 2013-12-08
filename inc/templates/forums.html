@@ -8,20 +8,11 @@
 {% if categoryfilter %}
 <a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
 {% endif %}
-<style type='text/css' scoped>
-    {% for category in categories %}
-
-    .forums-category-{{ category.name}} {
-        background-color: #{{ category.hexcode }};
-    }
-
-    .forums-category-{{ category.name}}:hover {
-        background-color: #{{ category.hoverhexcode }};
-    }
-
-    {% endfor %}
-</style>
 {% for thread in threads %}
+
+    {% if loop.first %}
+        {% include 'category-css.html' %}
+    {% endif %}
 
     {% include 'forum-row.html' %}
 
