@@ -103,7 +103,7 @@ class news extends master {
 
         global $con;
 
-        $a = Array(
+        $a = array(
                     "id" => $this->id,
                     "title" => $this->title,
                     "text" => Markdown($this->text),

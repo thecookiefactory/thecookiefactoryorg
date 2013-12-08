@@ -99,7 +99,7 @@ class map extends master {
 
         global $con;
 
-        $a = Array(
+        $a = array(
                     "id" => $this->id,
                     "name" => $this->name,
                     "text" => $this->text,
@@ -107,11 +107,11 @@ class map extends master {
                     "editdate" => $this->editdate->display(),
                     "extension" => $this->extension,
                     "comments" => $this->comments,
-                    "game" => Array("name" => $this->game->getName(), "steamid" => $this->game->getSteamId()),
+                    "game" => array("name" => $this->game->getName(), "steamid" => $this->game->getSteamId()),
                     "link" => $this->link,
                     "downloadcount" => $this->downloadcount,
                     "picturecount" => count($this->getPictures()),
-                    "pictures" => Array()
+                    "pictures" => array()
                     );
 
         if ($this->comments) {
@@ -125,7 +125,7 @@ class map extends master {
 
                 $thread = new forumthread($threadData["id"]);
 
-                $a["thread"] = Array("id" => $thread->getId(), "replycount" => $thread->replyCount());
+                $a["thread"] = array("id" => $thread->getId(), "replycount" => $thread->replyCount());
 
             } catch (PDOException $e) {
 
@@ -137,7 +137,7 @@ class map extends master {
 
         foreach ($this->getPictures() as $picture) {
 
-            array_push($a["pictures"], Array("filename" => $picture->getFileName(), "text" => $picture->getText()));
+            array_push($a["pictures"], array("filename" => $picture->getFileName(), "text" => $picture->getText()));
 
         }
 
@@ -149,7 +149,7 @@ class map extends master {
 
         global $con;
 
-        $pictures = Array();
+        $pictures = array();
 
         try {
 

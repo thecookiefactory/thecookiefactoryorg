@@ -28,7 +28,7 @@ try {
 
     $squery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
 
-    $pages = Array();
+    $pages = array();
 
     while ($srow = $squery->fetch()){
 

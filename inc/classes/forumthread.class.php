@@ -117,130 +117,75 @@ class forumthread extends master {
 
     }
 
-    public function display() {
+    public function returnArray($loc = null) {
 
         global $con;
         global $user;
 
-        $this->commentProcess();
+        $a = array(
+                    "id" => $this->id,
+                    "title" => $this->title,
+                    "text" => $this->text,
+                    "author" => $this->author->getName(),
+                    "date" => $this->date->display(),
+                    "editdate" => 0,
+                    "lastdate" => $this->lastdate->display(),
+                    "categoryname" => 0,
+                    "mapname" => 0,
+                    "newsstringid" => 0,
+                    "closed" => $this->closed,
+                    "replycount" => $this->replyCount()
+                    );
 
-        if (!$this->isNewsThread()) {
+        if ($this->editdate != null)
+            $a["editdate"] = $this->editdate->display();
 
-            ?>
-            <h1>
-                <a href='/forums/<?php echo $this->id; ?>'><?php echo $this->title; ?></a>
-            </h1>
+        if ($this->forumcategory != null)
+            $a["categoryname"] = $this->forumcategory->getName();
 
-            <?php echo ($this->isClosed() ? "<div class='forums-thread-closedtext'>closed</div>" : ""); ?>
+        if ($this->map != null)
+            $a["mapname"] = $this->map->getName();
 
-            <?php
+        if ($this->news != null)
+            $a["newsstringid"] = $this->news->getStringId();
 
-            if ($this->map != null) {
+        if ($loc == "main") {
 
-                echo "<a href='/maps/#" . $this->map->getName() . "'>&#x21AA; related map</a>";
+            $a["firstpost"] = array(
+                                    "id" => "",
+                                    "author" => $this->author->getName(),
+                                    "date" => $this->date->display(),
+                                    "editdate" => 0,
+                                    "text" => tformat($this->text),
+                                    "userhasrights" => 0
+                                    );
 
-            }
+            if ($this->editdate != null)
+                $a["firstpost"]["editdate"] = $this->editdate->display();
 
-        }
+            if (($user->isReal() && $this->author->getId() == $user->getId() && !$this->isClosed()) || $user->isAdmin())
+                $a["firstpost"]["userhasrights"] = 1;
 
-        ?>
-
-        <div class='forums-posts'>
-
-            <?php
-            if (!$this->isNewsThread()) {
-
-                $this->firstPost();
-
-            }
+            $a["posts"] = array();
 
             $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
             $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
             $selectPosts->execute();
 
-            $cn = $this->isNewsThread() ? 1 : 2;
-
             while ($foundPost = $selectPosts->fetch()) {
 
                 $post = new forumpost($foundPost["id"]);
-                $post->display($cn);
-                $cn++;
+                $a["posts"][] = $post->returnArray();
 
             }
-
-        ?>
-
-        </div>
-
-        <?php
-
-        if (!$this->isClosed()) {
-
-            if ($user->isReal()) {
-
-                ?>
-                <hr><h1 class='comments-title'>Reply to this thread</h1>
-                <?php
-                $this->commentForm();
-
-            } else {
-
-                ?>
-                <hr><h1 class='comments-title'>Log in to be able to post replies</h1>
-                <?php
-
-            }
-
-        } else {
-
-            ?>
-            closed thread
-            <?php
 
         }
 
-    }
-
-    public function displayRow() {
-
-        global $con;
-
-        ?>
-
-        <tr class='forums-entry'>
-            <?php $this->forumcategory->tableBox(); ?>
-            <td class='forums-entry-main <?php echo ($this->isClosed() ? "forums-entry-closed" : ""); ?>'>
-                <a class='forums-entry-title' href='/forums/<?php echo $this->id; ?>'>
-
-                    <?php echo $this->title; ?>
-
-                </a>
-                <br>
-                <span class='forums-entry-metadata'>
-
-                    created by <?php echo $this->author->getName() . " " . $this->date->display(); ?>
-
-                </span>
-            </td>
-            <td class='forums-entry-modifydate'>
-                <span class='forums-entry-miniheader'>Last reply posted</span><br>
-
-                <?php echo $this->lastdate->display(); ?>
-
-            </td>
-            <td class='forums-entry-postcount'>
-                <span class='forums-entry-miniheader'>Thread has</span><br>
-
-                <?php echo $this->replyCount() . ($this->replyCount() == 1 ? " reply" : " replies"); ?>
-
-            </td>
-        </tr>
-
-        <?php
+        return $a;
 
     }
 
-    protected function commentProcess() {
+    public function commentProcess() {
 
         global $con;
         global $user;
@@ -269,72 +214,6 @@ class forumthread extends master {
             }
 
         }
-
-    }
-
-    protected function firstPost() {
-
-        global $user;
-
-        ?>
-
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
-                    #1
-                </div>
-                <div class='forums-post-metadata'>
-
-                    <?php if (($user->isReal() && $this->author->getId() == $user->getId() && !$this->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->id . "'>edit</a>"; ?>
-                    <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
-
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-author'>
-
-                            <?php echo $this->author->getName(); ?>
-
-                        </span>
-                    </span>
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-date'>
-
-                            <?php echo $this->date->display(); ?>
-
-                        </span>
-                    </span>
-                </div>
-            </div>
-            <div class='forums-post-text'>
-
-                <p><?php echo tformat($this->text); ?></p>
-
-            </div>
-        </div>
-
-        <?php
-
-    }
-
-    protected function commentForm() {
-
-        ?>
-        <div class='comment-form'>
-            <?php
-            if ($this->isNewsThread()) {
-
-                echo "<form action='/news/" . $this->news->getStringId() . "/' method='post'>";
-
-            } else {
-
-                echo "<form action='/forums/" . $this->id . "/' method='post'>";
-
-            }
-            ?>
-                <textarea name='text' class='comment-textarea' required maxlength='20000'></textarea>
-                <input type='submit' name='cp' value='&gt;' class='comment-submitbutton'>
-            </form>
-        </div>
-        <?php
 
     }
 

@@ -76,48 +76,28 @@ class forumpost extends master {
 
     }
 
-    public function display($cn = 0) {
+    public function returnArray() {
 
         global $user;
 
         $thread = new forumthread($this->threadid);
 
-        ?>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
+        $a = array(
+                    "id" => $this->id,
+                    "text" => tformat($this->text),
+                    "author" => $this->author->getName(),
+                    "date" => $this->date->display(),
+                    "editdate" => 0,
+                    "userhasrights" => 0
+                    );
 
-                    <?php echo "#" . $cn; ?>
+        if ($this->editdate != null)
+            $a["editdate"] = $this->editdate->display();
 
-                </div>
-                <div class='forums-post-metadata'>
+        if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin())
+            $a["userhasrights"] = 1;
 
-                    <?php if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin()) echo "<a href='/forums/edit/" . $this->threadid . "/" . $this->id . "'>edit</a>"; ?>
-                    <?php if ($this->editdate != null) echo "last edited " . $this->editdate->display(); ?>
-
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-author'>
-
-                            <?php echo $this->author->getName(); ?>
-
-                        </span>
-                    </span>
-                    <span class='forums-post-metadata-item'>
-                        <span class='forums-post-date'>
-
-                            <?php echo $this->date->display(); ?>
-
-                        </span>
-                    </span>
-                </div>
-            </div>
-            <div class='forums-post-text'>
-
-                    <p><?php echo tformat($this->text); ?></p>
-
-            </div>
-        </div>
-        <?php
+        return $a;
 
     }
 
