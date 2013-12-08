@@ -76,7 +76,7 @@ class forumpost extends master {
 
     }
 
-    public function returnArray() {
+    public function returnArray($loc = null) {
 
         global $user;
 
@@ -84,12 +84,15 @@ class forumpost extends master {
 
         $a = array(
                     "id" => $this->id,
-                    "text" => tformat($this->text),
+                    "text" => $this->text,
                     "author" => $this->author->getName(),
                     "date" => $this->date->display(),
                     "editdate" => 0,
                     "userhasrights" => 0
                     );
+
+        if ($loc == "main")
+            $a["text"] = tformat($this->text);
 
         if ($this->editdate != null)
             $a["editdate"] = $this->editdate->display();
@@ -138,13 +141,15 @@ class forumpost extends master {
             $deletePost->bindValue("pid", $this->id, PDO::PARAM_INT);
             $deletePost->execute();
 
-            if (isset($_SESSION["lp"])) {
+            $thread = new forumthread($this->threadid);
 
-                header("Location: /" . $_SESSION["lp"]);
+            if (!$thread->isNewsThread()) {
+
+                header("Location: /forums/" . $this->threadid);
 
             } else {
 
-                header("Location: /news");
+                header("Location: /news/" . $thread->getNewsStringId());
 
             }
 
@@ -183,34 +188,10 @@ class forumpost extends master {
 
     protected function editForm() {
 
+        global $twig;
         global $user;
 
-        ?>
-        <form action='/forums/edit/<?php echo $this->threadid; ?>/<?php echo $this->id; ?>/' method='post'>
-
-        <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
-                    #N
-                </div>
-            </div>
-            <div>
-                <textarea class='forums-newpost-text' name='text' autofocus required placeholder='Type your post here...' maxlength='20000'><?php echo $this->text; ?></textarea>
-            </div>
-        </div>
-
-        <?php
-        if ($user->isAdmin()) {
-
-            echo "delete this reply <input type='checkbox' name='delete'>";
-
-        }
-        ?>
-
-        </form>
-
-        <?php
+        echo $twig->render("forum-edit.html", array("ispost" => true, "userisadmin" => $user->isAdmin(), "post" => $this->returnArray(), "thread" => array("id" => $this->threadid)));
 
     }
 

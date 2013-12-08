@@ -175,7 +175,7 @@ class forumthread extends master {
             while ($foundPost = $selectPosts->fetch()) {
 
                 $post = new forumpost($foundPost["id"]);
-                $a["posts"][] = $post->returnArray();
+                $a["posts"][] = $post->returnArray("main");
 
             }
 
@@ -423,53 +423,21 @@ class forumthread extends master {
 
         global $con;
         global $user;
+        global $twig;
 
-        ?>
-        <form action='/forums/edit/<?php echo $this->id; ?>/' method='post'>
-            <label class='forums-newpost-select-label' for='cat'>Category:
-            <select class='forums-newpost-select' name='cat'>
+        $categories = array();
 
-            <?php
-                $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+        $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-                while ($foundCategory = $selectCategories->fetch()) {
-                    $cat = new forumcategory($foundCategory["id"]);
-                    ?>
+        while ($foundCategory = $selectCategories->fetch()) {
 
-                    <option value='<?php echo $cat->getId(); ?>'<?php if ($cat->getId() == $this->forumcategory->getId()) echo " selected" ?>><?php echo $cat->getLongName(); ?></option>
+            $cat = new forumcategory($foundCategory["id"]);
+            $categories[] = $cat->returnArray();
 
-                    <?php
-                }
-            ?>
+        }
 
-        </select></label>
-        <input class='forums-newpost-submit' type='submit' name='edit' value='Submit &#x27A8;'>
-            <h1>
-                <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37' value='<?php echo $this->title; ?>'>
-            </h1>
-        <div class='forums-post'>
-            <div class='forums-post-header'>
-                <div class='forums-post-number'>
-                    #1
-                </div>
-            </div>
-            <div>
-                <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'><?php echo $this->text; ?></textarea>
-            </div>
-        </div>
+        echo $twig->render("forum-edit.html", array("categories" => $categories, "currentcategory" => $this->forumcategory->getId(), "ispost" => false, "userisadmin" => $user->isAdmin(), "thread" => $this->returnArray()));
 
-        <?php
-            if ($user->isAdmin()) {
-
-                echo "delete this whole thread <input type='checkbox' name='delete'>";
-                echo "closed thread?"; echo ($this->isClosed()) ? " <input type='checkbox' name='closed' checked>" : " <input type='checkbox' name='closed'>";
-
-            }
-        ?>
-
-        </form>
-
-        <?php
 
     }
 
