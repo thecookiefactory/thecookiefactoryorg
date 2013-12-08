@@ -24,7 +24,7 @@ try {
 
         $map = new map($foundMap["id"]);
 
-        array_push($maps, $map->returnArray());
+        $maps[] = $map->returnArray();
 
     }
 

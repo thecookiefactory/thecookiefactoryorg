@@ -10,7 +10,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  *
  * function __construct
  *
- * function display
+ * function returnArray
  *
  * function edit
  *

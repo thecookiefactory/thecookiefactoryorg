@@ -14,15 +14,9 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  *
  * function __construct
  *
- * function display
- *
- * function displayRow
+ * function returnArray
  *
  * function commentProcess
- *
- * function firstPost
- *
- * function commentForm
  *
  * function addNew
  *
@@ -271,6 +265,7 @@ class forumthread extends master {
                     $insertThread->execute();
 
                     header("Location: /forums/" . $con->lastInsertId());
+
                 }
 
             }
@@ -410,7 +405,6 @@ class forumthread extends master {
 
         }
 
-        // redirect
         if ($updateThread->rowCount() == 1) {
 
             header("Location: /forums/" . $this->id);
@@ -422,8 +416,8 @@ class forumthread extends master {
     protected function editForm() {
 
         global $con;
-        global $user;
         global $twig;
+        global $user;
 
         $categories = array();
 
@@ -437,7 +431,6 @@ class forumthread extends master {
         }
 
         echo $twig->render("forum-edit.html", array("categories" => $categories, "currentcategory" => $this->forumcategory->getId(), "ispost" => false, "userisadmin" => $user->isAdmin(), "thread" => $this->returnArray()));
-
 
     }
 

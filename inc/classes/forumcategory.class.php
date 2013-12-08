@@ -9,7 +9,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  *
  * function __construct
  *
- * function tableBox
+ * function returnArray
  *
  * function getName
  *

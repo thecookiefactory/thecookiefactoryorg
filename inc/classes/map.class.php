@@ -13,7 +13,7 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  *
  * function __construct
  *
- * function display
+ * function returnArray
  *
  * function getPictures
  *
@@ -137,7 +137,7 @@ class map extends master {
 
         foreach ($this->getPictures() as $picture) {
 
-            array_push($a["pictures"], array("filename" => $picture->getFileName(), "text" => $picture->getText()));
+            $a["pictures"][] = array("filename" => $picture->getFileName(), "text" => $picture->getText());
 
         }
 
