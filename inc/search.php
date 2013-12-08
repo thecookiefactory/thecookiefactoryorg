@@ -10,6 +10,7 @@ require_once "inc/markdown/markdown.php";
 $termlen = 0;
 $term = 0;
 $resultsFound = 0;
+$categories = array();
 $newsArray = array();
 $threadArray = array();
 
@@ -88,6 +89,23 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 }
 
+                try {
+
+                    $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
+
+                    while ($foundCategory = $selectCategories->fetch()) {
+
+                        $category = new forumcategory($foundCategory["id"]);
+                        $categories[] = $category->returnArray();
+
+                    }
+
+                } catch (PDOException $e) {
+
+                    die("An error occurred while trying to fetch the forum categories.");
+
+                }
+
             } else {
 
                 $resultsFound = 0;
@@ -100,7 +118,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
 }
 
-echo $twig->render("search.html", array("news" => $newsArray, "resultbutton" => resultbutton(), "resultsfound" => $resultsFound, "searchtype" => $searchType, "term" => $term, "termlen" => $termlen, "threads" => $threadArray));
+echo $twig->render("search.html", array("categories" => $categories, "news" => $newsArray, "resultbutton" => resultbutton(), "resultsfound" => $resultsFound, "searchtype" => $searchType, "term" => $term, "termlen" => $termlen, "threads" => $threadArray));
 
 function resultbutton() {
 
