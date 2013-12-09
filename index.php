@@ -46,6 +46,11 @@ $loginReturn = $user->login();
 
 echo $twig->render("index-nav.html", array("pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn));
 
+echo "<pre>";
+print_r($pages);
+print_r(array_column($pages, "stringid"));
+echo "</pre>";
+
 if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     $p = strip($_GET["p"]);
@@ -56,6 +61,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     } else if (in_array($p, array_column($pages, "stringid"))) {
 
+        echo "requiring|";
         require_once "inc/custom.php";
 
     } else if ($p != "login" && $p != "logout") {
