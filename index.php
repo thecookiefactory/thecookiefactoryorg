@@ -33,6 +33,7 @@ try {
     while ($srow = $squery->fetch()){
 
         $pages[] = array("title" => $srow["title"], "stringid" => $srow["stringid"]);
+        $pageids[] = $srow["stringid"];
 
     }
 
@@ -54,7 +55,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
         require_once "inc/" . $p . ".php";
 
-    } else if (in_array($p, array_column($pages, "stringid"))) {
+    } else if (in_array($p, $pageids)) {
 
         require_once "inc/custom.php";
 
