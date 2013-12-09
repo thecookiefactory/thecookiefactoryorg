@@ -6,16 +6,12 @@ if (!isset($r_c)) header("Location: /notfound.php");
  * game class
  *
  * function __construct
- * (line 33)
  *
  * function getName
- * (line 69)
  *
  * function isSteamGame
- * (line 75)
  *
  * function getSteamId
- * (line 81)
  */
 class game extends master {
 

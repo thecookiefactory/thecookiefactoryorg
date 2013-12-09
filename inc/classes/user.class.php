@@ -9,22 +9,16 @@ require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
  * user class
  *
  * function __construct
- * (line 50)
  *
  * function login
- * (line 108)
  *
  * function register
- * (line 224)
  *
  * function getName
- * (line 283)
  *
  * function getTwitchName
- * (line 297)
  *
  * function isAdmin
- * (line 303)
  */
 class user extends master {
 
@@ -112,15 +106,15 @@ class user extends master {
 
         if ($this->isReal()) {
 
-            echo "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . $this->getName() . "</span></span>";
+            $rs = "<span class='menu-item' class='actionbar-logindata'>logged in as <span class='actionbar-username'> " . $this->getName() . "</span></span>";
 
             if ($this->isAdmin()) {
 
-                echo "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
+                $rs .= "<span class='menu-item'><a href='/admin/index.php' target='_blank'>admin menu</a></span>";
 
             }
 
-            echo "<span class='menu-item'><a href='/logout'>log out</a></span>";
+            $rs .= "<span class='menu-item'><a href='/logout'>log out</a></span>";
 
             if (isset($_GET["p"]) && $_GET["p"] == "logout") {
 
@@ -141,6 +135,8 @@ class user extends master {
 
             }
 
+            return $rs;
+
         } else {
 
             if (!isset($OpenID)) {
@@ -160,13 +156,13 @@ class user extends master {
 
                 if (!isset($_SESSION["userid"])) {
 
-                    echo "<a class='menu-item' href='/login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
+                    return "<a class='menu-item' href='/login'><span class='login-text faux-link'>sign in via steam</span><img class='login-button login-button-image' src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_small.png' alt='login steam button'></a>";
 
                 }
 
             } elseif ($OpenID->mode == "cancel") {
 
-                echo "user canceled auth";
+                return "user canceled auth";
 
             } else {
 

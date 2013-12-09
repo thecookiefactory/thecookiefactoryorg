@@ -1,0 +1,21 @@
+{% if loggedin %}
+<a class='forums-createthread' href='/forums/add'>
+    <span class='forums-createthread-sign'>+</span>
+    <span class='forums-createthread-text'>create a new thread</span>
+</a>
+{% endif %}
+
+{% if categoryfilter %}
+<a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
+{% endif %}
+{% for thread in threads %}
+
+    {% if loop.first %}
+        {% include 'category-css.html' %}
+    {% endif %}
+
+    {% include 'forum-row.html' %}
+
+{% else %}
+    <p>There are no forum threads. Why don't you create one?</p>
+{% endfor %}

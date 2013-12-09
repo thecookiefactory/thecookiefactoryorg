@@ -6,10 +6,8 @@ if (!isset($r_c)) header("Location: /notfound.php");
  * master class
  *
  * function getId
- * (line 23)
  *
  * function isReal
- * (line 29)
  */
 class master {
 

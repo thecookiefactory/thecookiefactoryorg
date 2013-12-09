@@ -38,7 +38,6 @@ if ($action == "add" && $user->isReal()) {
 
         }
 
-
     }
 
 } else {
@@ -49,7 +48,9 @@ if ($action == "add" && $user->isReal()) {
 
         if (($thread->isReal() && !$thread->isNewsThread()) || ($thread->isNewsThread() && isset($tid))) {
 
-            $thread->display();
+            $thread->commentProcess();
+
+            echo $twig->render("forum-main.html", array("thread" => $thread->returnArray("main"), "loggedin" => $user->isReal()));
 
         } else {
 
@@ -59,18 +60,8 @@ if ($action == "add" && $user->isReal()) {
 
     } else {
 
-        if ($user->isReal()) {
-
-            ?>
-
-            <a class='forums-createthread' href='/forums/add'>
-                <span class='forums-createthread-sign'>+</span>
-                <span class='forums-createthread-text'>create a new thread</span>
-            </a>
-
-            <?php
-
-        }
+        $categories = array();
+        $threads = array();
 
         $get = isset($_GET["cat"]) ? strip($_GET["cat"]) : null;
         $cat = new forumcategory($get, "name");
@@ -86,15 +77,13 @@ if ($action == "add" && $user->isReal()) {
                 $selectThreads->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
                 $selectThreads->execute();
 
+                $categoryFilter = 1;
+
             } catch (PDOException $e) {
 
                 die("An error occurred while trying to fetch the threads.");
 
             }
-
-            ?>
-            <a class='forums-clearfilter' href='/forums'>&#x21A9; clear category filter</a>
-            <?php
 
         } else {
 
@@ -102,6 +91,8 @@ if ($action == "add" && $user->isReal()) {
 
                 $selectThreads = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`lastdate` DESC");
 
+                $categoryFilter = 0;
+
             } catch (PDOException $e) {
 
                 die("An error occurred while trying to fetch the threads.");
@@ -110,64 +101,31 @@ if ($action == "add" && $user->isReal()) {
 
         }
 
-        ?>
+        try {
 
-        <style type='text/css' scoped>
+            $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
 
-            <?php
+            while ($foundCategory = $selectCategories->fetch()) {
 
-            try {
-
-                $selectCategories = $con->query("SELECT * FROM `forumcategories`");
-
-                while ($foundCategory = $selectCategories->fetch()) {
-
-                    echo ".forums-category-" . $foundCategory["name"] . "         {background-color: #" . $foundCategory["hexcode"] . "; }\n";
-                    echo ".forums-category-" . $foundCategory["name"] . ":hover   {background-color: #" . $foundCategory["hoverhexcode"]. "; }\n";
-
-                }
-
-            } catch (PDOException $e) {
-
-                die("An error occurred while trying to fetch the forum categories.");
+                $category = new forumcategory($foundCategory["id"]);
+                $categories[] = $category->returnArray();
 
             }
 
-            ?>
+        } catch (PDOException $e) {
 
-        </style>
-        <table class='forums-table'>
-                <colgroup>
-                    <col class='forums-column-category'>
-                    <col class='forums-column-title'>
-                    <col class='forums-column-modifydate'>
-                    <col class='forums-column-postcount'>
-                </colgroup>
-            <tbody>
-
-        <?php
-
-        if ($selectThreads->rowCount() != 0) {
-
-            while ($foundThread = $selectThreads->fetch()) {
-
-                $thread = new forumthread($foundThread["id"]);
-                $thread->displayRow();
-
-            }
-
-        } else {
-
-            echo "There are no forum threads. Why don't you create one?";
+            die("An error occurred while trying to fetch the forum categories.");
 
         }
 
-        ?>
+        while ($foundThread = $selectThreads->fetch()) {
 
-            </tbody>
-        </table>
+            $thread = new forumthread($foundThread["id"]);
+            $threads[] = $thread->returnArray();
 
-        <?php
+        }
+
+        echo $twig->render("forums.html", array("categories" => $categories, "loggedin" => $user->isReal(), "categoryfilter" => $categoryFilter, "threads" => $threads));
 
     }
 

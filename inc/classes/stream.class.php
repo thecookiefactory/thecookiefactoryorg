@@ -8,19 +8,12 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * stream class
  *
  * function __construct
- * (line 40)
  *
- * function display
- * (line 95)
- *
- * function button
- * (line 126)
+ * function returnArray
  *
  * function isLive
- * (line 159)
  *
  * function getEmbedCode
- * (line 165)
  */
 class stream extends master {
 
@@ -92,67 +85,18 @@ class stream extends master {
 
     }
 
-    public function display() {
+    public function returnArray() {
 
-        if ($this->isLive()) {
+        $a = array(
+                    "id" => $this->id,
+                    "title" => $this->title,
+                    "text" => Markdown($this->text),
+                    "author" => $this->author->getName(),
+                    "islive" => $this->isLive(),
+                    "embedcode" => $this->getEmbedCode()
+                    );
 
-            ?>
-
-            <div class='stream-title'><h1><?php echo $this->title; ?></h1></div>
-
-            <?php
-
-        }
-
-        ?>
-
-        <div class='stream-content'>
-            <div class='stream-player'>
-
-                <?php echo $this->getEmbedCode(); ?>
-
-            </div>
-            <div class='stream-description'>
-
-                <?php echo Markdown($this->text); ?>
-
-            </div>
-        </div>
-
-        <?php
-
-    }
-
-    public function button() {
-
-        echo "<a href='/streams/" . $this->author->getName() . "'>";
-
-        if (isset($_GET["id"]) && $this->author->getName() == $_GET["id"]) {
-
-            ?>
-            <li class='stream-button stream-button-selected
-            <?php
-
-        } else {
-
-            ?>
-            <li class='stream-button
-            <?php
-
-        }
-
-        if ($this->isLive()) {
-            ?>
-            stream-live
-            <?php
-        }
-
-        ?>
-
-        '><?php echo $this->author->getName(); ?></li>
-        </a>
-
-        <?php
+        return $a;
 
     }
 

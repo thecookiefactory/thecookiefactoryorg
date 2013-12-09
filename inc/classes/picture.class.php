@@ -8,13 +8,10 @@ require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
  * picture class
  *
  * function __construct
- * (line 34)
  *
  * function getText
- * (line 71)
  *
  * function getFileName
- * (line 77)
  */
 class picture extends master {
 

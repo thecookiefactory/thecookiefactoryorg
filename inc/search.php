@@ -7,90 +7,43 @@ require_once "inc/classes/forumthread.class.php";
 require_once "inc/classes/news.class.php";
 require_once "inc/markdown/markdown.php";
 
-?>
-
-<?php
+$termlen = 0;
+$term = 0;
+$resultsFound = 0;
+$categories = array();
+$newsArray = array();
+$threadArray = array();
 
 if (isset($_GET["term"]) && vf($_GET["term"])) {
 
     $term = str_replace("%", "", $_GET["term"]);
     $term = strip($term);
+    $termlen = strlen($term);
 
-    if (strlen($term) > 50) {
-        ?>
-
-        <div class='search-title'>Please enter a keyword shorter than 50 characters.</div>
-
-        <?php
-    } else if (strlen($term) >= 3) {
+    if (strlen($term) < 50 && strlen($term) > 2) {
 
         if (isset($_POST["inn"]) || ($_SESSION["lp"] != "forums" && !isset($_POST["inf"]))) {
 
-            $nsearch = true;
+            $searchType = "news";
 
             $newsSearch = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
             $newsSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
             $newsSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
             $newsSearch->execute();
 
-            $nr = $newsSearch->rowCount();
+            $resultsFound = $newsSearch->rowCount();
 
-            $sss = ($nr == 1) ? "" : "s";
+            while ($foundNews = $newsSearch->fetch()) {
 
-            if ($nr == 0) {
+                $news = new news($foundNews["id"]);
 
-                if (strlen($term) > 23) {
-                    ?>
+                $newsArray[] = $news->returnArray();
 
-                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for your search term</div>
-
-                    <?php
-                } else {
-                    ?>
-
-                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for <span class='search-term'><?php echo $term; ?></span></div>
-
-                    <?php
-                }
-
-            } else {
-
-                if (strlen($term) > 23) {
-                    ?>
-
-                    <div class='search-title'><?php echo $nr; ?> <?php echo resultbutton(); ?><?php echo $sss; ?> found for your search term</div>
-
-                    <?php
-                } else {
-                    ?>
-
-                    <div class='search-title'><?php echo $nr; ?> <?php echo resultbutton(); ?><?php echo $sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
-
-                    <?php
-                }
-
-                ?>
-
-                <div class='search-results'>
-
-                <?php
-
-                while ($foundNews = $newsSearch->fetch()) {
-
-                    $news = new news($foundNews["id"]);
-
-                    $news->display("search");
-
-                }
-
-                ?>
-
-                </div>
-
-                <?php
             }
 
         } else {
+
+            $searchType = "forums";
 
             $threadSearch = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
             $threadSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
@@ -107,7 +60,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 if (!in_array($foundThread["id"], $ra)) {
 
-                    array_push($ra, $foundThread["id"]);
+                    $ra[] = $foundThread["id"];
 
                 }
 
@@ -117,7 +70,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 if (!in_array($foundPost["threadid"], $ra)) {
 
-                    array_push($ra, $foundPost["threadid"]);
+                    $ra[] = $foundPost["threadid"];
 
                 }
 
@@ -127,63 +80,23 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 $selectThreads = $con->query("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`forumcategory` <> 0 AND `forumthreads`.`id` IN (" . implode(',', array_map('intval', $ra)) . ") ORDER BY `forumthreads`.`id` DESC");
 
-                $nr = $selectThreads->rowCount();
+                $resultsFound = $selectThreads->rowCount();
 
-            } else {
+                while ($foundThreads = $selectThreads->fetch()) {
 
-                $nr = 0;
+                    $thread = new forumthread($foundThreads["id"]);
+                    $threadArray[] = $thread->returnArray();
 
-            }
-
-            $sss = ($nr == 1) ? "" : "s";
-
-            if ($nr == 0) {
-
-                if (strlen($term) > 21) {
-                    ?>
-
-                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for your search term</div>
-
-                    <?php
-                } else {
-                    ?>
-
-                    <div class='search-title'>No <?php echo resultbutton(); ?>s found for <span class='search-term'><?php echo $term; ?></span></div>
-
-                    <?php
                 }
-
-            } else {
-
-                if (strlen($term) > 21) {
-                    ?>
-
-                    <div class='search-title'><?php echo $nr . " " . resultbutton() . $sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
-
-                    <?php
-                } else {
-                    ?>
-
-                    <div class='search-title'><?php echo $nr . " " . resultbutton() . $sss; ?> found for <span class='search-term'><?php echo $term; ?></span></div>
-
-                    <?php
-                }
-            ?>
-
-            <div class='search-results'>
-
-                <style type='text/css' scoped>
-
-                <?php
 
                 try {
 
-                    $selectCategories = $con->query("SELECT * FROM `forumcategories`");
+                    $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
 
                     while ($foundCategory = $selectCategories->fetch()) {
 
-                        echo ".forums-category-" . $foundCategory["name"] . "         {background-color: #" . $foundCategory["hexcode"] . "; }\n";
-                        echo ".forums-category-" . $foundCategory["name"] . ":hover   {background-color: #" . $foundCategory["hoverhexcode"]. "; }\n";
+                        $category = new forumcategory($foundCategory["id"]);
+                        $categories[] = $category->returnArray();
 
                     }
 
@@ -193,62 +106,29 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
                 }
 
-                ?>
+            } else {
 
-                </style>
-                <table class='forums-table'>
-                        <colgroup>
-                            <col class='forums-column-category'>
-                            <col class='forums-column-title'>
-                            <col class='forums-column-modifydate'>
-                            <col class='forums-column-postcount'>
-                        </colgroup>
-                    <tbody>
-
-                <?php
-
-                while ($foundThreads = $selectThreads->fetch()) {
-
-                    $thread = new forumthread($foundThreads["id"]);
-                    $thread->displayRow();
-
-                }
-
-                ?>
-                    </tbody>
-                </table>
-
-            </div>
-
-             <?php
+                $resultsFound = 0;
 
             }
 
         }
 
-    } else {
-        ?>
-
-        <div class='search-title'>Please enter a keyword longer than 2 characters.</div>
-
-        <?php
     }
 
-} else {
-    ?>
-
-    <div class='search-title'>No keyword defined.</div>
-
-    <?php
 }
+
+echo $twig->render("search.html", array("categories" => $categories, "news" => $newsArray, "resultbutton" => resultbutton(), "resultsfound" => $resultsFound, "searchtype" => $searchType, "term" => $term, "termlen" => $termlen, "threads" => $threadArray));
 
 function resultbutton() {
 
+    global $resultsFound;
+    global $searchType;
     global $term;
-    global $nsearch;
 
-    $name = (isset($nsearch) && $nsearch == true) ? "inf" : "inn";
+    $sss = ($resultsFound == 1) ? "" : "s";
+    $name = ($searchType == "news") ? "inf" : "inn";
     $prettyname = ($name == "inf") ? "article" : "forum post";
-    return "<form method='post' action='/search/" . $term . "/'><input type='hidden' value='" . $term . "' name='searchb'><input class='search-type' value='" . $prettyname . "' type='submit' name='" . $name . "'></form>";
+    return "<form method='post' action='/search/" . $term . "/'><input type='hidden' value='" . $term . "' name='searchb'><input class='search-type' value='" . $prettyname . $sss . "' type='submit' name='" . $name . "'></form>";
 
 }

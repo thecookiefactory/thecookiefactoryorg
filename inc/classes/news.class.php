@@ -10,13 +10,10 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
  * news class
  *
  * function __construct
- * (line 48)
  *
- * function display
- * (line 105)
+ * function returnArray
  *
  * function getStringId
- * (line 224)
  */
 class news extends master {
 
@@ -102,40 +99,31 @@ class news extends master {
 
     }
 
-    public function display($loc = null) {
+    public function returnArray() {
 
         global $con;
-        global $r_c;
-        global $p;
 
-        ?>
+        $a = array(
+                    "id" => $this->id,
+                    "title" => $this->title,
+                    "text" => Markdown($this->text),
+                    "author" => $this->author->getName(),
+                    "date" => $this->date->display(),
+                    "editor" => 0,
+                    "editdate" => 0,
+                    "comments" => $this->comments,
+                    "live" => $this->live,
+                    "stringid" => $this->stringid
+                    );
 
-        <div class='article-header'>
-        <div class='article-title'>
-        <h1>
+        if ($this->editor != null) {
 
-        <?php
-
-        if ($loc == "main") {
-
-            echo $this->title;
-
-        } else {
-
-            echo "<a href='/news/" . $this->stringid . "'>" . $this->title . "</a>";
+            $a["editor"] = $this->editor->getName();
+            $a["editdate"] = $this->editdate->display();
 
         }
 
-        ?>
-
-        </h1>
-        </div>
-
-        <div class='article-metadata'>
-
-        <?php
-
-        if ($loc != "main" && $this->comments == 1) {
+        if ($this->comments == 1) {
 
             $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
             $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
@@ -144,80 +132,11 @@ class news extends master {
             $threadData = $selectThreadId->fetch();
 
             $thread = new forumthread($threadData["id"]);
-            $commnum = $thread->replyCount();
-            ?>
-
-            <?php
-            if ($commnum != 1) {
-                ?>
-                <span class='article-metadata-item'><a href='/news/<?php echo $this->stringid; ?>#comments'><?php echo $commnum; ?> comments</a></span>
-                <?php
-            } else {
-                ?>
-                <span class='article-metadata-item'><a href='/news/<?php echo $this->stringid; ?>#comments'><?php echo $commnum; ?> comment</a></span>
-                <?php
-            }
+            $a["commentcount"] = $thread->replyCount();
 
         }
 
-        ?>
-
-        <span class='article-metadata-item'><span class='article-author'><?php echo $this->author->getName(); ?></span></span>
-        <span class='article-metadata-item'><span class='article-date'><?php echo $this->date->display(); ?></span></span>
-        </div>
-
-        <?php
-
-        if ($this->editor != null && $this->editdate > $this->date) {
-            ?>
-
-            <div class='article-edit-metadata'>
-            <span class='article-metadata-item'><span class='article-author'><?php echo $this->editor->getName(); ?></span></span>
-            <span class='article-metadata-item'><span class='article-date'><?php echo $this->editdate->display(); ?></span></span>
-            </div>
-
-            <?php
-        }
-
-        ?>
-
-        </div>
-        <article>
-        <span class='article-text'><?php echo Markdown($this->text); ?></span>
-        </article>
-        <?php
-
-        if ($loc == "main") {
-
-            echo "<hr id='comments'>";
-
-            if ($this->comments == 1) {
-
-                $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-                $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
-                $selectThreadId->execute();
-
-                $threadData = $selectThreadId->fetch();
-
-                $tid = $threadData["id"];
-
-                require_once "inc/forums.php";
-
-            } else {
-
-                ?>
-
-                <h1 class='comments-title'>Commenting disabled</h1>
-
-                <?php
-
-            }
-
-        } else {
-
-            echo "<hr class='article-separator'>";
-
-        }
+        return $a;
 
     }
 

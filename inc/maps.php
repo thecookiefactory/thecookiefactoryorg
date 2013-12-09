@@ -6,6 +6,8 @@ include_once "analyticstracking.php";
 require_once "inc/classes/map.class.php";
 require_once "inc/markdown/markdown.php";
 
+$maps = array();
+
 $_SESSION["lp"] = $p;
 
 ?>
@@ -18,43 +20,15 @@ try {
 
     $selectMaps = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    if ($selectMaps->rowCount() != 0) {
+    while ($foundMap = $selectMaps->fetch()) {
 
-        $iii = 0;
+        $map = new map($foundMap["id"]);
 
-        while ($foundMap = $selectMaps->fetch()) {
-
-            $iii++;
-
-            $map = new map($foundMap["id"]);
-
-            echo $map->display();
-
-            if ($iii == 1) {
-
-                ?>
-                <div class='map-ad'>
-                      <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-                      <!-- Maps Inline -->
-                      <ins class='adsbygoogle'
-                           style='display:inline-block;width:728px;height:90px'
-                           data-ad-client='ca-pub-8578399795841431'
-                           data-ad-slot='8918199475'></ins>
-                      <script>
-                      (adsbygoogle = window.adsbygoogle || []).push({});
-                      </script>
-                </div>
-                <?php
-
-            }
-
-        }
-
-    } else {
-
-        echo "The are no maps.";
+        $maps[] = $map->returnArray();
 
     }
+
+    echo $twig->render("maps.html", array("maps" => $maps));
 
 } catch (PDOException $e) {
 
