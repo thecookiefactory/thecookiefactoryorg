@@ -95,7 +95,7 @@ class map extends master {
 
     }
 
-    public function display() {
+    public function returnArray() {
 
         global $con;
 
