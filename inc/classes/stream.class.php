@@ -92,11 +92,12 @@ class stream extends master {
                     "title" => $this->title,
                     "text" => Markdown($this->text),
                     "author" => $this->author->getName(),
-                    "islive" => $this->isLive(),
+                    "live" => $this->isLive(),
                     "embedcode" => $this->getEmbedCode()
                     );
 
         return $a;
+
 
     }
 
