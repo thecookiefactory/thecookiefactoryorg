@@ -44,8 +44,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                chmod("../img/maps/".$row["mapid"]."/".$row["filename"], 0777);
-
                 if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
 
                     $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
