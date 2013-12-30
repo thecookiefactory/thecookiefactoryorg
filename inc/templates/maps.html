@@ -19,7 +19,8 @@
           </div>
           {% for picture in map.pictures %}
             <div class='map-image'>
-              <img class='map-image' src='/img/maps/{{ map.id }}/{{ picture.filename }}' alt='{{ picture.text }}' title='{{ picture.  text }}'>
+              <div class='map-image-title'><span class='map-image-number'>{{ loop.index + 1 }}/{{ loop.length + 1 }}</span> - {{ picture.text }}</div>
+              <img class='map-image' src='/img/maps/{{ map.id }}/{{ picture.filename }}' alt='{{ picture.text }}'>
             </div>
           {% endfor %}
         {% endspaceless %}
