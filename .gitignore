@@ -20,7 +20,6 @@ xampp
 */__pycache__
 
 # Composer
-composer.json
 composer.lock
 composer.phar
 vendor
