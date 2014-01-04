@@ -44,7 +44,7 @@
           {% endif %}
         </div>
         <div class='map-data-desc'>
-          {{ map.text }}
+          {{ map.text | markdown }}
         </div>
         <div class='map-data-actionbar'>
           <span class='map-actionbar-button' id='map-lessinfo-{{ map.id }}' onclick='animateDataPanel(this.id)'>Less info</span>

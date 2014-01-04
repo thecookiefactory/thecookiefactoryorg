@@ -1,0 +1,8 @@
+{
+    "require": {
+    	"lightopenid/lightopenid": "*",
+        "twig/twig": "1.*",
+        "aptoma/twig-markdown": "*",
+        "michelf/php-markdown": "*"
+    }
+}

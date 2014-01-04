@@ -35,7 +35,7 @@ if (isset($_POST["text"])) {
     }
 
     $uquery = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live, `custompages`.`stringid` = :stringid WHERE `custompages`.`id` = :id");
-    $uquery->bindValue("text", strip($_POST["text"]), PDO::PARAM_STR);
+    $uquery->bindValue("text", $_POST["text"], PDO::PARAM_STR);
     $uquery->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
     $uquery->bindValue("live", $live, PDO::PARAM_INT);
     $uquery->bindValue("stringid", strip($_POST["stringid"]), PDO::PARAM_STR);
