@@ -4,7 +4,6 @@ if (!isset($r_c)) header("Location: /notfound.php");
 
 include_once "analyticstracking.php";
 require_once "classes/stream.class.php";
-require_once "inc/markdown/markdown.php";
 
 $streams = array();
 

@@ -19,6 +19,12 @@ xampp
 *.pyo
 */__pycache__
 
+# Composer
+composer.json
+composer.lock
+composer.phar
+vendor
+
 # Windows image file caches
 Thumbs.db
 

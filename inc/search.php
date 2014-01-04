@@ -5,7 +5,6 @@ if (!isset($r_c)) header("Location: /notfound.php");
 include_once "analyticstracking.php";
 require_once "inc/classes/forumthread.class.php";
 require_once "inc/classes/news.class.php";
-require_once "inc/markdown/markdown.php";
 
 $termlen = 0;
 $term = 0;

@@ -74,7 +74,7 @@ class custompage extends master {
 
     public function display() {
 
-        return Markdown($this->text);
+        return $this->text;
 
     }
 

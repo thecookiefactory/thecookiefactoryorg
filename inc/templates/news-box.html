@@ -42,7 +42,11 @@
 
 </div>
 <article>
-<span class='article-text'>{% autoescape false %}{{ new.text }}{% endautoescape %}</span>
+<span class='article-text'>
+    {% autoescape false %}
+            {{ new.text | markdown }}
+    {% endautoescape %}
+</span>
 </article>
 
 {% if not main %}

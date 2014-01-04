@@ -90,7 +90,7 @@ class stream extends master {
         $a = array(
                     "id" => $this->id,
                     "title" => $this->title,
-                    "text" => Markdown($this->text),
+                    "text" => $this->text,
                     "author" => $this->author->getName(),
                     "live" => $this->isLive(),
                     "embedcode" => $this->getEmbedCode()
