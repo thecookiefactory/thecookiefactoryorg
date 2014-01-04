@@ -9,4 +9,6 @@ $_SESSION["lp"] = $p;
 
 $page = new custompage(strip($_GET["p"]));
 
-echo $page->display();
+$pagea = $page->returnArray();
+
+echo $twig->render("maps.html", $pagea);

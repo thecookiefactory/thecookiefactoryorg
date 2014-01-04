@@ -72,9 +72,13 @@ class custompage extends master {
 
     }
 
-    public function display() {
+    public function returnArray() {
 
-        return $this->text;
+        $a = array(
+                    "text" => $this->text
+                    );
+
+        return $a;
 
     }
 
