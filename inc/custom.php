@@ -11,4 +11,4 @@ $page = new custompage(strip($_GET["p"]));
 
 $pagea = $page->returnArray();
 
-echo $twig->render("maps.html", $pagea);
+echo $twig->render("custom.html", $pagea);
