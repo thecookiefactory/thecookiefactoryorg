@@ -25,18 +25,26 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             $searchType = "news";
 
-            $newsSearch = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
-            $newsSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
-            $newsSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $newsSearch->execute();
+            try {
 
-            $resultsFound = $newsSearch->rowCount();
+                $newsSearch = $con->prepare("SELECT `news`.`id` FROM `news` WHERE (`news`.`text` LIKE :termm OR `news`.`title` LIKE :term) AND `news`.`live` = 1 ORDER BY `news`.`id` DESC");
+                $newsSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
+                $newsSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+                $newsSearch->execute();
 
-            while ($foundNews = $newsSearch->fetch()) {
+                $resultsFound = $newsSearch->rowCount();
 
-                $news = new news($foundNews["id"]);
+                while ($foundNews = $newsSearch->fetch()) {
 
-                $newsArray[] = $news->returnArray();
+                    $news = new news($foundNews["id"]);
+
+                    $newsArray[] = $news->returnArray();
+
+                }
+
+            } catch (PDOException $e) {
+
+
 
             }
 
@@ -44,34 +52,42 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             $searchType = "forums";
 
-            $threadSearch = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
-            $threadSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $threadSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
-            $threadSearch->execute();
+            try {
 
-            $postSearch = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE :term ORDER BY `forumposts`.`id` DESC");
-            $postSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
-            $postSearch->execute();
+                $threadSearch = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE (`forumthreads`.`text` LIKE :term OR `forumthreads`.`title` LIKE :termm) AND `forumthreads`.`forumcategory` <> 0 ORDER BY `forumthreads`.`id` DESC");
+                $threadSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+                $threadSearch->bindValue("termm", "%" . $term . "%", PDO::PARAM_STR);
+                $threadSearch->execute();
 
-            $ra = array();
+                $postSearch = $con->prepare("SELECT `forumposts`.`threadid` FROM `forumposts` WHERE `forumposts`.`text` LIKE :term ORDER BY `forumposts`.`id` DESC");
+                $postSearch->bindValue("term", "%" . $term . "%", PDO::PARAM_STR);
+                $postSearch->execute();
 
-            while ($foundThread = $threadSearch->fetch()) {
+                $ra = array();
 
-                if (!in_array($foundThread["id"], $ra)) {
+                while ($foundThread = $threadSearch->fetch()) {
 
-                    $ra[] = $foundThread["id"];
+                    if (!in_array($foundThread["id"], $ra)) {
+
+                        $ra[] = $foundThread["id"];
+
+                    }
+
+                }
+
+                while ($foundPost = $postSearch->fetch()) {
+
+                    if (!in_array($foundPost["threadid"], $ra)) {
+
+                        $ra[] = $foundPost["threadid"];
+
+                    }
 
                 }
 
-            }
+            } catch (PDOException $e) {
 
-            while ($foundPost = $postSearch->fetch()) {
-
-                if (!in_array($foundPost["threadid"], $ra)) {
-
-                    $ra[] = $foundPost["threadid"];
-
-                }
+                echo "Failed to fetch the search results.";
 
             }
 

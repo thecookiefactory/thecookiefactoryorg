@@ -9,7 +9,15 @@ $streams = array();
 
 $_SESSION["lp"] = $p;
 
-$selectStreams = $con->query("SELECT `streams`.`id` FROM `streams`");
+try {
+
+    $selectStreams = $con->query("SELECT `streams`.`id` FROM `streams`");
+
+} catch (PDOException $e) {
+
+    die("Failed to fetch streams.");
+
+}
 
 while ($foundStream = $selectStreams->fetch()) {
 
