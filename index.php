@@ -24,7 +24,7 @@ cookieCheck();
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
-echo $twig->render("index-top.html");
+echo $twig->render("index-top.html", array("canonical" => canonical()));
 
 include_once("inc/analyticstracking.php");
 
