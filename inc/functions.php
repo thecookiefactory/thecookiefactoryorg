@@ -51,24 +51,17 @@ function canonical() {
 
         if (isset($_GET["id"])) {
 
-            return "<link rel='canonical' href='http://thecookiefactory.org/index.php?p=" . $_GET["p"] . "?id=" . $_GET["id"] . "'>
-            <link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "?id=" . $_GET["id"] . "'>
-            <link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/?id=" . $_GET["id"] . "'>
-            <link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/" . $_GET["id"] . "'>";
+            return "<link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/" . $_GET["id"] . "'>";
 
         } else {
 
-            return "<link rel='canonical' href='http://thecookiefactory.org/index.php?p=" . $_GET["p"] . "'>
-            <link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "'>
-            <link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/'>";
+            return "<link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/'>";
 
         }
 
     } else {
 
-        return "<link rel='canonical' href='http://thecookiefactory.org/index.php'>
-                <link rel='canonical' href='http://thecookiefactory.org/index.php?p=news'>
-                <link rel='canonical' href='http://thecookiefactory.org/news/'>";
+        return "<link rel='canonical' href='http://thecookiefactory.org/'>";
 
     }
 
