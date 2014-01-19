@@ -22,9 +22,18 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
     }
 
     $xo = ($page - 1) * 5;
-    $selectNewsByPage = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`date` DESC LIMIT :xo, 5");
-    $selectNewsByPage->bindValue("xo", $xo, PDO::PARAM_INT);
-    $selectNewsByPage->execute();
+
+    try {
+
+        $selectNewsByPage = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`date` DESC LIMIT :xo, 5");
+        $selectNewsByPage->bindValue("xo", $xo, PDO::PARAM_INT);
+        $selectNewsByPage->execute();
+
+    } catch (PDOException $e) {
+
+        die("Failed to fetch the news.");
+
+    }
 
     if (($selectNewsByPage->rowCount() == 0) && ($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
 
@@ -55,15 +64,23 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
         if ($new["comments"] == 1) {
 
-            $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-            $selectThreadId->bindValue("id", $news->getId(), PDO::PARAM_INT);
-            $selectThreadId->execute();
+            try {
 
-            $threadData = $selectThreadId->fetch();
+                $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                $selectThreadId->bindValue("id", $news->getId(), PDO::PARAM_INT);
+                $selectThreadId->execute();
 
-            $tid = $threadData["id"];
+                $threadData = $selectThreadId->fetch();
 
-            require_once "inc/forums.php";
+                $tid = $threadData["id"];
+
+                require_once "inc/forums.php";
+
+            } catch (PDOException $e) {
+
+                echo "Failed to fetch comments.";
+
+            }
 
         }
 

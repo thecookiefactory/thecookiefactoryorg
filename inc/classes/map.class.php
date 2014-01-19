@@ -64,7 +64,7 @@ class map extends master {
 
             } catch (PDOException $e) {
 
-                echo "An error occured while trying to fetch data to the class. (" . $e->getMessage() . ")";
+                echo "An error occured while trying to fetch data to the class.";
 
             }
 
@@ -159,7 +159,7 @@ class map extends master {
 
         } catch (PDOException $e) {
 
-            echo "An error occured while trying to fetch the pictures. (" . $e->getMessage() . ")";
+            echo "An error occured while trying to fetch the pictures. ";
 
         }
 

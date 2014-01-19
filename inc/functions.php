@@ -44,3 +44,25 @@ function cookieh() {
     return str_shuffle(hash("sha256", microtime()));
 
 }
+
+function canonical() {
+
+    if (isset($_GET["p"])) {
+
+        if (isset($_GET["id"])) {
+
+            return "<link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/" . $_GET["id"] . "'>";
+
+        } else {
+
+            return "<link rel='canonical' href='http://thecookiefactory.org/" . $_GET["p"] . "/'>";
+
+        }
+
+    } else {
+
+        return "<link rel='canonical' href='http://thecookiefactory.org/'>";
+
+    }
+
+}

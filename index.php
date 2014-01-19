@@ -24,7 +24,7 @@ cookieCheck();
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
-echo $twig->render("index-top.html");
+echo $twig->render("index-top.html", array("canonical" => canonical()));
 
 include_once("inc/analyticstracking.php");
 
@@ -87,9 +87,17 @@ function cookieCheck() {
 
         $cv = $_COOKIE["userid"];
 
-        $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
-        $squery->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
-        $squery->execute();
+        try {
+
+            $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
+            $squery->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
+            $squery->execute();
+
+        } catch(PDOException $e) {
+
+            echo "Failed to fetch cookie info.";
+
+        }
 
         if ($squery->rowCount() == 1) {
 
@@ -98,10 +106,20 @@ function cookieCheck() {
             $_SESSION["userid"] = $srow["id"];
 
             $cookieh = cookieh();
-            $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-            $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-            $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
-            $uquery->execute();
+
+            try {
+
+                $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+                $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+                $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
+                $uquery->execute();
+
+            } catch (PDOException $e) {
+
+                echo "Failed to update cookie info.";
+
+            }
+
             setcookie("userid", $cookieh, time() + 2592000, "/");
 
         }
