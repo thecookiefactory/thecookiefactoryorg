@@ -1487,3 +1487,57 @@ img.map-image {
   font-variant: small-caps;
   font-size: 20px;
 }
+
+.about-container {
+  clear: both;
+  height: 256px;
+  display: block;
+}
+
+.about-container+.about-container {
+  margin-top: 16px;
+}
+
+div.about-img {
+  float: left;
+  height: 100%;
+  width: 256px;
+}
+
+.about-name,.about-description {
+  width: 699px;
+  margin-left: 262px;
+}
+
+.about-name {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-size: 48px;
+  border-bottom: 1px dotted #444;
+}
+
+.about-nick {
+  color: #F93;
+  font-weight: 600;
+}
+
+.about-text {
+  position: relative;
+}
+
+.about-contact {
+  list-style: none;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.6em;
+  position: absolute;
+  top: 156px;
+  left: 217px;
+}
+
+.about-contact li {
+  width: 235px;
+  float: left;
+  text-align: center;
+  display: inline;
+}

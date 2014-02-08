@@ -12,6 +12,7 @@
 <a class='menu-item' href='/maps/'>maps</a>
 <a class='menu-item' href='/streams/'>streams{% if someoneislive %}<sup class='menu-live-indicator'>live</sup>{% endif %}</a>
 <a class='menu-item' href='/forums/'>forums</a>
+<a class='menu-item' href='/about/'>about</a>
 {% for page in pages %}
     <a class='menu-item' href='/{{ page.stringid }}/'>{{ page.title }}</a>
 {% endfor %}
