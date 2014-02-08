@@ -42,7 +42,7 @@ function filterInput(elem) {
     if (!elem.value.match(/.{2,10}/)) error += "Your username must be 2 to 10 characters long. ";
 
     var ajax = new XMLHttpRequest();
-    ajax.open("GET", "inc/checkuser.php?name=" + elem.value, true);
+    ajax.open("GET", "/inc/checkuser.php?name=" + elem.value, true);
     ajax.send();
     ajax.onreadystatechange = function(){
         if (ajax.readyState === 4 && ajax.status === 200 && ajax.responseText != "0") {
