@@ -2,7 +2,7 @@ At the moment our main projects are TF2 maps, but we are also planning to create
 
 {% for about in abouts %}
 <div class='about-container'>
-<div class='about-img'><img src='img/custom/{{ about.username|lower }}.png' alt='{{ about.username }}' class='about-img'></div>
+<div class='about-img'><img src='/img/custom/{{ about.username|lower }}.png' alt='{{ about.username }}' class='about-img'></div>
 <div class='about-text'>
 <div class='about-name'>{{ about.firstname }} <span class='about-nick'>{{ about.username }}</span> {{ about.lastname }}</div>
 <p class='about-description'>{{ about.description }}</p>

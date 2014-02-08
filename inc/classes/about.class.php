@@ -82,7 +82,7 @@ class about extends master {
 
             } else {
 
-                echo "Could not find a page with the given id.";
+                echo "Could not find an about with the given id.";
 
             }
 
