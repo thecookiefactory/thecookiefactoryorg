@@ -52,11 +52,11 @@ function filterInput(elem) {
                 error += "Sorry, that username is already taken. ";
             }
         }
+    
+        elem.setCustomValidity(error);
     }
     
     request.send()
-
-    elem.setCustomValidity(error);
 }
 
 function searchRedirect() {
