@@ -40,7 +40,7 @@ function filterInput(elem) {
 
     if (elem.value.match(/\W/)) error += "Your username can contain English letters, numbers, and underscores only. ";
     if (!elem.value.match(/.{2}/)) error += "Your username must be at least 2 characters long. ";
-    if (elem.value.match(/.{11}/)) error += "Your username must be less, than 10 characters long. ";
+    if (elem.value.match(/.{11}/)) error += "Your username must be less than 10 characters long. ";
     var request = new XMLHttpRequest
 
     request.open('GET', '/inc/checkuser.php?name=' + elem.value, true)
