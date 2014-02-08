@@ -225,14 +225,14 @@ class user extends master {
         //checking if the username has valid characters only and is of the specified length
         if (!ctype_alnum(str_replace('-', '', $username))) {
 
-            echo "The specified username seems to have invalid characters. Only letters of the English alphabet, numbers and underscores are allowed.";
+            echo "Your username can contain English letters, numbers, and underscores only.";
             return;
 
         }
 
         if (strlen($username) < 2 || strlen($username) > 10) {
 
-            echo "The username must be between 2 and 10 charaters long.";
+            echo "Your username must be 2 to 10 characters long.";
             return;
 
         }
@@ -244,7 +244,7 @@ class user extends master {
 
         if ($selectUserId->rowCount() != 0) {
 
-            echo "We're sorry, that user already exists!";
+            echo "Sorry, that username is already taken.";
             return;
 
         }
