@@ -39,18 +39,24 @@ function filterInput(elem) {
     var error = "";
 
     if (elem.value.match(/\W/)) error += "Your username can contain English letters, numbers, and underscores only. ";
-    if (!elem.value.match(/.{2,10}/)) error += "Your username must be 2 to 10 characters long. ";
+    if (!elem.value.match(/.{2}/)) error += "Your username must be at least 2 characters long. ";
+    if (elem.value.match(/.{11}/)) error += "Your username must be less than 10 characters long. ";
+    var request = new XMLHttpRequest
 
-    var ajax = new XMLHttpRequest();
-    ajax.open("GET", "inc/checkuser.php?name=" + elem.value, true);
-    ajax.send();
-    ajax.onreadystatechange = function(){
-        if (ajax.readyState === 4 && ajax.status === 200 && ajax.responseText != "0") {
-            error += "Sorry, that username is already taken. ";
+    request.open('GET', '/inc/checkuser.php?name=' + elem.value, true)
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400){
+            resp = request.responseText
+            if (resp != '0') { 
+                error += "Sorry, that username is already taken. ";
+            }
         }
-    };
-
-    elem.setCustomValidity(error);
+    
+        elem.setCustomValidity(error);
+    }
+    
+    request.send()
 }
 
 function searchRedirect() {
