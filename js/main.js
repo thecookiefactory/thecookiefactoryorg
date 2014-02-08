@@ -41,14 +41,20 @@ function filterInput(elem) {
     if (elem.value.match(/\W/)) error += "Your username can contain English letters, numbers, and underscores only. ";
     if (!elem.value.match(/.{2,10}/)) error += "Your username must be 2 to 10 characters long. ";
 
-    var ajax = new XMLHttpRequest();
-    ajax.open("GET", "/inc/checkuser.php?name=" + elem.value, true);
-    ajax.send();
-    ajax.onreadystatechange = function(){
-        if (ajax.readyState === 4 && ajax.status === 200 && ajax.responseText != "0") {
-            error += "Sorry, that username is already taken. ";
+    var request = new XMLHttpRequest
+
+    request.open('GET', '/inc/checkuser.php?name=' + elem.value, true)
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400){
+            resp = request.responseText
+            if (resp != '0') { 
+                error += "Sorry, that username is already taken. ";
+            }
         }
-    };
+    }
+    
+    request.send()
 
     elem.setCustomValidity(error);
 }
