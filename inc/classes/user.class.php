@@ -223,9 +223,9 @@ class user extends master {
         $username = strip($username);
 
         //checking if the username has valid characters only and is of the specified length
-        if (!ctype_alnum($username)) {
+        if (!ctype_alnum(str_replace('-', '', $username))) {
 
-            echo "The specified username seems to have invalid characters. Only letters of the English alphabet and numbers are allowed.";
+            echo "The specified username seems to have invalid characters. Only letters of the English alphabet, numbers and underscores are allowed.";
             return;
 
         }
