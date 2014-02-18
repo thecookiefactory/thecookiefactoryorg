@@ -225,14 +225,14 @@ class user extends master {
         //checking if the username has valid characters only and is of the specified length
         if (!ctype_alnum(str_replace('-', '', $username))) {
 
-            echo "Your username can contain English letters, numbers, and underscores only.";
+            echo "<span class='register-error'>Your username can contain English letters, numbers, and underscores only.</span>";
             return;
 
         }
 
         if (strlen($username) < 2 || strlen($username) > 10) {
 
-            echo "Your username must be 2 to 10 characters long.";
+            echo "<span class='register-error'>Your username must be 2 to 10 characters long.</span>";
             return;
 
         }
@@ -244,7 +244,7 @@ class user extends master {
 
         if ($selectUserId->rowCount() != 0) {
 
-            echo "Sorry, that username is already taken.";
+            echo "<span class='register-error'>Sorry, that username is already taken.</span>";
             return;
 
         }
