@@ -3,4 +3,4 @@ php:
   - 5.5
   - 5.4
   - hhvm
-install: composer require composer.json
+install: composer install
