@@ -1,0 +1,33 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>manage forum categories</h1>
+
+<form action='forumtopics.php' method='post'>
+
+<table border>
+<tr><th>id</th><th>name</th><th>pretyname</th><th>background-color</th><th>hover background-color</th></tr>
+
+{% for row in rows %}
+<tr>
+<td>{{ row.id }}</td><td><input type='text' value='{{ row.name }}' name='{{ row.id }}name'></td>
+<td><input type='text' value='{{ row.longname }}' name='{{ row.id }}longname'></td>
+<td><input type='text' value='{{ row.hexcode }}' name='{{ row.id }}hexcode'></td>
+<td><input type='text' value='{{ row.hoverhexcode }}' name='{{ row.id }}hoverhexcode'></td>
+</tr>
+{% endfor %}
+
+</table>
+
+<input type='submit' value='update' name='update'>
+</form>
+<hr>
+<form action='forumtopics.php' method='post'>
+<input type='text' name='name'>
+<input type='text' name='longname'>
+<input type='text' name='hexcode'>
+<input type='text' name='hoverhexcode'>
+<input type='submit' name='addnew' value='add new'>
+</form>
+</ul>
+{% endblock %}

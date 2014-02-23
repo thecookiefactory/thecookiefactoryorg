@@ -45,6 +45,21 @@ function cookieh() {
 
 }
 
+function twigInit() {
+
+    global $r_c;
+
+    require_once str_repeat("../", $r_c) . "/vendor/autoload.php";
+
+    Twig_Autoloader::register();
+
+    $loader = new Twig_Loader_Filesystem(str_repeat("../", $r_c) . "inc/templates");
+    $twig = new Twig_Environment($loader);
+
+    return $twig;
+
+}
+
 function canonical() {
 
     if (isset($_GET["p"])) {

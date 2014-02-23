@@ -1,0 +1,28 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<h1>manage games</h1>
+
+<form action='games.php' method='post'>
+<table border>
+<tr><th>id</th><th>name</th><th>steamid store id</th></tr>
+
+{% for game in games %}
+<tr>
+<td>{{ game.id }}</td>
+<td><input type='text' value='{{ game.name }}' name='{{ game.id }}name'></td>
+<td><input type='text' value='{{ game.steamid }}' name='{{ game.id }}steamid'></td>
+</tr>
+{% endfor %}
+
+</table>
+
+<input type='submit' value='update' name='update'>
+</form>
+<hr>
+<form action='games.php' method='post'>
+<input type='text' name='name'><input type='text' name='steamid'><input type='submit' name='addnew' value='add new'>
+</form>
+
+{% endblock %}

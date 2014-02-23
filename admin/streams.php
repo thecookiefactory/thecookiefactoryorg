@@ -10,18 +10,7 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
-
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
-<h1>manage your stream</h1>
-
-<?php
+$twig = twigInit();
 
 if (isset($_POST["submit"])) {
 
@@ -52,7 +41,7 @@ if (isset($_POST["submit"])) {
         $uq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
         $uq->execute();
 
-        echo "Stream successfully updated.<br>";
+        $status = "update";
 
     } else {
 
@@ -60,11 +49,9 @@ if (isset($_POST["submit"])) {
         $dq->bindValue("userid", $user->getId(), PDO::PARAM_INT);
         $dq->execute();
 
-        echo "sttream deleted";
+        $status = "delete";
 
     }
-
-
 
 } else {
 
@@ -80,19 +67,10 @@ if (isset($_POST["submit"])) {
 
     $ur = $uq->fetch();
 
-    echo "<form action='streams.php' method='post'>
-    twitchname.tv username<br>
-    <input type='text' name='twitchname' value='".$ur["twitchname"]."' required><br>
-    description<br>
-    <textarea name='description' rows='7' cols='50' required>".$sr["text"]."</textarea><br>
-    Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) - watch out, if you uncheck this, all data regarding your stream will be lost<br>
-    <input type='submit' name='submit'>
-    </form>";
+    $data = array("twitchname" => $ur["twitchname"], "text" => $sr["text"]);
+
+    $status = "form";
 
 }
 
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/stream.html", array("status" => $status, "data" => (isset($data) ? $data : 0)));

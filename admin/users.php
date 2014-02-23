@@ -10,36 +10,17 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
-
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-    <style type='text/css'>
-        .admin-name {
-            color: #ff11dd;
-        }
-    </style>
-</head>
-<body>
-
-<h1>a list of all the registered users</h1>
-
-<?php
+$twig = twigInit();
 
 $q = $con->query("SELECT `users`.`id` FROM `users`");
+
+$users = array();
 
 while ($r = $q->fetch()) {
 
     $u = new user($r["id"]);
-    echo $u->getName() . "<br>";
+    $users[] = $u->getName();
 
 }
 
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/users.html", array("users" => $users));
