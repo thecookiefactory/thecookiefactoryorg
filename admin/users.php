@@ -12,14 +12,14 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$q = $con->query("SELECT `users`.`id` FROM `users`");
+$selectUsers = $con->query("SELECT `users`.`id` FROM `users`");
 
 $users = array();
 
-while ($r = $q->fetch()) {
+while ($userData = $selectUsers->fetch()) {
 
-    $u = new user($r["id"]);
-    $users[] = $u->getName();
+    $aUser = new user($userData["id"]);
+    $users[] = $aUser->getName();
 
 }
 
