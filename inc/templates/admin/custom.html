@@ -1,0 +1,37 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+{% if mode == "select" %}
+<form action='cpages.php' method='post'>
+<select name='cpage'>
+
+{% for page in pages %}
+
+<option value='{{ page.title }}'>{{ page.title }}</option>
+
+{% endfor %}
+
+</select>
+<input type='submit' value=''>
+</form>
+
+create new:
+<form action='cpages.php' method='post'>
+<input type='text' name='title'>
+<input type='submit' name='create'>
+</form>
+{% else %}
+<form action='cpages.php' method='post'>
+<input type='hidden' name='id' value='{{ data.id }}'>
+<input type='text' name='name' value='{{ data.title }}'>
+<textarea name='text' rows='30' cols='100'>{{ data.text }}</textarea>
+stringid (url): <input type='text' name='stringid' value='{{ data.stringid }}'>
+{% if data.live %}
+<input type='checkbox' name='live' checked>
+{% else %}
+<input type='checkbox' name='live'>
+{% endif %}
+<input type='submit' value=''>
+</form>
+{% endif %}
+{% endblock %}

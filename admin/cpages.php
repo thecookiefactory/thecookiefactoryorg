@@ -4,23 +4,14 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/custompage.class.php";
 require_once "../inc/classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
-
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
-
-<?php
+$twig = twigInit();
 
 if (isset($_POST["text"])) {
 
@@ -61,42 +52,27 @@ if (isset($_POST["cpage"])) {
 
     $srow = $squery->fetch();
 
-    echo "<form action='cpages.php' method='post'>";
-    echo "<input type='hidden' name='id' value='".$srow["id"]."'>";
-    echo "<input type='text' name='name' value='".$srow["title"]."'>";
-    echo "<textarea name='text' rows='30' cols='100'>".$srow["text"]."</textarea>";
-    echo "stringid (url): <input type='text' name='stringid' value='".$srow["stringid"]."'>";
-    echo "<input type='checkbox' name='live'" . (($srow["BIN(`custompages`.`live`)"] == 1) ? " checked" : "") . ">";
-    echo "<input type='submit' value=''>";
-    echo "</form>";
+    $p = new custompage($srow["id"], "id");
+
+    $data = $p->returnArray();
+
+    $mode = "update";
 
 } else {
 
     $squery = $con->query("SELECT * FROM `custompages` ORDER BY `custompages`.`title` ASC");
 
-    echo "<form action='cpages.php' method='post'>";
-    echo "<select name='cpage'>";
+    $pages = array();
 
-    while ($srow = $squery->fetch()) {
+    while ($r = $squery->fetch()) {
 
-        echo "<option value='".$srow["title"]."'>".$srow["title"]."</option>";
+        $fc = new custompage($r["id"], "id");
+        $pages[] = $fc->returnArray();
 
     }
 
-    echo "</select>";
-    echo "<input type='submit' value=''>";
-    echo "</form>";
-
-    echo "create new:";
-    echo "<form action='cpages.php' method='post'>";
-    echo "<input type='text' name='title'>";
-    echo "<input type='submit' name='create'>";
-    echo "</form>";
+    $mode = "select";
 
 }
 
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/custom.html", array("mode" => $mode, "pages" => (isset($pages) ? $pages : 0), "data" => (isset($data) ? $data : 0)));
