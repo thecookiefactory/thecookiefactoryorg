@@ -13,13 +13,13 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$query = $con->query("SELECT * FROM `games`");
+$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
 if (isset($_POST["update"])) {
 
-    while ($r = $query->fetch()) {
+    while ($gameData = $selectGames->fetch()) {
 
-        $id = $r["id"];
+        $id = $gameData["id"];
         $name = strip($_POST[$id."name"]);
         $steamid = strip($_POST[$id."steamid"]);
 
@@ -35,7 +35,7 @@ if (isset($_POST["update"])) {
 
                 $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
                 $uq->bindValue("name", $name, PDO::PARAM_STR);
-                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
                 $uq->execute();
 
             } else {
@@ -43,7 +43,7 @@ if (isset($_POST["update"])) {
                 $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
                 $uq->bindValue("name", $name, PDO::PARAM_STR);
                 $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
                 $uq->execute();
 
             }
@@ -76,13 +76,13 @@ if (isset($_POST["addnew"])) {
 
 }
 
-$query = $con->query("SELECT * FROM `games`");
+$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
 $games = array();
 
-while ($r = $query->fetch()) {
+while ($gameData = $selectGames->fetch()) {
 
-    $game = new game($r["id"]);
+    $game = new game($gameData["id"]);
     $games[] = $game->returnArray();
     
 }
