@@ -2,6 +2,7 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 
 /**
@@ -109,13 +110,9 @@ class stream extends master {
 
     protected function getEmbedCode() {
 
-        return "<object type='application/x-shockwave-flash' height='378' width='620' id='live_embed_player_flash' data='http://www.twitch.tv/widgets/live_embed_player.swf?channel=" . $this->author->getTwitchName() . "' bgcolor='#000000'>
-        <param name='allowFullScreen' value='true' />
-        <param name='allowScriptAccess' value='always' />
-        <param name='allowNetworking' value='all' />
-        <param name='movie' value='http://www.twitch.tv/widgets/live_embed_player.swf' />
-        <param name='flashvars' value='hostname=www.twitch.tv&channel=" . $this->author->getTwitchName() . "&auto_play=true&start_volume=25' />
-        </object>";
+        global $twig;
+
+        return $twig->render("stream-embed.html", array("user" => $this->author->getTwitchName()));
 
     }
 

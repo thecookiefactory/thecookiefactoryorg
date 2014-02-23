@@ -6,15 +6,15 @@
 {% if status == "update" %}
 Stream successfully updated.
 {% elseif status == "delete" %}
-sttream deleted
+Stream deleted.
 {% else %}
-<form action='streams.php' method='post'>
-twitchname.tv username<br>
+<form action='stream.php' method='post'>
+Twitch username<br>
 <input type='text' name='twitchname' value='{{ data.twitchname }}' required><br>
-description<br>
-<textarea name='description' rows='7' cols='50' required>{{ data.text }}</textarea><br>
-Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) - 
-watch out, if you uncheck this, all data regarding your stream will be lost<br>
+Stream description<br>
+<textarea name='description' rows='7' cols='50' placeholder='Inactive stream!' required>{{ data.text }}</textarea><br>
+Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) -
+if you uncheck this, your description will be lost<br>
 <input type='submit' name='submit'>
 </form>
 {% endif %}
