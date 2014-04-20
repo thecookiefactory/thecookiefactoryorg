@@ -10,22 +10,13 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
-
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
-
-<?php
+$twig = twigInit();
 
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 
     if ($_GET["action"] == "edit") {
-        // EDIT
+
+        $mode = "edit";
 
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
@@ -77,65 +68,58 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                     }
 
-                    $uq = $con->prepare("UPDATE `news` SET `news`.`title` = :title, `news`.`editorid` = :editorid, `news`.`text` = :text, `news`.`comments` = :comments, `news`.`live` = :live WHERE `news`.`id` = :id");
-                    $uq->bindValue("title", $title, PDO::PARAM_STR);
-                    $uq->bindValue("editorid", $editorid, PDO::PARAM_INT);
-                    $uq->bindValue("text", $text, PDO::PARAM_STR);
-                    $uq->bindValue("comments", $comments, PDO::PARAM_INT);
-                    $uq->bindValue("live", $live, PDO::PARAM_INT);
-                    $uq->bindValue("id", $id, PDO::PARAM_INT);
-                    $uq->execute();
+                    try {
 
-                    echo "Piece of news successfully updated.<br>";
-                    echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+                        $uq = $con->prepare("UPDATE `news`
+                                             SET `news`.`title` = :title,
+                                                 `news`.`editorid` = :editorid,
+                                                 `news`.`text` = :text,
+                                                 `news`.`comments` = :comments,
+                                                 `news`.`live` = :live
+                                             WHERE `news`.`id` = :id");
+                        $uq->bindValue("title", $title, PDO::PARAM_STR);
+                        $uq->bindValue("editorid", $editorid, PDO::PARAM_INT);
+                        $uq->bindValue("text", $text, PDO::PARAM_STR);
+                        $uq->bindValue("comments", $comments, PDO::PARAM_INT);
+                        $uq->bindValue("live", $live, PDO::PARAM_INT);
+                        $uq->bindValue("id", $id, PDO::PARAM_INT);
+                        $uq->execute();
+
+                        $status = "success";
+
+                    } catch (PDOException $e) {
+
+                        $status = "failure";
+
+                    }
 
                 } else {
 
-                    echo "<h1>edit news</h1>
-                    <form action='?action=edit&amp;id=".$id."' method='post'>
-                    Title<br>
-                    <input type='text' name='title' value='".$er["title"]."' required><br>
-                    Text<br>
-                    <textarea name='text' rows='10' cols='90' required>".$er["text"]."</textarea><br>
-                    Disable comments <input type='checkbox' name='comments'";
+                    $articleData = array("id" => $er["id"],
+                                         "title" => $er["title"],
+                                         "text" => $er["text"],
+                                         "comments" => $er["BIN(`news`.`comments`)"],
+                                         "live" => $er["BIN(`news`.`live`)"]);
 
-                    if ($er["BIN(`news`.`comments`)"] == 0) {
-
-                        echo "checked";
-
-                    }
-
-                    echo "><br>
-                    Publish? <input type='checkbox' name='live'";
-
-                    if ($er["BIN(`news`.`live`)"] == 1) {
-
-                        echo "checked";
-
-                    }
-
-                    echo "><br>
-                    <input type='submit' name='submit'>
-                    </form>";
+                    $status = "progress";
 
                 }
 
             } else {
 
-                echo "The specified id returned no news post.<br>";
-                echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+                $status = "notfound";
 
             }
 
         } else {
 
-            echo "There was no id defined.<br>";
-            echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+            $status = "notfound";
 
         }
 
     } else if ($_GET["action"] == "delete") {
-        // DELETE
+
+        $mode = "delete";
 
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
@@ -148,43 +132,48 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                 if (isset($_POST["delete"])) {
 
-                    $dq = $con->prepare("DELETE FROM `news` WHERE `news`.`id` = :id");
-                    $dq->bindValue("id", $id, PDO::PARAM_INT);
-                    $dq->execute();
-                    echo "News post successfully deleted.<br>";
+                    try {
 
-                    $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-                    $dq->bindValue("id", $id, PDO::PARAM_INT);
-                    $dq->execute();
-                    // comments are not actually deleted at this point, but w/e
-                    echo "Related comments successfully deleted.<br>";
-                    echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+                        $dq = $con->prepare("DELETE FROM `news` WHERE `news`.`id` = :id");
+                        $dq->bindValue("id", $id, PDO::PARAM_INT);
+                        $dq->execute();
+
+                        $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                        $dq->bindValue("id", $id, PDO::PARAM_INT);
+                        $dq->execute();
+                        // comments are not actually deleted at this point, but w/e
+
+                        $status = "success";
+
+                    } catch (PDOException $e) {
+
+                        $status = "failure";
+
+                    }
 
                 } else {
 
-                    echo "Delete news id ".$id;
-                    echo "<form action='?action=delete&amp;id=".$id."' method='post'>
-                    <input type='submit' name='delete' value='Yes, delete'> or <a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>
-                    </form>";
+                    $status = "confirm";
+
+                    $currentId = $id;
 
                 }
 
             } else {
 
-                echo "The specified id returned no news post.<br>";
-                echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+                $status = "notfound";
 
             }
 
         } else {
 
-            echo "There was no id defined.<br>";
-            echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+            $status = "notfound";
 
         }
 
     } else {
-        // WRITE
+
+        $mode = "write";
 
         if (isset($_POST["submit"])) {
 
@@ -212,98 +201,72 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, :comments, :live, '')");
-            $iq->bindValue("title", $title, PDO::PARAM_STR);
-            $iq->bindValue("text", $text, PDO::PARAM_STR);
-            $iq->bindValue("author", $author, PDO::PARAM_INT);
-            $iq->bindValue("comments", $comments, PDO::PARAM_INT);
-            $iq->bindValue("live", $live, PDO::PARAM_INT);
-            $iq->execute();
+            try {
 
-            $id = $con->lastInsertId();
+                $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, :comments, :live, '')");
+                $iq->bindValue("title", $title, PDO::PARAM_STR);
+                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                $iq->bindValue("author", $author, PDO::PARAM_INT);
+                $iq->bindValue("comments", $comments, PDO::PARAM_INT);
+                $iq->bindValue("live", $live, PDO::PARAM_INT);
+                $iq->execute();
 
-            $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
-            $iq->bindValue("title", $title, PDO::PARAM_STR);
-            $iq->bindValue("text", $text, PDO::PARAM_STR);
-            $iq->bindValue("author", $author, PDO::PARAM_INT);
-            $iq->bindValue("id", $id, PDO::PARAM_INT);
-            $iq->execute();
+                $id = $con->lastInsertId();
 
-            generateid($id);
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
+                $iq->bindValue("title", $title, PDO::PARAM_STR);
+                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                $iq->bindValue("author", $author, PDO::PARAM_INT);
+                $iq->bindValue("id", $id, PDO::PARAM_INT);
+                $iq->execute();
 
-            echo "News post successfully submitted.<br>";
-            echo "<a href='news.php'>news admin panel</a> - <a href='../index.php?p=news'>news page</a>";
+                generateid($id);
+
+                $status = "success";
+
+            } catch (PDOException $e) {
+
+                $status = "failure";
+
+            }
 
         } else {
 
-            echo "<h1>post news</h1>
-            <form action='?action=write' method='post'>
-            Title<br>
-            <input type='text' name='title' required><br>
-            Text<br>
-            <textarea name='text' rows='10' cols='90' required></textarea><br>
-            Disable comments <input type='checkbox' name='comments'><br>
-            Publish? <input type='checkbox' name='live'><br>
-            <input type='submit' name='submit'>
-            </form>";
+            $status = "progress";
 
         }
 
     }
 
-    // update the rss feed
     exec($config["python"]["rss"], $output, $return);
 
-    if (!$return)
-        echo "RSS feed updated!";
-    else
-        echo "RSS feed update failed!";
+    $rssResult = (!$return) ? "success" : "failure";
 
 } else {
-    // ALL
 
-    echo "<h1>manage news</h1>
-    <p><a href='?action=write'>write new</a></p>";
+    $mode = "manage";
 
-    echo "<h2>unpublished newz</h2>";
+    $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`
+                          FROM `news`
+                          WHERE `news`.`live` = 0
+                          ORDER BY `news`.`id` DESC");
 
-    $query = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 0 ORDER BY `news`.`id` DESC");
-
-    echo "<table style='border-spacing: 5px;'>";
-    echo "<tr><th>news</th><th>editing tools</th></tr>";
+    $unpublishedNews = array();
 
     while ($row = $query->fetch()) {
 
-        echo "<tr>";
-        echo "<td>";
-        echo "#".$row["id"]." - ".$row["title"]." - ".substr($row["text"], 0, 100);
-        echo "</td>";
-        echo "<td>";
-        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
-        echo "</td>";
-        echo "</tr>";
+        $unpublishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
 
     }
 
-    echo "</table>";
+    $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`stringid`
+                          FROM `news`
+                          WHERE `news`.`live` = 1
+                          ORDER BY `news`.`id` DESC");
 
-    echo "<h2>published newz</h2>";
-
-    $query = $con->query("SELECT * FROM `news` WHERE `news`.`live` = 1 ORDER BY `news`.`id` DESC");
-
-    echo "<table style='border-spacing: 5px;'>";
-    echo "<tr><th>news</th><th>editing tools</th></tr>";
+    $publishedNews = array();
 
     while ($row = $query->fetch()) {
-
-        echo "<tr>";
-        echo "<td>";
-        echo "#".$row["id"]." - ".$row["title"]." - ".substr($row["text"], 0, 100);
-        echo "</td>";
-        echo "<td>";
-        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
-        echo "</td>";
-        echo "</tr>";
 
         if (!vf($row["stringid"])) {
 
@@ -311,11 +274,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         }
 
+        $publishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+
     }
 
-    echo "</table>";
-
 }
+
+echo $twig->render("admin/news.html", array("mode" => $mode,
+                                            "status" => (isset($status) ? $status : null),
+                                            "articleData" => (isset($articleData) ? $articleData : null),
+                                            "currentid" => (isset($currentId) ? $currentId : null),
+                                            "unpublishedNews" => (isset($unpublishedNews) ? $unpublishedNews : null),
+                                            "publishedNews" => (isset($publishedNews) ? $publishedNews : null)));
 
 function generateid($x) {
 
@@ -349,9 +319,3 @@ function generateid($x) {
     return 0;
 
 }
-
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>

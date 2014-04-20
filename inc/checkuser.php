@@ -6,17 +6,25 @@ require_once "functions.php";
 
 if (vf($_GET["name"])) {
 
-    $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :name");
-    $selectUserId->bindValue("name", strip($_GET["name"]), PDO::PARAM_STR);
-    $selectUserId->execute();
+    try {
 
-    if ($selectUserId->rowCount() == 0) {
+        $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :name");
+        $selectUserId->bindValue("name", strip($_GET["name"]), PDO::PARAM_STR);
+        $selectUserId->execute();
 
-        echo "0";
+        if ($selectUserId->rowCount() == 0) {
 
-    } else {
+            echo "0";
 
-        echo "1";
+        } else {
+
+            echo "1";
+
+        }
+
+    } catch (PDOException $e) {
+
+        echo "An error occurred while trying to fetch data.";
 
     }
 

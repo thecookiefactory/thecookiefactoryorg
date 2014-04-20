@@ -44,7 +44,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             } catch (PDOException $e) {
 
-
+                die("Failed to fetch the search results.");
 
             }
 
@@ -87,7 +87,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
             } catch (PDOException $e) {
 
-                echo "Failed to fetch the search results.";
+                die("Failed to fetch the search results.");
 
             }
 

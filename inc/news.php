@@ -35,13 +35,23 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
     }
 
-    if (($selectNewsByPage->rowCount() == 0) && ($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() != 0)) {
+    try {
+
+        $liveNewsCount = $con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount();
+
+    } catch (PDOException $e) {
+
+        die("Failed to fetch live news.");
+
+    }
+
+    if (($selectNewsByPage->rowCount() == 0) && ($liveNewsCount != 0)) {
 
         header("Location: /news");
 
     }
 
-    $pageCount = ceil($con->query("SELECT `news`.`id` FROM `news` WHERE `news`.`live` = 1")->rowCount() / 5);
+    $pageCount = ceil($liveNewsCount / 5);
 
     while ($foundNews = $selectNewsByPage->fetch()) {
 

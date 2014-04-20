@@ -81,7 +81,7 @@ class forumthread extends master {
 
             } catch (PDOException $e) {
 
-                echo "An error occured while trying to fetch data to the class.";
+                die("An error occured while trying to fetch data to the class.");
 
             }
 
@@ -161,16 +161,24 @@ class forumthread extends master {
                 $a["firstpost"]["userhasrights"] = 1;
 
             $a["posts"] = array();
+            
+            try {
+            
+                $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+                $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
+                $selectPosts->execute();
 
-            $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
-            $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
-            $selectPosts->execute();
+                while ($foundPost = $selectPosts->fetch()) {
 
-            while ($foundPost = $selectPosts->fetch()) {
+                    $post = new forumpost($foundPost["id"]);
+                    $a["posts"][] = $post->returnArray("main");
 
-                $post = new forumpost($foundPost["id"]);
-                $a["posts"][] = $post->returnArray("main");
-
+                }
+            
+            } catch (PDOException $e) {
+            
+                die("Failed to fetch forum posts.");
+            
             }
 
         }
@@ -194,16 +202,24 @@ class forumthread extends master {
                 echo "Your comment must be less than 20 000 characters long.";
 
             } else {
+            
+                try {
+                
+                    $insertComment = $con->prepare("INSERT INTO `forumposts` VALUES(DEFAULT, :text, :author, DEFAULT, DEFAULT, :id)");
+                    $insertComment->bindValue("author", $author, PDO::PARAM_INT);
+                    $insertComment->bindValue("text", $text, PDO::PARAM_STR);
+                    $insertComment->bindValue("id", $this->id, PDO::PARAM_INT);
+                    $insertComment->execute();
 
-                $insertComment = $con->prepare("INSERT INTO `forumposts` VALUES(DEFAULT, :text, :author, DEFAULT, DEFAULT, :id)");
-                $insertComment->bindValue("author", $author, PDO::PARAM_INT);
-                $insertComment->bindValue("text", $text, PDO::PARAM_STR);
-                $insertComment->bindValue("id", $this->id, PDO::PARAM_INT);
-                $insertComment->execute();
-
-                $updateLastDate = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
-                $updateLastDate->bindValue("id", $this->id, PDO::PARAM_INT);
-                $updateLastDate->execute();
+                    $updateLastDate = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`lastdate` = now() WHERE `forumthreads`.`id` = :id");
+                    $updateLastDate->bindValue("id", $this->id, PDO::PARAM_INT);
+                    $updateLastDate->execute();
+                
+                } catch (PDOException $e) {
+                
+                    echo "Failed to post your comment.";
+                
+                }
 
             }
 
@@ -256,15 +272,23 @@ class forumthread extends master {
                     echo "Your comment must be less than 20,000 characters long.";
 
                 } else {
+                
+                    try {
+                    
+                        $insertThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
+                        $insertThread->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                        $insertThread->bindValue("title", $title, PDO::PARAM_STR);
+                        $insertThread->bindValue("text", $text, PDO::PARAM_STR);
+                        $insertThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                        $insertThread->execute();
 
-                    $insertThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, DEFAULT, DEFAULT, 0)");
-                    $insertThread->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $insertThread->bindValue("title", $title, PDO::PARAM_STR);
-                    $insertThread->bindValue("text", $text, PDO::PARAM_STR);
-                    $insertThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $insertThread->execute();
-
-                    header("Location: /forums/" . $con->lastInsertId());
+                        header("Location: /forums/" . $con->lastInsertId());
+                    
+                    } catch (PDOException $e) {
+                    
+                        echo "Failed to post your thread.";
+                    
+                    }
 
                 }
 
@@ -280,8 +304,16 @@ class forumthread extends master {
         global $twig;
 
         $categories = array();
-
-        $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+        
+        try {
+        
+            $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+        
+        } catch (PDOException $e) {
+        
+            die("Failed to fetch forum categories.");
+        
+        }
 
         while ($foundCategory = $selectCategories->fetch()) {
 
@@ -347,13 +379,21 @@ class forumthread extends master {
                     echo "Your comment must be less than 20,000 characters long.";
 
                 } else {
-
-                    $updateThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
-                    $updateThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
-                    $updateThread->bindValue("title", $title, PDO::PARAM_STR);
-                    $updateThread->bindValue("text", $text, PDO::PARAM_STR);
-                    $updateThread->bindValue("tid", $this->id, PDO::PARAM_INT);
-                    $updateThread->execute();
+                
+                    try {
+                    
+                        $updateThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`forumcategory` = :cat, `forumthreads`.`title` = :title, `forumthreads`.`text` = :text, `forumthreads`.`editdate` = now() WHERE `forumthreads`.`id` = :tid");
+                        $updateThread->bindValue("cat", $cat->getId(), PDO::PARAM_INT);
+                        $updateThread->bindValue("title", $title, PDO::PARAM_STR);
+                        $updateThread->bindValue("text", $text, PDO::PARAM_STR);
+                        $updateThread->bindValue("tid", $this->id, PDO::PARAM_INT);
+                        $updateThread->execute();
+                    
+                    } catch (PDOException $e) {
+                    
+                        echo "Failed to update the thread.";
+                    
+                    }
 
                 }
 
@@ -364,41 +404,73 @@ class forumthread extends master {
         if ($user->isAdmin()) {
 
             if (isset($_POST["closed"]) && $_POST["closed"] == "on" && !$this->isClosed()) {
-
-                $closeThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
-                $closeThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $closeThread->execute();
+            
+                try {
+                
+                    $closeThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'1' WHERE `forumthreads`.`id` = :id");
+                    $closeThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                    $closeThread->execute();
+                
+                } catch (PDOException $e) {
+                
+                    echo "Failed to close the thread.";
+                
+                }
 
             } else if (!isset($_POST["closed"]) && $this->isClosed()) {
-
-                $openThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
-                $openThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
-                $openThread->execute();
+            
+                try {
+                    
+                    $openThread = $con->prepare("UPDATE `forumthreads` SET `forumthreads`.`closed` = b'0' WHERE `forumthreads`.`id` = :id");
+                    $openThread->bindValue("id", $this->getId(), PDO::PARAM_INT);
+                    $openThread->execute();
+                
+                } catch (PDOException $e) {
+                
+                    echo "Failed to open the thread.";
+                
+                }
 
             }
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
                 if ($this->map != null) {
-
-                    $updateMapComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
-                    $updateMapComments->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
-                    $updateMapComments->execute();
+                
+                    try {
+                    
+                        $updateMapComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                        $updateMapComments->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
+                        $updateMapComments->execute();
+                
+                    } catch (PDOException $e) {
+                    
+                        echo "Failed to update map info.";
+                    
+                    }
 
                 }
+                
+                try {    
+                
+                    $deletePosts = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+                    $deletePosts->bindValue("tid", $this->id, PDO::PARAM_INT);
+                    $deletePosts->execute();
 
-                $deletePosts = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
-                $deletePosts->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $deletePosts->execute();
+                    $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+                    $deleteThread->bindValue("tid", $this->id, PDO::PARAM_INT);
+                    $deleteThread->execute();
 
-                $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
-                $deleteThread->bindValue("tid", $this->id, PDO::PARAM_INT);
-                $deleteThread->execute();
+                    if ($deleteThread->rowCount() == 1) {
 
-                if ($deleteThread->rowCount() == 1) {
+                        header("Location: /forums");
 
-                    header("Location: /forums");
-
+                    }
+                
+                } catch (PDOException $e) {
+                
+                    echo "Failed to delete the thread.";
+                
                 }
 
             }
@@ -420,9 +492,17 @@ class forumthread extends master {
         global $user;
 
         $categories = array();
+        
+        try {   
 
-        $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
-
+            $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+        
+        } catch (PDOException $e) {
+        
+            die("Failed to select categories.");
+        
+        }
+        
         while ($foundCategory = $selectCategories->fetch()) {
 
             $cat = new forumcategory($foundCategory["id"]);
@@ -437,10 +517,18 @@ class forumthread extends master {
     public function replyCount() {
 
         global $con;
-
-        $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
-        $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
-        $selectPosts->execute();
+        
+        try {
+              
+            $selectPosts = $con->prepare("SELECT `forumposts`.`id` FROM `forumposts` WHERE `forumposts`.`threadid` = :id");
+            $selectPosts->bindValue("id", $this->id, PDO::PARAM_INT);
+            $selectPosts->execute();
+        
+        } catch (PDOException $e) {
+        
+            die("Failed to select posts.");
+        
+        }
 
         return $selectPosts->rowCount();
 

@@ -47,7 +47,7 @@ class stream extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -61,7 +61,7 @@ class stream extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 

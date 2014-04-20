@@ -8,7 +8,7 @@
         <div class='forums-post-metadata'>
 
             {% if post.userhasrights %}
-                <a href='/forums/edit/{{ thread.id }}/{{ post.id }}'>edit</a>
+                <a href='/forums/edit/{{ thread.id }}/{{ post.id }}/'>edit</a>
             {% endif %}
             {% if post.editdate %}
                 last edited {% autoescape false %}{{ post.editdate }}{% endautoescape %}

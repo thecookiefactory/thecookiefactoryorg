@@ -58,7 +58,7 @@ class news extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -72,7 +72,7 @@ class news extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -124,15 +124,23 @@ class news extends master {
         }
 
         if ($this->comments == 1) {
+        
+            try {
+            
+                $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
+                $selectThreadId->execute();
 
-            $selectThreadId = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-            $selectThreadId->bindValue("id", $this->id, PDO::PARAM_INT);
-            $selectThreadId->execute();
+                $threadData = $selectThreadId->fetch();
 
-            $threadData = $selectThreadId->fetch();
-
-            $thread = new forumthread($threadData["id"]);
-            $a["commentcount"] = $thread->replyCount();
+                $thread = new forumthread($threadData["id"]);
+                $a["commentcount"] = $thread->replyCount();
+                
+            } catch (PDOException $e) {
+            
+                echo "Failed to fetch comments.";
+            
+            }
 
         }
 

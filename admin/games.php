@@ -84,7 +84,7 @@ while ($gameData = $selectGames->fetch()) {
 
     $game = new game($gameData["id"]);
     $games[] = $game->returnArray();
-    
+
 }
 
 echo $twig->render("admin/games.html", array("games" => $games));
