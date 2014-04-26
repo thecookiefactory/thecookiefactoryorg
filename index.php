@@ -1,5 +1,7 @@
 <?php
 
+ob_start('ob_gzhandler');
+
 session_start();
 
 $r_c = 0;
@@ -63,7 +65,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     } else if ($p != "login" && $p != "logout") {
 
-        http_response_code(404);
+        header("Location: /notfound.php", true, 404);
 
     }
 
@@ -151,3 +153,5 @@ function isAnyoneLive() {
     return false;
 
 }
+
+ob_end_flush();
