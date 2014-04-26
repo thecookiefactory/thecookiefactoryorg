@@ -203,7 +203,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, :comments, :live, '')");
+                $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, :comments, :live, '')");
                 $iq->bindValue("title", $title, PDO::PARAM_STR);
                 $iq->bindValue("text", $text, PDO::PARAM_STR);
                 $iq->bindValue("author", $author, PDO::PARAM_INT);
@@ -213,7 +213,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                 $id = $con->lastInsertId();
 
-                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, DEFAULT, DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
                 $iq->bindValue("title", $title, PDO::PARAM_STR);
                 $iq->bindValue("text", $text, PDO::PARAM_STR);
                 $iq->bindValue("author", $author, PDO::PARAM_INT);

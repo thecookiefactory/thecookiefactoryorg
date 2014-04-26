@@ -38,7 +38,7 @@ if (isset($_POST["text"])) {
 if (isset($_POST["create"])) {
 
     $title = strip($_POST["title"]);
-    $insertPage = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', DEFAULT, DEFAULT, DEFAULT, '')");
+    $insertPage = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', now(), DEFAULT, DEFAULT, '')");
     $insertPage->bindValue("title", $title, PDO::PARAM_STR);
     $insertPage->execute();
 
