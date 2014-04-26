@@ -63,7 +63,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
     } else if ($p != "login" && $p != "logout") {
 
-        header("Location: /notfound.php");
+        http_response_code(404);
 
     }
 
