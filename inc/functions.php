@@ -49,7 +49,7 @@ function twigInit() {
 
     global $r_c;
 
-    require_once str_repeat("../", $r_c) . "/vendor/autoload.php";
+    require_once str_repeat("../", $r_c) . "vendor/autoload.php";
 
     Twig_Autoloader::register();
 
