@@ -21,7 +21,6 @@ xampp
 */__pycache__
 
 # Composer
-composer.lock
 composer.phar
 vendor
 
