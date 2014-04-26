@@ -1,3 +1,4 @@
 <?php
-header("Location: /404", true, 404);
+http_response_code(404);
+header("Location: /404");
 ?>
