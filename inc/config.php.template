@@ -2,13 +2,11 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-
 $config["db"] = array(
-    "host" => $url["host"],
-    "username" => $url["user"],
-    "password" => $url["pass"],
-    "dbname" => substr($url["path"], 1),
+    "host" => "hostname",
+    "username" => "user",
+    "password" => "pass",
+    "dbname" => "database",
     "charset" => "utf8"
 );
 
