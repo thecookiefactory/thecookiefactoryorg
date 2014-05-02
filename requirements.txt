@@ -1,0 +1,4 @@
+requests
+Pillow
+PyRSS2Gen
+mysql-connector-repackaged
