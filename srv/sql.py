@@ -5,6 +5,7 @@ except ImportError:
     from urllib.parse import urlsplit
 
 import mysql.connector
+
 try:
     from config import *
 except ImportError:
@@ -15,7 +16,6 @@ except ImportError:
         'host': constring.hostname,
         'database': c.path[1:],
     }
-
     docroot = '/app'
 
 print('Initializing SQL connection.')
