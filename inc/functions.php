@@ -25,7 +25,9 @@ if (file_exists($config_file)) {
     $config["domain"] = getenv("TCF_DOMAIN");
 
     $config["python"] = array(
-        "rss" => "echo 0"
+        "rss" => "python " . str_repeat("../", $r_c) . "srv/rss.py",
+        "github" => "python " . str_repeat("../", $r_c) . "srv/github.py",
+        "twitch" => "python " . str_repeat("../", $r_c) . "srv/twitch.py"
     );
 
 }
