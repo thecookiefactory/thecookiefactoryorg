@@ -1,13 +1,11 @@
 <?php
 
-exec($config["python"]["github"], $output, $return);
+$r_c = 0;
+
+require_once "../inc/functions.php";
+
+exec($config["python"]["updater"], $output, $return);
 if ($output) error_log($output);
 
-echo "gaithub: ";
 print_r($output);
-
-exec($config["python"]["twitch"], $output, $return);
-if ($output) error_log($output);
-
-echo "twtich: ";
-print_r($output);
+print_r($return);
