@@ -14,7 +14,7 @@ except ImportError:
         'user': constring.username,
         'password': constring.password,
         'host': constring.hostname,
-        'database': c.path[1:],
+        'database': constring.path[1:],
     }
     docroot = '/app'
 
