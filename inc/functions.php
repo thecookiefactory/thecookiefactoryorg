@@ -29,6 +29,10 @@ if (file_exists($config_file)) {
         "updater" => "python /app/srv/updater.py"
     );
 
+    $config["updater_ip_whitelist"] = explode(
+        " ", getenv("UPDATER_IP_WHITELIST")
+    );
+
 }
 
 try {
