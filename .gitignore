@@ -4,7 +4,6 @@ img/maps/*/*
 img/maps/*.jpg
 img/maps/*.jpeg
 img/maps/*.png
-img/custom
 cache/*
 rss.xml
 .sublime-project
