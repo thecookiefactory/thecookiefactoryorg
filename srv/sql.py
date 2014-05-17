@@ -16,7 +16,7 @@ except ImportError:
         'host': constring.hostname,
         'database': constring.path[1:],
     }
-    docroot = '/app'
+    docroot = '/app/'
 
 print('Initializing SQL connection.')
 
