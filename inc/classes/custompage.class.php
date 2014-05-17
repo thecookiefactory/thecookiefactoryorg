@@ -3,6 +3,7 @@
 if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
 
 /**
  * custom page class
@@ -32,21 +33,39 @@ class custompage extends master {
     protected $live     = null;
     protected $stringid = null;
 
-    public function __construct($stringid = null) {
+    public function __construct($stringid = null, $field = null) {
 
         global $con;
 
         if ($stringid != null) {
 
-            try {
+            if ($field == "id") {
 
-                $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`stringid` = :stringid");
-                $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
-                $squery->execute();
+                try {
 
-            } catch (PDOException $e) {
+                    $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`id` = :stringid");
+                    $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
+                    $squery->execute();
 
-                echo "An error occured while trying to fetch data to the class.";
+                } catch (PDOException $e) {
+
+                    die("An error occured while trying to fetch data to the class.");
+
+                }
+
+            } else {
+
+                try {
+
+                    $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`stringid` = :stringid");
+                    $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
+                    $squery->execute();
+
+                } catch (PDOException $e) {
+
+                    die("An error occured while trying to fetch data to the class.");
+
+                }
 
             }
 
@@ -75,7 +94,11 @@ class custompage extends master {
     public function returnArray() {
 
         $a = array(
-                    "text" => $this->text
+                    "id" => $this->id,
+                    "title" => $this->title,
+                    "text" => $this->text,
+                    "live" => $this->live,
+                    "stringid" => $this->stringid
                     );
 
         return $a;

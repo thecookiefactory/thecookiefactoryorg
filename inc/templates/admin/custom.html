@@ -1,0 +1,41 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>Manage custom pages</h1>
+{% if mode == "select" %}
+Edit a page:
+<form action='custom.php' method='post'>
+<select name='cpage'>
+{% for page in pages %}
+<option value='{{ page.title }}'>{{ page.title }}</option>
+{% endfor %}
+</select>
+
+<input type='submit' value='Go!'>
+</form>
+
+Create new:
+<form action='custom.php' method='post'>
+<input type='text' name='title' required>
+<input type='submit' name='create' value='Go!'>
+</form>
+{% else %}
+<form action='custom.php' method='post'>
+<input type='hidden' name='id' value='{{ data.id }}' required>
+Title:<br>
+<input type='text' name='name' value='{{ data.title }}' required><br>
+Content:<br>
+<textarea name='text' rows='30' cols='100' required>{{ data.text }}</textarea><br>
+Stringid (used for the url):<br>
+<input type='text' name='stringid' value='{{ data.stringid }}' required><br>
+Live?<br>
+{% if data.live %}
+<input type='checkbox' name='live' checked>
+{% else %}
+<input type='checkbox' name='live'>
+{% endif %}
+<br>
+<input type='submit' value='Save'>
+</form>
+{% endif %}
+{% endblock %}

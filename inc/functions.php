@@ -2,7 +2,38 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once str_repeat("../", $r_c) . "inc/config.php";
+$config_file = str_repeat("../", $r_c) . "inc/config.php";
+
+if (file_exists($config_file)) {
+
+    require_once $config_file;
+
+} else {       # assunign heruk
+
+    $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+    $config["db"] = array(
+        "host" => $url["host"],
+        "username" => $url["user"],
+        "password" => $url["pass"],
+        "dbname" => substr($url["path"], 1),
+        "charset" => "utf8"
+    );
+
+    $config["apikey"] = getenv("STEAM_API_KEY");
+
+    $config["domain"] = getenv("TCF_DOMAIN");
+
+    $config["python"] = array(
+        "rss" => "python /app/srv/rss.py",
+        "updater" => "python /app/srv/updater.py"
+    );
+
+    $config["updater_ip_whitelist"] = explode(
+        " ", getenv("UPDATER_IP_WHITELIST")
+    );
+
+}
 
 try {
 
@@ -42,6 +73,21 @@ function vf($x) {
 function cookieh() {
 
     return str_shuffle(hash("sha256", microtime()));
+
+}
+
+function twigInit() {
+
+    global $r_c;
+
+    require_once str_repeat("../", $r_c) . "vendor/autoload.php";
+
+    Twig_Autoloader::register();
+
+    $loader = new Twig_Loader_Filesystem(str_repeat("../", $r_c) . "inc/templates");
+    $twig = new Twig_Environment($loader);
+
+    return $twig;
 
 }
 

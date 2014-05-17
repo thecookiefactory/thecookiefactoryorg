@@ -1184,6 +1184,9 @@ img.map-image {
   left: -60px;
 }
 
+.register-error {
+}
+
 .forums-createthread {
   display: block;
   margin-bottom: 13px;

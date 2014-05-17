@@ -1,17 +1,15 @@
 <?php
 
+ob_start('ob_gzhandler');
+
 session_start();
 
 $r_c = 0;
 require_once "inc/functions.php";
 require_once "inc/classes/master.class.php";
 require_once "inc/classes/user.class.php";
-require_once "vendor/autoload.php";
 
-Twig_Autoloader::register();
-
-$loader = new Twig_Loader_Filesystem("inc/templates");
-$twig = new Twig_Environment($loader);
+$twig = twigInit();
 
 use Aptoma\Twig\Extension\MarkdownExtension;
 use Aptoma\Twig\Extension\MarkdownEngine;
@@ -155,3 +153,5 @@ function isAnyoneLive() {
     return false;
 
 }
+
+ob_end_flush();

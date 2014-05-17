@@ -39,7 +39,7 @@
           <span class='map-data-prop map-data-date'>{% autoescape false %}{{ map.editdate }}{% endautoescape %}</span>
           {% if map.comments %}
               <span class='map-data-prop map-data-topic'>
-              <a href='/forums/{{ map.thread.id }}'>{{ map.thread.replycount }} {% if map.thread.replycount == 1%} reply</a> {% else %} replies</a> {% endif %}
+              <a href='/forums/{{ map.thread.id }}/'>{{ map.thread.replycount }} {% if map.thread.replycount == 1%} reply</a> {% else %} replies</a> {% endif %}
               </span>
           {% endif %}
         </div>

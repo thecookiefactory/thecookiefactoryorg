@@ -51,7 +51,7 @@ class forumpost extends master {
 
             } catch (PDOException $e) {
 
-                echo "An error occured while trying to fetch data to the class.";
+                die("An error occured while trying to fetch data to the class.");
 
             }
 
@@ -137,20 +137,28 @@ class forumpost extends master {
 
         if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-            $deletePost = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`id` = :pid");
-            $deletePost->bindValue("pid", $this->id, PDO::PARAM_INT);
-            $deletePost->execute();
+            try {
+            
+                $deletePost = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`id` = :pid");
+                $deletePost->bindValue("pid", $this->id, PDO::PARAM_INT);
+                $deletePost->execute();
+                
+                $thread = new forumthread($this->threadid);
 
-            $thread = new forumthread($this->threadid);
+                if (!$thread->isNewsThread()) {
 
-            if (!$thread->isNewsThread()) {
+                    header("Location: /forums/" . $this->threadid);
 
-                header("Location: /forums/" . $this->threadid);
+                } else {
 
-            } else {
+                    header("Location: /news/" . $thread->getNewsStringId());
 
-                header("Location: /news/" . $thread->getNewsStringId());
-
+                }
+            
+            } catch (PDOException $e) {
+            
+                echo "An error occurred while trying to delete the post.";
+            
             }
 
         } else {
@@ -162,22 +170,30 @@ class forumpost extends master {
                 echo "Your comment must be less than 20 000 characters long.";
 
             } else {
+            
+                try {
+                
+                    $updatePost = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`id` = :pid");
+                    $updatePost->bindValue("text", $text, PDO::PARAM_STR);
+                    $updatePost->bindValue("pid", $this->id, PDO::PARAM_INT);
+                    $updatePost->execute();
 
-                $updatePost = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`id` = :pid");
-                $updatePost->bindValue("text", $text, PDO::PARAM_STR);
-                $updatePost->bindValue("pid", $this->id, PDO::PARAM_INT);
-                $updatePost->execute();
+                    $thread = new forumthread($this->threadid);
 
-                $thread = new forumthread($this->threadid);
+                    if (!$thread->isNewsThread()) {
 
-                if (!$thread->isNewsThread()) {
+                        header("Location: /forums/" . $this->threadid);
 
-                    header("Location: /forums/" . $this->threadid);
+                    } else {
 
-                } else {
+                        header("Location: /news/" . $thread->getNewsStringId());
 
-                    header("Location: /news/" . $thread->getNewsStringId());
-
+                    }
+                
+                } catch (PDOException $e) {
+                
+                    echo "An error occurred while trying to update the post.";
+                
                 }
 
             }

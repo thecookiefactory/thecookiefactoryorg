@@ -1,0 +1,10 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>Registered users</h1>
+<ul>
+{% for user in users %}
+<li>{{ user }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

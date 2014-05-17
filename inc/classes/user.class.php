@@ -57,7 +57,7 @@ class user extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -71,7 +71,7 @@ class user extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -114,7 +114,7 @@ class user extends master {
 
             }
 
-            $rs .= "<span class='menu-item'><a href='/logout'>log out</a></span>";
+            $rs .= "<span class='menu-item'><a href='/logout/'>log out</a></span>";
 
             if (isset($_GET["p"]) && $_GET["p"] == "logout") {
 
@@ -171,9 +171,17 @@ class user extends master {
                     $_SESSION["steamauth"] = $OpenID->validate() ? $OpenID->identity : null;
                     $_SESSION["steamid"] = str_replace("http://steamcommunity.com/openid/id/", "", $_SESSION["steamauth"]);
 
-                    $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
-                    $selectUserId->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
-                    $selectUserId->execute();
+                    try {
+                    
+                        $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`steamid` = :steamid");
+                        $selectUserId->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_STR);
+                        $selectUserId->execute();
+                    
+                    } catch (PDOException $e) {
+                    
+                        die("Failed to fetch users.");
+                    
+                    }
 
                     if ($selectUserId->rowCount() == 1) {
 
@@ -184,12 +192,20 @@ class user extends master {
 
                         $cookieh = cookieh();
 
-                        $updateCookieh = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-                        $updateCookieh->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-                        $updateCookieh->bindValue("id", $userData["id"], PDO::PARAM_INT);
-                        $updateCookieh->execute();
+                        try {
+                        
+                            $updateCookieh = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
+                            $updateCookieh->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+                            $updateCookieh->bindValue("id", $userData["id"], PDO::PARAM_INT);
+                            $updateCookieh->execute();
 
-                        setcookie("userid", $cookieh, time() + 2592000, "/");
+                            setcookie("userid", $cookieh, time() + 2592000, "/");
+                        
+                        } catch (PDOException $e) {
+                        
+                            echo "Failed to update cookies.";
+                        
+                        }
 
                         if (isset($_SESSION["lp"])) {
 
@@ -225,43 +241,59 @@ class user extends master {
         //checking if the username has valid characters only and is of the specified length
         if (!ctype_alnum(str_replace('-', '', $username))) {
 
-            echo "Your username can contain English letters, numbers, and underscores only.";
+            echo "<span class='register-error'>Your username can contain English letters, numbers, and underscores only.</span>";
             return;
 
         }
 
         if (strlen($username) < 2 || strlen($username) > 10) {
 
-            echo "Your username must be 2 to 10 characters long.";
+            echo "<span class='register-error'>Your username must be 2 to 10 characters long.</span>";
             return;
 
         }
 
-        //checking if that user already exists
-        $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :username");
-        $selectUserId->bindValue("username", $username, PDO::PARAM_STR);
-        $selectUserId->execute();
+        try {
+        
+            //checking if that user already exists
+            $selectUserId = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`name` = :username");
+            $selectUserId->bindValue("username", $username, PDO::PARAM_STR);
+            $selectUserId->execute();
+        
+        } catch (PDOException $e) {
+        
+            die("Failed to fetch users.");
+        
+        }
 
         if ($selectUserId->rowCount() != 0) {
 
-            echo "Sorry, that username is already taken.";
+            echo "<span class='register-error'>Sorry, that username is already taken.</span>";
             return;
 
         }
 
         $cookieh = cookieh();
 
-        //registering the user and redirecting to the login form
-        $iquery = $con->prepare("INSERT INTO `users` VALUES(DEFAULT, :username, :steamid, DEFAULT, :cookieh, DEFAULT, DEFAULT)");
-        $iquery->bindValue("username", $username, PDO::PARAM_STR);
-        $iquery->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
-        $iquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-        $iquery->execute();
+        try {
+        
+            //registering the user and redirecting to the login form
+            $iquery = $con->prepare("INSERT INTO `users` VALUES(DEFAULT, :username, :steamid, DEFAULT, :cookieh, DEFAULT, DEFAULT)");
+            $iquery->bindValue("username", $username, PDO::PARAM_STR);
+            $iquery->bindValue("steamid", $_SESSION["steamid"], PDO::PARAM_INT);
+            $iquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
+            $iquery->execute();
 
-        $id = $con->lastInsertId();
+            $id = $con->lastInsertId();
 
-        $_SESSION["userid"] = $id;
-        setcookie("userid", $cookieh, time() + 2592000, "/");
+            $_SESSION["userid"] = $id;
+            setcookie("userid", $cookieh, time() + 2592000, "/");
+            
+        } catch (PDOException $e) {
+        
+            die("Failed to register the user.");
+        
+        }
 
         if (isset($_SESSION["lp"])) {
 

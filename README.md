@@ -11,8 +11,6 @@
 3. Edit your `php.ini` file as follows:
 
         extension=php_openssl.dll
-        upload_max_filesize = 128M
-        post_max_size = 128M
 
 4. Set up your database by running `mysql -u {DB_USER} -p {DB_NAME} < schema.sql`
 

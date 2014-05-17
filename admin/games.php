@@ -4,31 +4,22 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/game.class.php";
 require_once "../inc/classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
+$twig = twigInit();
 
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
-
-<?php
-
-$query = $con->query("SELECT * FROM `games`");
+$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
 if (isset($_POST["update"])) {
 
-    while ($r = $query->fetch()) {
+    while ($gameData = $selectGames->fetch()) {
 
-        $id = $r["id"];
+        $id = $gameData["id"];
         $name = strip($_POST[$id."name"]);
         $steamid = strip($_POST[$id."steamid"]);
 
@@ -44,7 +35,7 @@ if (isset($_POST["update"])) {
 
                 $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
                 $uq->bindValue("name", $name, PDO::PARAM_STR);
-                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
                 $uq->execute();
 
             } else {
@@ -52,7 +43,7 @@ if (isset($_POST["update"])) {
                 $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
                 $uq->bindValue("name", $name, PDO::PARAM_STR);
                 $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-                $uq->bindValue("id", $r["id"], PDO::PARAM_INT);
+                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
                 $uq->execute();
 
             }
@@ -85,32 +76,15 @@ if (isset($_POST["addnew"])) {
 
 }
 
-$query = $con->query("SELECT * FROM `games`");
+$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
-echo "<h1>manage games</h1>";
+$games = array();
 
-echo "<form action='games.php' method='post'>";
+while ($gameData = $selectGames->fetch()) {
 
-echo "<table border>";
-echo "<tr><th>id</th><th>name</th><th>steamid store id</th></tr>";
-
-while ($row = $query->fetch()) {
-
-    echo "<tr><td>".$row["id"]."</td><td><input type='text' value='".$row["name"]."' name='".$row["id"]."name'></td><td><input type='text' value='".$row["steamid"]."' name='".$row["id"]."steamid'></td></tr>";
+    $game = new game($gameData["id"]);
+    $games[] = $game->returnArray();
 
 }
 
-echo "</table>";
-
-echo "<input type='submit' value='update' name='update'>";
-echo "</form>";
-echo "<hr>";
-echo "<form action='games.php' method='post'>
-<input type='text' name='name'><input type='text' name='steamid'><input type='submit' name='addnew' value='add new'>
-</form>";
-
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/games.html", array("games" => $games));

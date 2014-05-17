@@ -8,7 +8,7 @@
 
 {% else %}
 
-    <a href='/news/{{ new.stringid }}'>{{ new.title }}</a>
+    <a href='/news/{{ new.stringid }}/'>{{ new.title }}</a>
 
 {% endif %}
 
@@ -20,9 +20,9 @@
 {% if not main and new.comments %}
 
     {% if new.commentcount != 1 %}
-        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}#comments'>{{ new.commentcount }} comments</a></span>
+        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}/#comments'>{{ new.commentcount }} comments</a></span>
     {% else %}
-        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}#comments'>{{ new.commentcount }} comment</a></span>
+        <span class='article-metadata-item'><a href='/news/{{ new.stringid }}/#comments'>{{ new.commentcount }} comment</a></span>
     {% endif %}
 
 {% endif %}

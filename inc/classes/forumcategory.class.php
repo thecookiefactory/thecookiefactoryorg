@@ -3,6 +3,7 @@
 if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
 
 /**
  * forum category class
@@ -50,7 +51,7 @@ class forumcategory extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 
@@ -64,7 +65,7 @@ class forumcategory extends master {
 
                 } catch (PDOException $e) {
 
-                    echo "An error occured while trying to fetch data to the class.";
+                    die("An error occured while trying to fetch data to the class.");
 
                 }
 

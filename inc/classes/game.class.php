@@ -2,6 +2,8 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
+
 /**
  * game class
  *
@@ -40,7 +42,7 @@ class game extends master {
 
             } catch (PDOException $e) {
 
-                echo "An error occured while trying to fetch data to the class.";
+                die("An error occured while trying to fetch data to the class.");
 
             }
 
@@ -60,6 +62,18 @@ class game extends master {
 
         }
 
+    }
+    
+    public function returnArray() {
+    
+        $a = array(
+                    "id" => $this->id,
+                    "name" => $this->name,
+                    "steamid" => $this->steamid
+                    );
+
+        return $a;
+    
     }
 
     public function getName() {
