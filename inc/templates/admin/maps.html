@@ -1,0 +1,167 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<h1>Manage maps</h1>
+
+{% if mode == "manage" %}
+
+    <p><a href='?action=write'>add new</a></p>
+
+    <table style='border-spacing: 5px;'>
+    <tr><th>Maps</th><th>Tools</th></tr>
+
+    {% for map in maps %}
+
+        <tr>
+        <td>
+        #{{ map.id }} - {{ map.name }}
+        </td>
+        <td>
+        <a href='?action=edit&amp;id={{ map.id }}'>edit</a> <a href='?action=delete&amp;id={{ map.id }}'>delete</a>
+        </td>
+        </tr>
+
+    {% endfor %}
+
+    </table>
+
+{% endif %}
+
+{% if mode == "write" %}
+
+    {% if status == "topic-success" %}
+
+        Successfully created the map with a forum topic.
+
+    {% endif %}
+
+    {% if status == "no-topic-success" %}
+
+        Successfully created the map without a forum topic.
+
+    {% endif %}
+
+    {% if status == "topic" or status == "no-topic" %}
+
+        Could not create the map.
+
+    {% endif %}
+
+    {% if status == "progress" %}
+
+        <h1>post a map</h1>
+        <form action='?action=write' method='post'>
+        Name<br>
+        <input type='text' name='name' required><br>
+        Associated game<br>
+        <select name='game'>
+
+        {% for game in games %}
+
+            <option value='{{ game.id }}'>{{ game.name }}</option>
+
+        {% endfor %}
+
+        </select><br>
+        description<br>
+        <textarea name='text' required></textarea><br>
+        download (empty for none, repo name for github, steam file id for workshop file):
+        <input type='text' name='download'>
+        <br>
+        <fieldset>
+        <legend>forum topic:</legend>
+        map topic name (leave empty if no topic)<br>
+        <input type='text' name='topicname'>
+        select cateryogy
+        <select name='topiccat'>
+
+        {% for category in forumcategories %}
+
+            <option value='{{ category.id }}'>{{ category.name }}</option>
+
+        {% endfor %}
+
+        </select>
+        <textarea name='topictext'></textarea>
+        </fieldset>
+        <input type='submit' name='submit'>
+        </form>
+
+    {% endif %}
+
+{% endif %}
+
+{% if mode == "delete" %}
+
+    {% if status == "success" %}
+
+        The map has been deleted.
+
+    {% endif %}
+
+    {% if status == "failure" %}
+
+        Delete process failed.
+
+    {% endif %}
+
+    {% if status == "confirm" %}
+
+        Delete map id {{ currentid }}?
+        <form action='?action=delete&amp;id={{ currentid }}' method='post'>
+        <input type='submit' name='delete' value='Yes, delete'>
+        </form>
+
+    {% endif %}
+
+    {% if status == "notfound" %}
+
+        Could not find the map.
+
+    {% endif %}
+
+{% endif %}
+
+{% if mode == "edit" %}
+
+{% if status == "edit" %}
+
+    <form action='?action=edit&amp;id={{ mapdata.id }}' method='post'>
+    Name<br>
+    <input type='text' name='name' value='{{ mapdata.name }}' required><br>
+    Associated game<br>
+    <select name='game'>
+
+    {% for game in games %}
+
+        {% if game.id == mapdata.gameid %}
+
+            <option value='{{ game.id }}' selected>{{ game.name }}</option>
+
+        {% else %}
+
+            <option value='{{ game.id }}'>{{ game.name }}</option>
+
+        {% endif %}
+
+    {% endfor %}
+
+    </select><br>
+    description<br>
+    <textarea name='text' required>{{ mapdata.text }}</textarea><br>
+    download (empty for none, repo name for github, steam file id for workshop file):
+    <input type='text' name='download' value='{{ mapdata.dl }}'>
+    <br>
+    <input type='submit' name='submit'>
+    </form>
+
+{% else %}
+
+    Could not find the map.
+
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

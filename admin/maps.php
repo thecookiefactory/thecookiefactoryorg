@@ -10,28 +10,20 @@ $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
-
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
-
-<?php
+$twig = twigInit();
 
 if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "delete" || $_GET["action"] == "write")) {
 
     if ($_GET["action"] == "edit") {
-        // EDIT
+
+        $mode = "edit";
+
+        $status = "edit";
 
         $id = strip($_GET["id"]);
         $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
         $eq->bindValue("id", $id, PDO::PARAM_INT);
         $eq->execute();
-
 
         if (isset($_POST["submit"]) && vf($_POST["name"]) && vf($_POST["game"]) && vf($_POST["text"])) {
 
@@ -41,54 +33,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $game = strip($_POST["game"]);
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
-
-            //image file
-            $image_name = $_FILES["image"]["name"];
-            $image_size = $_FILES["image"]["size"];
-            $image_type = $_FILES["image"]["type"];
-            $image_tmp = $_FILES["image"]["tmp_name"];
-
-            $location = dirname(getcwd()) . "/img/maps/";
-
-            $extension = substr($image_name, strpos($image_name, ".") + 1);
-
-            if (!empty($image_name) && $image_size > 0) {
-
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
-
-                    $location = "../img/maps/";
-
-                    unlink($location.$id.".".$mr["extension"]);
-                    echo "Old image file deleted.<br>";
-
-                    if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
-
-                        echo "New image file uploaded...<br>";
-
-                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
-                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
-                        $uq->bindValue("id", $id, PDO::PARAM_INT);
-                        $uq->execute();
-
-                        echo "File extension saved...<br>";
-
-                    } else {
-
-                        echo "There was an error uploading your image.<br>";
-
-                    }
-
-                } else {
-
-                    echo "File must be jpeg/png.<br>";
-
-                }
-
-            } else {
-
-                echo "There was no new image, continuing.<br>";
-
-            }
 
             $uq = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download WHERE `maps`.`id` = :id");
             $uq->bindValue("id", $id, PDO::PARAM_INT);
@@ -109,54 +53,36 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $mr = $eq->fetch();
 
-            echo "<form action='?action=edit&amp;id=".$id."' method='post' enctype='multipart/form-data'>
-            Name<br>
-            <input type='text' name='name' value='".$mr["name"]."' required><br>
-            Associated game<br>
-            <select name='game'>";
+            $mapdata = array("id" => $mr["id"],
+                             "name" => $mr["name"],
+                             "text" => $mr["text"],
+                             "dl" => $mr["dl"],
+                             "gameid" => $mr["gameid"]);
 
-            $gq = $con->query("SELECT * FROM `games` ORDER BY `games`.`id` ASC");
+            $gq = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
+
+            $games = array();
 
             while ($gr = $gq->fetch()) {
 
-                echo "<option value='".$gr["id"]."'";
-
-                if ($mr["gameid"] == $gr["id"]) {
-
-                    echo " selected";
-
-                }
-
-                echo ">".$gr["name"]."</option>";
+                $games[] = array("id" => $gr["id"], "name" => $gr["name"]);
 
             }
 
-            echo "</select><br>
-            description<br>
-            <textarea name='text' required>".$mr["text"]."</textarea><br>
-            download (empty for none, repo name for github, steam file id for workshop file):
-            <input type='text' name='download' value='".$mr["dl"]."'>
-            <br>
-            main image<br>
-            <img style='width: 300px;' src='../img/maps/".$mr["id"].".".$mr["extension"]."' alt=''>
-            <br>
-            <input type='file' name='image'><br>
-            <input type='submit' name='submit'>
-            </form>";
-
         } else {
 
-            echo "The specified id returned no maps.<br>";
-            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+            $status = "notfound";
 
         }
 
     } else if ($_GET["action"] == "delete") {
-        // DELETE
+
+        $mode = "delete";
 
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
+            $currentid = $id;
             $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
@@ -166,9 +92,6 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 $er = $eq->fetch();
 
                 if (isset($_POST["delete"])) {
-
-                    //deleting the main image
-                    unlink("../img/maps/".$er["id"].".".$er["extension"]);
 
                     //deleting images from the gallery
                     $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
@@ -194,39 +117,31 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     $dq->bindValue("id", $id, PDO::PARAM_INT);
                     $dq->execute();
 
-                    rmdir("../img/maps/".$id);
-
-                    echo "Map successfully deleted.<br>";
-                    echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+                    $status = "success";
 
                 } else {
 
-                    echo "Delete map id ".$id."?";
-                    echo "<form action='?action=delete&amp;id=".$id."' method='post'>
-                    <input type='submit' name='delete' value='Yes, delete'> or <a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>
-                    </form>";
+                    $status = "confirm";
 
                 }
 
             } else {
 
-                echo "The specified id returned no map.<br>";
-                echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+                $status = "notfound";
 
             }
 
         } else {
 
-            echo "There was no id defined.<br>";
-            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+            $status = "notfound";
+
         }
 
     } else {
-        // WRITE
+
+        $mode = "write";
 
         if (isset($_POST["submit"]) && vf($_POST["name"]) && vf($_POST["game"]) && vf($_POST["text"])) {
-
-            echo "Map creating process initiating...<br>";
 
             //basic values
             $name = strip($_POST["name"]);
@@ -238,11 +153,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
 
                 $comments = 1;
-                echo "the topic name is: ".$_POST["topicname"];
+
+                $status = "topic";
 
             } else {
 
                 $comments = 0;
+
+                $status = "no-topic";
 
             }
 
@@ -257,52 +175,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $iq->execute();
 
             $id = $con->lastInsertId();
-            echo "Basic values inserted...<br>";
-            echo "The map id is ".$id."<br>";
-
-            //create the directory
-            mkdir("../img/maps/".$id, 0777);
-            echo "Directory created...<br>";
-
-            //image file
-            $image_name = strtolower($_FILES["image"]["name"]);
-            $image_size = $_FILES["image"]["size"];
-            $image_type = $_FILES["image"]["type"];
-            $image_tmp = $_FILES["image"]["tmp_name"];
-
-            $extension = substr($image_name, strpos($image_name, ".") + 1);
-
-            if (!empty($image_name)) {
-
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($image_type == "image/jpeg" || $image_type == "image/png")) {
-
-                    $location = "../img/maps/";
-
-                    if (move_uploaded_file($image_tmp, $location.$id.".".$extension)) {
-
-                        echo "Image file successfully uploaded...<br>";
-                        $uq = $con->prepare("UPDATE `maps` SET `maps`.`extension` = :extension WHERE `maps`.`id` = :id");
-                        $uq->bindValue("extension", $extension, PDO::PARAM_STR);
-                        $uq->bindValue("id", $id, PDO::PARAM_INT);
-                        $uq->execute();
-                        echo "File extension saved...<br>";
-
-                    } else {
-
-                        echo "There was an error uploading your image.<br>";
-
-                    }
-
-                } else {
-
-                    echo "File must be jpeg/png.<br>";
-
-                }
-
-            }
 
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
-                // creating forum entry for comments
 
                 $authorid = $user->getId();
                 $title = strip($_POST["topicname"]);
@@ -319,86 +193,57 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            echo "Map successfully submitted.<br>";
-            echo "<a href='maps.php'>maps admin panel</a> - <a href='../index.php?p=maps'>maps page</a>";
+            $status .= "-success";
 
         } else {
 
-            echo "<h1>post a map</h1>
-            <form action='?action=write' method='post' enctype='multipart/form-data'>
-            Name<br>
-            <input type='text' name='name' required><br>
-            Associated game<br>
-            <select name='game'>";
+            $status = "progress";
 
-            $gq = $con->query("SELECT * FROM `games` ORDER BY `games`.`id` ASC");
+            $gq = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
+
+            $games = array();
 
             while ($gr = $gq->fetch()) {
 
-                echo "<option value='".$gr["id"]."'>".$gr["name"]."</option>";
+                $games[] = array("id" => $gr["id"], "name" => $gr["name"]);
 
             }
 
-            echo "
-            </select><br>
-            description<br>
-            <textarea name='text' required></textarea><br>
-            download (empty for none, repo name for github, steam file id for workshop file):
-            <input type='text' name='download'>
-            <br>
-            Main image<br>
-            <input type='file' name='image' required><br>
-            map topic name (leave empty if no topic)<br>
-            <input type='text' name='topicname'>
-            select cateryogy
-            <select name='topiccat'>";
+            $cq = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
-            $cq = $con->query("SELECT * FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+            $forumcategories = array();
 
             while ($cr = $cq->fetch()) {
 
-                echo "<option value='".$cr["id"]."'>".$cr["name"]."</option>";
+                $forumcategories[] = array("id" => $cr["id"], "name" => $cr["name"]);
 
             }
-
-            echo "</select>
-            <textarea name='topictext'></textarea>
-            <input type='submit' name='submit'>
-            </form>";
 
         }
 
     }
 
 } else {
-    // ALL
 
-    echo "<h1>manage maps</h1>
-    <p><a href='?action=write'>add new</a></p>";
+    $mode = "manage";
 
-    $query = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
+    $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    echo "<table style='border-spacing: 5px;'>";
-    echo "<tr><th>maps</th><th>editing tools</th></tr>";
+    $maps = array();
 
     while ($row = $query->fetch()) {
 
-        echo "<tr>";
-        echo "<td>";
-        echo "#".$row["id"]." - ".$row["name"];
-        echo "</td>";
-        echo "<td>";
-        echo "<a href='?action=edit&amp;id=".$row["id"]."'>edit</a> <a href='?action=delete&amp;id=".$row["id"]."'>delete</a>";
-        echo "</td>";
-        echo "</tr>";
+        $maps[] = array("id" => $row["id"], "name" => $row["name"]);
 
     }
 
-    echo "</table>";
-
 }
 
-?>
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/maps.html", array("mode" => $mode,
+                                            "status" => (isset($status) ? $status : null),
+                                            "mapdata" => (isset($mapdata) ? $mapdata : null),
+                                            "currentid" => (isset($currentid) ? $currentid : null),
+                                            "maps" => (isset($maps) ? $maps : null),
+                                            "games" => (isset($games) ? $games : null),
+                                            "forumcategories" => (isset($forumcategories) ? $forumcategories : null),
+                                            ));
