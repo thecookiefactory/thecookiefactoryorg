@@ -95,20 +95,6 @@ function twigInit() {
 
 }
 
-function S3Init() {
-
-    global $config;
-    global $r_c;
-
-    require_once str_repeat("../", $r_c) . "vendor/autoload.php";
-
-    return S3Client::factory(array(
-        "key"    => $config["s3"]["key"],
-        "secret" => $config["s3"]["secret"]
-    ));
-
-}
-
 function canonical() {
 
     if (isset($_GET["p"])) {

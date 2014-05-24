@@ -10,7 +10,10 @@ require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 
 use Aws\S3\S3Client;
 
-$S3client = S3Init();
+$S3C = S3Client::factory(array(
+    "key"    => $config["s3"]["key"],
+    "secret" => $config["s3"]["secret"]
+));
 
 /**
  * map class

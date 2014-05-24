@@ -59,16 +59,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.6.3",
+            "version": "2.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d2479a3f7dae629be60cb513ad88cefa6c8c2090"
+                "reference": "459e83a318911eb6685d0a6fd2dcd0495a660a51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d2479a3f7dae629be60cb513ad88cefa6c8c2090",
-                "reference": "d2479a3f7dae629be60cb513ad88cefa6c8c2090",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/459e83a318911eb6685d0a6fd2dcd0495a660a51",
+                "reference": "459e83a318911eb6685d0a6fd2dcd0495a660a51",
                 "shasum": ""
             },
             "require": {
@@ -123,7 +123,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2014-05-14 19:29:32"
+            "time": "2014-05-22 23:03:48"
         },
         {
             "name": "guzzle/guzzle",
@@ -297,7 +297,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.4.4",
+            "version": "v2.4.5",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",

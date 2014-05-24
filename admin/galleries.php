@@ -15,7 +15,10 @@ $twig = twigInit();
 
 use Aws\S3\S3Client;
 
-$S3client = S3Init();
+$S3C = S3Client::factory(array(
+    "key"    => $config["s3"]["key"],
+    "secret" => $config["s3"]["secret"]
+));
 
 if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "edit")) {
 
@@ -46,7 +49,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
                 try {
 
                     // delete from S3
-                    $result = $S3client->deleteObject(array(
+                    $result = $S3C->deleteObject(array(
                         'Bucket'     => $config["s3"]["bucket"],
                         'Key'        => $row["filename"]
                     ));
@@ -129,7 +132,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
                     try {
 
                         // upload to S3
-                        $result = $S3client->putObject(array(
+                        $result = $S3C->putObject(array(
                             'Bucket'     => $config["s3"]["bucket"],
                             'Key'        => $newfilename,
                             'SourceFile' => $tmp_name
