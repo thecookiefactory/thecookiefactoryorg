@@ -33,6 +33,10 @@ if (file_exists($config_file)) {
         " ", getenv("UPDATER_IP_WHITELIST")
     );
 
+    $config["s3"] = array("key" => getenv("AWS_ACCESS_KEY_ID"),
+                          "secret" => getenv("AWS_SECRET_ACCESS_KEY"),
+                          "bucket" => getenv("S3_BUCKET"));
+
 }
 
 try {
@@ -88,6 +92,20 @@ function twigInit() {
     $twig = new Twig_Environment($loader);
 
     return $twig;
+
+}
+
+function S3Init() {
+
+    global $config;
+    global $r_c;
+
+    require_once str_repeat("../", $r_c) . "vendor/autoload.php";
+
+    return S3Client::factory(array(
+        "key"    => $config["s3"]["key"],
+        "secret" => $config["s3"]["secret"]
+    ));
 
 }
 

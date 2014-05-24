@@ -5,12 +5,17 @@ session_start();
 $r_c = 1;
 require_once "../inc/functions.php";
 require_once "../inc/classes/user.class.php";
+require_once "../vendor/autoload.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
+
+use Aws\S3\S3Client;
+
+$S3client = S3Init();
 
 if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "edit")) {
 
@@ -38,7 +43,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
+                try {
+
+                    // delete from S3
+                    $result = $S3client->deleteObject(array(
+                        'Bucket'     => $config["s3"]["bucket"],
+                        'Key'        => $row["filename"]
+                    ));
 
                     $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
                     $dq->bindValue("id", $id, PDO::PARAM_INT);
@@ -46,7 +57,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                     $status = "deletesuccess";
 
-                } else {
+                } catch (Exception $e) {
 
                     $status = "deletefailure";
 
@@ -111,20 +122,29 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
 
-                    $location = "../img/maps/".$id."/";
+                    $newfilename = uniqid();
 
-                    if (move_uploaded_file($tmp_name, $location.$filename)) {
+                    $newfilename .= ".".$extension;
+
+                    try {
+
+                        // upload to S3
+                        $result = $S3client->putObject(array(
+                            'Bucket'     => $config["s3"]["bucket"],
+                            'Key'        => $newfilename,
+                            'SourceFile' => $tmp_name
+                        ));
 
                         $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
                         $iq->bindValue("text", $text, PDO::PARAM_STR);
-                        $iq->bindValue("filename", $filename, PDO::PARAM_STR);
+                        $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
                         $iq->bindValue("mapid", $id, PDO::PARAM_INT);
                         $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
                         $iq->execute();
 
                         $status = "success";
 
-                    } else {
+                    } catch (Exception $e) {
 
                         $status = "failure";
 
