@@ -147,7 +147,7 @@ class map extends master {
             try {
 
                 // get S3 url
-                $url = $S3C->getObjectUrl($config["s3"]["bucket"], $picture->getFileName());
+                $url = $S3C->getObjectUrl($config["s3"]["bucket"], $picture->getFileName(), '+10 minutes');
 
             } catch (Exception $e) {
 
