@@ -33,6 +33,10 @@ if (file_exists($config_file)) {
         " ", getenv("UPDATER_IP_WHITELIST")
     );
 
+    $config["s3"] = array("key" => getenv("AWS_ACCESS_KEY_ID"),
+                          "secret" => getenv("AWS_SECRET_ACCESS_KEY"),
+                          "bucket" => getenv("S3_BUCKET"));
+
 }
 
 try {

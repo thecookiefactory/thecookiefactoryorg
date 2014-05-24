@@ -5,26 +5,26 @@ session_start();
 $r_c = 1;
 require_once "../inc/functions.php";
 require_once "../inc/classes/user.class.php";
+require_once "../vendor/autoload.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
 if (!$user->isAdmin()) die("403");
 
-?>
+$twig = twigInit();
 
-<!doctype html>
-<html>
-<head>
-    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
-    <title>thecookiefactory.org admin</title>
-</head>
-<body>
+use Aws\S3\S3Client;
 
-<?php
+$S3C = S3Client::factory(array(
+    "key"    => $config["s3"]["key"],
+    "secret" => $config["s3"]["secret"]
+));
 
 if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "edit")) {
 
     if ($_GET["action"] == "edit" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
+
+        $mode = "edit";
 
         $id = strip($_GET["id"]);
 
@@ -40,21 +40,29 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $row = $query->fetch();
 
+        $picturedata = $row;
+
         if (isset($_POST["submit"])) {
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                if (unlink("../img/maps/".$row["mapid"]."/".$row["filename"])) {
+                try {
+
+                    // delete from S3
+                    $result = $S3C->deleteObject(array(
+                        'Bucket'     => $config["s3"]["bucket"],
+                        'Key'        => $row["filename"]
+                    ));
 
                     $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
                     $dq->bindValue("id", $id, PDO::PARAM_INT);
                     $dq->execute();
 
-                    echo "Image deleted successfully.<br>";
+                    $status = "deletesuccess";
 
-                } else {
+                } catch (Exception $e) {
 
-                    echo "Delete process failed.<br>";
+                    $status = "deletefailure";
 
                 }
 
@@ -62,28 +70,31 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 $text = strip($_POST["text"]);
 
-                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text WHERE `pictures`.`id` = :id");
+                $ordernumber = strip($_POST["ordernumber"]);
+
+                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
                 $query->bindValue("text", $text, PDO::PARAM_STR);
                 $query->bindValue("id", $id, PDO::PARAM_INT);
+                $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
                 $query->execute();
-                echo "Image updated.<br>";
+
+                $status = "success";
 
             }
 
         } else {
 
-            echo "<img style='width: 300px;' src='../img/maps/".$row["mapid"]."/".$row["filename"]."' alt=''>";
-            echo "<form action='?action=edit&amp;id=".$id."' method='post'>";
-            echo "<input type='text' name='text' maxlength='100' value='".$row["text"]."' required><br>";
-            echo "<input type='checkbox' name='delete'> Delete permanently<br>";
-            echo "<input type='submit' name='submit'>";
-            echo "</form>";
+            $status = "progress";
 
         }
 
     } else if ($_GET["action"] == "add" && isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
+        $mode = "add";
+
         $id = strip($_GET["id"]);
+
+        $currentid = $id;
 
         $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
         $mq->bindValue("id", $id, PDO::PARAM_INT);
@@ -97,11 +108,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $mr = $mq->fetch();
 
-        echo "<h1>Add an image to ".$mr["name"]."</h1>";
-
         if (isset($_POST["submit"])) {
 
             $text = strip($_POST["text"]);
+
+            $ordernumber = strip($_POST["ordernumber"]);
 
             //image variables
             $filename = strtolower($_FILES["image"]["name"]);
@@ -114,26 +125,37 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
 
-                    $location = "../img/maps/".$id."/";
+                    $newfilename = uniqid();
 
-                    if (move_uploaded_file($tmp_name, $location.$filename)) {
+                    $newfilename .= ".".$extension;
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid)");
+                    try {
+
+                        // upload to S3
+                        $result = $S3C->putObject(array(
+                            'Bucket'     => $config["s3"]["bucket"],
+                            'Key'        => $newfilename,
+                            'SourceFile' => $tmp_name
+                        ));
+
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
                         $iq->bindValue("text", $text, PDO::PARAM_STR);
-                        $iq->bindValue("filename", $filename, PDO::PARAM_STR);
+                        $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
                         $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                        $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
                         $iq->execute();
-                        echo "Image successfully uploaded.<br>";
 
-                    } else {
+                        $status = "success";
 
-                        echo "There was an error uploading your image.<br>";
+                    } catch (Exception $e) {
+
+                        $status = "failure";
 
                     }
 
                 } else {
 
-                    echo "File must be jpeg/png.<br>";
+                    $status = "wrongtype";
 
                 }
 
@@ -141,11 +163,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         } else {
 
-            echo "<form action='?action=add&amp;id=".$id."' method='post' enctype='multipart/form-data'>";
-            echo "<input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique. jpg/png only<br>";
-            echo "textription: <input type='text' name='text' required><br>";
-            echo "<input type='submit' name='submit'>";
-            echo "</form>";
+            $status = "progress";
 
         }
 
@@ -153,16 +171,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
 } else {
 
-    echo "<h1>manage galleries</h1>";
+    $mode = "manage";
 
-    $query = $con->query("SELECT * FROM `maps` ORDER BY `maps`.`id` DESC");
+    $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    echo "<ul>";
+    $maps = array();
 
     while ($row = $query->fetch()) {
-
-        echo "<li>";
-        echo "#".$row["id"]." - ".$row["name"]." - <a href='?action=add&amp;id=".$row["id"]."'>add new image</a>";
 
         $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
@@ -170,29 +185,25 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         if ($gq->rowCount() > 0) {
 
-            echo "<ul>";
+            $pictures = array();
 
             while ($gr = $gq->fetch()) {
 
-                echo "<li>";
-                echo "<a href='?action=edit&amp;id=".$gr["id"]."'>#".$gr["id"]." - ".$gr["text"]."</a>";
-                echo "</li>";
+                $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
 
             }
 
-            echo "</ul>";
         }
 
-        echo "</li>";
+        $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
 
     }
 
-    echo "</ul>";
-
 }
 
-?>
-
-<a href='index.php'> &lt;&lt; back to the main page</a>
-</body>
-</html>
+echo $twig->render("admin/galleries.html", array("mode" => $mode,
+                                                 "status" => (isset($status) ? $status : null),
+                                                 "picturedata" => (isset($picturedata) ? $picturedata : null),
+                                                 "currentid" => (isset($currentid) ? $currentid : null),
+                                                 "maps" => (isset($maps) ? $maps : null),
+                                                 ));
