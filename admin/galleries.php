@@ -56,9 +56,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 $text = strip($_POST["text"]);
 
-                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text WHERE `pictures`.`id` = :id");
+                $ordernumber = strip($_POST["ordernumber"]);
+
+                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
                 $query->bindValue("text", $text, PDO::PARAM_STR);
                 $query->bindValue("id", $id, PDO::PARAM_INT);
+                $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
                 $query->execute();
 
                 $status = "success";
