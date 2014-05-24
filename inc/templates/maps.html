@@ -1,18 +1,19 @@
 {% for map in maps %}
     <div class='map-name' id='{{ map.name }}'>{{ map.name }}</div>
     <div class='map-container'>
-      <div class='map-leftarrow map-arrow-disabled' id='map-{{ map.id }}-left' onclick='startImagerollScrolling(this.id, -1);'></div>
-      <div class='map-rightarrow map-arrow-disabled' id='map-{{ map.id }}-right' onclick='startImagerollScrolling(this.id, 1);'></div>
+      <div class='map-arrow-left' data-direction='left' data-map-id='{{ map.id }}'></div>
+      <div class='map-arrow-right' data-direction='right' data-map-id='{{ map.id }}'></div>
       <div class='map-actionbar' id='map-actionbar-{{ map.id }}'>
-        <span class='map-actionbar-button' id='map-moreinfo-{{ map.id }}' onclick='animateDataPanel(this.id)'>More info</span>
+        <span class='map-actionbar-button' id='map-moreinfo-{{ map.id }}'>More info</span>
           {% if map.link %}
-            <a href='{{ map.link }}' target='_blank'><span class='map-actionbar-button'>Download</span></a>
+            <a href='{{ map.link }}' target='_blank'>
+              <span class='map-actionbar-button'>Download</span>
+            </a>
           {% else %}
             <span class='map-actionbar-button-disabled'>Download</span>
           {% endif %}
       </div>
-      <div class='map-imageroll' id='map-{{ map.id }}' onload='initialize(this.id);'>
-        <script type='text/javascript'> lendict["map-{{ map.id }}"] = {{ map.picturecount }}; initialize("map-{{ map.id }}");</script>
+      <div class='map-imageroll' id='map-{{ map.id }}'>
         {% spaceless %}
           {% for picture in map.pictures %}
             <div class='map-image'>
@@ -36,7 +37,7 @@
           <span class='map-data-prop map-data-date'>{% autoescape false %}{{ map.editdate }}{% endautoescape %}</span>
           {% if map.comments %}
               <span class='map-data-prop map-data-topic'>
-              <a href='/forums/{{ map.thread.id }}/'>{{ map.thread.replycount }} {% if map.thread.replycount == 1%} reply</a> {% else %} replies</a> {% endif %}
+              <a href='/forums/{{ map.thread.id }}/'>{{ map.thread.replycount }} {% if map.thread.replycount == 1 %} reply</a> {% else %} replies</a> {% endif %}
               </span>
           {% endif %}
         </div>
@@ -44,7 +45,7 @@
           {{ map.text | markdown }}
         </div>
         <div class='map-data-actionbar'>
-          <span class='map-actionbar-button' id='map-lessinfo-{{ map.id }}' onclick='animateDataPanel(this.id)'>Less info</span>
+          <span class='map-actionbar-button' id='map-lessinfo-{{ map.id }}'>Less info</span>
           {% if map.link %}
             <a href='{{ map.link }}' target='_blank'><span class='map-actionbar-button'>Download</span></a>
           {% else %}
@@ -56,17 +57,19 @@
 
     {% if loop.first %}
         <div class='map-ad'>
-              <script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>
-              <!-- Maps Inline -->
-              <ins class='adsbygoogle'
-                   style='display:inline-block;width:728px;height:90px'
-                   data-ad-client='ca-pub-8578399795841431'
-                   data-ad-slot='8918199475'></ins>
-              <script>
-              (adsbygoogle = window.adsbygoogle || []).push({});
-              </script>
+          <!-- Maps Inline -->
+          <ins class='adsbygoogle'
+               style='display:inline-block;width:728px;height:90px'
+               data-ad-client='ca-pub-8578399795841431'
+               data-ad-slot='8918199475'></ins>
+          <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
         </div>
     {% endif %}
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+    <script src='/js/maps.js'></script>
+
 {% else %}
     <p>There are no maps.</p>
 {% endfor %}
