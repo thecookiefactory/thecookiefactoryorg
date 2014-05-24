@@ -95,6 +95,8 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
             $text = strip($_POST["text"]);
 
+            $ordernumber = strip($_POST["ordernumber"]);
+
             //image variables
             $filename = strtolower($_FILES["image"]["name"]);
             $filetype = $_FILES["image"]["type"];
@@ -110,10 +112,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                     if (move_uploaded_file($tmp_name, $location.$filename)) {
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid)");
+                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
                         $iq->bindValue("text", $text, PDO::PARAM_STR);
                         $iq->bindValue("filename", $filename, PDO::PARAM_STR);
                         $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                        $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
                         $iq->execute();
 
                         $status = "success";

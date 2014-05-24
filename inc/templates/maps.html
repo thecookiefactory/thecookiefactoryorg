@@ -12,14 +12,11 @@
           {% endif %}
       </div>
       <div class='map-imageroll' id='map-{{ map.id }}' onload='initialize(this.id);'>
-        <script type='text/javascript'> lendict["map-{{ map.id }}"] = {{ map.picturecount }} + 1; initialize("map-{{ map.id }}");</script>
+        <script type='text/javascript'> lendict["map-{{ map.id }}"] = {{ map.picturecount }}; initialize("map-{{ map.id }}");</script>
         {% spaceless %}
-          <div class='map-image'>
-            <img class='map-image' alt='{{ map.name }}' src='/img/maps/{{ map.id }}.{{ map.extension }}'>
-          </div>
           {% for picture in map.pictures %}
             <div class='map-image'>
-              <div class='map-image-title'><span class='map-image-number'>{{ loop.index + 1 }}/{{ loop.length + 1 }}</span> - {{ picture.text }}</div>
+              <div class='map-image-title'><span class='map-image-number'>{{ loop.index }}/{{ loop.length }}</span> - {{ picture.text }}</div>
               <img class='map-image' src='/img/maps/{{ map.id }}/{{ picture.filename }}' alt='{{ picture.text }}'>
             </div>
           {% endfor %}

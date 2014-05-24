@@ -79,7 +79,6 @@ class map extends master {
                 $this->date             = new dtime($srow["date"]);
                 $this->editdate         = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
                 $this->dl               = $srow["dl"];
-                $this->extension        = $srow["extension"];
                 $this->comments         = (int) $srow["BIN(`maps`.`comments`)"];
                 $this->game             = new game($srow["gameid"]);
                 $this->link             = $srow["link"];
@@ -105,7 +104,6 @@ class map extends master {
                     "text" => $this->text,
                     "author" => $this->author->getName(),
                     "editdate" => $this->editdate->display(),
-                    "extension" => $this->extension,
                     "comments" => $this->comments,
                     "game" => array("name" => $this->game->getName(), "steamid" => $this->game->getSteamId()),
                     "link" => $this->link,
@@ -153,7 +151,7 @@ class map extends master {
 
         try {
 
-            $selectPictures = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+            $selectPictures = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id ORDER BY `pictures`.`ordernumber` ASC");
             $selectPictures->bindValue("id", $this->id, PDO::PARAM_INT);
             $selectPictures->execute();
 
