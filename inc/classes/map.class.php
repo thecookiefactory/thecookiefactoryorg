@@ -105,6 +105,7 @@ class map extends master {
 
         global $con;
         global $config;
+        global $S3C;
 
         $a = array(
                     "id" => $this->id,
