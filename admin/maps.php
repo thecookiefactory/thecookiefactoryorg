@@ -41,12 +41,29 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $uq->bindValue("download", $download, PDO::PARAM_STR);
             $uq->execute();
 
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
+
+                $authorid = $user->getId();
+                $title = strip($_POST["topicname"]);
+                $text = strip($_POST["topictext"]);
+                $cat = strip($_POST["topiccat"]);
+
+                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
+                $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                $iq->bindValue("title", $title, PDO::PARAM_STR);
+                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                $iq->bindValue("cat", $cat, PDO::PARAM_INT);
+                $iq->bindValue("id", $id, PDO::PARAM_INT);
+                $iq->execute();
+
+            }
+
         }
 
         if ($eq->rowCount() == 1) {
 
             //fetching the current data
-            $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
+            $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 
@@ -56,6 +73,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                              "name" => $mr["name"],
                              "text" => $mr["text"],
                              "dl" => $mr["dl"],
+                             "comments" => $mr["comments"],
                              "gameid" => $mr["gameid"]);
 
             $gq = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
@@ -65,6 +83,20 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             while ($gr = $gq->fetch()) {
 
                 $games[] = array("id" => $gr["id"], "name" => $gr["name"]);
+
+            }
+
+            if ($mr["comments"] == 0) {
+
+                $cq = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+
+                $forumcategories = array();
+
+                while ($cr = $cq->fetch()) {
+
+                    $forumcategories[] = array("id" => $cr["id"], "name" => $cr["name"]);
+
+                }
 
             }
 
@@ -82,7 +114,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $id = strip($_GET["id"]);
             $currentid = $id;
-            $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+            $eq = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 
@@ -173,7 +205,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $id = $con->lastInsertId();
 
-            if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
+            if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
 
                 $authorid = $user->getId();
                 $title = strip($_POST["topicname"]);

@@ -153,6 +153,28 @@
     download (empty for none, repo name for github, steam file id for workshop file):
     <input type='text' name='download' value='{{ mapdata.dl }}'>
     <br>
+
+    {% if mapdata.comments == 0 %}
+
+        <fieldset>
+        <legend>forum topic:</legend>
+        map topic name (leave empty if no topic)<br>
+        <input type='text' name='topicname'>
+        select cateryogy
+        <select name='topiccat'>
+
+        {% for category in forumcategories %}
+
+            <option value='{{ category.id }}'>{{ category.name }}</option>
+
+        {% endfor %}
+
+        </select>
+        <textarea name='topictext'></textarea>
+        </fieldset>
+
+    {% endif %}
+
     <input type='submit' name='submit'>
     </form>
 

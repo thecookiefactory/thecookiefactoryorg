@@ -102,6 +102,8 @@ class picture extends master {
 
     public function delete() {
 
+        global $con;
+
         try {
 
             $S3C->deleteObject(array("Bucket"     => $config["s3"]["bucket"],
