@@ -4,6 +4,13 @@ if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
 
+use Aws\S3\S3Client;
+
+$S3C = S3Client::factory(array(
+    "key"    => $config["s3"]["key"],
+    "secret" => $config["s3"]["secret"]
+));
+
 /**
  * picture class
  *
@@ -74,6 +81,44 @@ class picture extends master {
     public function getFileName() {
 
         return $this->filename;
+
+    }
+
+    public function getUrl() {
+
+        global $S3C;
+
+        try {
+
+            return $S3C->getObjectUrl($config["s3"]["bucket"], $this->getFileName(), "+10 minutes");
+
+        } catch (Exception $e) {
+
+            die("Could not get the picture url from S3.");
+
+        }
+
+    }
+
+    public function delete() {
+
+        try {
+
+            $S3C->deleteObject(array("Bucket"     => $config["s3"]["bucket"],
+                                     "Key"        => $row["filename"]
+                                    ));
+
+            $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
+            $dq->bindValue("id", $this->id, PDO::PARAM_INT);
+            $dq->execute();
+
+            return true;
+
+        } catch (Exception $e) {
+
+            return false;
+
+        }
 
     }
 

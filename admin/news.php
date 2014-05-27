@@ -124,7 +124,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
+            $eq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 

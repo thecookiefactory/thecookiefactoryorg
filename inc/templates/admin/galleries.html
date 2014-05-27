@@ -75,7 +75,7 @@
 
     {% if status == "progress" %}
 
-        <img style='width: 300px;' src='../img/maps/{{ picturedata.mapid }}/{{ picturedata.filename }}' alt=''>
+        <img style='width: 300px;' src='{{ picturedata.url }}' alt=''>
         <form action='?action=edit&amp;id={{ picturedata.id }}' method='post'>
         <input type='text' name='text' maxlength='100' value='{{ picturedata.text }}' required><br>
         order number: <input type='number' name='ordernumber' value='{{ picturedata.ordernumber }}' required><br>

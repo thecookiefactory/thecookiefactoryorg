@@ -4,6 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/picture.class.php";
 require_once "../inc/classes/user.class.php";
 require_once "../vendor/autoload.php";
 
@@ -28,7 +29,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $id = strip($_GET["id"]);
 
-        $query = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`id` = :id");
+        $query = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
         $query->bindValue("id", $id, PDO::PARAM_INT);
         $query->execute();
 
@@ -42,25 +43,21 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $picturedata = $row;
 
+        $picture = new picture($row["id"]);
+
+        $picturedata["url"] = $picture->getUrl();
+
         if (isset($_POST["submit"])) {
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                try {
+                $picture = new picture($id);
 
-                    // delete from S3
-                    $result = $S3C->deleteObject(array(
-                        'Bucket'     => $config["s3"]["bucket"],
-                        'Key'        => $row["filename"]
-                    ));
-
-                    $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
-                    $dq->bindValue("id", $id, PDO::PARAM_INT);
-                    $dq->execute();
+                if ($picture->delete()) {
 
                     $status = "deletesuccess";
 
-                } catch (Exception $e) {
+                } else {
 
                     $status = "deletefailure";
 
@@ -133,9 +130,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                         // upload to S3
                         $result = $S3C->putObject(array(
-                            'Bucket'     => $config["s3"]["bucket"],
-                            'Key'        => $newfilename,
-                            'SourceFile' => $tmp_name
+                            "Bucket"     => $config["s3"]["bucket"],
+                            "Key"        => $newfilename,
+                            "SouceFile" => $tmp_name
                         ));
 
                         $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
@@ -179,7 +176,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
     while ($row = $query->fetch()) {
 
-        $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
+        $gq = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
         $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
         $gq->execute();
 

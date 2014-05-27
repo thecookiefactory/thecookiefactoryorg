@@ -4,6 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/picture.class.php";
 require_once "../inc/classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
@@ -21,13 +22,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         $status = "edit";
 
         $id = strip($_GET["id"]);
-        $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+        $eq = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
         $eq->bindValue("id", $id, PDO::PARAM_INT);
         $eq->execute();
 
         if (isset($_POST["submit"]) && vf($_POST["name"]) && vf($_POST["game"]) && vf($_POST["text"])) {
-
-            $mr = $eq->fetch();
 
             $name = strip($_POST["name"]);
             $game = strip($_POST["game"]);
@@ -47,7 +46,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if ($eq->rowCount() == 1) {
 
             //fetching the current data
-            $eq = $con->prepare("SELECT * FROM `maps` WHERE `maps`.`id` = :id");
+            $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 
@@ -94,16 +93,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                 if (isset($_POST["delete"])) {
 
                     //deleting images from the gallery
-                    $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
+                    $gq = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
                     $gq->bindValue("id", $id, PDO::PARAM_INT);
                     $gq->execute();
 
                     while ($gr = $gq->fetch()) {
 
-                        unlink("../img/maps/".$er["id"]."/".$gr["filename"]);
-                        $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
-                        $dq->bindValue("id", $gr["id"], PDO::PARAM_INT);
-                        $dq->execute();
+                        $picture = new picture($gr["id"]);
+                        $picture->delete();
 
                     }
 
