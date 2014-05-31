@@ -107,54 +107,70 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         if (isset($_POST["submit"])) {
 
-            $text = strip($_POST["text"]);
+            $uploadsuccess = true;
 
-            $ordernumber = strip($_POST["ordernumber"]);
+            for($i = 0; $i < count($_FILES["images"]["name"]); $i++) {
 
-            //image variables
-            $filename = strtolower($_FILES["image"]["name"]);
-            $filetype = $_FILES["image"]["type"];
-            $tmp_name = $_FILES["image"]["tmp_name"];
+                //image variables
+                $filename = strtolower($_FILES["images"]["name"][$i]);
+                $filetype = $_FILES["images"]["type"][$i];
+                $tmp_name = $_FILES["images"]["tmp_name"][$i];
 
-            $extension = substr($filename, strpos($filename, ".") + 1);
+                $extension = substr($filename, strpos($filename, ".") + 1);
 
-            if (!empty($filename)) {
+                if (!empty($filename)) {
 
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
+                    if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
 
-                    $newfilename = uniqid();
+                        $newfilename = uniqid();
 
-                    $newfilename .= ".".$extension;
+                        $newfilename .= ".".$extension;
 
-                    try {
+                        try {
 
-                        // upload to S3
-                        $result = $S3C->putObject(array(
-                            "Bucket"     => $config["s3"]["bucket"],
-                            "Key"        => $newfilename,
-                            "SouceFile" => $tmp_name
-                        ));
+                            // upload to S3
+                            $result = $S3C->putObject(array(
+                                "Bucket"     => $config["s3"]["bucket"],
+                                "Key"        => $newfilename,
+                                "SouceFile" => $tmp_name
+                            ));
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
-                        $iq->bindValue("text", $text, PDO::PARAM_STR);
-                        $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
-                        $iq->bindValue("mapid", $id, PDO::PARAM_INT);
-                        $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                        $iq->execute();
+                            $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
+                            $iq->bindValue("text", $text, PDO::PARAM_STR);
+                            $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
+                            $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                            $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                            $iq->execute();
 
-                        $status = "success";
+                        } catch (Exception $e) {
 
-                    } catch (Exception $e) {
+                            $uploadsuccess = false;
 
-                        $status = "failure";
+                        }
+
+                    } else {
+
+                        $wrongtype = true;
 
                     }
 
-                } else {
-
-                    $status = "wrongtype";
-
                 }
+
+            }
+
+            if ($uploadsuccess) {
+
+                $status = "success";
+
+            } else {
+
+                $status = "failure";
+
+            }
+
+            if (isset($wrongtype)) {
+
+                $status = "wrongtype";
 
             }
 

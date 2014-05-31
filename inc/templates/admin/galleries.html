@@ -42,9 +42,7 @@
     {% if status == "progress" %}
 
             <form action='?action=add&amp;id={{ currentid }}' method='post' enctype='multipart/form-data'>
-            <input type='file' name='image' required> &lt;= Please choose a name wisely, because it will be kept, also make sure this is unique. jpg/png only<br>
-            textription: <input type='text' name='text' required><br>
-            order number: <input type='number' name='ordernumber' required><br>
+            <input type='file' name='images[]' multiple required> jpg/png only<br>
             <input type='submit' name='submit'>
             </form>
 
@@ -52,19 +50,19 @@
 
     {% if status == "wrongtype" %}
 
-        File must be jpeg/png.
+        File must be jpeg/png. Some of pictures were not uploaded.
 
     {% endif %}
 
     {% if status == "failure" %}
 
-        There was an error uploading your image.
+        There was an error uploading your images. Some of them might not be uploaded.
 
     {% endif %}
 
     {% if status == "success" %}
 
-        Image successfully uploaded.
+        Images successfully uploaded.
 
     {% endif %}
 
