@@ -86,6 +86,7 @@ class picture extends master {
 
     public function getUrl() {
 
+        global $config;
         global $S3C;
 
         try {
