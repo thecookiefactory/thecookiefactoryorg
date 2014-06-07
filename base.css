@@ -100,13 +100,8 @@ footer {
   line-height: 1.4em;
 }
 
-.contact-us-link {
-  font-weight: 700;
-}
-
-.contact-us-link+.contact-us-link:before {
-  content: " \B7  ";
-}
+.contact-us i.fa-inverse {
+  color: #0A0A0A;
 
 a,
 a:visited {
