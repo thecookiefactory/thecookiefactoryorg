@@ -1,0 +1,35 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>Manage about section</h1>
+
+{% if status == "success" %}
+
+Successfully updated.
+
+{% endif %}
+
+{% if status == "toomuch" %}
+
+Please only enter 6 or less profiles.
+
+{% endif %}
+
+<form action='about.php' method='post'>
+
+About: <textarea name='description'>{{ description | raw }}</textarea><br>
+
+Website: <input type='text' name='website' value='{{ website }}'><br>
+email: <input type='text' name='email' value='{{ email }}'><br>
+github: <input type='text' name='github' value='{{ github }}'><br>
+twitter: <input type='text' name='twitter' value='{{ twitter }}'><br>
+twitch: <input type='text' name='twitch' value='{{ twitch }}'><br>
+youtube: <input type='text' name='youtube' value='{{ youtube }}'><br>
+steam: <input type='text' name='steam' value='{{ steam }}'><br>
+reddit: <input type='text' name='reddit' value='{{ reddit }}'><br>
+
+<input type='submit' name='submit'>
+
+</form>
+
+{% endblock %}
