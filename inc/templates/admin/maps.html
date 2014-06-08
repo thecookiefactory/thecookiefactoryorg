@@ -149,7 +149,7 @@
 
     </select><br>
     description<br>
-    <textarea name='text' required>{{ mapdata.text }}</textarea><br>
+    <textarea name='text' required>{{ mapdata.text | raw }}</textarea><br>
     download (empty for none, repo name for github, steam file id for workshop file):
     <input type='text' name='download' value='{{ mapdata.dl }}'>
     <br>

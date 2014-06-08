@@ -12,7 +12,7 @@ Stream deleted.
 Twitch username<br>
 <input type='text' name='twitchname' value='{{ data.twitchname }}' required><br>
 Stream description<br>
-<textarea name='description' rows='7' cols='50' placeholder='Inactive stream!' required>{{ data.text }}</textarea><br>
+<textarea name='description' rows='7' cols='50' placeholder='Inactive stream!' required>{{ data.text | raw }}</textarea><br>
 Active stream <input type='checkbox' name='active' checked> (there is a chance your stream will be live sometime soon) -
 if you uncheck this, your description will be lost<br>
 <input type='submit' name='submit'>

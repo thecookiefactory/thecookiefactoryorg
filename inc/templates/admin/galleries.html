@@ -75,7 +75,7 @@
 
         <img style='width: 300px;' src='{{ picturedata.url }}' alt=''>
         <form action='?action=edit&amp;id={{ picturedata.id }}' method='post'>
-        <input type='text' name='text' maxlength='100' value='{{ picturedata.text }}' required><br>
+        <input type='text' name='text' maxlength='100' value='{{ picturedata.text | raw }}' required><br>
         order number: <input type='number' name='ordernumber' value='{{ picturedata.ordernumber }}' required><br>
         <input type='checkbox' name='delete'> Delete permanently<br>
         <input type='submit' name='submit'>

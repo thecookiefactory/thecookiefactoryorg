@@ -23,11 +23,11 @@ Create new:
 <form action='custom.php' method='post'>
 <input type='hidden' name='id' value='{{ data.id }}' required>
 Title:<br>
-<input type='text' name='name' value='{{ data.title }}' required><br>
+<input type='text' name='name' value='{{ data.title | raw }}' required><br>
 Content:<br>
-<textarea name='text' rows='30' cols='100' required>{{ data.text }}</textarea><br>
+<textarea name='text' rows='30' cols='100' required>{{ data.text | raw }}</textarea><br>
 Stringid (used for the url):<br>
-<input type='text' name='stringid' value='{{ data.stringid }}' required><br>
+<input type='text' name='stringid' value='{{ data.stringid | raw }}' required><br>
 Live?<br>
 {% if data.live %}
 <input type='checkbox' name='live' checked>
