@@ -17,10 +17,18 @@ if (isset($_POST["submit"])) {
 
     $description = strip($_POST["description"]);
 
-    $updatedesc = $con->prepare("UPDATE `about` SET `about`.`description` = :description WHERE `about`.`userid` = :id");
-    $updatedesc->bindValue("description", $description, PDO::PARAM_STR);
-    $updatedesc->bindValue("id", $user->getId(), PDO::PARAM_INT);
-    $updatedesc->execute();
+    try {
+
+        $updatedesc = $con->prepare("UPDATE `about` SET `about`.`description` = :description WHERE `about`.`userid` = :id");
+        $updatedesc->bindValue("description", $description, PDO::PARAM_STR);
+        $updatedesc->bindValue("id", $user->getId(), PDO::PARAM_INT);
+        $updatedesc->execute();
+
+    } catch (PDOException $e) {
+
+        die("Failed to execute the query.");
+
+    }
 
     $linkcount = 0;
 
@@ -126,38 +134,54 @@ if (isset($_POST["submit"])) {
 
     } else {
 
-        $updatedesc = $con->prepare("UPDATE `about`
-                                     SET `about`.`website` = :website,
-                                         `about`.`email` = :email,
-                                         `about`.`github` = :github,
-                                         `about`.`twitter` = :twitter,
-                                         `about`.`twitch` = :twitch,
-                                         `about`.`youtube` = :youtube,
-                                         `about`.`steam` = :steam,
-                                         `about`.`reddit` = :reddit
-                                     WHERE `about`.`userid` = :id");
-        $updatedesc->bindValue("website", $website, PDO::PARAM_STR);
-        $updatedesc->bindValue("email", $email, PDO::PARAM_STR);
-        $updatedesc->bindValue("github", $github, PDO::PARAM_STR);
-        $updatedesc->bindValue("twitter", $twitter, PDO::PARAM_STR);
-        $updatedesc->bindValue("twitch", $twitch, PDO::PARAM_STR);
-        $updatedesc->bindValue("youtube", $youtube, PDO::PARAM_STR);
-        $updatedesc->bindValue("steam", $steam, PDO::PARAM_STR);
-        $updatedesc->bindValue("reddit", $reddit, PDO::PARAM_STR);
-        $updatedesc->bindValue("id", $user->getId(), PDO::PARAM_INT);
-        $updatedesc->execute();
+        try {
 
-        $status = "success";
+            $updatedesc = $con->prepare("UPDATE `about`
+                                         SET `about`.`website` = :website,
+                                             `about`.`email` = :email,
+                                             `about`.`github` = :github,
+                                             `about`.`twitter` = :twitter,
+                                             `about`.`twitch` = :twitch,
+                                             `about`.`youtube` = :youtube,
+                                             `about`.`steam` = :steam,
+                                             `about`.`reddit` = :reddit
+                                         WHERE `about`.`userid` = :id");
+            $updatedesc->bindValue("website", $website, PDO::PARAM_STR);
+            $updatedesc->bindValue("email", $email, PDO::PARAM_STR);
+            $updatedesc->bindValue("github", $github, PDO::PARAM_STR);
+            $updatedesc->bindValue("twitter", $twitter, PDO::PARAM_STR);
+            $updatedesc->bindValue("twitch", $twitch, PDO::PARAM_STR);
+            $updatedesc->bindValue("youtube", $youtube, PDO::PARAM_STR);
+            $updatedesc->bindValue("steam", $steam, PDO::PARAM_STR);
+            $updatedesc->bindValue("reddit", $reddit, PDO::PARAM_STR);
+            $updatedesc->bindValue("id", $user->getId(), PDO::PARAM_INT);
+            $updatedesc->execute();
+
+            $status = "success";
+
+        } catch (PDOException $e) {
+
+            die("Failed to execute the query.");
+
+        }
 
     }
 
 }
 
-$selectdata = $con->prepare("SELECT * FROM `about` WHERE `about`.`userid` = :id");
-$selectdata->bindValue("id", $user->getId(), PDO::PARAM_INT);
-$selectdata->execute();
+try {
 
-$aboutdata = $selectdata->fetch();
+    $selectdata = $con->prepare("SELECT * FROM `about` WHERE `about`.`userid` = :id");
+    $selectdata->bindValue("id", $user->getId(), PDO::PARAM_INT);
+    $selectdata->execute();
+
+    $aboutdata = $selectdata->fetch();
+
+} catch (PDOException $e) {
+
+    die("Failed to execute the query.");
+
+}
 
 if (isset($status)) {
 
