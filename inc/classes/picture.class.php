@@ -3,6 +3,8 @@
 if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
+require_once str_repeat("../", $r_c) . "vendor/autoload.php";
 
 use Aws\S3\S3Client;
 
