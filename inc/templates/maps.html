@@ -1,6 +1,6 @@
-<ul>
+<ul class='stream-menu'>
 {% for map in maps %}
-<li><a href='#{{ map.name }}'>{{ map.name }}</a></li>
+<a href='#{{ map.name }}'><li class='stream-button'>{{ map.name }}</li></a>
 {% endfor %}
 </ul>
 
