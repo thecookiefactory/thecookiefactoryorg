@@ -32,13 +32,15 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $game = strip($_POST["game"]);
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
+            $link = strip($_POST["link"]);
 
-            $uq = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download WHERE `maps`.`id` = :id");
+            $uq = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download, `maps`.`link` = :link WHERE `maps`.`id` = :id");
             $uq->bindValue("id", $id, PDO::PARAM_INT);
             $uq->bindValue("name", $name, PDO::PARAM_STR);
             $uq->bindValue("game", $game, PDO::PARAM_INT);
             $uq->bindValue("text", $text, PDO::PARAM_STR);
             $uq->bindValue("download", $download, PDO::PARAM_STR);
+            $uq->bindValue("link", $link, PDO::PARAM_STR);
             $uq->execute();
 
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {
@@ -63,7 +65,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if ($eq->rowCount() == 1) {
 
             //fetching the current data
-            $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
+            $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`link`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
             $eq->bindValue("id", $id, PDO::PARAM_INT);
             $eq->execute();
 
@@ -73,6 +75,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                              "name" => $mr["name"],
                              "text" => $mr["text"],
                              "dl" => $mr["dl"],
+                             "link" => $mr["link"],
                              "comments" => $mr["comments"],
                              "gameid" => $mr["gameid"]);
 
