@@ -196,7 +196,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             }
 
             //inserting the basic data and returning the map id
-            $iq = $con->prepare("INSERT INTO `maps` VALUES(DEFAULT, :name, :text, :author, now(), DEFAULT, :download, '', :comments, :game, '', 0)");
+            $iq = $con->prepare("INSERT INTO `maps` VALUES(DEFAULT, :name, :text, :author, now(), DEFAULT, :download, :comments, :game, '', 0)");
             $iq->bindValue("name", $name, PDO::PARAM_STR);
             $iq->bindValue("text", $text, PDO::PARAM_STR);
             $iq->bindValue("author", $author, PDO::PARAM_INT);
