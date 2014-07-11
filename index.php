@@ -71,7 +71,7 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
 
 } else {
 
-    require_once "inc/news.php";
+    require_once "inc/maps.php";
 
 }
 
