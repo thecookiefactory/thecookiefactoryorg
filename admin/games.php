@@ -13,44 +13,76 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
+try {
 
-if (isset($_POST["update"])) {
+    $selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
-    while ($gameData = $selectGames->fetch()) {
+    if (isset($_POST["update"])) {
 
-        $id = $gameData["id"];
-        $name = strip($_POST[$id."name"]);
-        $steamid = strip($_POST[$id."steamid"]);
+        while ($gameData = $selectGames->fetch()) {
 
-        if ($name == "" && $steamid == "") {
+            $id = $gameData["id"];
+            $name = strip($_POST[$id."name"]);
+            $steamid = strip($_POST[$id."steamid"]);
 
-            $dq = $con->prepare("DELETE FROM `games` WHERE `games`.`id` = :id");
-            $dq->bindValue("id", $id, PDO::PARAM_INT);
-            $dq->execute();
+            if ($name == "" && $steamid == "") {
 
-        } else {
+                try {
 
-            if (!vf($steamid)) {
+                    $dq = $con->prepare("DELETE FROM `games` WHERE `games`.`id` = :id");
+                    $dq->bindValue("id", $id, PDO::PARAM_INT);
+                    $dq->execute();
 
-                $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
-                $uq->bindValue("name", $name, PDO::PARAM_STR);
-                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
-                $uq->execute();
+                } catch (PDOException $e) {
+
+                    die("Query failed.");
+
+                }
 
             } else {
 
-                $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
-                $uq->bindValue("name", $name, PDO::PARAM_STR);
-                $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-                $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
-                $uq->execute();
+                if (!vf($steamid)) {
+
+                    try {
+
+                        $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
+                        $uq->bindValue("name", $name, PDO::PARAM_STR);
+                        $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
+                        $uq->execute();
+
+                    } catch (PDOException $e) {
+
+                        die("Query failed.");
+
+                    }
+
+                } else {
+
+                    try {
+
+                        $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
+                        $uq->bindValue("name", $name, PDO::PARAM_STR);
+                        $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+                        $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
+                        $uq->execute();
+
+                    } catch (PDOException $e) {
+
+                        die("Query failed.");
+
+                    }
+
+                }
 
             }
 
         }
 
     }
+
+} catch (PDOException $e) {
+
+    die("Query failed.");
 
 }
 
@@ -61,29 +93,53 @@ if (isset($_POST["addnew"])) {
 
     if (!vf($steamid)) {
 
-        $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, DEFAULT, DEFAULT)");
-        $iq->bindValue("name", $name, PDO::PARAM_STR);
-        $iq->execute();
+        try {
+
+            $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, DEFAULT, DEFAULT)");
+            $iq->bindValue("name", $name, PDO::PARAM_STR);
+            $iq->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
     } else {
 
-        $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, :steamid, DEFAULT)");
-        $iq->bindValue("name", $name, PDO::PARAM_STR);
-        $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-        $iq->execute();
+        try {
+
+            $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, :steamid, DEFAULT)");
+            $iq->bindValue("name", $name, PDO::PARAM_STR);
+            $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
+            $iq->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
     }
 
 }
 
-$selectGames = $con->query("SELECT `games`.`id` FROM `games`");
+try {
 
-$games = array();
+    $selectGames = $con->query("SELECT `games`.`id` FROM `games`");
 
-while ($gameData = $selectGames->fetch()) {
+    $games = array();
 
-    $game = new game($gameData["id"]);
-    $games[] = $game->returnArray();
+    while ($gameData = $selectGames->fetch()) {
+
+        $game = new game($gameData["id"]);
+        $games[] = $game->returnArray();
+
+    }
+
+} catch (PDOException $e) {
+
+    die("Query failed.");
 
 }
 

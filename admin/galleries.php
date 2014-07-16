@@ -29,9 +29,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $id = strip($_GET["id"]);
 
-        $query = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
-        $query->bindValue("id", $id, PDO::PARAM_INT);
-        $query->execute();
+        try {
+
+            $query = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
+            $query->bindValue("id", $id, PDO::PARAM_INT);
+            $query->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
         if ($query->rowCount() == 0) {
 
@@ -69,11 +77,19 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 $ordernumber = strip($_POST["ordernumber"]);
 
-                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
-                $query->bindValue("text", $text, PDO::PARAM_STR);
-                $query->bindValue("id", $id, PDO::PARAM_INT);
-                $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                $query->execute();
+                try {
+
+                    $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
+                    $query->bindValue("text", $text, PDO::PARAM_STR);
+                    $query->bindValue("id", $id, PDO::PARAM_INT);
+                    $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                    $query->execute();
+
+                } catch (PDOException $e) {
+
+                    die("Query failed.");
+
+                }
 
                 $status = "success";
 
@@ -93,9 +109,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $currentid = $id;
 
-        $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
-        $mq->bindValue("id", $id, PDO::PARAM_INT);
-        $mq->execute();
+        try {
+
+            $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+            $mq->bindValue("id", $id, PDO::PARAM_INT);
+            $mq->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
         if ($mq->rowCount() == 0) {
 
@@ -135,12 +159,20 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
                                 "SouceFile" => $tmp_name
                             ));
 
-                            $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
-                            $iq->bindValue("text", $text, PDO::PARAM_STR);
-                            $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
-                            $iq->bindValue("mapid", $id, PDO::PARAM_INT);
-                            $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                            $iq->execute();
+                            try {
+
+                                $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
+                                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                                $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
+                                $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                                $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                                $iq->execute();
+
+                            } catch (PDOException $e) {
+
+                                die("Query failed.");
+
+                            }
 
                         } catch (Exception $e) {
 
@@ -186,29 +218,37 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
     $mode = "manage";
 
-    $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
+    try {
 
-    $maps = array();
+        $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    while ($row = $query->fetch()) {
+        $maps = array();
 
-        $gq = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
-        $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
-        $gq->execute();
+        while ($row = $query->fetch()) {
 
-        if ($gq->rowCount() > 0) {
+            $gq = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+            $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
+            $gq->execute();
 
-            $pictures = array();
+            if ($gq->rowCount() > 0) {
 
-            while ($gr = $gq->fetch()) {
+                $pictures = array();
 
-                $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
+                while ($gr = $gq->fetch()) {
+
+                    $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
+
+                }
 
             }
 
+            $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
+
         }
 
-        $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
+    } catch (PDOException $e) {
+
+        die("Query failed.");
 
     }
 

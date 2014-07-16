@@ -12,14 +12,22 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$selectUsers = $con->query("SELECT `users`.`id` FROM `users`");
+try {
 
-$users = array();
+    $selectUsers = $con->query("SELECT `users`.`id` FROM `users`");
 
-while ($userData = $selectUsers->fetch()) {
+    $users = array();
 
-    $aUser = new user($userData["id"]);
-    $users[] = $aUser->getName();
+    while ($userData = $selectUsers->fetch()) {
+
+        $aUser = new user($userData["id"]);
+        $users[] = $aUser->getName();
+
+    }
+
+} catch (PDOException $e) {
+
+    die("Query failed.");
 
 }
 
