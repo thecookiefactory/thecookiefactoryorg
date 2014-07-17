@@ -169,6 +169,57 @@ if (isset($_POST["submit"])) {
 
 }
 
+if (isset($_POST["submitdesc"])) {
+
+    try {
+
+        $checkquery = $con->prepare("SELECT `about`.`id` FROM `about` WHERE `about`.`userid` = 1");
+        $checkquery->execute();
+
+    } catch (PDOException $e) {
+
+        die("Query failed. 1" . $e->getMessage());
+
+    }
+
+    $description = strip($_POST["description"]);
+
+    if ($checkquery->rowCount() == 0) {
+
+        try {
+
+            $updatedesc = $con->prepare("INSERT INTO `about` VALUES(DEFAULT, 1, '', '', :description, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)");
+            $updatedesc->bindValue("description", $description, PDO::PARAM_STR);
+            $updatedesc->execute();
+
+            $status = "descsuccess";
+
+        } catch (PDOException $e) {
+
+            die("Failed to execute the query.");
+
+        }
+
+    } else {
+
+        try {
+
+            $updatedesc = $con->prepare("UPDATE `about` SET `about`.`description` = :description WHERE `about`.`userid` = 1");
+            $updatedesc->bindValue("description", $description, PDO::PARAM_STR);
+            $updatedesc->execute();
+
+            $status = "descsuccess";
+
+        } catch (PDOException $e) {
+
+            die("Failed to execute the query.");
+
+        }
+
+    }
+
+}
+
 try {
 
     $selectdata = $con->prepare("SELECT * FROM `about` WHERE `about`.`userid` = :id");
@@ -176,6 +227,19 @@ try {
     $selectdata->execute();
 
     $aboutdata = $selectdata->fetch();
+
+} catch (PDOException $e) {
+
+    die("Failed to execute the query.");
+
+}
+
+try {
+
+    $selectdesc = $con->query("SELECT `about`.`description` FROM `about` WHERE `about`.`userid` = 1");
+    $desc = $selectdesc->fetch();
+
+    $aboutdata["groupdesc"] = $desc["description"];
 
 } catch (PDOException $e) {
 

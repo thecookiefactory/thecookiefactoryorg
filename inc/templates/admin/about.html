@@ -3,9 +3,15 @@
 {% block content %}
 <h1>Manage about section</h1>
 
+{% if status == "descsuccess" %}
+
+Successfully updated group description.
+
+{% endif %}
+
 {% if status == "success" %}
 
-Successfully updated.
+Successfully updated your profile.
 
 {% endif %}
 
@@ -29,6 +35,14 @@ steam: <input type='text' name='steam' value='{{ steam | raw }}'><br>
 reddit: <input type='text' name='reddit' value='{{ reddit | raw }}'><br>
 
 <input type='submit' name='submit'>
+
+</form>
+
+<form action='about.php' method='post'>
+
+Group about: <textarea name='description'>{{ groupdesc | raw }}</textarea><br>
+
+<input type='submit' name='submitdesc'>
 
 </form>
 
