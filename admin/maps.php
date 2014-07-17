@@ -4,6 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/forumthread.class.php";
 require_once "../inc/classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
@@ -75,6 +76,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     $iq->bindValue("cat", $cat, PDO::PARAM_INT);
                     $iq->bindValue("id", $id, PDO::PARAM_INT);
                     $iq->execute();
+
+                } catch (PDOException $e) {
+
+                    die("Query failed.");
+
+                }
+
+                try {
+
+                    $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 1 WHERE `maps`.`id` = :id");
+                    $uq->bindValue("id", $id, PDO::PARAM_INT);
+                    $uq->execute();
 
                 } catch (PDOException $e) {
 
@@ -207,10 +220,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     try {
 
                         //deleting the forum thread
-                        $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                        $dq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
                         $dq->bindValue("id", $id, PDO::PARAM_INT);
                         $dq->execute();
-                        // comments are not actually deleted at this point, but w/e
+
+                        $fi = $dq->fetch();
+
+                        $mapthread = new forumthread($fi["id"]);
+                        $mapthread->delete("r_c");
 
                     } catch (PDOException $e) {
 

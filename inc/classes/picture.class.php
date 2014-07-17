@@ -106,24 +106,35 @@ class picture extends master {
     public function delete() {
 
         global $con;
+        global $config;
+        global $S3C;
 
         try {
-
-            $S3C->deleteObject(array("Bucket"     => $config["s3"]["bucket"],
-                                     "Key"        => $row["filename"]
-                                    ));
 
             $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
             $dq->bindValue("id", $this->id, PDO::PARAM_INT);
             $dq->execute();
 
+        } catch (PDOException $e) {
+
+            die("Query failed");
+
+        }
+
+        try {
+
+            $S3C->deleteObject(array("Bucket"     => $config["s3"]["bucket"],
+                                     "Key"        => $this->filename
+                            ));
+
             return true;
 
         } catch (Exception $e) {
 
-            return false;
+            echo "Could not delete the image!!!!!!!!! from s3";
 
         }
+
 
     }
 
