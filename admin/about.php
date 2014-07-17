@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
 
     } catch (PDOException $e) {
 
-        die("Failed to execute the query.");
+        die("Failed to update your description.");
 
     }
 
@@ -136,7 +136,7 @@ if (isset($_POST["submit"])) {
 
         try {
 
-            $updatedesc = $con->prepare("UPDATE `about`
+            $updatelinks = $con->prepare("UPDATE `about`
                                          SET `about`.`website` = :website,
                                              `about`.`email` = :email,
                                              `about`.`github` = :github,
@@ -146,22 +146,22 @@ if (isset($_POST["submit"])) {
                                              `about`.`steam` = :steam,
                                              `about`.`reddit` = :reddit
                                          WHERE `about`.`userid` = :id");
-            $updatedesc->bindValue("website", $website, PDO::PARAM_STR);
-            $updatedesc->bindValue("email", $email, PDO::PARAM_STR);
-            $updatedesc->bindValue("github", $github, PDO::PARAM_STR);
-            $updatedesc->bindValue("twitter", $twitter, PDO::PARAM_STR);
-            $updatedesc->bindValue("twitch", $twitch, PDO::PARAM_STR);
-            $updatedesc->bindValue("youtube", $youtube, PDO::PARAM_STR);
-            $updatedesc->bindValue("steam", $steam, PDO::PARAM_STR);
-            $updatedesc->bindValue("reddit", $reddit, PDO::PARAM_STR);
-            $updatedesc->bindValue("id", $user->getId(), PDO::PARAM_INT);
-            $updatedesc->execute();
+            $updatelinks->bindValue("website", $website, PDO::PARAM_STR);
+            $updatelinks->bindValue("email", $email, PDO::PARAM_STR);
+            $updatelinks->bindValue("github", $github, PDO::PARAM_STR);
+            $updatelinks->bindValue("twitter", $twitter, PDO::PARAM_STR);
+            $updatelinks->bindValue("twitch", $twitch, PDO::PARAM_STR);
+            $updatelinks->bindValue("youtube", $youtube, PDO::PARAM_STR);
+            $updatelinks->bindValue("steam", $steam, PDO::PARAM_STR);
+            $updatelinks->bindValue("reddit", $reddit, PDO::PARAM_STR);
+            $updatelinks->bindValue("id", $user->getId(), PDO::PARAM_INT);
+            $updatelinks->execute();
 
             $status = "success";
 
         } catch (PDOException $e) {
 
-            die("Failed to execute the query.");
+            die("Failed to update your links.");
 
         }
 
@@ -178,7 +178,7 @@ if (isset($_POST["submitdesc"])) {
 
     } catch (PDOException $e) {
 
-        die("Query failed. 1" . $e->getMessage());
+        die("Failed to fetch the previous group description.");
 
     }
 
@@ -188,15 +188,15 @@ if (isset($_POST["submitdesc"])) {
 
         try {
 
-            $updatedesc = $con->prepare("INSERT INTO `about` VALUES(DEFAULT, 1, '', '', :description, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)");
-            $updatedesc->bindValue("description", $description, PDO::PARAM_STR);
-            $updatedesc->execute();
+            $insertdesc = $con->prepare("INSERT INTO `about` VALUES(DEFAULT, 1, '', '', :description, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)");
+            $insertdesc->bindValue("description", $description, PDO::PARAM_STR);
+            $insertdesc->execute();
 
             $status = "descsuccess";
 
         } catch (PDOException $e) {
 
-            die("Failed to execute the query.");
+            die("Failed to insert the group description.");
 
         }
 
@@ -212,7 +212,7 @@ if (isset($_POST["submitdesc"])) {
 
         } catch (PDOException $e) {
 
-            die("Failed to execute the query.");
+            die("Failed to update the group description.");
 
         }
 
@@ -230,7 +230,7 @@ try {
 
 } catch (PDOException $e) {
 
-    die("Failed to execute the query.");
+    die("Failed to fetch your data.");
 
 }
 
@@ -243,7 +243,7 @@ try {
 
 } catch (PDOException $e) {
 
-    die("Failed to execute the query.");
+    die("Failed to fetch the group description.");
 
 }
 

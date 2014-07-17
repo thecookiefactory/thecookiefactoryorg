@@ -27,7 +27,7 @@ if (isset($_POST["submit"])) {
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to fetch your stream.");
 
         }
 
@@ -41,7 +41,7 @@ if (isset($_POST["submit"])) {
 
             } catch (PDOException $e) {
 
-                die("Query failed.");
+                die("Failed to create your stream.");
 
             }
 
@@ -56,7 +56,7 @@ if (isset($_POST["submit"])) {
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to update your stream.");
 
         }
 
@@ -69,7 +69,7 @@ if (isset($_POST["submit"])) {
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to update your twitch name.");
 
         }
 
@@ -85,7 +85,7 @@ if (isset($_POST["submit"])) {
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to delete your stream.");
 
         }
 
@@ -105,7 +105,7 @@ if (isset($_POST["submit"])) {
 
     } catch (PDOException $e) {
 
-        die("Query failed.");
+        die("Failed to fetch your stream's description.");
 
     }
 
@@ -119,7 +119,7 @@ if (isset($_POST["submit"])) {
 
     } catch (PDOException $e) {
 
-        die("Query failed.");
+        die("Failed to fetch your twitch name.");
 
     }
 

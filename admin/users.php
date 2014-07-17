@@ -27,7 +27,7 @@ try {
 
 } catch (PDOException $e) {
 
-    die("Query failed.");
+    die("Failed to fetch users.");
 
 }
 

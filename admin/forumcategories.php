@@ -37,7 +37,7 @@ try {
 
                 } catch (PDOException $e) {
 
-                    die("Query failed.");
+                    die("Failed to delete categories.");
 
                 }
 
@@ -45,7 +45,9 @@ try {
 
                 try {
 
-                    $updateCategory = $con->prepare("UPDATE `forumcategories` SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode WHERE `forumcategories`.`id` = :id");
+                    $updateCategory = $con->prepare("UPDATE `forumcategories`
+                                                     SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode
+                                                     WHERE `forumcategories`.`id` = :id");
                     $updateCategory->bindValue("name", $name, PDO::PARAM_STR);
                     $updateCategory->bindValue("longname", $longname, PDO::PARAM_STR);
                     $updateCategory->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
@@ -55,7 +57,7 @@ try {
 
                 } catch (PDOException $e) {
 
-                    die("Query failed.");
+                    die("Failed to update categories.");
 
                 }
 
@@ -83,7 +85,7 @@ try {
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to add new category.");
 
         }
 
@@ -102,7 +104,7 @@ try {
 
 } catch (PDOException $e) {
 
-    die("Query failed.");
+    die("Failed to select categories.");
 
 }
 

@@ -37,7 +37,7 @@ if (isset($_POST["text"])) {
 
     } catch (PDOException $e) {
 
-        die("Failed to execute the query.");
+        die("Failed to update the page.");
 
     }
 
@@ -55,7 +55,7 @@ if (isset($_POST["create"])) {
 
     } catch (PDOException $e) {
 
-        die("Failed to execute the query.");
+        die("Failed to create the page.");
 
     }
 
@@ -79,7 +79,7 @@ if (isset($_POST["cpage"])) {
 
     } catch (PDOException $e) {
 
-        die("Failed to execute the query.");
+        die("Failed to fetch page data.");
 
     }
 
@@ -102,7 +102,7 @@ if (isset($_POST["cpage"])) {
 
     } catch (PDOException $e) {
 
-        die("Failed to execute the query.");
+        die("Failed to fetch pages.");
 
     }
 

@@ -29,13 +29,13 @@ try {
 
                 try {
 
-                    $dq = $con->prepare("DELETE FROM `games` WHERE `games`.`id` = :id");
-                    $dq->bindValue("id", $id, PDO::PARAM_INT);
-                    $dq->execute();
+                    $deleteGame = $con->prepare("DELETE FROM `games` WHERE `games`.`id` = :id");
+                    $deleteGame->bindValue("id", $id, PDO::PARAM_INT);
+                    $deleteGame->execute();
 
                 } catch (PDOException $e) {
 
-                    die("Query failed.");
+                    die("Failed to delete games.");
 
                 }
 
@@ -45,14 +45,14 @@ try {
 
                     try {
 
-                        $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
-                        $uq->bindValue("name", $name, PDO::PARAM_STR);
-                        $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
-                        $uq->execute();
+                        $updateGame = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= NULL WHERE `games`.`id` = :id");
+                        $updateGame->bindValue("name", $name, PDO::PARAM_STR);
+                        $updateGame->bindValue("id", $gameData["id"], PDO::PARAM_INT);
+                        $updateGame->execute();
 
                     } catch (PDOException $e) {
 
-                        die("Query failed.");
+                        die("Failed to update games.");
 
                     }
 
@@ -60,15 +60,15 @@ try {
 
                     try {
 
-                        $uq = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
-                        $uq->bindValue("name", $name, PDO::PARAM_STR);
-                        $uq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-                        $uq->bindValue("id", $gameData["id"], PDO::PARAM_INT);
-                        $uq->execute();
+                        $updateGame = $con->prepare("UPDATE `games` SET `games`.`name` = :name, `games`.`steamid`= :steamid WHERE `games`.`id` = :id");
+                        $updateGame->bindValue("name", $name, PDO::PARAM_STR);
+                        $updateGame->bindValue("steamid", $steamid, PDO::PARAM_INT);
+                        $updateGame->bindValue("id", $gameData["id"], PDO::PARAM_INT);
+                        $updateGame->execute();
 
                     } catch (PDOException $e) {
 
-                        die("Query failed.");
+                        die("Failed to update games.");
 
                     }
 
@@ -82,7 +82,7 @@ try {
 
 } catch (PDOException $e) {
 
-    die("Query failed.");
+    die("Failed to fetch games.");
 
 }
 
@@ -95,13 +95,13 @@ if (isset($_POST["addnew"])) {
 
         try {
 
-            $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, DEFAULT, DEFAULT)");
-            $iq->bindValue("name", $name, PDO::PARAM_STR);
-            $iq->execute();
+            $insertGame = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, DEFAULT, DEFAULT)");
+            $insertGame->bindValue("name", $name, PDO::PARAM_STR);
+            $insertGame->execute();
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to add new game.");
 
         }
 
@@ -109,14 +109,14 @@ if (isset($_POST["addnew"])) {
 
         try {
 
-            $iq = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, :steamid, DEFAULT)");
-            $iq->bindValue("name", $name, PDO::PARAM_STR);
-            $iq->bindValue("steamid", $steamid, PDO::PARAM_INT);
-            $iq->execute();
+            $insertGame = $con->prepare("INSERT INTO `games` VALUES(DEFAULT, :name, :steamid, DEFAULT)");
+            $insertGame->bindValue("name", $name, PDO::PARAM_STR);
+            $insertGame->bindValue("steamid", $steamid, PDO::PARAM_INT);
+            $insertGame->execute();
 
         } catch (PDOException $e) {
 
-            die("Query failed.");
+            die("Failed to add new game.");
 
         }
 
