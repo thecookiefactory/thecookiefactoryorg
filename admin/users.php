@@ -21,7 +21,7 @@ try {
     while ($userData = $selectUsers->fetch()) {
 
         $aUser = new user($userData["id"]);
-        $users[] = $aUser->getName();
+        $users[] = array("id" => $aUser->getId(), "name" => $aUser->getName());
 
     }
 
