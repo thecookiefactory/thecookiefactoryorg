@@ -21,11 +21,21 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`), BIN(`news`.`live`)
-                                 FROM `news`
-                                 WHERE `news`.`id` = :id");
-            $eq->bindValue("id", $id, PDO::PARAM_INT);
-            $eq->execute();
+
+            try {
+
+                $eq = $con->prepare("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`authorid`, `news`.`date`, `news`.`editorid`, `news`.`editdate`, BIN(`news`.`comments`), BIN(`news`.`live`)
+                                     FROM `news`
+                                     WHERE `news`.`id` = :id");
+                $eq->bindValue("id", $id, PDO::PARAM_INT);
+                $eq->execute();
+
+            } catch (PDOException $e) {
+
+                die("Query failed.");
+
+            }
+
 
             if ($eq->rowCount() == 1) {
 
@@ -53,9 +63,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                         if ($er["BIN(`news`.`live`)"] == 0) {
 
-                            $uq = $con->prepare("UPDATE `news` SET `news`.`date` = now() WHERE `news`.`id` = :id");
-                            $uq->bindValue("id", $id, PDO::PARAM_INT);
-                            $uq->execute();
+                            try {
+
+                                $uq = $con->prepare("UPDATE `news` SET `news`.`date` = now() WHERE `news`.`id` = :id");
+                                $uq->bindValue("id", $id, PDO::PARAM_INT);
+                                $uq->execute();
+
+                            } catch (PDOException $e) {
+
+                                die("Query failed.");
+
+                            }
 
                             if (!vf($er["stringid"]))
                                 generateid($id);
@@ -124,9 +142,18 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
         if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 
             $id = strip($_GET["id"]);
-            $eq = $con->prepare("SELECT * FROM `news` WHERE `news`.`id` = :id");
-            $eq->bindValue("id", $id, PDO::PARAM_INT);
-            $eq->execute();
+
+            try {
+
+                $eq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`id` = :id");
+                $eq->bindValue("id", $id, PDO::PARAM_INT);
+                $eq->execute();
+
+            } catch (PDOException $e) {
+
+                die("Query failed.");
+
+            }
 
             if ($eq->rowCount() == 1) {
 
@@ -246,35 +273,51 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     $mode = "manage";
 
-    $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`
-                          FROM `news`
-                          WHERE `news`.`live` = 0
-                          ORDER BY `news`.`id` DESC");
+    try {
 
-    $unpublishedNews = array();
+        $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`
+                              FROM `news`
+                              WHERE `news`.`live` = 0
+                              ORDER BY `news`.`id` DESC");
 
-    while ($row = $query->fetch()) {
+        $unpublishedNews = array();
 
-        $unpublishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+        while ($row = $query->fetch()) {
 
-    }
-
-    $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`stringid`
-                          FROM `news`
-                          WHERE `news`.`live` = 1
-                          ORDER BY `news`.`id` DESC");
-
-    $publishedNews = array();
-
-    while ($row = $query->fetch()) {
-
-        if (!vf($row["stringid"])) {
-
-            generateid($row["id"]);
+            $unpublishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
 
         }
 
-        $publishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+    } catch (PDOException $e) {
+
+        die("Query failed.");
+
+    }
+
+    try {
+
+        $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`stringid`
+                              FROM `news`
+                              WHERE `news`.`live` = 1
+                              ORDER BY `news`.`id` DESC");
+
+        $publishedNews = array();
+
+        while ($row = $query->fetch()) {
+
+            if (!vf($row["stringid"])) {
+
+                generateid($row["id"]);
+
+            }
+
+            $publishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+
+        }
+
+    } catch (PDOException $e) {
+
+        die("Query failed.");
 
     }
 
@@ -291,19 +334,35 @@ function generateid($x) {
 
     global $con;
 
-    $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
-    $gq->bindValue("id", $x, PDO::PARAM_INT);
-    $gq->execute();
+    try {
 
-    $gr = $gq->fetch();
+        $gq = $con->prepare("SELECT `news`.`id`, `news`.`title` FROM `news` WHERE `news`.`id` = :id");
+        $gq->bindValue("id", $x, PDO::PARAM_INT);
+        $gq->execute();
+
+        $gr = $gq->fetch();
+
+    } catch (PDOException $e) {
+
+        die("Query failed.");
+
+    }
 
     $stringid = preg_replace("/[^A-Za-z0-9 ]/", "", $gr["title"]);
 
     $stringid = str_replace(" ", "_", $stringid);
 
-    $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
-    $cq->bindValue("si", $stringid, PDO::PARAM_STR);
-    $cq->execute();
+    try {
+
+        $cq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`stringid` = :si");
+        $cq->bindValue("si", $stringid, PDO::PARAM_STR);
+        $cq->execute();
+
+    } catch (PDOException $e) {
+
+        die("Query failed.");
+
+    }
 
     if ($cq->rowCount() != 0) {
 
@@ -311,10 +370,18 @@ function generateid($x) {
 
     }
 
-    $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
-    $uq->bindValue("si", $stringid, PDO::PARAM_STR);
-    $uq->bindValue("id", $x, PDO::PARAM_INT);
-    $uq->execute();
+    try {
+
+        $uq = $con->prepare("UPDATE `news` SET `news`.`stringid` = :si WHERE `news`.`id` = :id");
+        $uq->bindValue("si", $stringid, PDO::PARAM_STR);
+        $uq->bindValue("id", $x, PDO::PARAM_INT);
+        $uq->execute();
+
+    } catch (PDOException $e) {
+
+        die("Query failed.");
+
+    }
 
     return 0;
 

@@ -1,6 +1,6 @@
 {% if not thread.newsstringid %}
     <h1>
-        <a href='/forums/{{ thread.id }}/'>{{ thread.title }}</a>
+        <a href='/forums/{{ thread.id }}/'>{% autoescape false %}{{ thread.title }}{% endautoescape %}</a>
     </h1>
 
     {% if thread.closed %}

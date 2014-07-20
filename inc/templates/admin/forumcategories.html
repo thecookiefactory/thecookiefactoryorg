@@ -10,10 +10,10 @@
 
 {% for row in rows %}
 <tr>
-<td><input type='text' value='{{ row.name }}' name='{{ row.id }}name'></td>
-<td><input type='text' value='{{ row.longname }}' name='{{ row.id }}longname'></td>
-<td><input type='text' value='{{ row.hexcode }}' name='{{ row.id }}hexcode'></td>
-<td><input type='text' value='{{ row.hoverhexcode }}' name='{{ row.id }}hoverhexcode'></td>
+<td><input type='text' value='{{ row.name | raw }}' name='{{ row.id }}name'></td>
+<td><input type='text' value='{{ row.longname | raw }}' name='{{ row.id }}longname'></td>
+<td><input type='text' value='{{ row.hexcode | raw }}' name='{{ row.id }}hexcode'></td>
+<td><input type='text' value='{{ row.hoverhexcode | raw }}' name='{{ row.id }}hoverhexcode'></td>
 </tr>
 {% endfor %}
 

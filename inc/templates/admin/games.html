@@ -10,7 +10,7 @@
 
 {% for game in games %}
 <tr>
-<td><input type='text' value='{{ game.name }}' name='{{ game.id }}name'></td>
+<td><input type='text' value='{{ game.name | raw }}' name='{{ game.id }}name'></td>
 <td><input type='text' value='{{ game.steamid }}' name='{{ game.id }}steamid'></td>
 </tr>
 {% endfor %}

@@ -25,53 +25,86 @@ if (isset($_POST["text"])) {
 
     }
 
-    $updatePage = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live, `custompages`.`stringid` = :stringid WHERE `custompages`.`id` = :id");
-    $updatePage->bindValue("text", $_POST["text"], PDO::PARAM_STR);
-    $updatePage->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
-    $updatePage->bindValue("live", $live, PDO::PARAM_INT);
-    $updatePage->bindValue("stringid", strip($_POST["stringid"]), PDO::PARAM_STR);
-    $updatePage->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
-    $updatePage->execute();
+    try {
+
+        $updatePage = $con->prepare("UPDATE `custompages` SET `custompages`.`text` = :text, `custompages`.`title` = :name, `custompages`.`live` = :live, `custompages`.`stringid` = :stringid WHERE `custompages`.`id` = :id");
+        $updatePage->bindValue("text", $_POST["text"], PDO::PARAM_STR);
+        $updatePage->bindValue("name", strip($_POST["name"]), PDO::PARAM_STR);
+        $updatePage->bindValue("live", $live, PDO::PARAM_INT);
+        $updatePage->bindValue("stringid", strip($_POST["stringid"]), PDO::PARAM_STR);
+        $updatePage->bindValue("id", strip($_POST["id"]), PDO::PARAM_INT);
+        $updatePage->execute();
+
+    } catch (PDOException $e) {
+
+        die("Failed to update the page.");
+
+    }
 
 }
 
 if (isset($_POST["create"])) {
 
     $title = strip($_POST["title"]);
-    $insertPage = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', now(), DEFAULT, DEFAULT, '')");
-    $insertPage->bindValue("title", $title, PDO::PARAM_STR);
-    $insertPage->execute();
+
+    try {
+
+        $insertPage = $con->prepare("INSERT INTO `custompages` VALUES(DEFAULT, :title, '', now(), DEFAULT, DEFAULT, '')");
+        $insertPage->bindValue("title", $title, PDO::PARAM_STR);
+        $insertPage->execute();
+
+    } catch (PDOException $e) {
+
+        die("Failed to create the page.");
+
+    }
 
 }
 
 if (isset($_POST["cpage"])) {
 
-    $selectPage = $con->prepare("SELECT `custompages`.`id` FROM `custompages` WHERE `custompages`.`title` = :cpage");
-    $selectPage->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
-    $selectPage->execute();
+    try {
 
-    $pageData = $selectPage->fetch();
+        $selectPage = $con->prepare("SELECT `custompages`.`id` FROM `custompages` WHERE `custompages`.`title` = :cpage");
+        $selectPage->bindValue("cpage", strip($_POST["cpage"]), PDO::PARAM_STR);
+        $selectPage->execute();
 
-    $page = new custompage($pageData["id"], "id");
-
-    $data = $page->returnArray();
-
-    $mode = "update";
-
-} else {
-
-    $selectPages = $con->query("SELECT `custompages`.`id` FROM `custompages` ORDER BY `custompages`.`title` ASC");
-
-    $pages = array();
-
-    while ($pageData = $selectPages->fetch()) {
+        $pageData = $selectPage->fetch();
 
         $page = new custompage($pageData["id"], "id");
-        $pages[] = $page->returnArray();
+
+        $data = $page->returnArray();
+
+        $mode = "update";
+
+    } catch (PDOException $e) {
+
+        die("Failed to fetch page data.");
 
     }
 
-    $mode = "select";
+} else {
+
+    try {
+
+        $selectPages = $con->query("SELECT `custompages`.`id` FROM `custompages` ORDER BY `custompages`.`title` ASC");
+
+        $pages = array();
+
+        while ($pageData = $selectPages->fetch()) {
+
+            $page = new custompage($pageData["id"], "id");
+            $pages[] = $page->returnArray();
+
+        }
+
+        $mode = "select";
+
+    } catch (PDOException $e) {
+
+        die("Failed to fetch pages.");
+
+    }
 
 }
 

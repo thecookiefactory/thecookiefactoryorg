@@ -326,6 +326,50 @@ class forumthread extends master {
 
     }
 
+    public function delete($fromadmin = null) {
+
+        global $con;
+
+        if ($this->map != null) {
+
+            try {
+
+                $updateMapComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
+                $updateMapComments->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
+                $updateMapComments->execute();
+
+            } catch (PDOException $e) {
+
+                echo "Failed to update map info.";
+
+            }
+
+        }
+
+        try {
+
+            $deletePosts = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
+            $deletePosts->bindValue("tid", $this->id, PDO::PARAM_INT);
+            $deletePosts->execute();
+
+            $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
+            $deleteThread->bindValue("tid", $this->id, PDO::PARAM_INT);
+            $deleteThread->execute();
+
+            if ($deleteThread->rowCount() == 1 && $fromadmin == null) {
+
+                header("Location: /forums");
+
+            }
+
+        } catch (PDOException $e) {
+
+            echo "Failed to delete the thread.";
+
+        }
+
+    }
+
     public function edit() {
 
         global $con;
@@ -435,43 +479,7 @@ class forumthread extends master {
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                if ($this->map != null) {
-
-                    try {
-
-                        $updateMapComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 0 WHERE `maps`.`id` = :id");
-                        $updateMapComments->bindValue("id", $this->map->getId(), PDO::PARAM_INT);
-                        $updateMapComments->execute();
-
-                    } catch (PDOException $e) {
-
-                        echo "Failed to update map info.";
-
-                    }
-
-                }
-
-                try {
-
-                    $deletePosts = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`threadid` = :tid");
-                    $deletePosts->bindValue("tid", $this->id, PDO::PARAM_INT);
-                    $deletePosts->execute();
-
-                    $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`id` = :tid");
-                    $deleteThread->bindValue("tid", $this->id, PDO::PARAM_INT);
-                    $deleteThread->execute();
-
-                    if ($deleteThread->rowCount() == 1) {
-
-                        header("Location: /forums");
-
-                    }
-
-                } catch (PDOException $e) {
-
-                    echo "Failed to delete the thread.";
-
-                }
+                $this->delete();
 
             }
 

@@ -19,35 +19,75 @@ if (isset($_POST["submit"])) {
 
     if (isset($_POST["active"]) && $_POST["active"] == "on") {
 
+        try {
+
             $checkStream = $con->prepare("SELECT `streams`.`id` FROM `streams` WHERE `streams`.`authorid` = :userid");
             $checkStream->bindValue("userid", $user->getId(), PDO::PARAM_INT);
             $checkStream->execute();
 
-            if ($checkStream->rowCount() == 0) {
+        } catch (PDOException $e) {
+
+            die("Failed to fetch your stream.");
+
+        }
+
+        if ($checkStream->rowCount() == 0) {
+
+            try {
 
                 $insertStream = $con->prepare("INSERT INTO `streams` VALUES(DEFAULT, DEFAULT, '', :userid)");
                 $insertStream ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
                 $insertStream->execute();
 
+            } catch (PDOException $e) {
+
+                die("Failed to create your stream.");
+
             }
 
-        $updateStream = $con->prepare("UPDATE `streams` SET `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
-        $updateStream->bindValue("text", $description, PDO::PARAM_STR);
-        $updateStream->bindValue("userid", $user->getId(), PDO::PARAM_INT);
-        $updateStream->execute();
+        }
 
-        $updateUser = $con->prepare("UPDATE `users` SET `users`.`twitchname` = :twitchname WHERE `users`.`id` = :userid");
-        $updateUser->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
-        $updateUser->bindValue("userid", $user->getId(), PDO::PARAM_INT);
-        $updateUser->execute();
+        try {
+
+            $updateStream = $con->prepare("UPDATE `streams` SET `streams`.`text` = :text WHERE `streams`.`authorid` = :userid");
+            $updateStream->bindValue("text", $description, PDO::PARAM_STR);
+            $updateStream->bindValue("userid", $user->getId(), PDO::PARAM_INT);
+            $updateStream->execute();
+
+        } catch (PDOException $e) {
+
+            die("Failed to update your stream.");
+
+        }
+
+        try {
+
+            $updateUser = $con->prepare("UPDATE `users` SET `users`.`twitchname` = :twitchname WHERE `users`.`id` = :userid");
+            $updateUser->bindValue("twitchname", $twitchname, PDO::PARAM_STR);
+            $updateUser->bindValue("userid", $user->getId(), PDO::PARAM_INT);
+            $updateUser->execute();
+
+        } catch (PDOException $e) {
+
+            die("Failed to update your twitch name.");
+
+        }
 
         $status = "update";
 
     } else {
 
-        $deleteStream = $con->prepare("DELETE FROM `streams` WHERE `streams`.`authorid` = :userid");
-        $deleteStream->bindValue("userid", $user->getId(), PDO::PARAM_INT);
-        $deleteStream->execute();
+        try {
+
+            $deleteStream = $con->prepare("DELETE FROM `streams` WHERE `streams`.`authorid` = :userid");
+            $deleteStream->bindValue("userid", $user->getId(), PDO::PARAM_INT);
+            $deleteStream->execute();
+
+        } catch (PDOException $e) {
+
+            die("Failed to delete your stream.");
+
+        }
 
         $status = "delete";
 
@@ -55,17 +95,33 @@ if (isset($_POST["submit"])) {
 
 } else {
 
-    $selectText = $con->prepare("SELECT `streams`.`text` FROM `streams` WHERE `streams`.`authorid` = :userid");
-    $selectText ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
-    $selectText->execute();
+    try {
 
-    $streamText = $selectText->fetch();
+        $selectText = $con->prepare("SELECT `streams`.`text` FROM `streams` WHERE `streams`.`authorid` = :userid");
+        $selectText ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
+        $selectText->execute();
 
-    $selectTwitchName = $con->prepare("SELECT `users`.`twitchname` FROM `users` WHERE `users`.`id` = :userid");
-    $selectTwitchName ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
-    $selectTwitchName->execute();
+        $streamText = $selectText->fetch();
 
-    $userTwitchName = $selectTwitchName->fetch();
+    } catch (PDOException $e) {
+
+        die("Failed to fetch your stream's description.");
+
+    }
+
+    try {
+
+        $selectTwitchName = $con->prepare("SELECT `users`.`twitchname` FROM `users` WHERE `users`.`id` = :userid");
+        $selectTwitchName ->bindValue("userid", $user->getId(), PDO::PARAM_INT);
+        $selectTwitchName->execute();
+
+        $userTwitchName = $selectTwitchName->fetch();
+
+    } catch (PDOException $e) {
+
+        die("Failed to fetch your twitch name.");
+
+    }
 
     $streamData = array("twitchname" => $userTwitchName["twitchname"], "text" => $streamText["text"]);
 

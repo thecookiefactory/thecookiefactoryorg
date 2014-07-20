@@ -104,9 +104,9 @@
 
         <form action='?action=edit&amp;id={{ articleData.id }}' method='post'>
         Title<br>
-        <input type='text' name='title' value='{{ articleData.title }}' required><br>
+        <input type='text' name='title' value='{{ articleData.title | raw }}' required><br>
         Text<br>
-        <textarea name='text' rows='10' cols='90' required>{{ articleData.text }}</textarea><br>
+        <textarea name='text' rows='10' cols='90' required>{{ articleData.text | raw }}</textarea><br>
         Disable comments
         {% if articleData.comments == 0 %}
 

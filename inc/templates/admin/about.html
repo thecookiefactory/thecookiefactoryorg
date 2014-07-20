@@ -1,0 +1,49 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>Manage about section</h1>
+
+{% if status == "descsuccess" %}
+
+Successfully updated group description.
+
+{% endif %}
+
+{% if status == "success" %}
+
+Successfully updated your profile.
+
+{% endif %}
+
+{% if status == "toomuch" %}
+
+Please only enter 6 or less profiles.
+
+{% endif %}
+
+<form action='about.php' method='post'>
+
+About: <textarea name='description'>{{ description | raw }}</textarea><br>
+
+Website: <input type='text' name='website' value='{{ website | raw }}'><br>
+email: <input type='text' name='email' value='{{ email | raw }}'><br>
+github: <input type='text' name='github' value='{{ github | raw }}'><br>
+twitter: <input type='text' name='twitter' value='{{ twitter | raw }}'><br>
+twitch: <input type='text' name='twitch' value='{{ twitch | raw }}'><br>
+youtube: <input type='text' name='youtube' value='{{ youtube | raw }}'><br>
+steam: <input type='text' name='steam' value='{{ steam | raw }}'><br>
+reddit: <input type='text' name='reddit' value='{{ reddit | raw }}'><br>
+
+<input type='submit' name='submit'>
+
+</form>
+
+<form action='about.php' method='post'>
+
+Group about: <textarea name='description'>{{ groupdesc | raw }}</textarea><br>
+
+<input type='submit' name='submitdesc'>
+
+</form>
+
+{% endblock %}

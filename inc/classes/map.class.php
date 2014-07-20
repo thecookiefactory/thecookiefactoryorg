@@ -8,13 +8,6 @@ require_once str_repeat("../", $r_c) . "inc/classes/game.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/picture.class.php";
 require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
 
-use Aws\S3\S3Client;
-
-$S3C = S3Client::factory(array(
-    "key"    => $config["s3"]["key"],
-    "secret" => $config["s3"]["secret"]
-));
-
 /**
  * map class
  *
@@ -105,7 +98,6 @@ class map extends master {
 
         global $con;
         global $config;
-        global $S3C;
 
         $a = array(
                     "id" => $this->id,
@@ -144,18 +136,7 @@ class map extends master {
 
         foreach ($this->getPictures() as $picture) {
 
-            try {
-
-                // get S3 url
-                $url = $S3C->getObjectUrl($config["s3"]["bucket"], $picture->getFileName(), '+10 minutes');
-
-            } catch (Exception $e) {
-
-                die("Could not get the picture url from S3.");
-
-            }
-
-            $a["pictures"][] = array("url" => $url, "text" => $picture->getText());
+            $a["pictures"][] = array("url" => $picture->getUrl(), "text" => $picture->getText());
 
         }
 

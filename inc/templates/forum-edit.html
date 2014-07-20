@@ -15,7 +15,7 @@
 <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
     {% if not ispost %}
     <h1>
-        <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37' value='{{ thread.title }}'>
+        <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37' value='{{ thread.title | raw }}'>
     </h1>
     {% endif %}
 <div class='forums-post'>
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div>
-        <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'>{% if ispost %}{{ post.text }}{% else %}{{ thread.text }}{% endif %}</textarea>
+        <textarea class='forums-newpost-text' name='text' required placeholder='Type your post here...' maxlength='20000'>{% if ispost %}{{ post.text | raw }}{% else %}{{ thread.text | raw }}{% endif %}</textarea>
     </div>
 </div>
 

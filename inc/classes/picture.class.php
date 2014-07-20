@@ -3,6 +3,15 @@
 if (!isset($r_c)) header("Location: /notfound.php");
 
 require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "inc/classes/master.class.php";
+require_once str_repeat("../", $r_c) . "vendor/autoload.php";
+
+use Aws\S3\S3Client;
+
+$S3C = S3Client::factory(array(
+    "key"    => $config["s3"]["key"],
+    "secret" => $config["s3"]["secret"]
+));
 
 /**
  * picture class
@@ -74,6 +83,58 @@ class picture extends master {
     public function getFileName() {
 
         return $this->filename;
+
+    }
+
+    public function getUrl() {
+
+        global $config;
+        global $S3C;
+
+        try {
+
+            return $S3C->getObjectUrl($config["s3"]["bucket"], $this->getFileName(), "+10 minutes");
+
+        } catch (Exception $e) {
+
+            die("Could not get the picture url from S3.");
+
+        }
+
+    }
+
+    public function delete() {
+
+        global $con;
+        global $config;
+        global $S3C;
+
+        try {
+
+            $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
+            $dq->bindValue("id", $this->id, PDO::PARAM_INT);
+            $dq->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed");
+
+        }
+
+        try {
+
+            $S3C->deleteObject(array("Bucket"     => $config["s3"]["bucket"],
+                                     "Key"        => $this->filename
+                            ));
+
+            return true;
+
+        } catch (Exception $e) {
+
+            echo "Could not delete the image!!!!!!!!! from s3";
+
+        }
+
 
     }
 

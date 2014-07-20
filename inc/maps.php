@@ -7,7 +7,7 @@ require_once "inc/classes/map.class.php";
 
 $maps = array();
 
-$_SESSION["lp"] = $p;
+$_SESSION["lp"] = "maps";
 
 ?>
 

@@ -4,6 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
+require_once "../inc/classes/picture.class.php";
 require_once "../inc/classes/user.class.php";
 require_once "../vendor/autoload.php";
 
@@ -28,9 +29,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $id = strip($_GET["id"]);
 
-        $query = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`id` = :id");
-        $query->bindValue("id", $id, PDO::PARAM_INT);
-        $query->execute();
+        try {
+
+            $query = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
+            $query->bindValue("id", $id, PDO::PARAM_INT);
+            $query->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
         if ($query->rowCount() == 0) {
 
@@ -42,25 +51,21 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $picturedata = $row;
 
+        $picture = new picture($row["id"]);
+
+        $picturedata["url"] = $picture->getUrl();
+
         if (isset($_POST["submit"])) {
 
             if (isset($_POST["delete"]) && $_POST["delete"] == "on") {
 
-                try {
+                $picture = new picture($id);
 
-                    // delete from S3
-                    $result = $S3C->deleteObject(array(
-                        'Bucket'     => $config["s3"]["bucket"],
-                        'Key'        => $row["filename"]
-                    ));
-
-                    $dq = $con->prepare("DELETE FROM `pictures` WHERE `pictures`.`id` = :id");
-                    $dq->bindValue("id", $id, PDO::PARAM_INT);
-                    $dq->execute();
+                if ($picture->delete()) {
 
                     $status = "deletesuccess";
 
-                } catch (Exception $e) {
+                } else {
 
                     $status = "deletefailure";
 
@@ -72,11 +77,19 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 $ordernumber = strip($_POST["ordernumber"]);
 
-                $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
-                $query->bindValue("text", $text, PDO::PARAM_STR);
-                $query->bindValue("id", $id, PDO::PARAM_INT);
-                $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                $query->execute();
+                try {
+
+                    $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
+                    $query->bindValue("text", $text, PDO::PARAM_STR);
+                    $query->bindValue("id", $id, PDO::PARAM_INT);
+                    $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                    $query->execute();
+
+                } catch (PDOException $e) {
+
+                    die("Query failed.");
+
+                }
 
                 $status = "success";
 
@@ -96,9 +109,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         $currentid = $id;
 
-        $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
-        $mq->bindValue("id", $id, PDO::PARAM_INT);
-        $mq->execute();
+        try {
+
+            $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+            $mq->bindValue("id", $id, PDO::PARAM_INT);
+            $mq->execute();
+
+        } catch (PDOException $e) {
+
+            die("Query failed.");
+
+        }
 
         if ($mq->rowCount() == 0) {
 
@@ -110,54 +131,78 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         if (isset($_POST["submit"])) {
 
-            $text = strip($_POST["text"]);
+            $uploadsuccess = true;
 
-            $ordernumber = strip($_POST["ordernumber"]);
+            for($i = 0; $i < count($_FILES["images"]["name"]); $i++) {
 
-            //image variables
-            $filename = strtolower($_FILES["image"]["name"]);
-            $filetype = $_FILES["image"]["type"];
-            $tmp_name = $_FILES["image"]["tmp_name"];
+                //image variables
+                $filename = strtolower($_FILES["images"]["name"][$i]);
+                $filetype = $_FILES["images"]["type"][$i];
+                $tmp_name = $_FILES["images"]["tmp_name"][$i];
 
-            $extension = substr($filename, strpos($filename, ".") + 1);
+                $extension = substr($filename, strpos($filename, ".") + 1);
 
-            if (!empty($filename)) {
+                if (!empty($filename)) {
 
-                if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
+                    if (($extension == "jpg" || $extension == "jpeg" || $extension == "png") && ($filetype == "image/jpeg" || $filetype == "image/png")) {
 
-                    $newfilename = uniqid();
+                        $newfilename = uniqid();
 
-                    $newfilename .= ".".$extension;
+                        $newfilename .= ".".$extension;
 
-                    try {
+                        try {
 
-                        // upload to S3
-                        $result = $S3C->putObject(array(
-                            'Bucket'     => $config["s3"]["bucket"],
-                            'Key'        => $newfilename,
-                            'SourceFile' => $tmp_name
-                        ));
+                            // upload to S3
+                            $result = $S3C->putObject(array(
+                                "Bucket"     => $config["s3"]["bucket"],
+                                "Key"        => $newfilename,
+                                "SouceFile" => $tmp_name
+                            ));
 
-                        $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
-                        $iq->bindValue("text", $text, PDO::PARAM_STR);
-                        $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
-                        $iq->bindValue("mapid", $id, PDO::PARAM_INT);
-                        $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                        $iq->execute();
+                            try {
 
-                        $status = "success";
+                                $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
+                                $iq->bindValue("text", $text, PDO::PARAM_STR);
+                                $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
+                                $iq->bindValue("mapid", $id, PDO::PARAM_INT);
+                                $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                                $iq->execute();
 
-                    } catch (Exception $e) {
+                            } catch (PDOException $e) {
 
-                        $status = "failure";
+                                die("Query failed.");
+
+                            }
+
+                        } catch (Exception $e) {
+
+                            $uploadsuccess = false;
+
+                        }
+
+                    } else {
+
+                        $wrongtype = true;
 
                     }
 
-                } else {
-
-                    $status = "wrongtype";
-
                 }
+
+            }
+
+            if ($uploadsuccess) {
+
+                $status = "success";
+
+            } else {
+
+                $status = "failure";
+
+            }
+
+            if (isset($wrongtype)) {
+
+                $status = "wrongtype";
 
             }
 
@@ -173,29 +218,37 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
     $mode = "manage";
 
-    $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
+    try {
 
-    $maps = array();
+        $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
-    while ($row = $query->fetch()) {
+        $maps = array();
 
-        $gq = $con->prepare("SELECT * FROM `pictures` WHERE `pictures`.`mapid` = :id");
-        $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
-        $gq->execute();
+        while ($row = $query->fetch()) {
 
-        if ($gq->rowCount() > 0) {
+            $gq = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+            $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
+            $gq->execute();
 
-            $pictures = array();
+            if ($gq->rowCount() > 0) {
 
-            while ($gr = $gq->fetch()) {
+                $pictures = array();
 
-                $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
+                while ($gr = $gq->fetch()) {
+
+                    $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
+
+                }
 
             }
 
+            $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
+
         }
 
-        $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
+    } catch (PDOException $e) {
+
+        die("Query failed.");
 
     }
 

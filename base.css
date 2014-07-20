@@ -100,12 +100,22 @@ footer {
   line-height: 1.4em;
 }
 
-.contact-us-link {
-  font-weight: 700;
+.contact-us {
+  list-style-type: none;
+  padding: 0;
 }
 
-.contact-us-link+.contact-us-link:before {
-  content: " \B7  ";
+.contact-us li {
+  display: inline;
+}
+
+.contact-us i.fa {
+  color: #CACACA;
+  transition: color 0.2s ease-in-out;
+}
+
+.contact-us i.fa:hover {
+  color: #4188D2;
 }
 
 a,

@@ -20,7 +20,7 @@
             <td class='forums-entry-main {% if thread.closed %}forums-entry-closed{% endif %}'>
                 <a class='forums-entry-title' href='/forums/{{ thread.id }}'>
 
-                    {{ thread.title }}
+                    {% autoescape false %}{{ thread.title }}{% endautoescape %}
 
                 </a>
                 <br>

@@ -13,64 +13,98 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
+try {
 
-if (isset($_POST["update"])) {
+    $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
 
-    while ($categoryData = $selectCategories->fetch()) {
+    if (isset($_POST["update"])) {
 
-        $id = $categoryData["id"];
-        $name = strip($_POST[$id."name"]);
-        $longname = strip($_POST[$id."longname"]);
-        $hexcode = strip($_POST[$id."hexcode"]);
-        $hoverhexcode = strip($_POST[$id."hoverhexcode"]);
+        while ($categoryData = $selectCategories->fetch()) {
 
-        if (!vf($name)) {
+            $id = $categoryData["id"];
+            $name = strip($_POST[$id."name"]);
+            $longname = strip($_POST[$id."longname"]);
+            $hexcode = strip($_POST[$id."hexcode"]);
+            $hoverhexcode = strip($_POST[$id."hoverhexcode"]);
 
-            $deleteCategory = $con->prepare("DELETE FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
-            $deleteCategory->bindValue("id", $id, PDO::PARAM_INT);
-            $deleteCategory->execute();
+            if (!vf($name)) {
 
-        } else {
+                try {
 
-            $updateCategory = $con->prepare("UPDATE `forumcategories` SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode WHERE `forumcategories`.`id` = :id");
-            $updateCategory->bindValue("name", $name, PDO::PARAM_STR);
-            $updateCategory->bindValue("longname", $longname, PDO::PARAM_STR);
-            $updateCategory->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
-            $updateCategory->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
-            $updateCategory->bindValue("id", $id, PDO::PARAM_INT);
-            $updateCategory->execute();
+                    $deleteCategory = $con->prepare("DELETE FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
+                    $deleteCategory->bindValue("id", $id, PDO::PARAM_INT);
+                    $deleteCategory->execute();
+
+                } catch (PDOException $e) {
+
+                    die("Failed to delete categories.");
+
+                }
+
+            } else {
+
+                try {
+
+                    $updateCategory = $con->prepare("UPDATE `forumcategories`
+                                                     SET `forumcategories`.`name` = :name, `forumcategories`.`longname` = :longname, `forumcategories`.`hexcode` = :hexcode, `forumcategories`.`hoverhexcode` = :hoverhexcode
+                                                     WHERE `forumcategories`.`id` = :id");
+                    $updateCategory->bindValue("name", $name, PDO::PARAM_STR);
+                    $updateCategory->bindValue("longname", $longname, PDO::PARAM_STR);
+                    $updateCategory->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
+                    $updateCategory->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
+                    $updateCategory->bindValue("id", $id, PDO::PARAM_INT);
+                    $updateCategory->execute();
+
+                } catch (PDOException $e) {
+
+                    die("Failed to update categories.");
+
+                }
+
+            }
 
         }
 
     }
 
-}
+    if (isset($_POST["addnew"])) {
 
-if (isset($_POST["addnew"])) {
+        $name = strip($_POST["name"]);
+        $longname = strip($_POST["longname"]);
+        $hexcode = strip($_POST["hexcode"]);
+        $hoverhexcode = strip($_POST["hoverhexcode"]);
 
-    $name = strip($_POST["name"]);
-    $longname = strip($_POST["longname"]);
-    $hexcode = strip($_POST["hexcode"]);
-    $hoverhexcode = strip($_POST["hoverhexcode"]);
+        try {
 
-    $insertCategory = $con->prepare("INSERT INTO `forumcategories` VALUES(DEFAULT, :name, :longname, :hexcode, :hoverhexcode, DEFAULT)");
-    $insertCategory->bindValue("name", $name, PDO::PARAM_STR);
-    $insertCategory->bindValue("longname", $longname, PDO::PARAM_STR);
-    $insertCategory->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
-    $insertCategory->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
-    $insertCategory->execute();
+            $insertCategory = $con->prepare("INSERT INTO `forumcategories` VALUES(DEFAULT, :name, :longname, :hexcode, :hoverhexcode, DEFAULT)");
+            $insertCategory->bindValue("name", $name, PDO::PARAM_STR);
+            $insertCategory->bindValue("longname", $longname, PDO::PARAM_STR);
+            $insertCategory->bindValue("hexcode", $hexcode, PDO::PARAM_STR);
+            $insertCategory->bindValue("hoverhexcode", $hoverhexcode, PDO::PARAM_STR);
+            $insertCategory->execute();
 
-}
+        } catch (PDOException $e) {
 
-$selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
+            die("Failed to add new category.");
 
-$rows = array();
+        }
 
-while ($categoryData = $selectCategories->fetch()) {
+    }
 
-    $category = new forumcategory($categoryData["id"]);
-    $rows[] = $category->returnArray();
+    $selectCategories = $con->query("SELECT `forumcategories`.`id` FROM `forumcategories`");
+
+    $rows = array();
+
+    while ($categoryData = $selectCategories->fetch()) {
+
+        $category = new forumcategory($categoryData["id"]);
+        $rows[] = $category->returnArray();
+
+    }
+
+} catch (PDOException $e) {
+
+    die("Failed to select categories.");
 
 }
 
