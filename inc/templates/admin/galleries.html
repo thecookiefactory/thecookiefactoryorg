@@ -42,7 +42,9 @@
     {% if status == "progress" %}
 
             <form action='?action=add&amp;id={{ currentid }}' method='post' enctype='multipart/form-data'>
-            <input type='file' name='images[]' multiple required> jpg/png only<br>
+            <input type='file' name='image' required> jpg/png only<br>
+            textription: <input type='text' name='text' required><br>
+            order number: <input type='number' name='ordernumber' required><br>
             <input type='submit' name='submit'>
             </form>
 
