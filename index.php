@@ -22,8 +22,6 @@ cookieCheck();
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
-echo $twig->render("index-top.html", array("canonical" => canonical()));
-
 include_once("inc/analyticstracking.php");
 
 $someoneIsLive = isAnyoneLive();
@@ -49,7 +47,7 @@ try {
 
 $loginReturn = $user->login();
 
-echo $twig->render("index-nav.html", array("pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn));
+echo $twig->render("index-top.html", array("canonical" => canonical(), "pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn));
 
 if (isset($_GET["p"]) && vf($_GET["p"])) {
 

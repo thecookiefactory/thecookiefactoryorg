@@ -10,3 +10,36 @@
     {% autoescape false %}{{ canonical }}{% endautoescape %}
 </head>
 <body>
+<a href='/'>
+<header>
+
+</header>
+</a>
+
+<div class='wrapper'>
+
+<nav>
+<span class='nav-menubar'>
+<a class='menu-item' href='/maps/'>maps</a>
+<a class='menu-item' href='/news/'>news</a>
+<a class='menu-item' href='/streams/'>streams{% if someoneislive %}<sup class='menu-live-indicator'>live</sup>{% endif %}</a>
+<a class='menu-item' href='/forums/'>forums</a>
+<a class='menu-item' href='/about/'>about</a>
+{% for page in pages %}
+    <a class='menu-item' href='/{{ page.stringid }}/'>{{ page.title }}</a>
+{% endfor %}
+</span>
+
+<div class='nav-actionbar'>
+<form class='menu-item' onsubmit='searchRedirect();'>
+<input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
+</form>
+
+{% autoescape false %}{{ loginreturn }}{% endautoescape %}
+
+</div>
+
+</nav>
+<hr>
+
+<section class='include-section'>
