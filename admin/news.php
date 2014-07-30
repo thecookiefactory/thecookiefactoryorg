@@ -145,9 +145,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $eq = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`id` = :id");
-                $eq->bindValue("id", $id, PDO::PARAM_INT);
-                $eq->execute();
+                $selectNewsId = $con->prepare("SELECT `news`.`id` FROM `news` WHERE `news`.`id` = :id");
+                $selectNewsId->bindValue("id", $id, PDO::PARAM_INT);
+                $selectNewsId->execute();
 
             } catch (PDOException $e) {
 
@@ -155,19 +155,19 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if ($eq->rowCount() == 1) {
+            if ($selectNewsId->rowCount() == 1) {
 
                 if (isset($_POST["delete"])) {
 
                     try {
 
-                        $dq = $con->prepare("DELETE FROM `news` WHERE `news`.`id` = :id");
-                        $dq->bindValue("id", $id, PDO::PARAM_INT);
-                        $dq->execute();
+                        $deleteNews = $con->prepare("DELETE FROM `news` WHERE `news`.`id` = :id");
+                        $deleteNews->bindValue("id", $id, PDO::PARAM_INT);
+                        $deleteNews->execute();
 
-                        $dq = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
-                        $dq->bindValue("id", $id, PDO::PARAM_INT);
-                        $dq->execute();
+                        $deleteThread = $con->prepare("DELETE FROM `forumthreads` WHERE `forumthreads`.`newsid` = :id");
+                        $deleteThread->bindValue("id", $id, PDO::PARAM_INT);
+                        $deleteThread->execute();
                         // comments are not actually deleted at this point, but w/e
 
                         $status = "success";
@@ -230,22 +230,22 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $iq = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, :comments, :live, '')");
-                $iq->bindValue("title", $title, PDO::PARAM_STR);
-                $iq->bindValue("text", $text, PDO::PARAM_STR);
-                $iq->bindValue("author", $author, PDO::PARAM_INT);
-                $iq->bindValue("comments", $comments, PDO::PARAM_INT);
-                $iq->bindValue("live", $live, PDO::PARAM_INT);
-                $iq->execute();
+                $insertNews = $con->prepare("INSERT INTO `news` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, :comments, :live, '')");
+                $insertNews->bindValue("title", $title, PDO::PARAM_STR);
+                $insertNews->bindValue("text", $text, PDO::PARAM_STR);
+                $insertNews->bindValue("author", $author, PDO::PARAM_INT);
+                $insertNews->bindValue("comments", $comments, PDO::PARAM_INT);
+                $insertNews->bindValue("live", $live, PDO::PARAM_INT);
+                $insertNews->execute();
 
                 $id = $con->lastInsertId();
 
-                $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
-                $iq->bindValue("title", $title, PDO::PARAM_STR);
-                $iq->bindValue("text", $text, PDO::PARAM_STR);
-                $iq->bindValue("author", $author, PDO::PARAM_INT);
-                $iq->bindValue("id", $id, PDO::PARAM_INT);
-                $iq->execute();
+                $createThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :author, now(), DEFAULT, DEFAULT, 0, DEFAULT, :id, 0)");
+                $createThread->bindValue("title", $title, PDO::PARAM_STR);
+                $createThread->bindValue("text", $text, PDO::PARAM_STR);
+                $createThread->bindValue("author", $author, PDO::PARAM_INT);
+                $createThread->bindValue("id", $id, PDO::PARAM_INT);
+                $createThread->execute();
 
                 generateStringid($id);
 
@@ -275,16 +275,16 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     try {
 
-        $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`
+        $selectNewsData = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`
                               FROM `news`
                               WHERE `news`.`live` = 0
                               ORDER BY `news`.`id` DESC");
 
         $unpublishedNews = array();
 
-        while ($row = $query->fetch()) {
+        while ($newsData = $selectNewsData->fetch()) {
 
-            $unpublishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+            $unpublishedNews[] = array("id" => $newsData["id"], "title" => $newsData["title"], "text" => substr($newsData["text"], 0, 100));
 
         }
 
@@ -296,22 +296,22 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     try {
 
-        $query = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`stringid`
+        $selectNewsData = $con->query("SELECT `news`.`id`, `news`.`title`, `news`.`text`, `news`.`stringid`
                               FROM `news`
                               WHERE `news`.`live` = 1
                               ORDER BY `news`.`id` DESC");
 
         $publishedNews = array();
 
-        while ($row = $query->fetch()) {
+        while ($newsData = $selectNewsData->fetch()) {
 
-            if (!vf($row["stringid"])) {
+            if (!vf($newsData["stringid"])) {
 
-                generateStringid($row["id"]);
+                generateStringid($newsData["id"]);
 
             }
 
-            $publishedNews[] = array("id" => $row["id"], "title" => $row["title"], "text" => substr($row["text"], 0, 100));
+            $publishedNews[] = array("id" => $newsData["id"], "title" => $newsData["title"], "text" => substr($newsData["text"], 0, 100));
 
         }
 

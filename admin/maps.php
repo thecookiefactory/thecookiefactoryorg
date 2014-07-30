@@ -25,9 +25,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         try {
 
-            $eq = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
-            $eq->bindValue("id", $id, PDO::PARAM_INT);
-            $eq->execute();
+            $selectMapId = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
+            $selectMapId->bindValue("id", $id, PDO::PARAM_INT);
+            $selectMapId->execute();
 
         } catch (PDOException $e) {
 
@@ -45,14 +45,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $uq = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download, `maps`.`link` = :link WHERE `maps`.`id` = :id");
-                $uq->bindValue("id", $id, PDO::PARAM_INT);
-                $uq->bindValue("name", $name, PDO::PARAM_STR);
-                $uq->bindValue("game", $game, PDO::PARAM_INT);
-                $uq->bindValue("text", $text, PDO::PARAM_STR);
-                $uq->bindValue("download", $download, PDO::PARAM_STR);
-                $uq->bindValue("link", $link, PDO::PARAM_STR);
-                $uq->execute();
+                $updateMapData = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download, `maps`.`link` = :link WHERE `maps`.`id` = :id");
+                $updateMapData->bindValue("id", $id, PDO::PARAM_INT);
+                $updateMapData->bindValue("name", $name, PDO::PARAM_STR);
+                $updateMapData->bindValue("game", $game, PDO::PARAM_INT);
+                $updateMapData->bindValue("text", $text, PDO::PARAM_STR);
+                $updateMapData->bindValue("download", $download, PDO::PARAM_STR);
+                $updateMapData->bindValue("link", $link, PDO::PARAM_STR);
+                $updateMapData->execute();
 
             } catch (PDOException $e) {
 
@@ -69,13 +69,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                 try {
 
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
-                    $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iq->bindValue("title", $title, PDO::PARAM_STR);
-                    $iq->bindValue("text", $text, PDO::PARAM_STR);
-                    $iq->bindValue("cat", $cat, PDO::PARAM_INT);
-                    $iq->bindValue("id", $id, PDO::PARAM_INT);
-                    $iq->execute();
+                    $createThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
+                    $createThread->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                    $createThread->bindValue("title", $title, PDO::PARAM_STR);
+                    $createThread->bindValue("text", $text, PDO::PARAM_STR);
+                    $createThread->bindValue("cat", $cat, PDO::PARAM_INT);
+                    $createThread->bindValue("id", $id, PDO::PARAM_INT);
+                    $createThread->execute();
 
                 } catch (PDOException $e) {
 
@@ -85,9 +85,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                 try {
 
-                    $uq = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 1 WHERE `maps`.`id` = :id");
-                    $uq->bindValue("id", $id, PDO::PARAM_INT);
-                    $uq->execute();
+                    $enableComments = $con->prepare("UPDATE `maps` SET `maps`.`comments` = 1 WHERE `maps`.`id` = :id");
+                    $enableComments->bindValue("id", $id, PDO::PARAM_INT);
+                    $enableComments->execute();
 
                 } catch (PDOException $e) {
 
@@ -99,16 +99,16 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         }
 
-        if ($eq->rowCount() == 1) {
+        if ($selectMapId->rowCount() == 1) {
 
             try {
 
                 //fetching the current data
-                $eq = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`link`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
-                $eq->bindValue("id", $id, PDO::PARAM_INT);
-                $eq->execute();
+                $selectMapData = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`link`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
+                $selectMapData->bindValue("id", $id, PDO::PARAM_INT);
+                $selectMapData->execute();
 
-                $mr = $eq->fetch();
+                $mapData = $selectMapData->fetch();
 
             } catch (PDOException $e) {
 
@@ -116,23 +116,23 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            $mapdata = array("id" => $mr["id"],
-                             "name" => $mr["name"],
-                             "text" => $mr["text"],
-                             "dl" => $mr["dl"],
-                             "link" => $mr["link"],
-                             "comments" => $mr["comments"],
-                             "gameid" => $mr["gameid"]);
+            $mapdata = array("id" => $mapData["id"],
+                             "name" => $mapData["name"],
+                             "text" => $mapData["text"],
+                             "dl" => $mapData["dl"],
+                             "link" => $mapData["link"],
+                             "comments" => $mapData["comments"],
+                             "gameid" => $mapData["gameid"]);
 
             try {
 
-                $gq = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
+                $selectGame = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
 
                 $games = array();
 
-                while ($gr = $gq->fetch()) {
+                while ($gameData = $selectGame->fetch()) {
 
-                    $games[] = array("id" => $gr["id"], "name" => $gr["name"]);
+                    $games[] = array("id" => $gameData["id"], "name" => $gameData["name"]);
 
                 }
 
@@ -142,17 +142,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if ($mr["comments"] == 0) {
+            if ($mapData["comments"] == 0) {
 
                 try {
 
-                    $cq = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+                    $selectCategories = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
                     $forumcategories = array();
 
-                    while ($cr = $cq->fetch()) {
+                    while ($categoryData = $selectCategories->fetch()) {
 
-                        $forumcategories[] = array("id" => $cr["id"], "name" => $cr["name"]);
+                        $forumcategories[] = array("id" => $categoryData["id"], "name" => $categoryData["name"]);
 
                     }
 
@@ -181,9 +181,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $eq = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
-                $eq->bindValue("id", $id, PDO::PARAM_INT);
-                $eq->execute();
+                $selectMapId = $con->prepare("SELECT `maps`.`id` FROM `maps` WHERE `maps`.`id` = :id");
+                $selectMapId->bindValue("id", $id, PDO::PARAM_INT);
+                $selectMapId->execute();
 
             } catch (PDOException $e) {
 
@@ -191,22 +191,20 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if ($eq->rowCount() == 1) {
-
-                $er = $eq->fetch();
+            if ($selectMapId->rowCount() == 1) {
 
                 if (isset($_POST["delete"])) {
 
                     try {
 
                         //deleting images from the gallery
-                        $gq = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
-                        $gq->bindValue("id", $id, PDO::PARAM_INT);
-                        $gq->execute();
+                        $selectPictures = $con->prepare("SELECT `pictures`.`id` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+                        $selectPictures->bindValue("id", $id, PDO::PARAM_INT);
+                        $selectPictures->execute();
 
-                        while ($gr = $gq->fetch()) {
+                        while ($pictureData = $selectPictures->fetch()) {
 
-                            $picture = new picture($gr["id"]);
+                            $picture = new picture($pictureData["id"]);
                             $picture->delete();
 
                         }
@@ -220,13 +218,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
                     try {
 
                         //deleting the forum thread
-                        $dq = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
-                        $dq->bindValue("id", $id, PDO::PARAM_INT);
-                        $dq->execute();
+                        $selectThreadData = $con->prepare("SELECT `forumthreads`.`id` FROM `forumthreads` WHERE `forumthreads`.`mapid` = :id");
+                        $selectThreadData->bindValue("id", $id, PDO::PARAM_INT);
+                        $selectThreadData->execute();
 
-                        $fi = $dq->fetch();
+                        $threadData = $selectThreadData->fetch();
 
-                        $mapthread = new forumthread($fi["id"]);
+                        $mapthread = new forumthread($threadData["id"]);
                         $mapthread->delete("r_c");
 
                     } catch (PDOException $e) {
@@ -237,9 +235,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                     try {
 
-                        $dq = $con->prepare("DELETE FROM `maps` WHERE `maps`.`id` = :id");
-                        $dq->bindValue("id", $id, PDO::PARAM_INT);
-                        $dq->execute();
+                        $deleteMap = $con->prepare("DELETE FROM `maps` WHERE `maps`.`id` = :id");
+                        $deleteMap->bindValue("id", $id, PDO::PARAM_INT);
+                        $deleteMap->execute();
 
                     } catch (PDOException $e) {
 
@@ -297,14 +295,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             try {
 
                 //inserting the basic data and returning the map id
-                $iq = $con->prepare("INSERT INTO `maps` VALUES(DEFAULT, :name, :text, :author, now(), DEFAULT, :download, :comments, :game, '', 0)");
-                $iq->bindValue("name", $name, PDO::PARAM_STR);
-                $iq->bindValue("text", $text, PDO::PARAM_STR);
-                $iq->bindValue("author", $author, PDO::PARAM_INT);
-                $iq->bindValue("download", $download, PDO::PARAM_STR);
-                $iq->bindValue("comments", $comments, PDO::PARAM_INT);
-                $iq->bindValue("game", $game, PDO::PARAM_INT);
-                $iq->execute();
+                $createMap = $con->prepare("INSERT INTO `maps` VALUES(DEFAULT, :name, :text, :author, now(), DEFAULT, :download, :comments, :game, '', 0)");
+                $createMap->bindValue("name", $name, PDO::PARAM_STR);
+                $createMap->bindValue("text", $text, PDO::PARAM_STR);
+                $createMap->bindValue("author", $author, PDO::PARAM_INT);
+                $createMap->bindValue("download", $download, PDO::PARAM_STR);
+                $createMap->bindValue("comments", $comments, PDO::PARAM_INT);
+                $createMap->bindValue("game", $game, PDO::PARAM_INT);
+                $createMap->execute();
 
             } catch (PDOException $e) {
 
@@ -323,13 +321,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                 try {
 
-                    $iq = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
-                    $iq->bindValue("authorid", $authorid, PDO::PARAM_INT);
-                    $iq->bindValue("title", $title, PDO::PARAM_STR);
-                    $iq->bindValue("text", $text, PDO::PARAM_STR);
-                    $iq->bindValue("cat", $cat, PDO::PARAM_INT);
-                    $iq->bindValue("id", $id, PDO::PARAM_INT);
-                    $iq->execute();
+                    $createThread = $con->prepare("INSERT INTO `forumthreads` VALUES(DEFAULT, :title, :text, :authorid, DEFAULT, DEFAULT, DEFAULT, :cat, :id, DEFAULT, 0)");
+                    $createThread->bindValue("authorid", $authorid, PDO::PARAM_INT);
+                    $createThread->bindValue("title", $title, PDO::PARAM_STR);
+                    $createThread->bindValue("text", $text, PDO::PARAM_STR);
+                    $createThread->bindValue("cat", $cat, PDO::PARAM_INT);
+                    $createThread->bindValue("id", $id, PDO::PARAM_INT);
+                    $createThread->execute();
 
                 } catch (PDOException $e) {
 
@@ -347,13 +345,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $gq = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
+                $selectGame = $con->query("SELECT `games`.`id`, `games`.`name` FROM `games` ORDER BY `games`.`id` ASC");
 
                 $games = array();
 
-                while ($gr = $gq->fetch()) {
+                while ($gameData = $selectGame->fetch()) {
 
-                    $games[] = array("id" => $gr["id"], "name" => $gr["name"]);
+                    $games[] = array("id" => $gameData["id"], "name" => $gameData["name"]);
 
                 }
 
@@ -365,13 +363,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             try {
 
-                $cq = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
+                $selectCategories = $con->query("SELECT `forumcategories`.`id`, `forumcategories`.`name` FROM `forumcategories` ORDER BY `forumcategories`.`name` ASC");
 
                 $forumcategories = array();
 
-                while ($cr = $cq->fetch()) {
+                while ($categoryData = $selectCategories->fetch()) {
 
-                    $forumcategories[] = array("id" => $cr["id"], "name" => $cr["name"]);
+                    $forumcategories[] = array("id" => $categoryData["id"], "name" => $categoryData["name"]);
 
                 }
 
@@ -391,13 +389,13 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
     try {
 
-        $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
+        $selectMapData = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
         $maps = array();
 
-        while ($row = $query->fetch()) {
+        while ($mapData = $selectMapData->fetch()) {
 
-            $maps[] = array("id" => $row["id"], "name" => $row["name"]);
+            $maps[] = array("id" => $mapData["id"], "name" => $mapData["name"]);
 
         }
 

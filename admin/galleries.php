@@ -31,9 +31,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         try {
 
-            $query = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
-            $query->bindValue("id", $id, PDO::PARAM_INT);
-            $query->execute();
+            $selectPictureData = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text`, `pictures`.`ordernumber` FROM `pictures` WHERE `pictures`.`id` = :id");
+            $selectPictureData->bindValue("id", $id, PDO::PARAM_INT);
+            $selectPictureData->execute();
 
         } catch (PDOException $e) {
 
@@ -41,17 +41,15 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         }
 
-        if ($query->rowCount() == 0) {
+        if ($selectPictureData->rowCount() == 0) {
 
             die("Not a valid id.");
 
         }
 
-        $row = $query->fetch();
+        $picturedata = $selectPictureData->fetch();
 
-        $picturedata = $row;
-
-        $picture = new picture($row["id"]);
+        $picture = new picture($picturedata["id"]);
 
         $picturedata["url"] = $picture->getUrl();
 
@@ -79,11 +77,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                 try {
 
-                    $query = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
-                    $query->bindValue("text", $text, PDO::PARAM_STR);
-                    $query->bindValue("id", $id, PDO::PARAM_INT);
-                    $query->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                    $query->execute();
+                    $updatePictureData = $con->prepare("UPDATE `pictures` SET `pictures`.`text` = :text, `pictures`.`ordernumber` = :ordernumber WHERE `pictures`.`id` = :id");
+                    $updatePictureData->bindValue("text", $text, PDO::PARAM_STR);
+                    $updatePictureData->bindValue("id", $id, PDO::PARAM_INT);
+                    $updatePictureData->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                    $updatePictureData->execute();
 
                 } catch (PDOException $e) {
 
@@ -111,9 +109,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         try {
 
-            $mq = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
-            $mq->bindValue("id", $id, PDO::PARAM_INT);
-            $mq->execute();
+            $selectMap = $con->prepare("SELECT `maps`.`name` FROM `maps` WHERE `maps`.`id` = :id");
+            $selectMap->bindValue("id", $id, PDO::PARAM_INT);
+            $selectMap->execute();
 
         } catch (PDOException $e) {
 
@@ -121,13 +119,11 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
         }
 
-        if ($mq->rowCount() == 0) {
+        if ($selectMap->rowCount() == 0) {
 
             die("Not a valid id.");
 
         }
-
-        $mr = $mq->fetch();
 
         if (isset($_POST["submit"])) {
 
@@ -163,12 +159,12 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
                         try {
 
-                            $iq = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
-                            $iq->bindValue("text", $text, PDO::PARAM_STR);
-                            $iq->bindValue("filename", $newfilename, PDO::PARAM_STR);
-                            $iq->bindValue("mapid", $id, PDO::PARAM_INT);
-                            $iq->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
-                            $iq->execute();
+                            $createPicture = $con->prepare("INSERT INTO `pictures` VALUES(DEFAULT, :text, DEFAULT, :filename, :mapid, :ordernumber)");
+                            $createPicture->bindValue("text", $text, PDO::PARAM_STR);
+                            $createPicture->bindValue("filename", $newfilename, PDO::PARAM_STR);
+                            $createPicture->bindValue("mapid", $id, PDO::PARAM_INT);
+                            $createPicture->bindValue("ordernumber", $ordernumber, PDO::PARAM_INT);
+                            $createPicture->execute();
 
                         } catch (PDOException $e) {
 
@@ -220,29 +216,29 @@ if (isset($_GET["action"]) && ($_GET["action"] == "add" || $_GET["action"] == "e
 
     try {
 
-        $query = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
+        $selectMapData = $con->query("SELECT `maps`.`id`, `maps`.`name` FROM `maps` ORDER BY `maps`.`id` DESC");
 
         $maps = array();
 
-        while ($row = $query->fetch()) {
+        while ($mapData = $selectMapData->fetch()) {
 
-            $gq = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
-            $gq->bindValue("id", $row["id"], PDO::PARAM_INT);
-            $gq->execute();
+            $selectPictureData = $con->prepare("SELECT `pictures`.`id`, `pictures`.`text` FROM `pictures` WHERE `pictures`.`mapid` = :id");
+            $selectPictureData->bindValue("id", $mapData["id"], PDO::PARAM_INT);
+            $selectPictureData->execute();
 
-            if ($gq->rowCount() > 0) {
+            if ($selectPictureData->rowCount() > 0) {
 
                 $pictures = array();
 
-                while ($gr = $gq->fetch()) {
+                while ($pictureData = $selectPictureData->fetch()) {
 
-                    $pictures[] = array("id" => $gr["id"], "text" => $gr["text"]);
+                    $pictures[] = array("id" => $pictureData["id"], "text" => $pictureData["text"]);
 
                 }
 
             }
 
-            $maps[] = array("id" => $row["id"], "name" => $row["name"], "picturecount" => $gq->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
+            $maps[] = array("id" => $mapData["id"], "name" => $mapData["name"], "picturecount" => $selectPictureData->rowCount(), "pictures" => (isset($pictures) ? $pictures : null));
 
         }
 
