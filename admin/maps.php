@@ -42,12 +42,14 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $text = strip($_POST["text"]);
             $download = strip($_POST["download"]);
             $link = strip($_POST["link"]);
+            $authorid = strip($_POST["authorid"]);
 
             try {
 
-                $updateMapData = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download, `maps`.`link` = :link WHERE `maps`.`id` = :id");
+                $updateMapData = $con->prepare("UPDATE `maps` SET `maps`.`name` = :name, `maps`.`authorid` = :authorid, `maps`.`gameid` = :game, `maps`.`text` = :text, `maps`.`dl` = :download, `maps`.`link` = :link WHERE `maps`.`id` = :id");
                 $updateMapData->bindValue("id", $id, PDO::PARAM_INT);
                 $updateMapData->bindValue("name", $name, PDO::PARAM_STR);
+                $updateMapData->bindValue("authorid", $authorid, PDO::PARAM_INT);
                 $updateMapData->bindValue("game", $game, PDO::PARAM_INT);
                 $updateMapData->bindValue("text", $text, PDO::PARAM_STR);
                 $updateMapData->bindValue("download", $download, PDO::PARAM_STR);
@@ -104,25 +106,17 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             try {
 
                 //fetching the current data
-                $selectMapData = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`dl`, `maps`.`link`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
+                $selectMapData = $con->prepare("SELECT `maps`.`id`, `maps`.`name`, `maps`.`text`, `maps`.`authorid`, `maps`.`dl`, `maps`.`link`, `maps`.`comments`, `maps`.`gameid` FROM `maps` WHERE `maps`.`id` = :id");
                 $selectMapData->bindValue("id", $id, PDO::PARAM_INT);
                 $selectMapData->execute();
 
-                $mapData = $selectMapData->fetch();
+                $mapdata = $selectMapData->fetch();
 
             } catch (PDOException $e) {
 
                 die("Query failed.");
 
             }
-
-            $mapdata = array("id" => $mapData["id"],
-                             "name" => $mapData["name"],
-                             "text" => $mapData["text"],
-                             "dl" => $mapData["dl"],
-                             "link" => $mapData["link"],
-                             "comments" => $mapData["comments"],
-                             "gameid" => $mapData["gameid"]);
 
             try {
 
@@ -142,7 +136,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             }
 
-            if ($mapData["comments"] == 0) {
+            if ($mapdata["comments"] == 0) {
 
                 try {
 
@@ -393,9 +387,9 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         $maps = array();
 
-        while ($mapData = $selectMapData->fetch()) {
+        while ($mapdata = $selectMapData->fetch()) {
 
-            $maps[] = array("id" => $mapData["id"], "name" => $mapData["name"]);
+            $maps[] = array("id" => $mapdata["id"], "name" => $mapdata["name"]);
 
         }
 

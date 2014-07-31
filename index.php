@@ -22,8 +22,6 @@ cookieCheck();
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
-include_once("inc/analyticstracking.php");
-
 $someoneIsLive = isAnyoneLive();
 
 try {
