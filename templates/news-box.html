@@ -4,11 +4,11 @@
 
 {% if main %}
 
-    {{ new.title }}
+    <a href='/news/{{ new.stringid }}/'>{{ new.title }}</a>
 
 {% else %}
 
-    <a href='/news/{{ new.stringid }}/'>{{ new.title }}</a>
+    {{ new.title }}
 
 {% endif %}
 
@@ -17,7 +17,7 @@
 
 <div class='article-metadata'>
 
-{% if not main and new.comments %}
+{% if main and new.comments %}
 
     {% if new.commentcount != 1 %}
         <span class='article-metadata-item'><a href='/news/{{ new.stringid }}/#comments'>{{ new.commentcount }} comments</a></span>
@@ -44,27 +44,7 @@
 <article>
 <span class='article-text'>
     {% autoescape false %}
-            {{ new.text | markdown }}
+        {{ new.text | markdown }}
     {% endautoescape %}
 </span>
 </article>
-
-{% if not main %}
-
-    <hr class='article-separator'>
-
-{% else %}
-
-    <hr id='comments'>
-
-    {% if not new.comments %}
-
-        <h1 class='comments-title'>Commenting disabled</h1>
-
-    {% else %}
-
-        <!-- require the related forum thread -->
-
-    {% endif %}
-
-{% endif %}

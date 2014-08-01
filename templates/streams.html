@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<ul class='stream-menu'>
+{% for stream in streams %}
+    <a href='/streams/{{ stream.author }}/'>
+
+    {% if stream.id == selectedid %}
+        {% if stream.live %}
+            <li class='stream-button stream-button-selected stream-live'>
+        {% else %}
+            <li class='stream-button stream-button-selected'>
+        {% endif %}
+    {% else %}
+        {% if stream.live %}
+            <li class='stream-button stream-live'>
+        {% else %}
+            <li class='stream-button'>
+        {% endif %}
+    {% endif %}
+
+    {{ stream.author }}</li>
+    </a>
+{% else %}
+    <p>There are no active streams.</p>
+{% endfor %}
+</ul>
+{% if selectedid %}
+
+    {% set stream = attribute(streams, selectedid) %}
+
+    {% include 'stream-main.html' %}
+
+{% endif %}
+
+{% endblock %}

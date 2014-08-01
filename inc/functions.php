@@ -88,7 +88,7 @@ function twigInit() {
 
     Twig_Autoloader::register();
 
-    $loader = new Twig_Loader_Filesystem(str_repeat("../", $r_c) . "inc/templates");
+    $loader = new Twig_Loader_Filesystem(str_repeat("../", $r_c) . "templates");
     $twig = new Twig_Environment($loader);
 
     return $twig;

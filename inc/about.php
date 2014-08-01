@@ -33,7 +33,7 @@ try {
 
     }
 
-    echo $twig->render("about.html", array("description" => $description, "abouts" => $abouts));
+    echo $twig->render("about.html", array("index_var" => $index_var, "description" => $description, "abouts" => $abouts));
 
 } catch (PDOException $e) {
 

@@ -1,6 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<script src='/js/maps.js'></script>
+
 <ul class='stream-menu'>
 {% for map in maps %}
-<a href='#{{ map.name }}'><li class='stream-button'>{{ map.name }}</li></a>
+    <a href='#{{ map.name }}'><li class='stream-button'>{{ map.name }}</li></a>
 {% endfor %}
 </ul>
 
@@ -76,3 +82,5 @@
 {% else %}
     <p>There are no maps.</p>
 {% endfor %}
+
+{% endblock %}

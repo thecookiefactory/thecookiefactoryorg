@@ -1,13 +1,13 @@
 <style type='text/css' scoped>
-    {% for category in categories %}
+  {% for category in categories %}
 
-    .forums-category-{{ category.name}} {
+    .forums-category-{{ category.name }} {
         background-color: #{{ category.hexcode }};
     }
 
-    .forums-category-{{ category.name}}:hover {
+    .forums-category-{{ category.name }}:hover {
         background-color: #{{ category.hoverhexcode }};
     }
 
-    {% endfor %}
+  {% endfor %}
 </style>

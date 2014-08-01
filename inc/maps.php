@@ -8,12 +8,6 @@ $maps = array();
 
 $_SESSION["lp"] = "maps";
 
-?>
-
-<script src='/js/maps.js'></script>
-
-<?php
-
 try {
 
     $selectMaps = $con->query("SELECT `maps`.`id` FROM `maps` ORDER BY `maps`.`id` DESC");
@@ -26,7 +20,7 @@ try {
 
     }
 
-    echo $twig->render("maps.html", array("maps" => $maps));
+    echo $twig->render("maps.html", array("index_var" => $index_var, "maps" => $maps));
 
 } catch (PDOException $e) {
 

@@ -45,7 +45,7 @@ try {
 
 $loginReturn = $user->login();
 
-echo $twig->render("index-top.html", array("canonical" => canonical(), "pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn));
+$index_var = array("canonical" => canonical(), "pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn);
 
 if (isset($_GET["p"]) && vf($_GET["p"])) {
 
@@ -70,8 +70,6 @@ if (isset($_GET["p"]) && vf($_GET["p"])) {
     require_once "inc/maps.php";
 
 }
-
-echo $twig->render("index-bottom.html");
 
 function cookieCheck() {
 

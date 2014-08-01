@@ -10,4 +10,4 @@ $page = new custompage(strip($_GET["p"]));
 
 $pagea = $page->returnArray();
 
-echo $twig->render("custom.html", $pagea);
+echo $twig->render("custom.html", array("index_var" => $index_var, "pagedata" => $pagea));

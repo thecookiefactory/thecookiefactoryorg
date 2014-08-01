@@ -48,4 +48,4 @@ if (isset($_GET["id"])) {
 
 }
 
-echo $twig->render("streams.html", array("streams" => $streams, "selectedid" => $selectedId));
+echo $twig->render("streams.html", array("index_var" => $index_var, "streams" => $streams, "selectedid" => $selectedId));

@@ -301,6 +301,7 @@ class forumthread extends master {
     protected function addForm() {
 
         global $con;
+        global $index_var;
         global $twig;
 
         $categories = array();
@@ -322,7 +323,7 @@ class forumthread extends master {
 
         }
 
-        echo $twig->render("forum-add.html", array("categories" => $categories));
+        echo $twig->render("forum-add.html", array("index_var" => $index_var, "categories" => $categories));
 
     }
 
@@ -496,6 +497,7 @@ class forumthread extends master {
     protected function editForm() {
 
         global $con;
+        global $index_var;
         global $twig;
         global $user;
 
@@ -518,7 +520,7 @@ class forumthread extends master {
 
         }
 
-        echo $twig->render("forum-edit.html", array("categories" => $categories, "currentcategory" => $this->forumcategory->getId(), "ispost" => false, "userisadmin" => $user->isAdmin(), "thread" => $this->returnArray()));
+        echo $twig->render("forum-edit.html", array("index_var" => $index_var, "categories" => $categories, "currentcategory" => $this->forumcategory->getId(), "ispost" => false, "userisadmin" => $user->isAdmin(), "thread" => $this->returnArray()));
 
     }
 
