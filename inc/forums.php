@@ -2,7 +2,6 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 require_once "inc/classes/forumthread.class.php";
 
 $_SESSION["lp"] = $p;
@@ -50,7 +49,7 @@ if ($action == "add" && $user->isReal()) {
 
             $thread->commentProcess();
 
-            echo $twig->render("forum-main.html", array("thread" => $thread->returnArray("main"), "loggedin" => $user->isReal()));
+            echo $twig->render("forums.html", array("index_var" => $index_var, "thread" => $thread->returnArray("main"), "loggedin" => $user->isReal(), "main" => false));
 
         } else {
 
@@ -125,7 +124,7 @@ if ($action == "add" && $user->isReal()) {
 
         }
 
-        echo $twig->render("forums.html", array("categories" => $categories, "loggedin" => $user->isReal(), "categoryfilter" => $categoryFilter, "threads" => $threads));
+        echo $twig->render("forums.html", array("index_var" => $index_var, "categories" => $categories, "loggedin" => $user->isReal(), "categoryfilter" => $categoryFilter, "threads" => $threads, "main" => true));
 
     }
 

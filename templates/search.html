@@ -1,3 +1,7 @@
+{% extends "index.html" %}
+
+{% block content %}
+
 {% if termlen > 50 %}
 
     <div class='search-title'>Please enter a keyword shorter than 50 characters.</div>
@@ -65,3 +69,5 @@
     {% endif %}
 
 {% endif %}
+
+{% endblock %}

@@ -2,7 +2,6 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 
 if (isset($_POST["submit"])) {
 
@@ -12,4 +11,4 @@ if (isset($_POST["submit"])) {
 
 }
 
-echo $twig->render("register.html", array("sessionisset" => isset($_SESSION["steamid"]), "isloggedin" => $user->isReal()));
+echo $twig->render("register.html", array("index_var" => $index_var, "sessionisset" => isset($_SESSION["steamid"]), "isloggedin" => $user->isReal()));

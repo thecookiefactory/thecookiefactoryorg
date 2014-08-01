@@ -204,10 +204,11 @@ class forumpost extends master {
 
     protected function editForm() {
 
+        global $index_var;
         global $twig;
         global $user;
 
-        echo $twig->render("forum-edit.html", array("ispost" => true, "userisadmin" => $user->isAdmin(), "post" => $this->returnArray(), "thread" => array("id" => $this->threadid)));
+        echo $twig->render("forum-edit.html", array("index_var" => $index_var, "ispost" => true, "userisadmin" => $user->isAdmin(), "post" => $this->returnArray(), "thread" => array("id" => $this->threadid)));
 
     }
 

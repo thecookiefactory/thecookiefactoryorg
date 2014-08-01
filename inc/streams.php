@@ -2,7 +2,6 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 require_once "classes/stream.class.php";
 
 $streams = array();
@@ -49,4 +48,4 @@ if (isset($_GET["id"])) {
 
 }
 
-echo $twig->render("streams.html", array("streams" => $streams, "selectedid" => $selectedId));
+echo $twig->render("streams.html", array("index_var" => $index_var, "streams" => $streams, "selectedid" => $selectedId));

@@ -1,3 +1,7 @@
+{% extends "index.html" %}
+
+{% block content %}
+
 <form action='/forums/add/' method='post'>
     <label class='forums-newpost-select-label' for='cat'>Category:
     <select class='forums-newpost-select' name='cat'>
@@ -25,3 +29,5 @@
 </div>
 
 </form>
+
+{% endblock %}

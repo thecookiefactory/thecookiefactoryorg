@@ -2,7 +2,6 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 require_once "inc/classes/forumthread.class.php";
 require_once "inc/classes/news.class.php";
 
@@ -133,7 +132,7 @@ if (isset($_GET["term"]) && vf($_GET["term"])) {
 
 }
 
-echo $twig->render("search.html", array("categories" => $categories, "news" => $newsArray, "resultbutton" => resultbutton(), "resultsfound" => $resultsFound, "searchtype" => $searchType, "term" => $term, "termlen" => $termlen, "threads" => $threadArray));
+echo $twig->render("search.html", array("index_var" => $index_var, "categories" => $categories, "news" => $newsArray, "resultbutton" => resultbutton(), "resultsfound" => $resultsFound, "searchtype" => $searchType, "term" => $term, "termlen" => $termlen, "threads" => $threadArray));
 
 function resultbutton() {
 

@@ -2,18 +2,11 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 require_once "inc/classes/map.class.php";
 
 $maps = array();
 
 $_SESSION["lp"] = "maps";
-
-?>
-
-<script src='/js/maps.js'></script>
-
-<?php
 
 try {
 
@@ -27,7 +20,7 @@ try {
 
     }
 
-    echo $twig->render("maps.html", array("maps" => $maps));
+    echo $twig->render("maps.html", array("index_var" => $index_var, "maps" => $maps));
 
 } catch (PDOException $e) {
 

@@ -1,5 +1,9 @@
+{% extends "index.html" %}
+
+{% block content %}
+
 <form action='/forums/edit/{{ thread.id }}/{% if ispost %}{{ post.id }}/{% endif %}' method='post'>
-    {% if not ispost %}
+  {% if not ispost %}
     <label class='forums-newpost-select-label' for='cat'>Category:
     <select class='forums-newpost-select' name='cat'>
 
@@ -11,21 +15,21 @@
 
     </select>
     </label>
-    {% endif %}
+  {% endif %}
 <input class='forums-newpost-submit forums-edit-submit' type='submit' name='edit' value='Submit &#x27A8;'>
-    {% if not ispost %}
+  {% if not ispost %}
     <h1>
         <input class='forums-newpost-title' type='text' name='title' autofocus required placeholder='Enter a title here...' maxlength='37' value='{{ thread.title | raw }}'>
     </h1>
-    {% endif %}
+  {% endif %}
 <div class='forums-post'>
     <div class='forums-post-header'>
         <div class='forums-post-number'>
-            {% if ispost %}
+          {% if ispost %}
             #N
-            {% else %}
+          {% else %}
             #1
-            {% endif %}
+          {% endif %}
         </div>
     </div>
     <div>
@@ -45,3 +49,5 @@
 {% endif %}
 
 </form>
+
+{% endblock %}

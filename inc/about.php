@@ -2,7 +2,6 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
 require_once "inc/classes/about.class.php";
 
 $abouts = array();
@@ -34,7 +33,7 @@ try {
 
     }
 
-    echo $twig->render("about.html", array("description" => $description, "abouts" => $abouts));
+    echo $twig->render("about.html", array("index_var" => $index_var, "description" => $description, "abouts" => $abouts));
 
 } catch (PDOException $e) {
 

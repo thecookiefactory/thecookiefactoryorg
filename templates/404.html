@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class='notfound-box'></div>
+<div class='notfound-quote'>
+    <span class='notfound-quote-text'>&bdquo;{% autoescape false %}{{ message }}{% endautoescape %}&ldquo;</span>
+    <br>
+    <span class='notfound-quote-data'>&mdash;thecookiefactory, {{ date.month }} {{ date.mday }}, {{ date.year }}</span>
+</div>
+
+{% endblock %}
