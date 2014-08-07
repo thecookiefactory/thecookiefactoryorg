@@ -39,7 +39,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $name = strip($_POST["name"]);
             $game = strip($_POST["game"]);
-            $text = strip($_POST["text"]);
+            $text = strip($_POST["text"], true);
             $download = strip($_POST["download"]);
             $link = strip($_POST["link"]);
             $authorid = strip($_POST["authorid"]);
@@ -269,7 +269,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
             $name = strip($_POST["name"]);
             $author = $user->getId();
             $game = strip($_POST["game"]);
-            $text = strip($_POST["text"]);
+            $text = strip($_POST["text"], true);
             $download = strip($_POST["download"]);
 
             if (isset($_POST["topicname"]) && vf($_POST["topicname"]) && vf($_POST["topiccat"]) && vf($_POST["topictext"])) {

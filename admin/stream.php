@@ -15,7 +15,7 @@ $twig = twigInit();
 if (isset($_POST["submit"])) {
 
     $twitchname = strip($_POST["twitchname"]);
-    $description = strip($_POST["description"]);
+    $description = strip($_POST["description"], true);
 
     if (isset($_POST["active"]) && $_POST["active"] == "on") {
 

@@ -52,12 +52,18 @@ try {
 
 }
 
-function strip($x) {
+function strip($x, $uses_markdown = false) {
 
     global $con;
 
     $x = trim($x);
-    $x = htmlspecialchars($x, ENT_QUOTES, "UTF-8");
+
+    if (!$uses_markdown) {
+
+        $x = htmlspecialchars($x, ENT_QUOTES, "UTF-8");
+
+    }
+
     return $x;
 
 }

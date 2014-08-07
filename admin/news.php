@@ -45,7 +45,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                     $title = strip($_POST["title"]);
                     $editorid = $user->getId();
-                    $text = strip($_POST["text"]);
+                    $text = strip($_POST["text"], true);
 
                     if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
 
@@ -206,7 +206,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
             $title = strip($_POST["title"]);
             $author = $user->getId();
-            $text = strip($_POST["text"]);
+            $text = strip($_POST["text"], true);
 
             if (isset($_POST["comments"]) && $_POST["comments"] == "on") {
 
