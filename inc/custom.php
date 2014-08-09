@@ -2,7 +2,7 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once "inc/classes/custompage.class.php";
+require_once "classes/custompage.class.php";
 
 $_SESSION["lp"] = $p;
 

@@ -4,7 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
-require_once "../inc/classes/user.class.php";
+require_once "../classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 

@@ -2,11 +2,11 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once str_repeat("../", $r_c) . "inc/classes/dtime.class.php";
-require_once str_repeat("../", $r_c) . "inc/classes/forumthread.class.php";
-require_once str_repeat("../", $r_c) . "inc/classes/game.class.php";
-require_once str_repeat("../", $r_c) . "inc/classes/picture.class.php";
-require_once str_repeat("../", $r_c) . "inc/classes/user.class.php";
+require_once str_repeat("../", $r_c) . "classes/dtime.class.php";
+require_once str_repeat("../", $r_c) . "classes/forumthread.class.php";
+require_once str_repeat("../", $r_c) . "classes/game.class.php";
+require_once str_repeat("../", $r_c) . "classes/picture.class.php";
+require_once str_repeat("../", $r_c) . "classes/user.class.php";
 
 /**
  * map class

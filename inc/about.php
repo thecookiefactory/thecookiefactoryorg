@@ -2,7 +2,7 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once "inc/classes/about.class.php";
+require_once "classes/about.class.php";
 
 $abouts = array();
 

@@ -2,8 +2,8 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once "inc/classes/forumthread.class.php";
-require_once "inc/classes/news.class.php";
+require_once "classes/forumthread.class.php";
+require_once "classes/news.class.php";
 
 $newsArray = array();
 

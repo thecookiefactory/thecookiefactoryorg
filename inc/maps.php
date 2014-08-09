@@ -2,7 +2,7 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-require_once "inc/classes/map.class.php";
+require_once "classes/map.class.php";
 
 $maps = array();
 
