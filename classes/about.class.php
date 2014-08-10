@@ -1,48 +1,26 @@
 <?php
 
-if (!isset($r_c)) header("Location: /notfound.php");
+if (!isset($r_c)) header('Location: /notfound.php');
 
-require_once str_repeat("../", $r_c) . "classes/user.class.php";
+require_once str_repeat('../', $r_c) . 'classes/user.class.php';
 
-/**
- * about page class
- *
- * function __construct
- *
- * function returnArray
- */
 class about extends master {
 
-    /**
-     * variables
-     *
-     * @var $id int
-     * @var $user object
-     * @var $firstname string
-     * @var $lastname string
-     * @var $description string
-     * @var $website string
-     * @var $email string
-     * @var $github string
-     * @var $twitter string
-     * @var $twitch string
-     * @var $youtube string
-     * @var $steam string
-     * @var $reddit string
-     */
-    protected $id           = null;
-    protected $user         = null;
-    protected $firstname    = null;
-    protected $lastname     = null;
-    protected $description  = null;
-    protected $website      = null;
-    protected $email        = null;
-    protected $github       = null;
-    protected $twitter      = null;
-    protected $twitch       = null;
-    protected $youtube      = null;
-    protected $steam        = null;
-    protected $reddit       = null;
+    protected $id          = null;
+    protected $user        = null;
+    protected $firstName   = null;
+    protected $lastName    = null;
+    protected $description = null;
+    protected $linkList = array(
+        'website' => null,
+        'email'   => null,
+        'github'  => null,
+        'twitter' => null,
+        'twitch'  => null,
+        'youtube' => null,
+        'steam'   => null,
+        'reddit'  => null
+    );
 
     public function __construct($userid = null) {
 
@@ -52,37 +30,132 @@ class about extends master {
 
             try {
 
-                $squery = $con->prepare("SELECT * FROM `about` WHERE `about`.`userid` = :userid");
-                $squery->bindValue("userid", $userid, PDO::PARAM_STR);
-                $squery->execute();
+                $getAboutData = $con->prepare('
+                    SELECT *
+                    FROM `about`
+                    WHERE `about`.`userid` = :userid
+                ');
+                $getAboutData->bindValue('userid', $userid, PDO::PARAM_STR);
+                $getAboutData->execute();
 
             } catch (PDOException $e) {
 
-                die("An error occured while trying to fetch data to the class.");
+                die('Could not get data for the about class.');
 
             }
 
-            if ($squery->rowCount() == 1) {
+            if ($getAboutData->rowCount() == 1) {
 
-                $srow = $squery->fetch();
+                $aboutData = $getAboutData->fetch();
 
-                $this->id           = $srow["id"];
-                $this->user         = new user($srow["userid"]);
-                $this->firstname    = $srow["firstname"];
-                $this->lastname     = $srow["lastname"];
-                $this->description  = $srow["description"];
-                $this->website      = ($srow["website"] != null) ? $srow["website"] : null;
-                $this->email        = ($srow["email"] != null) ? $srow["email"] : null;
-                $this->github       = ($srow["github"] != null) ? $srow["github"] : null;
-                $this->twitter      = ($srow["twitter"] != null) ? $srow["twitter"] : null;
-                $this->twitch       = ($srow["twitch"] != null) ? $srow["twitch"] : null;
-                $this->youtube      = ($srow["youtube"] != null) ? $srow["youtube"] : null;
-                $this->steam        = ($srow["steam"] != null) ? $srow["steam"] : null;
-                $this->reddit       = ($srow["reddit"] != null) ? $srow["reddit"] : null;
+                $this->id           = $aboutData['id'];
+                $this->user         = new user($aboutData['userid']);
+                $this->firstName    = $aboutData['firstname'];
+                $this->lastName     = $aboutData['lastname'];
+                $this->description  = $aboutData['description'];
+
+                foreach (array_keys($this->linkList) as $key) {
+
+                    $this->linkList[$key] = ($aboutData[$key] != null) ? $aboutData[$key] : null;
+
+                }
 
             } else {
 
-                echo "Could not find an about with the given id.";
+                die('Could not find an about with the given id.');
+
+            }
+
+        }
+
+    }
+
+    public function update($description, $linkList = null) {
+
+        global $con;
+
+        $this->description = strip($description);
+
+        try {
+
+            $updateDescription = $con->prepare('
+                UPDATE `about`
+                SET `about`.`description` = :description
+                WHERE `about`.`id` = :id
+            ');
+            $updateDescription->bindValue('description', $this->description, PDO::PARAM_STR);
+            $updateDescription->bindValue('id', $this->id, PDO::PARAM_INT);
+            $updateDescription->execute();
+
+            if ($linkList == null) {
+
+                return 'descsuccess';
+
+            }
+
+        } catch (PDOException $e) {
+
+            die('Failed to update the description.');
+
+        }
+
+        if ($linkList != null) {
+
+            $linkcount = 0;
+
+            foreach ($linkList as $key => $value) {
+
+                if (vf($value)) {
+
+                    $this->linkList[$key] = strip($value);
+
+                    $linkcount++;
+
+                } else {
+
+                    $this->linkList[$key] = null;
+
+                }
+
+            }
+
+            if ($linkcount > 6) {
+
+                return 'toomuch';
+
+            } else {
+
+                try {
+
+                    $updateLinks = $con->prepare('
+                        UPDATE `about`
+                        SET `about`.`website` = :website,
+                          `about`.`email` = :email,
+                          `about`.`github` = :github,
+                          `about`.`twitter` = :twitter,
+                          `about`.`twitch` = :twitch,
+                          `about`.`youtube` = :youtube,
+                          `about`.`steam` = :steam,
+                          `about`.`reddit` = :reddit
+                        WHERE `about`.`id` = :id
+                    ');
+
+                    foreach ($this->linkList as $key => $value) {
+
+                        $updateLinks->bindValue($key, $value, PDO::PARAM_STR);
+
+                    }
+
+                    $updateLinks->bindValue('id', $this->id, PDO::PARAM_INT);
+                    $updateLinks->execute();
+
+                    return 'success';
+
+                } catch (PDOException $e) {
+
+                    die('Failed to update your links.');
+
+                }
 
             }
 
@@ -92,24 +165,25 @@ class about extends master {
 
     public function returnArray() {
 
-        $a = array(
-                    "username" => $this->user->getName(),
-                    "firstname" => $this->firstname,
-                    "lastname" => $this->lastname,
-                    "description" => $this->description,
-                    "links" => array()
-                    );
+        $returnee = array(
+            'username' => $this->user->getName(),
+            'firstname' => $this->firstName,
+            'lastname' => $this->lastName,
+            'description' => $this->description,
+            'linkList' => array()
+        );
 
-        if ($this->website != null) $a["links"]["website"] = $this->website;
-        if ($this->email != null) $a["links"]["email"] = $this->email;
-        if ($this->github != null) $a["links"]["github"] = $this->github;
-        if ($this->twitter != null) $a["links"]["twitter"] = $this->twitter;
-        if ($this->twitch != null) $a["links"]["twitch"] = $this->twitch;
-        if ($this->youtube != null) $a["links"]["youtube"] = $this->youtube;
-        if ($this->steam != null) $a["links"]["steam"] = $this->steam;
-        if ($this->reddit != null) $a["links"]["reddit"] = $this->reddit;
+        foreach ($this->linkList as $key => $value) {
 
-        return $a;
+            if ($this->linkList[$key] != null) {
+
+                $returnee['linkList'][$key] = $value;
+
+            }
+
+        }
+
+        return $returnee;
 
     }
 

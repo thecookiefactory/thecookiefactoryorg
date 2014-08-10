@@ -1,42 +1,37 @@
 <?php
 
-if (!isset($r_c)) header("Location: /notfound.php");
+if (!isset($r_c)) header('Location: /notfound.php');
 
-require_once "classes/about.class.php";
+require_once 'classes/about.class.php';
 
-$abouts = array();
+$aboutList = array();
 
-$_SESSION["lp"] = $p;
+$_SESSION['lp'] = $p;
 
-try {
-
-    $selectdesc = $con->query("SELECT `about`.`description` FROM `about` WHERE `about`.`userid` = 1");
-    $desc = $selectdesc->fetch();
-
-    $description = $desc["description"];
-
-} catch (PDOException $e) {
-
-    die("Failed to execute the query.");
-
-}
+$groupAbout = new about(1);
+$description = $groupAbout->returnArray()['description'];
 
 try {
 
-    $selectAbout = $con->query("SELECT `users`.`id` FROM `users` WHERE `users`.`admin` = 1 AND `users`.`id` <> 1 ORDER BY `users`.`name` ASC");
+    $getAdmins = $con->query('
+        SELECT `users`.`id`
+        FROM `users`
+        WHERE `users`.`admin` = 1 AND `users`.`id` <> 1
+        ORDER BY `users`.`name` ASC
+    ');
 
-    while ($foundUsers = $selectAbout->fetch()) {
+    while ($admin = $getAdmins->fetch()) {
 
-        $about = new about($foundUsers["id"]);
+        $about = new about($admin['id']);
 
-        $abouts[] = $about->returnArray();
+        $aboutList[] = $about->returnArray();
 
     }
 
-    echo $twig->render("about.html", array("index_var" => $index_var, "description" => $description, "abouts" => $abouts));
-
 } catch (PDOException $e) {
 
-    echo "An error occurred while trying to fetch data.";
+    echo 'An error occurred while trying to fetch data.';
 
 }
+
+echo $twig->render('about.html', array('index_var' => $index_var, 'description' => $description, 'aboutList' => $aboutList));
