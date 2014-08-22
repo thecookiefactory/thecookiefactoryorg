@@ -1,30 +1,12 @@
 <?php
 
-if (!isset($r_c)) header("Location: /notfound.php");
+if (!isset($r_c)) header('Location: /notfound.php');
 
-require_once str_repeat("../", $r_c) . "classes/dtime.class.php";
-require_once str_repeat("../", $r_c) . "classes/master.class.php";
+require_once str_repeat('../', $r_c) . 'classes/dtime.class.php';
+require_once str_repeat('../', $r_c) . 'classes/master.class.php';
 
-/**
- * custom page class
- *
- * function __construct
- *
- * function display
- */
 class custompage extends master {
 
-    /**
-     * variables
-     *
-     * @var $id int
-     * @var $title string
-     * @var $text string
-     * @var $date object
-     * @var $editdate object
-     * @var $live int
-     * @var $stringid string
-     */
     protected $id       = null;
     protected $title    = null;
     protected $text     = null;
@@ -33,57 +15,43 @@ class custompage extends master {
     protected $live     = null;
     protected $stringid = null;
 
-    public function __construct($stringid = null, $field = null) {
+    public function __construct($stringid = null) {
 
         global $con;
 
         if ($stringid != null) {
 
-            if ($field == "id") {
+            try {
 
-                try {
+                $getPageData = $con->prepare('
+                    SELECT *, BIN(`custompages`.`live`)
+                    FROM `custompages`
+                    WHERE `custompages`.`stringid` = :stringid
+                ');
+                $getPageData->bindValue('stringid', $stringid, PDO::PARAM_STR);
+                $getPageData->execute();
 
-                    $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`id` = :stringid");
-                    $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
-                    $squery->execute();
+            } catch (PDOException $e) {
 
-                } catch (PDOException $e) {
-
-                    die("An error occured while trying to fetch data to the class.");
-
-                }
-
-            } else {
-
-                try {
-
-                    $squery = $con->prepare("SELECT *, BIN(`custompages`.`live`) FROM `custompages` WHERE `custompages`.`stringid` = :stringid");
-                    $squery->bindValue("stringid", $stringid, PDO::PARAM_STR);
-                    $squery->execute();
-
-                } catch (PDOException $e) {
-
-                    die("An error occured while trying to fetch data to the class.");
-
-                }
+                die('Could not get data for the custom page.');
 
             }
 
-            if ($squery->rowCount() == 1) {
+            if ($getPageData->rowCount() == 1) {
 
-                $srow = $squery->fetch();
+                $pageData = $getPageData->fetch();
 
-                $this->id       = $srow["id"];
-                $this->title    = $srow["title"];
-                $this->text     = $srow["text"];
-                $this->date     = new dtime($srow["date"]);
-                $this->editdate = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
-                $this->live     = (int) $srow["BIN(`custompages`.`live`)"];
-                $this->stringid = $srow["stringid"];
+                $this->id       = $pageData['id'];
+                $this->title    = $pageData['title'];
+                $this->text     = $pageData['text'];
+                $this->date     = new dtime($pageData['date']);
+                $this->editdate = ($pageData['editdate'] != null) ? new dtime($pageData['editdate']) : null;
+                $this->live     = (int) $pageData['BIN(`custompages`.`live`)'];
+                $this->stringid = $pageData['stringid'];
 
             } else {
 
-                echo "Could not find a page with the given id.";
+                echo 'Could not find a custom page with the given id.';
 
             }
 
@@ -91,17 +59,78 @@ class custompage extends master {
 
     }
 
+    public function create($stringid = null) {
+
+        global $con;
+
+        if ($this->id == null) {
+
+            $this->stringid = strip($stringid);
+
+            try {
+
+                $createPage = $con->prepare('
+                    INSERT INTO `custompages`
+                    VALUES(DEFAULT, "", "", DEFAULT, DEFAULT, DEFAULT, :stringid)
+                ');
+                $createPage->bindValue('stringid', $this->stringid, PDO::PARAM_STR);
+                $createPage->execute();
+
+            } catch (PDOException $e) {
+
+                die('Failed to create the page.');
+
+            }
+
+        }
+
+    }
+
+    public function update($title, $text, $live, $stringid) {
+
+        global $con;
+
+        $this->title = strip($title);
+        $this->text = strip($text);
+        $this->live = strip($live);
+        $this->stringid = strip($stringid);
+
+        try {
+
+            $updatePage = $con->prepare('
+                UPDATE `custompages`
+                SET `custompages`.`title` = :title,
+                    `custompages`.`text` = :text,
+                    `custompages`.`live` = :live,
+                    `custompages`.`stringid` = :stringid
+                WHERE `custompages`.`id` = :id
+            ');
+            $updatePage->bindValue('title', $this->title, PDO::PARAM_STR);
+            $updatePage->bindValue('text', $this->text, PDO::PARAM_STR);
+            $updatePage->bindValue('live', $this->live, PDO::PARAM_INT);
+            $updatePage->bindValue('stringid', $this->stringid, PDO::PARAM_STR);
+            $updatePage->bindValue('id', $this->id, PDO::PARAM_INT);
+            $updatePage->execute();
+
+        } catch (PDOException $e) {
+
+            die('Failed to update the page.');
+
+        }
+
+    }
+
     public function returnArray() {
 
-        $a = array(
-                    "id" => $this->id,
-                    "title" => $this->title,
-                    "text" => $this->text,
-                    "live" => $this->live,
-                    "stringid" => $this->stringid
-                    );
+        $returnee = array(
+            'id' => $this->id,
+            'title' => $this->title,
+            'text' => $this->text,
+            'live' => $this->live,
+            'stringid' => $this->stringid
+        );
 
-        return $a;
+        return $returnee;
 
     }
 

@@ -1,13 +1,12 @@
 <?php
 
-ob_start("ob_gzhandler");
+ob_start('ob_gzhandler');
 
 session_start();
 
 $r_c = 0;
-require_once "inc/functions.php";
-require_once "classes/master.class.php";
-require_once "classes/user.class.php";
+require_once 'inc/functions.php';
+require_once 'classes/user.class.php';
 
 $twig = twigInit();
 
@@ -20,54 +19,58 @@ $twig->addExtension(new MarkdownExtension($engine));
 
 cookieCheck();
 
-$user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
+$user = new user((isset($_SESSION['userid']) ? $_SESSION['userid'] : null));
 
 $someoneIsLive = isAnyoneLive();
 
 try {
 
-    $squery = $con->query("SELECT `custompages`.`title`, `custompages`.`stringid` FROM `custompages` WHERE BIN(`custompages`.`live`) = 1");
+    $squery = $con->query('
+        SELECT `custompages`.`title`, `custompages`.`stringid`
+        FROM `custompages`
+        WHERE BIN(`custompages`.`live`) = 1
+    ');
 
     $pages = array();
 
     while ($srow = $squery->fetch()){
 
-        $pages[] = array("title" => $srow["title"], "stringid" => $srow["stringid"]);
-        $pageids[] = $srow["stringid"];
+        $pages[] = array('title' => $srow['title'], 'stringid' => $srow['stringid']);
+        $pageids[] = $srow['stringid'];
 
     }
 
 } catch (PDOException $e) {
 
-    echo "An error occurred while trying to fetch the custom pages.";
+    echo 'An error occurred while trying to fetch the custom pages.';
 
 }
 
 $loginReturn = $user->login();
 
-$index_var = array("canonical" => canonical(), "pages" => $pages, "someoneislive" => $someoneIsLive, "loginreturn" => $loginReturn);
+$index_var = array('canonical' => canonical(), 'pages' => $pages, 'someoneislive' => $someoneIsLive, 'loginreturn' => $loginReturn);
 
-if (isset($_GET["p"]) && vf($_GET["p"])) {
+if (isset($_GET['p']) && vf($_GET['p'])) {
 
-    $p = strip($_GET["p"]);
+    $p = strip($_GET['p']);
 
-    if (file_exists("inc/" . $p . ".php") && $p != "functions" && $p != "config") {
+    if (file_exists('inc/' . $p . '.php') && $p != 'functions' && $p != 'config') {
 
-        require_once "inc/" . $p . ".php";
+        require_once 'inc/' . $p . '.php';
 
     } else if (in_array($p, $pageids)) {
 
-        require_once "inc/custom.php";
+        require_once 'inc/custompage.php';
 
-    } else if ($p != "login" && $p != "logout") {
+    } else if ($p != 'login' && $p != 'logout') {
 
-        header("Location: /notfound.php");
+        header('Location: /notfound.php');
 
     }
 
 } else {
 
-    require_once "inc/maps.php";
+    require_once 'inc/maps.php';
 
 }
 
@@ -75,19 +78,23 @@ function cookieCheck() {
 
     global $con;
 
-    if (isset($_COOKIE["userid"]) && !isset($_SESSION["userid"])) {
+    if (isset($_COOKIE['userid']) && !isset($_SESSION['userid'])) {
 
-        $cv = $_COOKIE["userid"];
+        $cv = $_COOKIE['userid'];
 
         try {
 
-            $squery = $con->prepare("SELECT `users`.`id` FROM `users` WHERE `users`.`cookieh` = :cv");
-            $squery->bindValue("cv", hash("sha256", $cv),  PDO::PARAM_STR);
+            $squery = $con->prepare('
+                SELECT `users`.`id`
+                FROM `users`
+                WHERE `users`.`cookieh` = :cv
+            ');
+            $squery->bindValue('cv', hash('sha256', $cv),  PDO::PARAM_STR);
             $squery->execute();
 
         } catch(PDOException $e) {
 
-            echo "Failed to fetch cookie info.";
+            echo 'Failed to fetch cookie info.';
 
         }
 
@@ -95,24 +102,28 @@ function cookieCheck() {
 
             $srow = $squery->fetch();
 
-            $_SESSION["userid"] = $srow["id"];
+            $_SESSION['userid'] = $srow['id'];
 
             $cookieh = cookieh();
 
             try {
 
-                $uquery = $con->prepare("UPDATE `users` SET `users`.`cookieh` = :cookieh WHERE `users`.`id` = :id");
-                $uquery->bindValue("cookieh", hash("sha256", $cookieh), PDO::PARAM_STR);
-                $uquery->bindValue("id", $srow["id"], PDO::PARAM_INT);
+                $uquery = $con->prepare('
+                    UPDATE `users`
+                    SET `users`.`cookieh` = :cookieh
+                    WHERE `users`.`id` = :id
+                ');
+                $uquery->bindValue('cookieh', hash('sha256', $cookieh), PDO::PARAM_STR);
+                $uquery->bindValue('id', $srow['id'], PDO::PARAM_INT);
                 $uquery->execute();
 
             } catch (PDOException $e) {
 
-                echo "Failed to update cookie info.";
+                echo 'Failed to update cookie info.';
 
             }
 
-            setcookie("userid", $cookieh, time() + 2592000, "/");
+            setcookie('userid', $cookieh, time() + 2592000, '/');
 
         }
 
@@ -126,11 +137,14 @@ function isAnyoneLive() {
 
     try {
 
-        $squery = $con->query("SELECT `streams`.`title` FROM `streams`");
+        $squery = $con->query('
+            SELECT `streams`.`title`
+            FROM `streams`
+        ');
 
         while ($srow = $squery->fetch()) {
 
-            if (vf($srow["title"])) {
+            if (vf($srow['title'])) {
 
                 return true;
 
@@ -140,7 +154,7 @@ function isAnyoneLive() {
 
     } catch (PDOException $e) {
 
-        echo "An error occurred while trying to fetch the streams.";
+        echo 'An error occurred while trying to fetch the streams.';
 
     }
 
