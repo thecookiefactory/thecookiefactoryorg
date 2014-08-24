@@ -73,4 +73,11 @@ if (isset($_POST['selectedpage'])) {
 
 }
 
-echo $twig->render('admin/custompages.html', array('mode' => $mode, 'stringids' => (isset($stringids) ? $stringids : 0), 'data' => (isset($data) ? $data : 0)));
+echo $twig->render(
+    'admin/custompages.html',
+    array(
+        'mode' => $mode,
+        'stringids' => (isset($stringids) ? $stringids : 0),
+        'data' => (isset($data) ? $data : 0)
+    )
+);

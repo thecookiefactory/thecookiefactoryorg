@@ -48,7 +48,12 @@ try {
 
 $loginReturn = $user->login();
 
-$index_var = array('canonical' => canonical(), 'pages' => $pages, 'someoneislive' => $someoneIsLive, 'loginreturn' => $loginReturn);
+$index_var = array(
+    'canonical' => canonical(),
+    'pages' => $pages,
+    'someoneislive' => $someoneIsLive,
+    'loginreturn' => $loginReturn
+);
 
 if (isset($_GET['p']) && vf($_GET['p'])) {
 

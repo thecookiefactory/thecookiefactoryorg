@@ -107,7 +107,7 @@ class custompage extends master {
             ');
             $updatePage->bindValue('title', $this->title, PDO::PARAM_STR);
             $updatePage->bindValue('text', $this->text, PDO::PARAM_STR);
-            $updatePage->bindValue('live', $this->live, PDO::PARAM_INT);
+            $updatePage->bindValue('live', (int) $this->live, PDO::PARAM_INT);
             $updatePage->bindValue('stringid', $this->stringid, PDO::PARAM_STR);
             $updatePage->bindValue('id', $this->id, PDO::PARAM_INT);
             $updatePage->execute();
