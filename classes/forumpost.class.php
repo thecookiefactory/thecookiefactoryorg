@@ -1,35 +1,12 @@
 <?php
 
-if (!isset($r_c)) header("Location: /notfound.php");
+if (!isset($r_c)) header('Location: /notfound.php');
 
-require_once str_repeat("../", $r_c) . "classes/dtime.class.php";
-require_once str_repeat("../", $r_c) . "classes/user.class.php";
+require_once str_repeat('../', $r_c) . 'classes/dtime.class.php';
+require_once str_repeat('../', $r_c) . 'classes/user.class.php';
 
-/**
- * forum post class
- *
- * function __construct
- *
- * function returnArray
- *
- * function edit
- *
- * function editProcess
- *
- * function editForm
- */
 class forumpost extends master {
 
-    /**
-     * variables
-     *
-     * @var $id int
-     * @var $text string
-     * @var $author object
-     * @var $date object
-     * @var $editdate object
-     * @var $thread object
-     */
     protected $id       = null;
     protected $text     = null;
     protected $author   = null;
@@ -45,63 +22,51 @@ class forumpost extends master {
 
             try {
 
-                $squery = $con->prepare("SELECT * FROM `forumposts` WHERE `forumposts`.`id` = :id");
-                $squery->bindValue("id", $id, PDO::PARAM_INT);
-                $squery->execute();
+                $getPostData = $con->prepare('
+                    SELECT *
+                    FROM `forumposts`
+                    WHERE `forumposts`.`id` = :id
+                ');
+                $getPostData->bindValue('id', $id, PDO::PARAM_INT);
+                $getPostData->execute();
 
             } catch (PDOException $e) {
 
-                die("An error occured while trying to fetch data to the class.");
+                die('Could not get data for the post.');
 
             }
 
-            if ($squery->rowCount() == 1) {
+            if ($getPostData->rowCount() == 1) {
 
-                $srow = $squery->fetch();
+                $postData = $getPostData->fetch();
 
-                $this->id       = $srow["id"];
-                $this->text     = $srow["text"];
-                $this->author   = new user($srow["authorid"]);
-                $this->date     = new dtime($srow["date"]);
-                $this->editdate = ($srow["editdate"] != null) ? new dtime($srow["editdate"]) : null;
-                $this->threadid = $srow["threadid"];
+                $this->id       = $postData['id'];
+                $this->text     = $postData['text'];
+                $this->author   = new user($postData['authorid']);
+                $this->date     = new dtime($postData['date']);
+                $this->editdate = ($postData['editdate'] != null) ? new dtime($postData['editdate']) : null;
+                $this->threadid = $postData['threadid'];
 
             } else {
 
-                echo "Could not find a post with the given id.";
+                echo 'Could not find a post with the given id.';
 
             }
 
         }
 
     }
-
-    public function returnArray($loc = null) {
-
-        global $user;
-
-        $thread = new forumthread($this->threadid);
-
-        $a = array(
-                    "id" => $this->id,
-                    "text" => $this->text,
-                    "author" => $this->author->getName(),
-                    "date" => $this->date->display(),
-                    "editdate" => 0,
-                    "userhasrights" => 0
-                    );
-
-        if ($loc == "main")
-            $a["text"] = tformat($this->text);
-
-        if ($this->editdate != null)
-            $a["editdate"] = $this->editdate->display();
-
-        if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin())
-            $a["userhasrights"] = 1;
-
-        return $a;
-
+    
+    public function create() {
+    
+    }
+    
+    public function update() {
+    
+    }
+    
+    public function delete() {
+    
     }
 
     public function edit() {
@@ -112,11 +77,11 @@ class forumpost extends master {
 
         if (($this->author->getId() != $user->getId() || $thread->isClosed()) && !$user->isAdmin()) {
 
-            echo "You dont have the right!!";
+            die('403');
 
         } else {
 
-            if (isset($_POST["edit"]) && (isset($_POST["text"]) && vf($_POST["text"]))) {
+            if (isset($_POST['edit']) && (isset($_POST['text']) && validField($_POST['text']))) {
 
                 $this->editProcess();
 
@@ -135,65 +100,72 @@ class forumpost extends master {
         global $con;
         global $user;
 
-        if ($user->isAdmin() && isset($_POST["delete"]) && $_POST["delete"] == "on") {
+        if ($user->isAdmin() && isset($_POST['delete']) && $_POST['delete'] == 'on') {
 
             try {
-            
-                $deletePost = $con->prepare("DELETE FROM `forumposts` WHERE `forumposts`.`id` = :pid");
-                $deletePost->bindValue("pid", $this->id, PDO::PARAM_INT);
+
+                $deletePost = $con->prepare('
+                    DELETE FROM `forumposts`
+                    WHERE `forumposts`.`id` = :postid
+                ');
+                $deletePost->bindValue('postid', $this->id, PDO::PARAM_INT);
                 $deletePost->execute();
-                
+
                 $thread = new forumthread($this->threadid);
 
                 if (!$thread->isNewsThread()) {
 
-                    header("Location: /forums/" . $this->threadid);
+                    header('Location: /forums/' . $this->threadid);
 
                 } else {
 
-                    header("Location: /news/" . $thread->getNewsStringId());
+                    header('Location: /news/' . $thread->getNewsStringId());
 
                 }
-            
+
             } catch (PDOException $e) {
-            
-                echo "An error occurred while trying to delete the post.";
-            
+
+                echo 'An error occurred while trying to delete the post.';
+
             }
 
         } else {
 
-            $text = strip($_POST["text"]);
+            $text = strip($_POST['text']);
 
             if (strlen($text) > 20000) {
 
-                echo "Your comment must be less than 20 000 characters long.";
+                echo 'Your comment must be less than 20 000 characters long.';
 
             } else {
-            
+
                 try {
-                
-                    $updatePost = $con->prepare("UPDATE `forumposts` SET `forumposts`.`text` = :text WHERE `forumposts`.`id` = :pid");
-                    $updatePost->bindValue("text", $text, PDO::PARAM_STR);
-                    $updatePost->bindValue("pid", $this->id, PDO::PARAM_INT);
+
+                    $updatePost = $con->prepare('
+                        UPDATE `forumposts`
+                        SET `forumposts`.`text` = :text
+                        WHERE `forumposts`.`id` = :postid
+                    ');
+                    $updatePost->bindValue('text', $text, PDO::PARAM_STR);
+                    $updatePost->bindValue('postid', $this->id, PDO::PARAM_INT);
                     $updatePost->execute();
 
                     $thread = new forumthread($this->threadid);
 
                     if (!$thread->isNewsThread()) {
 
-                        header("Location: /forums/" . $this->threadid);
+                        header('Location: /forums/' . $this->threadid);
 
                     } else {
 
-                        header("Location: /news/" . $thread->getNewsStringId());
+                        header('Location: /news/' . $thread->getNewsStringId());
 
                     }
-                
+
                 } catch (PDOException $e) {
-                
-                    echo "An error occurred while trying to update the post.";
-                
+
+                    echo 'An error occurred while trying to update the post.';
+
                 }
 
             }
@@ -208,7 +180,44 @@ class forumpost extends master {
         global $twig;
         global $user;
 
-        echo $twig->render("forum-edit.html", array("index_var" => $index_var, "ispost" => true, "userisadmin" => $user->isAdmin(), "post" => $this->returnArray(), "thread" => array("id" => $this->threadid)));
+        echo $twig->render(
+            'forum-edit.html',
+            array(
+                'index_var' => $index_var,
+                'ispost' => true,
+                'userisadmin' => $user->isAdmin(),
+                'post' => $this->returnArray(),
+                'thread' => array('id' => $this->threadid)
+            )
+        );
+
+    }
+
+    public function returnArray($loc = null) {
+
+        global $user;
+
+        $thread = new forumthread($this->threadid);
+
+        $returnee = array(
+            'id' => $this->id,
+            'text' => $this->text,
+            'author' => $this->author->getName(),
+            'date' => $this->date->display(),
+            'editdate' => 0,
+            'userhasrights' => 0
+        );
+
+        if ($loc == 'main')
+            $returnee['text'] = tformat($this->text);
+
+        if ($this->editdate != null)
+            $returnee['editdate'] = $this->editdate->display();
+
+        if (($user->isReal() && $this->author->getId() == $user->getId() && !$thread->isClosed()) || $user->isAdmin())
+            $returnee['userhasrights'] = 1;
+
+        return $returnee;
 
     }
 

@@ -105,7 +105,7 @@ class about extends master {
 
             foreach ($linkList as $key => $value) {
 
-                if (vf($value)) {
+                if (validField($value)) {
 
                     $this->linkList[$key] = strip($value);
 

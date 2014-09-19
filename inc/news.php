@@ -9,7 +9,7 @@ $newsArray = array();
 
 $_SESSION["lp"] = "news";
 
-if (!isset($_GET["id"]) || !vf($_GET["id"])) {
+if (!isset($_GET["id"]) || !validField($_GET["id"])) {
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
 
@@ -80,9 +80,9 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
                 $threadData = $selectThreadId->fetch();
 
-                $tid = $threadData["id"];
+                $threadId = $threadData["id"];
 
-                $thread = new forumthread($tid);
+                $thread = new forumthread($threadId);
 
             } catch (PDOException $e) {
 

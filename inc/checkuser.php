@@ -4,7 +4,7 @@ $r_c = 1;
 
 require_once "functions.php";
 
-if (vf($_GET["name"])) {
+if (validField($_GET["name"])) {
 
     try {
 

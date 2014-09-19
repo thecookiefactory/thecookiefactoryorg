@@ -55,7 +55,7 @@ $index_var = array(
     'loginreturn' => $loginReturn
 );
 
-if (isset($_GET['p']) && vf($_GET['p'])) {
+if (isset($_GET['p']) && validField($_GET['p'])) {
 
     $p = strip($_GET['p']);
 
@@ -149,7 +149,7 @@ function isAnyoneLive() {
 
         while ($srow = $squery->fetch()) {
 
-            if (vf($srow['title'])) {
+            if (validField($srow['title'])) {
 
                 return true;
 

@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends 'index.html' %}
 
 {% block content %}
 
@@ -24,7 +24,7 @@
           {% endif %}
       </div>
       <div class='map-imageroll' id='map-{{ map.id }}' onload='initialize(this.id);'>
-        <script type='text/javascript'> lendict["map-{{ map.id }}"] = {{ map.picturecount }}; initialize("map-{{ map.id }}");</script>
+        <script type='text/javascript'> lendict['map-{{ map.id }}'] = {{ map.picturecount }}; initialize('map-{{ map.id }}');</script>
         {% spaceless %}
           {% for picture in map.pictures %}
             <div class='map-image'>

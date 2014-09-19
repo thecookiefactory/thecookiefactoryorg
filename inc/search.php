@@ -12,7 +12,7 @@ $categories = array();
 $newsArray = array();
 $threadArray = array();
 
-if (isset($_GET["term"]) && vf($_GET["term"])) {
+if (isset($_GET["term"]) && validField($_GET["term"])) {
 
     $term = str_replace("%", "", $_GET["term"]);
     $term = strip($term);

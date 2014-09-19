@@ -75,7 +75,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
                             }
 
-                            if (!vf($newsData["stringid"]))
+                            if (!validField($newsData["stringid"]))
                                 generateStringid($id);
 
                         }
@@ -305,7 +305,7 @@ if (isset($_GET["action"]) && ($_GET["action"] == "edit" || $_GET["action"] == "
 
         while ($newsData = $selectNewsData->fetch()) {
 
-            if (!vf($newsData["stringid"])) {
+            if (!validField($newsData["stringid"])) {
 
                 generateStringid($newsData["id"]);
 

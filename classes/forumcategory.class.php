@@ -1,33 +1,12 @@
 <?php
 
-if (!isset($r_c)) header("Location: /notfound.php");
+if (!isset($r_c)) header('Location: /notfound.php');
 
-require_once str_repeat("../", $r_c) . "classes/dtime.class.php";
-require_once str_repeat("../", $r_c) . "classes/master.class.php";
+require_once str_repeat('../', $r_c) . 'classes/dtime.class.php';
+require_once str_repeat('../', $r_c) . 'classes/master.class.php';
 
-/**
- * forum category class
- *
- * function __construct
- *
- * function returnArray
- *
- * function getName
- *
- * function getLongName
- */
 class forumcategory extends master {
 
-    /**
-     * variables
-     *
-     * @var $id int
-     * @var $name string
-     * @var $longname string
-     * @var $hexcode string
-     * @var $hoverhexcode string
-     * @var $date object
-     */
     protected $id           = null;
     protected $name         = null;
     protected $longname     = null;
@@ -41,17 +20,21 @@ class forumcategory extends master {
 
         if ($id != null) {
 
-            if ($field == "name") {
+            if ($field == 'name') {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `forumcategories` WHERE `forumcategories`.`name` = :id");
-                    $squery->bindValue("id", $id, PDO::PARAM_STR);
-                    $squery->execute();
+                    $getCategoryData = $con->prepare('
+                        SELECT *
+                        FROM `forumcategories`
+                        WHERE `forumcategories`.`name` = :id
+                    ');
+                    $getCategoryData->bindValue('id', $id, PDO::PARAM_STR);
+                    $getCategoryData->execute();
 
                 } catch (PDOException $e) {
 
-                    die("An error occured while trying to fetch data to the class.");
+                    die('Could not get data for the category.');
 
                 }
 
@@ -59,32 +42,36 @@ class forumcategory extends master {
 
                 try {
 
-                    $squery = $con->prepare("SELECT * FROM `forumcategories` WHERE `forumcategories`.`id` = :id");
-                    $squery->bindValue("id", $id, PDO::PARAM_INT);
-                    $squery->execute();
+                    $getCategoryData = $con->prepare('
+                        SELECT *
+                        FROM `forumcategories`
+                        WHERE `forumcategories`.`id` = :id
+                    ');
+                    $getCategoryData->bindValue('id', $id, PDO::PARAM_INT);
+                    $getCategoryData->execute();
 
                 } catch (PDOException $e) {
 
-                    die("An error occured while trying to fetch data to the class.");
+                    die('Could not get data for the category.');
 
                 }
 
             }
 
-            if ($squery->rowCount() == 1) {
+            if ($getCategoryData->rowCount() == 1) {
 
-                $srow = $squery->fetch();
+                $categoryData = $getCategoryData->fetch();
 
-                $this->id           = $srow["id"];
-                $this->name         = $srow["name"];
-                $this->longname     = $srow["longname"];
-                $this->hexcode      = $srow["hexcode"];
-                $this->hoverhexcode = $srow["hoverhexcode"];
-                $this->date         = new dtime($srow["date"]);
+                $this->id           = $categoryData['id'];
+                $this->name         = $categoryData['name'];
+                $this->longname     = $categoryData['longname'];
+                $this->hexcode      = $categoryData['hexcode'];
+                $this->hoverhexcode = $categoryData['hoverhexcode'];
+                $this->date         = new dtime($categoryData['date']);
 
             } else {
 
-                echo "Could not find a category with the given id.";
+                echo 'Could not find a category with the given id.';
 
             }
 
@@ -92,17 +79,109 @@ class forumcategory extends master {
 
     }
 
+    public function create($name, $longname, $hexcode, $hoverhexcode) {
+
+        global $con;
+
+        $this->name = strip($name);
+        $this->longname = strip($longname);
+        $this->hexcode = strip($hexcode);
+        $this->hoverhexcode = strip($hoverhexcode);
+
+        try {
+
+            $insertCategory = $con->prepare('
+                INSERT INTO `forumcategories`
+                VALUES(DEFAULT, :name, :longname, :hexcode, :hoverhexcode, DEFAULT)
+            ');
+            $insertCategory->bindValue('name', $this->name, PDO::PARAM_STR);
+            $insertCategory->bindValue('longname', $this->longname, PDO::PARAM_STR);
+            $insertCategory->bindValue('hexcode', $this->hexcode, PDO::PARAM_STR);
+            $insertCategory->bindValue('hoverhexcode', $this->hoverhexcode, PDO::PARAM_STR);
+            $insertCategory->execute();
+
+        } catch (PDOException $e) {
+
+            die('Failed to add new category.');
+
+        }
+
+    }
+
+    public function update($name, $longname, $hexcode, $hoverhexcode) {
+
+        global $con;
+
+        if (!validField($name)) {
+
+            $this->delete();
+
+        } else {
+
+            $this->name = strip($name);
+            $this->longname = strip($longname);
+            $this->hexcode = strip($hexcode);
+            $this->hoverhexcode = strip($hoverhexcode);
+
+            try {
+
+                $updateCategory = $con->prepare('
+                    UPDATE `forumcategories`
+                    SET `forumcategories`.`name` = :name,
+                        `forumcategories`.`longname` = :longname,
+                        `forumcategories`.`hexcode` = :hexcode,
+                        `forumcategories`.`hoverhexcode` = :hoverhexcode
+                    WHERE `forumcategories`.`id` = :id
+                ');
+                $updateCategory->bindValue('name', $this->name, PDO::PARAM_STR);
+                $updateCategory->bindValue('longname', $this->longname, PDO::PARAM_STR);
+                $updateCategory->bindValue('hexcode', $this->hexcode, PDO::PARAM_STR);
+                $updateCategory->bindValue('hoverhexcode', $this->hoverhexcode, PDO::PARAM_STR);
+                $updateCategory->bindValue('id', $this->id, PDO::PARAM_INT);
+                $updateCategory->execute();
+
+            } catch (PDOException $e) {
+
+                die('Failed to update the category.');
+
+            }
+
+        }
+
+    }
+
+    public function delete() {
+
+        global $con;
+
+        try {
+
+            $deleteCategory = $con->prepare('
+                DELETE FROM `forumcategories`
+                WHERE `forumcategories`.`id` = :id
+            ');
+            $deleteCategory->bindValue('id', $this->id, PDO::PARAM_INT);
+            $deleteCategory->execute();
+
+        } catch (PDOException $e) {
+
+            die('Failed to delete the category.');
+
+        }
+
+    }
+
     public function returnArray() {
 
-        $a = array(
-                    "id" => $this->id,
-                    "name" => $this->name,
-                    "longname" => $this->longname,
-                    "hexcode" => $this->hexcode,
-                    "hoverhexcode" => $this->hoverhexcode
-                    );
+        $returnee = array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'longname' => $this->longname,
+            'hexcode' => $this->hexcode,
+            'hoverhexcode' => $this->hoverhexcode
+        );
 
-        return $a;
+        return $returnee;
 
     }
 
