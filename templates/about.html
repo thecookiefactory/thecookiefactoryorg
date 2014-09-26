@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<p>
+{% autoescape false %}{{ description }}{% endautoescape %}
+</p>
+
+{% for about in aboutList %}
+    <div class='about-container'>
+    <div class='about-img'><img src='/img/custom/{{ about.username | lower }}.png' alt='{{ about.username }}' class='about-img'></div>
+    <div class='about-text'>
+    <div class='about-name'>{{ about.firstname }} <span class='about-nick'>{{ about.username }}</span> {{ about.lastname }}</div>
+    <p class='about-description'>{% autoescape false %}{{ about.description }}{% endautoescape %}</p>
+    <ul class='about-contact'>
+      {% if about.linkList.website is defined %}
+        <a href='{{ about.linkList.website }}'><li>Website</li></a>
+      {% endif %}
+      {% if about.linkList.email is defined %}
+        <a href='mailto:{{ about.linkList.email }}'><li>Email</li></a>
+      {% endif %}
+      {% if about.linkList.github is defined %}
+        <a href='https://github.com/{{ about.linkList.github }}'><li>GitHub</li></a>
+      {% endif %}
+      {% if about.linkList.twitter is defined %}
+        <a href='https://twitter.com/{{ about.linkList.twitter }}'><li>Twitter</li></a>
+      {% endif %}
+      {% if about.linkList.twitch is defined %}
+        <a href='http://twitch.tv/{{ about.linkList.twitch }}'><li>Twitch</li></a>
+      {% endif %}
+      {% if about.linkList.youtube is defined %}
+        <a href='http://youtube.com/user/{{ about.linkList.youtube }}'><li>YouTube</li></a>
+      {% endif %}
+      {% if about.linkList.steam is defined %}
+        <a href='http://steamcommunity.com/id/{{ about.linkList.steam }}'><li>Steam</li></a>
+      {% endif %}
+      {% if about.linkList.reddit is defined %}
+        <a href='http://reddit.com/user/{{ about.linkList.reddit }}'><li>Reddit</li></a>
+      {% endif %}
+    </ul>
+    </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

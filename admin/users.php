@@ -4,7 +4,7 @@ session_start();
 
 $r_c = 1;
 require_once "../inc/functions.php";
-require_once "../inc/classes/user.class.php";
+require_once "../classes/user.class.php";
 
 $user = new user((isset($_SESSION["userid"]) ? $_SESSION["userid"] : null));
 
@@ -12,14 +12,22 @@ if (!$user->isAdmin()) die("403");
 
 $twig = twigInit();
 
-$selectUsers = $con->query("SELECT `users`.`id` FROM `users`");
+try {
 
-$users = array();
+    $selectUsers = $con->query("SELECT `users`.`id` FROM `users`");
 
-while ($userData = $selectUsers->fetch()) {
+    $users = array();
 
-    $aUser = new user($userData["id"]);
-    $users[] = $aUser->getName();
+    while ($userData = $selectUsers->fetch()) {
+
+        $aUser = new user($userData["id"]);
+        $users[] = array("id" => $aUser->getId(), "name" => $aUser->getName());
+
+    }
+
+} catch (PDOException $e) {
+
+    die("Failed to fetch users.");
 
 }
 

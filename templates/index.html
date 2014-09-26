@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+    <title>thecookiefactory</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+    <link rel='stylesheet' type='text/css' href='/base.css'>
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600|Roboto+Slab'>
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'>
+    <link href='//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet'>
+    {% autoescape false %}{{ index_var.canonical }}{% endautoescape %}
+</head>
+<body>
+<a href='/'>
+<header>
+
+</header>
+</a>
+
+<div class='wrapper'>
+
+<nav>
+<span class='nav-menubar'>
+<a class='menu-item' href='/maps/'>maps</a>
+<a class='menu-item' href='/news/'>news</a>
+<a class='menu-item' href='/streams/'>streams{% if index_var.someoneislive %}<sup class='menu-live-indicator'>live</sup>{% endif %}</a>
+<a class='menu-item' href='/forums/'>forums</a>
+<a class='menu-item' href='/about/'>about</a>
+{% for page in index_var.pages %}
+    <a class='menu-item' href='/{{ page.stringid }}/'>{{ page.title }}</a>
+{% endfor %}
+</span>
+
+<div class='nav-actionbar'>
+<form class='menu-item' onsubmit='searchRedirect();'>
+<input type='text' id='searchbox' name='term' style='display: inline;' class='searchbox' placeholder='search' onfocus='searchboxFocus();' onblur='searchboxBlur();' autocomplete='off' maxlength='50'>
+</form>
+
+{% autoescape false %}{{ index_var.loginreturn }}{% endautoescape %}
+
+</div>
+
+</nav>
+<hr>
+
+<section class='include-section'>
+{% block content %}
+
+{% endblock %}
+</section>
+
+</div>
+
+<footer>
+2014 thecookiefactory.org<br>
+<ul class='contact-us'>
+    <li>
+        <span class='fa-stack fa-3x'>
+            <a href='http://steamcommunity.com/groups/thecookiefactory'>
+                <i class='fa fa-steam fa-stack-1x'></i>
+            </a>
+        </span>
+    </li>
+    <li>
+        <span class='fa-stack fa-3x'>
+            <a href='http://gplus.to/thecookiefactory'>
+                <i class='fa fa-google-plus fa-stack-1x'></i>
+            </a>
+        </span>
+    </li>
+    <li>
+        <span class='fa-stack fa-3x'>
+            <a href='http://facebook.com/thecookiefactoryorg'>
+                <i class='fa fa-facebook fa-stack-1x'></i>
+            </a>
+        </span>
+    </li>
+    <li>
+        <span class='fa-stack fa-3x'>
+            <a href='http://youtube.com/thecookiefactoryorg'>
+                <i class='fa fa-youtube-play fa-stack-1x'></i>
+            </a>
+        </span>
+    </li>
+    <li>
+        <span class='fa-stack fa-3x'>
+            <a href='http://github.com/thecookiefactory'>
+                <i class='fa fa-github fa-stack-1x'></i>
+            </a>
+        </span>
+    </li>
+</ul>
+</footer>
+<script type='text/javascript'>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35387303-1']);
+    _gaq.push(['_setDomainName', 'thecookiefactory.org']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+<script>
+    var _prum = [['id', '521714aeabe53d5156000000'],
+                 ['mark', 'firstbyte', (new Date()).getTime()]];
+    (function() {
+        var s = document.getElementsByTagName('script')[0]
+          , p = document.createElement('script');
+        p.async = 'async';
+        p.src = '//rum-static.pingdom.net/prum.min.js';
+        s.parentNode.insertBefore(p, s);
+    })();
+</script>
+</body>
+</html>

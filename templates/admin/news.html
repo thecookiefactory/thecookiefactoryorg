@@ -1,0 +1,170 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<h1>Manage news</h1>
+
+{% if mode == "manage" %}
+
+    <p><a href='?action=write'>write new</a></p>
+
+    <h2>unpublished news</h2>
+
+    <table style='border-spacing: 5px;'>
+    <tr><th>news</th><th>editing tools</th></tr>
+
+    {% for news in unpublishedNews %}
+
+        <tr>
+        <td>
+        #{{ news.id }} - {{ news.title }} - {{ news.text }}
+        </td>
+        <td>
+        <a href='?action=edit&amp;id={{ news.id }}'>edit</a> <a href='?action=delete&amp;id={{ news.id }}'>delete</a>
+        </td>
+        </tr>
+
+    {% endfor %}
+
+    </table>
+
+    <h2>published news</h2>
+
+    <table style='border-spacing: 5px;'>
+    <tr><th>news</th><th>editing tools</th></tr>
+
+    {% for news in publishedNews %}
+
+        <tr>
+        <td>
+        #{{ news.id }} - {{ news.title }} - {{ news.text }}
+        </td>
+        <td>
+        <a href='?action=edit&amp;id={{ news.id }}'>edit</a> <a href='?action=delete&amp;id={{ news.id }}'>delete</a>
+        </td>
+        </tr>
+
+    {% endfor %}
+
+    </table>
+
+{% endif %}
+
+{% if mode == "write" %}
+
+    {% if status == "success" %}
+
+        News post successfully submitted.
+
+    {% endif %}
+
+    {% if status == "failure" %}
+
+        Posting failed.
+
+    {% endif %}
+
+    {% if status == "progress" %}
+
+        <h1>post news</h1>
+        <form action='?action=write' method='post'>
+        Title<br>
+        <input type='text' name='title' required><br>
+        Text<br>
+        <textarea name='text' rows='10' cols='90' required></textarea><br>
+        Disable comments <input type='checkbox' name='comments'><br>
+        Publish? <input type='checkbox' name='live'><br>
+        <input type='submit' name='submit'>
+        </form>
+
+    {% endif %}
+
+{% endif %}
+
+{% if mode == "edit" %}
+
+    {% if status == "notfound" %}
+
+        Could not load the piece of news.
+
+    {% endif %}
+
+    {% if status == "success" %}
+
+        Successfully updated the piece of news.
+
+    {% endif %}
+
+    {% if status == "failure" %}
+
+        Updating failed.
+
+    {% endif %}
+
+    {% if status == "progress" %}
+
+        <form action='?action=edit&amp;id={{ articleData.id }}' method='post'>
+        Title<br>
+        <input type='text' name='title' value='{{ articleData.title | raw }}' required><br>
+        Text<br>
+        <textarea name='text' rows='10' cols='90' required>{{ articleData.text | raw }}</textarea><br>
+        Disable comments
+        {% if articleData.comments == 0 %}
+
+            <input type='checkbox' name='comments' checked>
+
+        {% else %}
+
+            <input type='checkbox' name='comments'>
+
+        {% endif %}
+        <br>
+        Publish?
+        {% if articleData.live == 1 %}
+
+            <input type='checkbox' name='live' checked>
+
+        {% else %}
+
+            <input type='checkbox' name='live'>
+
+        {% endif %}
+        <br>
+        <input type='submit' name='submit'>
+        </form>
+
+    {% endif %}
+
+{% endif %}
+
+{% if mode == "delete" %}
+
+    {% if status == "success" %}
+
+        The article and the related comments have been deleted.
+
+    {% endif %}
+
+    {% if status == "failure" %}
+
+        Delete process failed.
+
+    {% endif %}
+
+    {% if status == "confirm" %}
+
+        Delete news id {{ currentid }}?
+        <form action='?action=delete&amp;id={{ currentid }}' method='post'>
+        <input type='submit' name='delete' value='Yes, delete'>
+        </form>
+
+    {% endif %}
+
+    {% if status == "notfound" %}
+
+        Could not load the piece of news.
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

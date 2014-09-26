@@ -15,6 +15,10 @@ $config["apikey"] = "steamapikey";
 $config["domain"] = "domainname";
 
 $config["python"] = array(
-    "rss" => "execute the python rss script",
-    "webp" => "execute the webp python script"
+    "rss" => "python /app/srv/rss.py",
+    "updater" => "python /app/srv/updater.py"
 );
+
+$config["s3"] = array("key" => "s3key",
+                      "secret" => "s3secretkey",
+                      "bucket" => "s3bucket");

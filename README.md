@@ -22,9 +22,9 @@
 
 # Dependencies
 
-* Apache 2
-* PHP 5.4-5.5
-* MySQL 5.6
+* [Apache 2](http://httpd.apache.org/download.cgi)
+* [PHP 5.4-5.5](http://php.net/downloads.php)
+* [MySQL 5.6](http://dev.mysql.com/downloads/mysql/)
 * [Python 3](http://www.python.org/download/) (Python 2 is supported as well)
   - [MySQL Connector/Python](http://dev.mysql.com/downloads/connector/python/)
   - [Requests](http://docs.python-requests.org/en/latest/)

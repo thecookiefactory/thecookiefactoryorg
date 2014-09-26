@@ -1,0 +1,108 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<h1>manage galleries</h1>
+
+{% if mode == "manage" %}
+
+    <ul>
+
+    {% for map in maps %}
+
+        <li>
+        #{{ map.id }} - {{ map.name }} - <a href='?action=add&amp;id={{ map.id }}'>add new image</a>
+
+        {% if map.picturecount > 0 %}
+
+            <ul>
+
+            {% for picture in map.pictures %}
+
+                <li>
+                <a href='?action=edit&amp;id={{ picture.id }}'>#{{ picture.id }} - {{ picture.text }}</a>
+                </li>
+
+            {% endfor %}
+
+            </ul>
+
+        {% endif %}
+
+        </li>
+
+    {% endfor %}
+
+    </ul>
+
+{% endif %}
+
+{% if mode == "add" %}
+
+    {% if status == "progress" %}
+
+            <form action='?action=add&amp;id={{ currentid }}' method='post' enctype='multipart/form-data'>
+            <input type='file' name='image' required> jpg/png only<br>
+            textription: <input type='text' name='text' required><br>
+            order number: <input type='number' name='ordernumber' required><br>
+            <input type='submit' name='submit'>
+            </form>
+
+    {% endif %}
+
+    {% if status == "wrongtype" %}
+
+        File must be jpeg/png. Some of pictures were not uploaded.
+
+    {% endif %}
+
+    {% if status == "failure" %}
+
+        There was an error uploading your images. Some of them might not be uploaded.
+
+    {% endif %}
+
+    {% if status == "success" %}
+
+        Images successfully uploaded.
+
+    {% endif %}
+
+
+{% endif %}
+
+{% if mode == "edit" %}
+
+    {% if status == "progress" %}
+
+        <img style='width: 300px;' src='{{ picturedata.url }}' alt=''>
+        <form action='?action=edit&amp;id={{ picturedata.id }}' method='post'>
+        <input type='text' name='text' maxlength='100' value='{{ picturedata.text | raw }}' required><br>
+        order number: <input type='number' name='ordernumber' value='{{ picturedata.ordernumber }}' required><br>
+        <input type='checkbox' name='delete'> Delete permanently<br>
+        <input type='submit' name='submit'>
+        </form>
+
+    {% endif %}
+
+    {% if status == "deletesuccess" %}
+
+        Image deleted successfully.
+
+    {% endif %}
+
+    {% if status == "deletefailure" %}
+
+        Delete process failed.
+
+    {% endif %}
+
+    {% if status == "success" %}
+
+        Image updated.
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+{% if termlen > 50 %}
+
+    <div class='search-title'>Please enter a keyword shorter than 50 characters.</div>
+
+{% else %}
+
+    {% if termlen < 3 %}
+
+        <div class='search-title'>Please enter a keyword longer than 2 characters.</div>
+
+    {% else %}
+
+        {% if resultsfound == 0 %}
+
+            {% if termlen > 23 %}
+
+                <div class='search-title'>No {% autoescape false %}{{ resultbutton }}{% endautoescape %} found for your search term</div>
+
+            {% else %}
+
+                <div class='search-title'>No {% autoescape false %}{{ resultbutton }}{% endautoescape %} found for <span class='search-term'>{{ term }}</span></div>
+
+            {% endif %}
+
+        {% else %}
+
+            {% if termlen > 23 %}
+
+                <div class='search-title'>{{ resultsfound }} {% autoescape false %}{{ resultbutton }}{% endautoescape %} found for your search term</div>
+
+            {% else %}
+
+                <div class='search-title'>{{ resultsfound }} {% autoescape false %}{{ resultbutton }}{% endautoescape %} found for <span class='search-term'>{{ term }}</span></div>
+
+            {% endif %}
+
+            <div class='search-results'>
+
+            {% if searchtype == 'news' %}
+
+                {% for new in news %}
+
+                    {% include 'news-box.html' %}
+
+                {% endfor %}
+
+            {% else %}
+
+                {% for thread in threads %}
+
+                    {% if loop.first %}
+                        {% include 'category-css.html' %}
+                    {% endif %}
+
+                    {% include 'forum-row.html' %}
+
+                {% endfor %}
+
+            {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

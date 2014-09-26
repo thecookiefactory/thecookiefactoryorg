@@ -2,14 +2,14 @@
 
 if (!isset($r_c)) header("Location: /notfound.php");
 
-include_once "analyticstracking.php";
-require_once "inc/classes/news.class.php";
+require_once "classes/forumthread.class.php";
+require_once "classes/news.class.php";
 
 $newsArray = array();
 
 $_SESSION["lp"] = "news";
 
-if (!isset($_GET["id"]) || !vf($_GET["id"])) {
+if (!isset($_GET["id"]) || !validField($_GET["id"])) {
 
     if (!isset($_GET["page"]) || !is_numeric($_GET["page"]) || $_GET["page"] < 1) {
 
@@ -60,7 +60,7 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
     }
 
-    echo $twig->render("news.html", array("news" => $newsArray, "pagecount" => $pageCount, "page" => $page, "main" => 0));
+    echo $twig->render("news.html", array("index_var" => $index_var, "news" => $newsArray, "pagecount" => $pageCount, "page" => $page, "main" => 1));
 
 } else {
 
@@ -69,8 +69,6 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
     if ($news->isReal()) {
 
         $new = $news->returnArray();
-
-        echo $twig->render("news-box.html", array("new" => $new, "main" => 1));
 
         if ($new["comments"] == 1) {
 
@@ -82,9 +80,9 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
 
                 $threadData = $selectThreadId->fetch();
 
-                $tid = $threadData["id"];
+                $threadId = $threadData["id"];
 
-                require_once "inc/forums.php";
+                $thread = new forumthread($threadId);
 
             } catch (PDOException $e) {
 
@@ -93,6 +91,8 @@ if (!isset($_GET["id"]) || !vf($_GET["id"])) {
             }
 
         }
+
+        echo $twig->render("news.html", array("index_var" => $index_var, "new" => $new, "main" => 0, "comments" => ($new["comments"] == 1), "thread" => $thread->returnArray("main"), "loggedin" => $user->isReal()));
 
     } else {
 

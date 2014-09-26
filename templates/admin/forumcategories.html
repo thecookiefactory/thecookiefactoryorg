@@ -1,0 +1,34 @@
+{% extends 'admin/index.html' %}
+
+{% block content %}
+<h1>Manage forum categories</h1>
+
+<form action='forumcategories.php' method='post'>
+Delete short name to remove category
+<table border>
+<tr><th>Short name</th><th>Proper name</th><th>Background color</th><th>Hover background color</th></tr>
+
+{% for row in rows %}
+<tr>
+<td><input type='text' value='{{ row.name | raw }}' name='{{ row.id }}name'></td>
+<td><input type='text' value='{{ row.longname | raw }}' name='{{ row.id }}longname'></td>
+<td><input type='text' value='{{ row.hexcode | raw }}' name='{{ row.id }}hexcode'></td>
+<td><input type='text' value='{{ row.hoverhexcode | raw }}' name='{{ row.id }}hoverhexcode'></td>
+</tr>
+{% endfor %}
+
+</table>
+<p>
+<input type='submit' value='Update' name='update'>
+</p>
+</form>
+<hr>
+<form action='forumcategories.php' method='post'>
+<input type='text' name='name'>
+<input type='text' name='longname'>
+<input type='text' name='hexcode'>
+<input type='text' name='hoverhexcode'>
+<input type='submit' name='addnew' value='Insert'>
+</form>
+</ul>
+{% endblock %}
