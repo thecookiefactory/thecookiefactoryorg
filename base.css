@@ -100,6 +100,17 @@ footer {
   line-height: 1.4em;
 }
 
+.paypal-button {
+  -webkit-filter: saturate(0) brightness(0.8);
+  filter: saturate(0) brightness(0.8);
+  display: block;
+  margin-top: 2.5em;
+}
+
+.paypal-button input {
+  border: 0;
+}
+
 .contact-us {
   list-style-type: none;
   padding: 0;
