@@ -13,5 +13,8 @@ exec($config["python"]["updater"], $output, $return);
 error_log($output);
 error_log($return);
 
+echo $_SERVER['REMOTE_ADDR'] . '|';
+echo (!in_array($_SERVER['REMOTE_ADDR'], $config["updater_ip_whitelist"]));
+
 echo 'output: <pre>'; print_r($output); echo '</pre>';
 echo 'return: <pre>'; print_r($return); echo '</pre>';
