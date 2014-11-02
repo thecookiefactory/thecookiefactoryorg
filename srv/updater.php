@@ -2,13 +2,10 @@
 
 $r_c = 0;
 
-require_once "../inc/functions.php";
+require_once '../inc/functions.php';
 
-if (!in_array($_SERVER['REMOTE_ADDR'], $config["updater_ip_whitelist"])) {
-    error_log("255");
-    die("255");
+if ($_POST['access_key'] == $config['updaterkey']) {
+    exec($config['python']['updater'], $output, $return);
+} else {
+    echo 'You shall not pass!';
 }
-
-exec($config["python"]["updater"], $output, $return);
-error_log($output);
-error_log($return);

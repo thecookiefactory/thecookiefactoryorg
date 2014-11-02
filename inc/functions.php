@@ -20,7 +20,9 @@ if (file_exists($config_file)) {
         'charset' => 'utf8'
     );
 
-    $config['apikey'] = getenv('STEAM_API_KEY');
+    $config["updaterkey"] = getenv("UPDATER_KEY");
+
+    $config["apikey"] = getenv("STEAM_API_KEY");
 
     $config['domain'] = getenv('TCF_DOMAIN');
 
@@ -29,13 +31,9 @@ if (file_exists($config_file)) {
         'updater' => 'python /app/srv/updater.py'
     );
 
-    $config['updater_ip_whitelist'] = explode(
-        ' ', getenv('UPDATER_IP_WHITELIST')
-    );
-
-    $config['s3'] = array('key' => getenv('AWS_ACCESS_KEY_ID'),
-                          'secret' => getenv('AWS_SECRET_ACCESS_KEY'),
-                          'bucket' => getenv('S3_BUCKET'));
+    $config["s3"] = array("key" => getenv("AWS_ACCESS_KEY_ID"),
+                          "secret" => getenv("AWS_SECRET_ACCESS_KEY"),
+                          "bucket" => getenv("S3_BUCKET"));
 
 }
 
