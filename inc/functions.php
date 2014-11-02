@@ -20,6 +20,8 @@ if (file_exists($config_file)) {
         "charset" => "utf8"
     );
 
+    $config["updaterkey"] = getenv("UPDATER_KEY");
+
     $config["apikey"] = getenv("STEAM_API_KEY");
 
     $config["domain"] = getenv("TCF_DOMAIN");
@@ -27,10 +29,6 @@ if (file_exists($config_file)) {
     $config["python"] = array(
         "rss" => "python /app/srv/rss.py",
         "updater" => "python /app/srv/updater.py"
-    );
-
-    $config["updater_ip_whitelist"] = explode(
-        " ", getenv("UPDATER_IP_WHITELIST")
     );
 
     $config["s3"] = array("key" => getenv("AWS_ACCESS_KEY_ID"),
