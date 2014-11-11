@@ -18,7 +18,7 @@ def getFromAPI(repo, method, param=''):
 
 
 def insertAssetLink(sql, map):
-    sql.crs.execute("UPDATE `maps` SET `link`='{l}', `downloadcount`='{d}', `editdate`='{e}' WHERE `id`='{i}'".format(l=map['newlink'], i=map['mapid'], d=map['dlcount'], e=map['date']))
+    sql.crs.execute("UPDATE `maps` SET `link`='{l}', `downloadcount`='{d}', `editdate`='{e}' WHERE `id`='{i}'".format(l=map['newlink'], i=map['mapid'], d=map.get('dlcount', 0), e=map['date']))
 
 
 def main():
