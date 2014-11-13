@@ -104,7 +104,7 @@ class map extends master {
                     "name" => $this->name,
                     "text" => $this->text,
                     "author" => $this->author->getName(),
-                    "editdate" => $this->editdate->display(),
+                    "editdate" => ($this->editdate != null) ? $this->editdate->display() : $this->date->display(),
                     "comments" => $this->comments,
                     "game" => array("name" => $this->game->getName(), "steamid" => $this->game->getSteamId()),
                     "link" => $this->link,
