@@ -105,17 +105,17 @@ function canonical() {
 
         if (isset($_GET['id'])) {
 
-            return '<link rel=\'canonical\' href=\'http://thecookiefactory.org/' . $_GET['p'] . '/' . $_GET['id'] . '\'>';
+            return "<link rel='canonical' href='https://thecookiefactory.org/" . $_GET["p"] . "/" . $_GET["id"] . "'>";
 
         } else {
 
-            return '<link rel=\'canonical\' href=\'http://thecookiefactory.org/' . $_GET['p'] . '/\'>';
+            return "<link rel='canonical' href='https://thecookiefactory.org/" . $_GET["p"] . "/'>";
 
         }
 
     } else {
 
-        return '<link rel=\'canonical\' href=\'http://thecookiefactory.org/\'>';
+        return "<link rel='canonical' href='https://thecookiefactory.org/'>";
 
     }
 
