@@ -1,6 +1,0 @@
-dbconfig = {'user': 'username',
-            'password': 'password',
-            'host': 'hostname',
-            'database': 'database'}
-
-docroot = 'path'
