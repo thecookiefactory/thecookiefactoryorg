@@ -1,5 +1,5 @@
-from twitch import main as twitch
-from github import main as github
+import streams
+import maps
 
-twitch()
-github()
+streams.main()
+maps.main()
