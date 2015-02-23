@@ -1,0 +1,7 @@
+forge 'https://forgeapi.puppetlabs.com'
+
+mod 'puppetlabs-apt', '1.7.0'
+mod 'puppetlabs-mysql', '3.1.0'
+mod 'jfryman-nginx', '0.2.1'
+mod 'stankevich-python', '1.7.15'
+mod 'willdurand-composer', '1.1.0'
